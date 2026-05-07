@@ -1,0 +1,1059 @@
+// =============================================================================
+// Hikaya — Prisma schema
+//
+// Single source of truth for the data model. Covers all Phase 1 entities from
+// the PRD: users, profiles, portfolios, bookings, messaging, collections,
+// quotes, contracts, store, and the studio CRM. Phase 2/3 entities (gear
+// rental, agencies, blog, moodboards) are stubbed in commented blocks at the
+// bottom of the file so the data model evolves without surprises.
+//
+// Conventions:
+//   - cuid IDs everywhere (cuid2 in app code; native cuid for stored ids).
+//   - Money is stored as integer SAR halalas (1 SAR = 100 halalas).
+//   - timestamps: createdAt + updatedAt on every entity.
+//   - soft delete is avoided in Phase 1 to keep queries simple.
+// =============================================================================
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------------------------------------
+// Enums
+// -----------------------------------------------------------------------------
+
+enum UserRole {
+  CREATOR
+  STUDIO_OWNER
+  CLIENT
+  AGENCY          // Phase 3
+  RENTAL_COMPANY  // Phase 2
+  ADMIN
+}
+
+enum AuthProvider {
+  EMAIL
+  GOOGLE
+  APPLE
+}
+
+enum Locale {
+  EN
+  AR
+}
+
+enum Country {
+  SA
+  AE
+  KW
+  QA
+  BH
+  OM
+}
+
+enum City {
+  RIYADH
+  JEDDAH
+  DAMMAM
+  KHOBAR
+  MAKKAH
+  MEDINA
+  TABUK
+  ABHA
+  OTHER
+}
+
+enum Discipline {
+  WEDDING_PHOTOGRAPHY
+  PORTRAIT_PHOTOGRAPHY
+  COMMERCIAL_PHOTOGRAPHY
+  PRODUCT_PHOTOGRAPHY
+  EVENT_PHOTOGRAPHY
+  FASHION_PHOTOGRAPHY
+  COMMERCIAL_VIDEO
+  WEDDING_VIDEO
+  EVENT_VIDEO
+  DOCUMENTARY
+  GRAPHIC_DESIGN
+  BRAND_IDENTITY
+  MOTION_GRAPHICS
+  VIDEO_EDITING
+  COLOR_GRADING
+  RETOUCHING
+  DRONE_OPERATION
+}
+
+enum Availability {
+  AVAILABLE
+  BUSY
+  ON_VACATION
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  STUDIO
+  AGENCY
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  TRIAL
+}
+
+enum PortfolioLayout {
+  MASONRY
+  EDITORIAL
+  REEL
+}
+
+enum PortfolioItemType {
+  PHOTO
+  VIDEO
+  PROJECT
+  REEL
+}
+
+enum BookingStatus {
+  INQUIRY
+  QUOTED
+  CONTRACTED
+  CONFIRMED
+  IN_PROGRESS
+  DELIVERED
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+enum InquiryStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+}
+
+enum JobStatus {
+  OPEN
+  FILLED
+  EXPIRED
+  CLOSED
+}
+
+enum JobApplicationStatus {
+  SUBMITTED
+  SHORTLISTED
+  REJECTED
+  ACCEPTED
+}
+
+enum ThreadType {
+  GENERAL
+  BOOKING
+}
+
+enum MessageStatus {
+  SENT
+  DELIVERED
+  READ
+}
+
+enum CollectionAccess {
+  OPEN_LINK
+  PASSWORD
+  EMAIL_GATED
+}
+
+enum QuoteStatus {
+  DRAFT
+  SENT
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+enum ContractStatus {
+  DRAFT
+  SENT
+  CREATOR_SIGNED
+  CLIENT_SIGNED
+  SIGNED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  CAPTURED
+  IN_ESCROW
+  RELEASED
+  REFUNDED
+  FAILED
+}
+
+enum PaymentProvider {
+  MOYASAR
+  TAMARA
+  TABBY
+  STRIPE
+  MANUAL          // Phase 1 fallback while Moyasar isn't wired
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PAID
+  VOID
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum ProductCategory {
+  PRESET
+  LUT
+  TEMPLATE
+  OVERLAY
+  GUIDE
+  OTHER
+}
+
+enum DisputeStatus {
+  OPEN
+  CREATOR_RESPONDED
+  UNDER_REVIEW
+  RESOLVED_CREATOR
+  RESOLVED_CLIENT_PARTIAL
+  RESOLVED_CLIENT_FULL
+  APPEALED
+}
+
+// -----------------------------------------------------------------------------
+// Identity
+// -----------------------------------------------------------------------------
+
+model User {
+  id              String        @id @default(cuid())
+  email           String        @unique
+  emailVerifiedAt DateTime?
+  passwordHash    String?       // nullable for OAuth-only users
+  authProvider    AuthProvider  @default(EMAIL)
+  displayName     String
+  locale          Locale        @default(EN)
+  avatarUrl       String?
+  phone           String?
+  roles           UserRole[]    @default([CLIENT])
+  activeRole      UserRole      @default(CLIENT)
+  isSuspended     Boolean       @default(false)
+  lastSeenAt      DateTime?
+
+  // Relations
+  creatorProfile      CreatorProfile?
+  studioProfile       StudioProfile?
+  clientProfile       ClientProfile?
+  subscription        Subscription?
+  threadsAsCreator    Thread[]            @relation("ThreadCreator")
+  threadsAsClient     Thread[]            @relation("ThreadClient")
+  messages            Message[]
+  inquiriesSent       Inquiry[]           @relation("InquiryClient")
+  jobsPosted          Job[]
+  jobApplications     JobApplication[]
+  reviewsAuthored     Review[]            @relation("ReviewAuthor")
+  reviewsReceived     Review[]            @relation("ReviewSubject")
+  productsPurchased   Order[]
+  notifications       Notification[]
+  walletEntries       WalletEntry[]
+  payouts             Payout[]
+  sessions            Session[]
+  studioMemberships   StudioMember[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([roles])
+  @@index([activeRole])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  refreshToken String   @unique
+  userAgent    String?
+  ipAddress    String?
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// -----------------------------------------------------------------------------
+// Profiles
+// -----------------------------------------------------------------------------
+
+model CreatorProfile {
+  id                String         @id @default(cuid())
+  userId            String         @unique
+  username          String         @unique
+  displayNameEn     String
+  displayNameAr     String?
+  bioEn             String?        @db.VarChar(500)
+  bioAr             String?        @db.VarChar(500)
+  avatarUrl         String?
+  coverUrl          String?
+  disciplines       Discipline[]
+  city              City
+  country           Country        @default(SA)
+  startingPriceSar  Int?
+  yearsExperience   Int?
+  languages         Locale[]       @default([EN])
+  equipment         String[]       @default([])
+  availability      Availability   @default(AVAILABLE)
+  socialLinks       Json           @default("{}")
+  vatNumber         String?
+  isVerified        Boolean        @default(false)
+
+  reviewScore       Float          @default(0)
+  reviewCount       Int            @default(0)
+  profileViewCount  Int            @default(0)
+
+  preferredLayout   PortfolioLayout @default(MASONRY)
+
+  // Relations
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  portfolioItems    PortfolioItem[]
+  projects          Project[]
+  collections       Collection[]
+  inquiriesReceived Inquiry[]         @relation("InquiryCreator")
+  jobApplications   JobApplication[]
+  bookings          Booking[]
+  products          Product[]
+  studioMembership  StudioMember[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([city])
+  @@index([disciplines])
+  @@index([availability])
+}
+
+model StudioProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique  // owner
+  slug          String   @unique
+  nameEn        String
+  nameAr        String?
+  logoUrl       String?
+  coverUrl      String?
+  city          City
+  country       Country  @default(SA)
+  address       String?
+  descriptionEn String?  @db.VarChar(2000)
+  descriptionAr String?  @db.VarChar(2000)
+  specialties   Discipline[]
+  capacity      Int?     // typical concurrent bookings
+  vatNumber     String?
+  isVerified    Boolean  @default(false)
+
+  // Relations
+  owner         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  members       StudioMember[]
+  bookings      Booking[]
+  clients       ClientProfile[] @relation("StudioClients")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StudioMember {
+  id               String   @id @default(cuid())
+  studioId         String
+  userId           String
+  creatorProfileId String?
+  isAdmin          Boolean  @default(false)
+  joinedAt         DateTime @default(now())
+
+  studio          StudioProfile   @relation(fields: [studioId], references: [id], onDelete: Cascade)
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creatorProfile  CreatorProfile? @relation(fields: [creatorProfileId], references: [id])
+
+  @@unique([studioId, userId])
+  @@index([studioId])
+  @@index([userId])
+}
+
+model ClientProfile {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  isBusiness    Boolean  @default(false)
+  companyName   String?
+  industry      String?
+  logoUrl       String?
+  city          City?
+  country       Country  @default(SA)
+  vatNumber     String?
+
+  // Relations
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings  Booking[]
+  studios   StudioProfile[] @relation("StudioClients")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// -----------------------------------------------------------------------------
+// Subscriptions (plans, billing)
+// -----------------------------------------------------------------------------
+
+model Subscription {
+  id                String              @id @default(cuid())
+  userId            String              @unique
+  plan              SubscriptionPlan
+  status            SubscriptionStatus  @default(TRIAL)
+  currentPeriodEnd  DateTime?
+  trialEndsAt       DateTime?
+  externalRef       String?             // Moyasar subscription id
+  cancelledAt       DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// -----------------------------------------------------------------------------
+// Portfolio
+// -----------------------------------------------------------------------------
+
+model Project {
+  id            String   @id @default(cuid())
+  creatorId     String
+  slug          String
+  titleEn       String
+  titleAr       String?
+  descriptionEn String?  @db.VarChar(4000)
+  descriptionAr String?  @db.VarChar(4000)
+  coverUrl      String
+  clientCredit  String?
+  tags          String[] @default([])
+  featuredAt    DateTime?
+  publishedAt   DateTime?
+
+  creator       CreatorProfile  @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  items         PortfolioItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([creatorId, slug])
+  @@index([creatorId])
+}
+
+model PortfolioItem {
+  id            String             @id @default(cuid())
+  creatorId     String
+  projectId     String?
+  type          PortfolioItemType
+  titleEn       String?
+  titleAr       String?
+  descriptionEn String?            @db.VarChar(2000)
+  descriptionAr String?            @db.VarChar(2000)
+  url           String             // Cloudinary or Cloudflare Stream URL
+  thumbnailUrl  String?
+  width         Int?
+  height        Int?
+  durationMs    Int?               // for video
+  externalEmbedUrl String?         // YouTube / Vimeo
+  watermarked   Boolean            @default(false)
+  orderIndex    Int                @default(0)
+  viewCount     Int                @default(0)
+  publishedAt   DateTime?
+
+  creator  CreatorProfile @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  project  Project?       @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([creatorId])
+  @@index([projectId])
+  @@index([type])
+}
+
+// -----------------------------------------------------------------------------
+// Hiring — inquiries, jobs, bookings
+// -----------------------------------------------------------------------------
+
+model Inquiry {
+  id                String         @id @default(cuid())
+  clientId          String         // User
+  creatorProfileId  String
+  discipline        Discipline
+  sessionDates      DateTime[]
+  city              City
+  locationDetail    String?
+  description       String         @db.VarChar(2000)
+  budgetMinHalalas  Int?
+  budgetMaxHalalas  Int?
+  attachmentUrls    String[]       @default([])
+  status            InquiryStatus  @default(PENDING)
+  respondsBy        DateTime       // creator has 48h
+  respondedAt       DateTime?
+  declineReason     String?
+
+  client          User            @relation("InquiryClient",  fields: [clientId],         references: [id], onDelete: Cascade)
+  creatorProfile  CreatorProfile  @relation("InquiryCreator", fields: [creatorProfileId], references: [id], onDelete: Cascade)
+  booking         Booking?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([creatorProfileId, status])
+  @@index([clientId])
+}
+
+model Job {
+  id              String   @id @default(cuid())
+  postedById      String   // User (client)
+  title           String
+  discipline      Discipline
+  city            City
+  description     String   @db.VarChar(4000)
+  budgetHalalas   Int?
+  budgetIsOpen    Boolean  @default(false)
+  creatorsNeeded  Int      @default(1)
+  deadline        DateTime
+  status          JobStatus @default(OPEN)
+  expiresAt       DateTime
+
+  postedBy      User              @relation(fields: [postedById], references: [id], onDelete: Cascade)
+  applications  JobApplication[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, expiresAt])
+  @@index([discipline, city])
+}
+
+model JobApplication {
+  id                String                @id @default(cuid())
+  jobId             String
+  applicantUserId   String
+  creatorProfileId  String
+  coverNote         String                @db.VarChar(2000)
+  proposedRateHalalas Int
+  status            JobApplicationStatus  @default(SUBMITTED)
+
+  job             Job             @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  applicant       User            @relation(fields: [applicantUserId], references: [id], onDelete: Cascade)
+  creatorProfile  CreatorProfile  @relation(fields: [creatorProfileId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([jobId, applicantUserId])
+  @@index([jobId])
+  @@index([applicantUserId])
+}
+
+model Booking {
+  id                  String        @id @default(cuid())
+  inquiryId           String?       @unique
+  clientProfileId     String
+  creatorProfileId    String
+  studioProfileId     String?
+  discipline          Discipline
+  status              BookingStatus @default(INQUIRY)
+  sessionStart        DateTime
+  sessionEnd          DateTime?
+  city                City
+  locationDetail      String?
+  notes               String?       @db.VarChar(4000)
+  totalHalalas        Int           @default(0)
+  depositHalalas      Int           @default(0)
+  deliveredAt         DateTime?
+  reviewWindowEndsAt  DateTime?
+
+  inquiry         Inquiry?         @relation(fields: [inquiryId], references: [id], onDelete: SetNull)
+  clientProfile   ClientProfile    @relation(fields: [clientProfileId], references: [id])
+  creatorProfile  CreatorProfile   @relation(fields: [creatorProfileId], references: [id])
+  studio          StudioProfile?   @relation(fields: [studioProfileId], references: [id])
+  threads         Thread[]
+  quotes          Quote[]
+  contracts       Contract[]
+  collections     Collection[]
+  payments        Payment[]
+  invoices        Invoice[]
+  reviews         Review[]
+  dispute         Dispute?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([creatorProfileId, status])
+  @@index([clientProfileId])
+  @@index([studioProfileId])
+  @@index([sessionStart])
+}
+
+// -----------------------------------------------------------------------------
+// Messaging
+// -----------------------------------------------------------------------------
+
+model Thread {
+  id          String     @id @default(cuid())
+  type        ThreadType @default(GENERAL)
+  bookingId   String?
+  creatorUserId String
+  clientUserId  String
+  lastMessageAt DateTime?
+
+  booking      Booking?   @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  creatorUser  User       @relation("ThreadCreator", fields: [creatorUserId], references: [id], onDelete: Cascade)
+  clientUser   User       @relation("ThreadClient",  fields: [clientUserId],  references: [id], onDelete: Cascade)
+  messages     Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([creatorUserId, clientUserId, bookingId])
+  @@index([bookingId])
+}
+
+model Message {
+  id              String        @id @default(cuid())
+  threadId        String
+  senderId        String
+  body            String        @db.Text
+  attachmentUrls  String[]      @default([])
+  status          MessageStatus @default(SENT)
+  readAt          DateTime?
+
+  thread Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  sender User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([threadId, createdAt])
+  @@index([senderId])
+}
+
+// -----------------------------------------------------------------------------
+// Client collections (galleries)
+// -----------------------------------------------------------------------------
+
+model Collection {
+  id              String           @id @default(cuid())
+  creatorId       String
+  bookingId       String?
+  shareSlug       String           @unique
+  titleEn         String
+  titleAr         String?
+  coverUrl        String?
+  message         String?          @db.VarChar(2000)
+  access          CollectionAccess @default(OPEN_LINK)
+  passwordHash    String?
+  allowedEmails   String[]         @default([])
+  expiresAt       DateTime?
+  allowDownloads  Boolean          @default(true)
+  watermarkPreviews Boolean        @default(true)
+  lastAccessedAt  DateTime?
+  publishedAt     DateTime?
+
+  creator  CreatorProfile     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  booking  Booking?           @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  images   CollectionImage[]
+  selections CollectionSelection[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([creatorId])
+  @@index([bookingId])
+}
+
+model CollectionImage {
+  id            String  @id @default(cuid())
+  collectionId  String
+  url           String
+  thumbnailUrl  String?
+  fullResUrl    String?
+  width         Int?
+  height        Int?
+  orderIndex    Int     @default(0)
+
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  selections CollectionSelection[]
+
+  createdAt DateTime @default(now())
+
+  @@index([collectionId])
+}
+
+model CollectionSelection {
+  id            String   @id @default(cuid())
+  collectionId  String
+  imageId       String
+  clientEmail   String
+  note          String?
+
+  collection Collection      @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  image      CollectionImage @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([imageId, clientEmail])
+  @@index([collectionId])
+}
+
+// -----------------------------------------------------------------------------
+// Quotes & contracts
+// -----------------------------------------------------------------------------
+
+model Quote {
+  id              String       @id @default(cuid())
+  bookingId       String
+  number          String       @unique
+  status          QuoteStatus  @default(DRAFT)
+  expiresAt       DateTime?
+  notes           String?      @db.VarChar(4000)
+  subtotalHalalas Int          @default(0)
+  vatHalalas      Int          @default(0)
+  discountHalalas Int          @default(0)
+  totalHalalas    Int          @default(0)
+  approvedAt      DateTime?
+  rejectedAt      DateTime?
+
+  booking   Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  lineItems QuoteLineItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([bookingId])
+}
+
+model QuoteLineItem {
+  id              String  @id @default(cuid())
+  quoteId         String
+  descriptionEn   String
+  descriptionAr   String?
+  quantity        Int     @default(1)
+  unitHalalas     Int
+  totalHalalas    Int
+  orderIndex      Int     @default(0)
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@index([quoteId])
+}
+
+model Contract {
+  id                String         @id @default(cuid())
+  bookingId         String
+  status            ContractStatus @default(DRAFT)
+  bodyHtml          String         @db.Text
+  scopeOfWork       String?        @db.Text
+  deliverables      String?        @db.Text
+  paymentTerms      String?        @db.Text
+  cancellationPolicy String?       @db.Text
+  usageRights       String?        @db.Text
+  additionalTerms   String?        @db.Text
+  pdfUrl            String?
+  creatorSignedAt   DateTime?
+  creatorSignedName String?
+  clientSignedAt    DateTime?
+  clientSignedName  String?
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([bookingId])
+}
+
+model DocumentTemplate {
+  id            String   @id @default(cuid())
+  ownerUserId   String
+  kind          String   // "QUOTE" or "CONTRACT"
+  nameEn        String
+  nameAr        String?
+  bodyHtml      String   @db.Text
+  isPlatform    Boolean  @default(false) // platform-provided default templates
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerUserId, kind])
+  @@index([isPlatform])
+}
+
+// -----------------------------------------------------------------------------
+// Payments, invoices, wallet
+// -----------------------------------------------------------------------------
+
+model Payment {
+  id                  String          @id @default(cuid())
+  bookingId           String?
+  productOrderId      String?
+  amountHalalas       Int
+  currency            String          @default("SAR")
+  status              PaymentStatus   @default(PENDING)
+  provider            PaymentProvider @default(MOYASAR)
+  externalRef         String?         // Moyasar payment id
+  capturedAt          DateTime?
+  releasedAt          DateTime?
+  refundedHalalas     Int             @default(0)
+  failureReason       String?
+
+  booking      Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  productOrder Order?   @relation(fields: [productOrderId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([bookingId])
+  @@index([productOrderId])
+  @@index([status])
+}
+
+model Invoice {
+  id              String         @id @default(cuid())
+  bookingId       String?
+  productOrderId  String?
+  number          String         @unique // sequential, ZATCA-compliant
+  issuedToUserId  String
+  status          InvoiceStatus  @default(DRAFT)
+  subtotalHalalas Int
+  vatHalalas      Int
+  totalHalalas    Int
+  vatNumber       String?        // issuer VAT number (creator/studio)
+  pdfUrl          String?
+  issuedAt        DateTime?
+
+  booking      Booking? @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  productOrder Order?   @relation(fields: [productOrderId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([bookingId])
+  @@index([productOrderId])
+  @@index([issuedToUserId])
+}
+
+model WalletEntry {
+  id            String  @id @default(cuid())
+  userId        String
+  amountHalalas Int     // signed: positive = credit, negative = debit
+  description   String
+  bookingId     String?
+  productOrderId String?
+  payoutId      String?
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payout  Payout?  @relation(fields: [payoutId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model Payout {
+  id              String   @id @default(cuid())
+  userId          String
+  amountHalalas   Int
+  iban            String
+  status          String   @default("PENDING") // PENDING | PROCESSING | PAID | FAILED
+  externalRef     String?
+  scheduledFor    DateTime
+  paidAt          DateTime?
+
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  entries WalletEntry[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model DiscountCode {
+  id              String    @id @default(cuid())
+  ownerUserId     String?   // null = platform-wide
+  code            String    @unique
+  percentageOff   Int?
+  amountOffHalalas Int?
+  minOrderHalalas Int?
+  maxUses         Int?
+  usedCount       Int       @default(0)
+  expiresAt       DateTime?
+  isActive        Boolean   @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// -----------------------------------------------------------------------------
+// Creator store
+// -----------------------------------------------------------------------------
+
+model Product {
+  id              String           @id @default(cuid())
+  creatorId       String
+  slug            String
+  titleEn         String
+  titleAr         String?
+  descriptionEn   String?          @db.VarChar(4000)
+  descriptionAr   String?          @db.VarChar(4000)
+  category        ProductCategory
+  status          ProductStatus    @default(DRAFT)
+  priceHalalas    Int
+  freeSampleUrl   String?
+  fileUrls        String[]         @default([])
+  previewImageUrls String[]        @default([])
+  compatibleSoftware String[]      @default([])
+  salesCount      Int              @default(0)
+
+  creator  CreatorProfile @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  orders   OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([creatorId, slug])
+  @@index([category, status])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  buyerUserId     String
+  totalHalalas    Int
+  vatHalalas      Int          @default(0)
+  status          PaymentStatus @default(PENDING)
+
+  buyer    User        @relation(fields: [buyerUserId], references: [id], onDelete: Cascade)
+  items    OrderItem[]
+  payments Payment[]
+  invoices Invoice[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([buyerUserId])
+}
+
+model OrderItem {
+  id              String  @id @default(cuid())
+  orderId         String
+  productId       String
+  unitHalalas     Int
+  commissionHalalas Int   // platform's 12% slice, recorded at sale
+  downloadToken   String  @unique
+  downloadExpiresAt DateTime
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+// -----------------------------------------------------------------------------
+// Reviews & disputes
+// -----------------------------------------------------------------------------
+
+model Review {
+  id          String  @id @default(cuid())
+  bookingId   String
+  authorId    String  // user (the one writing — usually client)
+  subjectId   String  // user (the one being reviewed — usually creator)
+  rating      Int     // 1..5
+  body        String? @db.VarChar(2000)
+  isPublic    Boolean @default(true)
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  author  User    @relation("ReviewAuthor",  fields: [authorId],  references: [id], onDelete: Cascade)
+  subject User    @relation("ReviewSubject", fields: [subjectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([bookingId, authorId])
+  @@index([subjectId])
+}
+
+model Dispute {
+  id              String        @id @default(cuid())
+  bookingId       String        @unique
+  raisedByUserId  String
+  reason          String
+  description     String        @db.VarChar(4000)
+  creatorResponse String?       @db.VarChar(4000)
+  resolution      String?       @db.VarChar(4000)
+  status          DisputeStatus @default(OPEN)
+  raisedAt        DateTime      @default(now())
+  responseDueAt   DateTime
+  resolvedAt      DateTime?
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// -----------------------------------------------------------------------------
+// Notifications
+// -----------------------------------------------------------------------------
+
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  kind        String   // e.g. INQUIRY_RECEIVED, MESSAGE_NEW, GALLERY_VIEWED
+  titleEn     String
+  titleAr     String?
+  bodyEn      String?
+  bodyAr      String?
+  payload     Json     @default("{}")
+  href        String?
+  readAt      DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, readAt])
+}
+
+// =============================================================================
+// PHASE 2 / 3 entities — schema sketches, not migrated yet.
+// Uncomment and migrate when those phases are scoped.
+// =============================================================================
+//
+// model Blog            { id String @id @default(cuid()); ... }
+// model Moodboard       { id String @id @default(cuid()); ... }
+// model RentalCompany   { id String @id @default(cuid()); ... }
+// model RentalItem      { id String @id @default(cuid()); ... }
+// model RentalBooking   { id String @id @default(cuid()); ... }
+// model AgencyProfile   { id String @id @default(cuid()); ... }
+// model CastingCall     { id String @id @default(cuid()); ... }
