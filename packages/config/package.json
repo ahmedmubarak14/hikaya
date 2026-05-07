@@ -1,0 +1,28 @@
+{
+  "name": "@hikaya/config",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared configuration: tsconfig presets, ESLint, Tailwind, Prettier.",
+  "type": "module",
+  "files": [
+    "tsconfig",
+    "eslint",
+    "tailwind"
+  ],
+  "exports": {
+    "./tsconfig/base.json": "./tsconfig/base.json",
+    "./tsconfig/next.json": "./tsconfig/next.json",
+    "./tsconfig/nest.json": "./tsconfig/nest.json",
+    "./tsconfig/library.json": "./tsconfig/library.json",
+    "./eslint/base": "./eslint/base.js",
+    "./eslint/next": "./eslint/next.js",
+    "./eslint/nest": "./eslint/nest.js",
+    "./tailwind/preset": "./tailwind/preset.js",
+    "./tailwind/tokens": "./tailwind/tokens.js"
+  },
+  "scripts": {
+    "lint": "echo \"@hikaya/config has no source to lint\"",
+    "typecheck": "echo \"@hikaya/config is config-only\"",
+    "clean": "rm -rf .turbo"
+  }
+}
