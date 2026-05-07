@@ -1,0 +1,22 @@
+/**
+ * @hikaya/ui — base layer.
+ *
+ * Apps should @import this AFTER their Tailwind base layer if they want the
+ * brand defaults. The web app currently inlines these declarations directly
+ * in apps/web/src/styles/globals.css; this file is provided for any future
+ * consumer of @hikaya/ui (e.g. a Storybook, a marketing microsite) that
+ * doesn't want to reimplement the base.
+ */
+:root {
+  --bg: #080808;
+  --surface: #f8f6f1;
+  --ink: #080808;
+  --paper: #f8f6f1;
+  --accent: #e8ff47;
+  --accent-secondary: #ff6b35;
+  --muted: #888580;
+  --line: #1a1a1a;
+  --sage: #4a7a5a;
+  --info: #3a6fd8;
+  --purple: #7c52c8;
+}
