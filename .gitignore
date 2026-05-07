@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build artifacts
+.next/
+.turbo/
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# Test
+coverage/
+.nyc_output/
+
+# Prisma
+**/prisma/migrations/**/migration_lock.toml.bak
+
+# Cache
+.cache/
+.eslintcache
+.prettiercache
+
+# Vercel
+.vercel/
+
+# Sentry
+.sentryclirc
