@@ -38,6 +38,8 @@ export interface GalleryFailure {
 }
 export interface GallerySuccess {
   ok: true;
+  error?: undefined;
+  fieldErrors?: undefined;
   message?: string;
 }
 export type GalleryResult = GallerySuccess | GalleryFailure;
@@ -53,10 +55,10 @@ function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string
 
 async function requireOwnedCreator() {
   const session = await getSession();
-  if (!session) return { error: 'NOT_AUTHENTICATED' as const };
+  if (!session) return { ok: false as const, error: 'NOT_AUTHENTICATED' as const };
   const creator = await getMyCreatorProfile(session.user.email);
-  if (!creator) return { error: 'NO_CREATOR_PROFILE' as const };
-  return { creator, session };
+  if (!creator) return { ok: false as const, error: 'NO_CREATOR_PROFILE' as const };
+  return { ok: true as const, creator, session };
 }
 
 /* ----------------------------- creator actions ----------------------------- */
@@ -67,7 +69,7 @@ export async function createGalleryAction(
   formData: FormData,
 ): Promise<GalleryResult> {
   const auth = await requireOwnedCreator();
-  if ('error' in auth) return { ok: false, error: auth.error };
+  if (!auth.ok) return { ok: false, error: auth.error };
 
   const parsed = createGallerySchema.safeParse({
     titleEn: formData.get('titleEn'),
@@ -102,7 +104,7 @@ export async function deleteGalleryAction(
   galleryId: string,
 ): Promise<GalleryResult> {
   const auth = await requireOwnedCreator();
-  if ('error' in auth) return { ok: false, error: auth.error };
+  if (!auth.ok) return { ok: false, error: auth.error };
 
   const gallery = getGalleryById(galleryId);
   if (!gallery) return { ok: false, error: 'GALLERY_NOT_FOUND' };
@@ -120,7 +122,7 @@ export async function addImagesAction(
   formData: FormData,
 ): Promise<GalleryResult> {
   const auth = await requireOwnedCreator();
-  if ('error' in auth) return { ok: false, error: auth.error };
+  if (!auth.ok) return { ok: false, error: auth.error };
 
   const gallery = getGalleryById(galleryId);
   if (!gallery) return { ok: false, error: 'GALLERY_NOT_FOUND' };
@@ -145,7 +147,7 @@ export async function removeImageAction(
   imageId: string,
 ): Promise<GalleryResult> {
   const auth = await requireOwnedCreator();
-  if ('error' in auth) return { ok: false, error: auth.error };
+  if (!auth.ok) return { ok: false, error: auth.error };
 
   const gallery = getGalleryById(galleryId);
   if (!gallery) return { ok: false, error: 'GALLERY_NOT_FOUND' };

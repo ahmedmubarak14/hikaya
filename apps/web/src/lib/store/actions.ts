@@ -38,6 +38,8 @@ export interface StoreFailure {
 }
 export interface StoreSuccess {
   ok: true;
+  error?: undefined;
+  fieldErrors?: undefined;
   message?: string;
 }
 export type StoreResult = StoreSuccess | StoreFailure;
@@ -55,10 +57,10 @@ function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string
 
 async function requireOwnedCreator() {
   const session = await getSession();
-  if (!session) return { error: 'NOT_AUTHENTICATED' as const };
+  if (!session) return { ok: false as const, error: 'NOT_AUTHENTICATED' as const };
   const creator = await getMyCreatorProfile(session.user.email);
-  if (!creator) return { error: 'NO_CREATOR_PROFILE' as const };
-  return { creator, session };
+  if (!creator) return { ok: false as const, error: 'NO_CREATOR_PROFILE' as const };
+  return { ok: true as const, creator, session };
 }
 
 function parseProductForm(formData: FormData) {
@@ -85,7 +87,7 @@ export async function createProductAction(
   formData: FormData,
 ): Promise<StoreResult> {
   const auth = await requireOwnedCreator();
-  if ('error' in auth) return { ok: false, error: auth.error };
+  if (!auth.ok) return { ok: false, error: auth.error };
 
   const parsed = parseProductForm(formData);
   if (!parsed.success) {
@@ -119,7 +121,7 @@ export async function updateProductAction(
   formData: FormData,
 ): Promise<StoreResult> {
   const auth = await requireOwnedCreator();
-  if ('error' in auth) return { ok: false, error: auth.error };
+  if (!auth.ok) return { ok: false, error: auth.error };
 
   const product = getProductById(productId);
   if (!product) return { ok: false, error: 'PRODUCT_NOT_FOUND' };
@@ -157,7 +159,7 @@ export async function setProductStatusAction(
   status: 'DRAFT' | 'ACTIVE' | 'ARCHIVED',
 ): Promise<StoreResult> {
   const auth = await requireOwnedCreator();
-  if ('error' in auth) return { ok: false, error: auth.error };
+  if (!auth.ok) return { ok: false, error: auth.error };
 
   const product = getProductById(productId);
   if (!product) return { ok: false, error: 'PRODUCT_NOT_FOUND' };

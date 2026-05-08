@@ -38,6 +38,8 @@ export interface JobFailure {
 }
 export interface JobSuccess {
   ok: true;
+  error?: undefined;
+  fieldErrors?: undefined;
   message?: string;
 }
 export type JobResult = JobSuccess | JobFailure;

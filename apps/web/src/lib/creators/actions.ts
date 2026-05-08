@@ -30,6 +30,8 @@ export interface EditorFailure {
 }
 export interface EditorSuccess {
   ok: true;
+  error?: undefined;
+  fieldErrors?: undefined;
   message?: string;
 }
 export type EditorResult = EditorSuccess | EditorFailure;
@@ -45,10 +47,10 @@ function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string
 
 async function requireOwnedCreator() {
   const session = await getSession();
-  if (!session) return { error: 'NOT_AUTHENTICATED' as const };
+  if (!session) return { ok: false as const, error: 'NOT_AUTHENTICATED' as const };
   const creator = getCreatorByOwnerEmail(session.user.email);
-  if (!creator) return { error: 'NO_CREATOR_PROFILE' as const };
-  return { creator, session };
+  if (!creator) return { ok: false as const, error: 'NO_CREATOR_PROFILE' as const };
+  return { ok: true as const, creator, session };
 }
 
 export async function updateProfileAction(
@@ -57,7 +59,7 @@ export async function updateProfileAction(
   formData: FormData,
 ): Promise<EditorResult> {
   const auth = await requireOwnedCreator();
-  if ('error' in auth) return { ok: false, error: auth.error };
+  if (!auth.ok) return { ok: false, error: auth.error };
 
   const parsed = profileEditSchema.safeParse({
     displayNameEn: formData.get('displayNameEn'),
@@ -111,7 +113,7 @@ export async function addPortfolioItemAction(
   formData: FormData,
 ): Promise<EditorResult> {
   const auth = await requireOwnedCreator();
-  if ('error' in auth) return { ok: false, error: auth.error };
+  if (!auth.ok) return { ok: false, error: auth.error };
 
   const parsed = portfolioItemAddSchema.safeParse({
     url: formData.get('url') || undefined,
@@ -145,7 +147,7 @@ export async function deletePortfolioItemAction(
   itemId: string,
 ): Promise<EditorResult> {
   const auth = await requireOwnedCreator();
-  if ('error' in auth) return { ok: false, error: auth.error };
+  if (!auth.ok) return { ok: false, error: auth.error };
 
   storeRemoveItem(auth.creator.id, itemId);
 
@@ -161,7 +163,7 @@ export async function movePortfolioItemAction(
   direction: 'up' | 'down',
 ): Promise<EditorResult> {
   const auth = await requireOwnedCreator();
-  if ('error' in auth) return { ok: false, error: auth.error };
+  if (!auth.ok) return { ok: false, error: auth.error };
 
   storeMoveItem(auth.creator.id, itemId, direction);
 

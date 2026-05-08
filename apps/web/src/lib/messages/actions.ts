@@ -35,6 +35,8 @@ export interface MessageFailure {
 }
 export interface MessageSuccess {
   ok: true;
+  error?: undefined;
+  fieldErrors?: undefined;
   message?: string;
 }
 export type MessageResult = MessageSuccess | MessageFailure;
