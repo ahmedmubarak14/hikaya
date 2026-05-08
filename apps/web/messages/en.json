@@ -105,7 +105,51 @@
     "portfolioLink": "Edit portfolio",
     "galleriesLink": "Client galleries",
     "quotesLink": "Quotes",
-    "contractsLink": "Contracts"
+    "contractsLink": "Contracts",
+    "messagesLink": "Messages"
+  },
+  "messages": {
+    "list": {
+      "title": "Messages",
+      "eyebrow": "Messages",
+      "headline": "All conversation,",
+      "headlineItalic": "in one place.",
+      "subtitle": "Every thread with every client lives on Hikaya. Searchable, attachable, and a paper trail when it counts.",
+      "backToAccount": "Back to account",
+      "empty": "No conversations yet.",
+      "emptyHint": "Start one from a creator's profile, or wait for an inquiry to land.",
+      "discoverCta": "Browse creatives",
+      "noPreview": "No messages yet."
+    },
+    "thread": {
+      "title": "Conversation",
+      "back": "All messages",
+      "empty": "Say something — first message wins.",
+      "type": {
+        "GENERAL": "Conversation",
+        "BOOKING": "Booking thread"
+      }
+    },
+    "bubble": {
+      "status": {
+        "SENT": "Sent",
+        "DELIVERED": "Delivered",
+        "READ": "Read"
+      }
+    },
+    "composer": {
+      "placeholder": "Write a message…",
+      "send": "Send"
+    },
+    "start": {
+      "cta": "Message",
+      "label": "Send a quick note",
+      "placeholder": "Hi — saw your work, want to talk about a project on March 14…",
+      "send": "Start conversation",
+      "cancel": "Cancel",
+      "errorSelf": "You can't message yourself.",
+      "errorNoUser": "This creator's account isn't messageable yet."
+    }
   },
   "quotes": {
     "list": {

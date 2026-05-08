@@ -86,6 +86,12 @@ export default async function MePage({ params }: Props) {
               {t('portfolioLink')} →
             </Link>
             <Link
+              href={`/${locale}/me/messages`}
+              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+            >
+              {t('messagesLink')} →
+            </Link>
+            <Link
               href={`/${locale}/me/galleries`}
               className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
             >

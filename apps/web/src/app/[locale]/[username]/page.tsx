@@ -7,6 +7,7 @@ import { Badge, Button, cn } from '@hikaya/ui';
 
 import { DisciplineTag } from '@/components/creators/discipline-tag';
 import { PortfolioGrid } from '@/components/creators/portfolio-grid';
+import { StartThreadButton } from '@/components/messages/start-thread-button';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
@@ -134,7 +135,7 @@ export default async function CreatorProfilePage({ params }: Props) {
               <Link href={`/${locale}/${creator.username}/hire`}>
                 <Button size="md" variant="primary">{t('hireCta')}</Button>
               </Link>
-              <Button size="md" variant="outline">{t('messageCta')}</Button>
+              <StartThreadButton locale={locale} creatorUsername={creator.username} />
             </div>
           </div>
 
