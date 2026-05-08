@@ -131,7 +131,9 @@ export default async function CreatorProfilePage({ params }: Props) {
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <Button size="md" variant="primary">{t('hireCta')}</Button>
+              <Link href={`/${locale}/${creator.username}/hire`}>
+                <Button size="md" variant="primary">{t('hireCta')}</Button>
+              </Link>
               <Button size="md" variant="outline">{t('messageCta')}</Button>
             </div>
           </div>

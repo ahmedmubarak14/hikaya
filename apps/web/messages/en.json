@@ -99,7 +99,48 @@
     "emailLabel": "Email",
     "roleLabel": "Active role",
     "nextLabel": "What's next",
-    "nextBody": "We're currently scaffolding feature surfaces. Auth is the first slice — portfolio, discover, and the studio CRM are queued up."
+    "nextBody": "We're currently scaffolding feature surfaces. Auth is the first slice — portfolio, discover, and the studio CRM are queued up.",
+    "inquiriesLink": "View my inquiries"
+  },
+  "inquiry": {
+    "title": "Send an inquiry",
+    "subtitle": "Tell the creator about your project. They'll see it instantly and have 48 hours to respond.",
+    "panelLineItalic": "Hire",
+    "panelLineWith": "{name}.",
+    "panelBody": "Inquiries on Hikaya stay on Hikaya. The creator gets a notification, the conversation lives in one thread, and the paper trail is yours forever.",
+    "panelFooter": "حكاية — A story, in Arabic.",
+    "backTo": "Back to {name}",
+    "form": {
+      "discipline": "What kind of work?",
+      "city": "Where?",
+      "sessionDate": "Preferred date",
+      "locationDetail": "Location detail",
+      "locationDetailHint": "e.g. \"Edge of the World, 2-day trip\" or \"Corniche, sunset window\".",
+      "description": "Project brief",
+      "descriptionHint": "20+ characters. Mood, deliverables, anything they should know upfront.",
+      "budgetMin": "Budget min",
+      "budgetMax": "Budget max",
+      "budgetCurrency": "SAR",
+      "submit": "Send inquiry",
+      "errorCreatorNotFound": "We couldn't find that creator. They may have removed their profile."
+    }
+  },
+  "inquiries": {
+    "title": "Your inquiries",
+    "subtitle": "Every project request you've sent. Status updates appear here in real time once you've connected an account.",
+    "backToAccount": "Back to account",
+    "empty": "You haven't sent any inquiries yet.",
+    "emptyHint": "Find someone whose work you love, then tell them about your project.",
+    "discoverCta": "Discover creatives",
+    "sentLabel": "Inquiry sent",
+    "sentBody": "We've notified the creator. They have 48 hours to respond — you'll see status updates here.",
+    "sentAgo": "sent {time}",
+    "status": {
+      "PENDING": "Awaiting reply",
+      "ACCEPTED": "Accepted",
+      "DECLINED": "Declined",
+      "EXPIRED": "Expired"
+    }
   },
   "discover": {
     "title": "Discover creatives",

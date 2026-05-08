@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
@@ -76,7 +77,13 @@ export default async function MePage({ params }: Props) {
           </Card>
         </div>
 
-        <div className="mt-10 flex justify-end">
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
+          <Link
+            href={`/${locale}/me/inquiries`}
+            className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+          >
+            {t('inquiriesLink')} →
+          </Link>
           <SignOutButton locale={locale} />
         </div>
       </main>
