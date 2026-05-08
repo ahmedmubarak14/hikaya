@@ -56,6 +56,51 @@
     "rights": "© {year} Hikaya. All rights reserved.",
     "made": "Made in Riyadh."
   },
+  "auth": {
+    "signInEyebrow": "Welcome back",
+    "signInTitle": "Sign in to Hikaya",
+    "signInSubtitle": "Pick up where you left off — your studio, your clients, your work.",
+    "signInCta": "Sign in",
+    "signUpEyebrow": "Make it yours",
+    "signUpTitle": "Create your Hikaya account",
+    "signUpSubtitle": "It takes a minute. Build a portfolio or hire your first creative — both start here.",
+    "signUpCta": "Create account",
+    "signOut": "Sign out",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "Minimum 8 characters.",
+    "displayName": "Your name",
+    "roleLabel": "I'm here to",
+    "roleClient": "Hire creatives",
+    "roleClientHint": "Brands, businesses, and individuals.",
+    "roleCreator": "Showcase my work",
+    "roleCreatorHint": "Photographers, videographers, designers.",
+    "acceptTerms": "I agree to Hikaya's <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
+    "haveAccount": "Already have an account?",
+    "signInLink": "Sign in",
+    "noAccount": "New to Hikaya?",
+    "signUpLink": "Create an account",
+    "panelLineItalic": "Tell",
+    "panelLine": "your story.",
+    "panelBody": "Hikaya is the all-in-one platform Gulf creatives use to showcase work, get hired, run their studio, deliver to clients, and sell what they make.",
+    "panelFooter": "حكاية — A story, in Arabic.",
+    "demoLabel": "Demo accounts",
+    "demoCredentials": "Try <email>noor@hikaya.sa</email> / <password>password123</password> for the creator view, or <email>client@hikaya.sa</email> for the client view.",
+    "demoNote": "Backend is mocked in-memory; data resets on server restart.",
+    "errors": {
+      "invalidCredentials": "Email or password is incorrect.",
+      "emailTaken": "An account with this email already exists."
+    }
+  },
+  "me": {
+    "title": "Your account",
+    "greeting": "Hi, {name}.",
+    "subtitle": "This is your account home. The dashboard, portfolio editor, bookings, and messages all branch from here.",
+    "emailLabel": "Email",
+    "roleLabel": "Active role",
+    "nextLabel": "What's next",
+    "nextBody": "We're currently scaffolding feature surfaces. Auth is the first slice — portfolio, discover, and the studio CRM are queued up."
+  },
   "common": {
     "comingSoon": "Coming soon"
   }
