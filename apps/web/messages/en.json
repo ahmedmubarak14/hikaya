@@ -102,7 +102,96 @@
     "nextBody": "We're currently scaffolding feature surfaces. Auth is the first slice — portfolio, discover, and the studio CRM are queued up.",
     "inquiriesLink": "View my inquiries",
     "studioLink": "Studio dashboard",
-    "portfolioLink": "Edit portfolio"
+    "portfolioLink": "Edit portfolio",
+    "galleriesLink": "Client galleries"
+  },
+  "gallery": {
+    "list": {
+      "title": "Client galleries",
+      "eyebrow": "Galleries",
+      "headline": "Deliver beautifully —",
+      "headlineItalic": "every time.",
+      "subtitle": "Curate the work, send a private link, and watch your client favorite their selects. No more WeTransfer. No more WhatsApp.",
+      "backToAccount": "Back to account",
+      "newCta": "New gallery",
+      "empty": "No galleries yet.",
+      "emptyHint": "Create your first gallery — one per client, one per project.",
+      "imageCount": "{count, plural, =0 {empty} =1 {1 image} other {# images}}",
+      "visitorCount": "{count, plural, =0 {Not opened yet} =1 {1 visitor} other {# visitors}}",
+      "expires": "Expires {date}"
+    },
+    "create": {
+      "title": "New gallery",
+      "subtitle": "Set up the basics now — you'll add images once it's created.",
+      "back": "Back to galleries",
+      "form": {
+        "titleEn": "Gallery name",
+        "titleAr": "Gallery name (Arabic, optional)",
+        "message": "Welcome message",
+        "messagePlaceholder": "Sara — favorites for the album by Friday…",
+        "messageHint": "Shown above the gallery to the client.",
+        "coverUrl": "Cover image URL",
+        "coverUrlHint": "Optional — leave blank to use a placeholder.",
+        "expiresInDays": "Expires in (days)",
+        "expiresInDaysHint": "Optional. After this date the link still works but shows an expired badge.",
+        "allowDownloads": "Allow downloads",
+        "allowDownloadsHint": "Clients can save originals from the gallery.",
+        "watermarkPreviews": "Watermark previews",
+        "watermarkPreviewsHint": "Adds a diagonal watermark over each image; removed for purchased selects.",
+        "submit": "Create gallery",
+        "errorGeneric": "Something went wrong. Please try again."
+      }
+    },
+    "manage": {
+      "title": "Manage gallery",
+      "back": "Back to galleries",
+      "eyebrow": "Manage",
+      "shareLabel": "Private link",
+      "shareHint": "Anyone with this link can view the gallery. Send it via the platform messaging when that ships.",
+      "preview": "Preview as client",
+      "stats": "At a glance",
+      "imagesLabel": "Images",
+      "visitorsLabel": "Visitors",
+      "favoritesLabel": "Favorites",
+      "expires": "Expires {date}",
+      "noImages": "No images in this gallery yet.",
+      "noImagesHint": "Paste image URLs above — one per line — to get started.",
+      "removeImage": "Remove",
+      "topFavorites": "Top favorites",
+      "noFavoritesYet": "No favorites yet. Once your client opens the link and hearts a few, the most-loved images will surface here.",
+      "dangerZone": "Delete gallery",
+      "dangerHint": "Removes the gallery, all its images, and any selections clients have made. This cannot be undone.",
+      "delete": "Delete gallery",
+      "deleteConfirm": "Delete this gallery and all its data? This cannot be undone."
+    },
+    "addImages": {
+      "label": "Add images by URL",
+      "placeholder": "https://images.example.com/01.jpg\nhttps://images.example.com/02.jpg",
+      "hint": "One URL per line. Up to 50 at a time. The eventual flow uploads directly to Cloudinary.",
+      "submit": "Add to gallery",
+      "added": "Added",
+      "invalid": "Add at least one valid URL."
+    },
+    "viewer": {
+      "byCreator": "By {name}",
+      "imageCount": "{count, plural, =1 {1 image} other {# images}}",
+      "youSelected": "{count, plural, =0 {None selected} =1 {1 selected} other {# selected}}",
+      "expiresOn": "Expires {date}",
+      "expired": "Link expired",
+      "downloadsAllowed": "Downloads on",
+      "watermarked": "Preview only",
+      "emptyTitle": "Your gallery is empty.",
+      "emptyHint": "The creator hasn't added images yet. Check back soon.",
+      "footerNote": "Delivered via Hikaya"
+    },
+    "heart": {
+      "favorite": "Favorite",
+      "unfavorite": "Unfavorite"
+    },
+    "share": {
+      "copy": "Copy link",
+      "copied": "Copied"
+    }
   },
   "portfolioEditor": {
     "title": "Edit your portfolio",

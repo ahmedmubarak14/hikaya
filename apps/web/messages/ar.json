@@ -102,7 +102,96 @@
     "nextBody": "نحن بصدد بناء واجهات الميزات. التسجيل هو الشريحة الأولى — معرض الأعمال، الاستكشاف، وإدارة الاستوديو في الطريق.",
     "inquiriesLink": "عرض طلباتي",
     "studioLink": "لوحة الاستوديو",
-    "portfolioLink": "تحرير معرض الأعمال"
+    "portfolioLink": "تحرير معرض الأعمال",
+    "galleriesLink": "معارض العملاء"
+  },
+  "gallery": {
+    "list": {
+      "title": "معارض العملاء",
+      "eyebrow": "المعارض",
+      "headline": "سلِّم بأناقة —",
+      "headlineItalic": "في كلّ مرّة.",
+      "subtitle": "اختر الأعمال، أرسل رابطاً خاصّاً، وراقب عميلك يختار صوره المفضّلة. لا مزيد من WeTransfer ولا WhatsApp.",
+      "backToAccount": "العودة إلى الحساب",
+      "newCta": "معرض جديد",
+      "empty": "لا معارض بعد.",
+      "emptyHint": "أنشئ أوّل معرض — واحد لكلّ عميل، واحد لكلّ مشروع.",
+      "imageCount": "{count, plural, zero {فارغ} one {صورة واحدة} two {صورتان} few {# صور} many {# صورة} other {# صورة}}",
+      "visitorCount": "{count, plural, zero {لم يُفتَح بعد} one {زائر واحد} two {زائران} few {# زوّار} many {# زائراً} other {# زائر}}",
+      "expires": "ينتهي {date}"
+    },
+    "create": {
+      "title": "معرض جديد",
+      "subtitle": "ضع الأساسيّات الآن — ستضيف الصور بعد الإنشاء.",
+      "back": "العودة إلى المعارض",
+      "form": {
+        "titleEn": "اسم المعرض (إنجليزي)",
+        "titleAr": "اسم المعرض (عربي، اختياري)",
+        "message": "رسالة ترحيب",
+        "messagePlaceholder": "سارة — اختاري المفضّلات للألبوم بحلول الجمعة…",
+        "messageHint": "تظهر للعميل أعلى المعرض.",
+        "coverUrl": "رابط صورة الغلاف",
+        "coverUrlHint": "اختياري — اتركه فارغاً لاستخدام صورة افتراضيّة.",
+        "expiresInDays": "ينتهي بعد (يوم)",
+        "expiresInDaysHint": "اختياري. بعد هذا التاريخ يبقى الرابط شغّالاً لكن يظهر شارة \"منتهي\".",
+        "allowDownloads": "السماح بالتحميل",
+        "allowDownloadsHint": "العملاء يستطيعون حفظ الصور الأصليّة من المعرض.",
+        "watermarkPreviews": "علامة مائيّة على المعاينات",
+        "watermarkPreviewsHint": "تضيف علامة مائيّة قُطريّة على كل صورة، تُرفع فقط للصور المُختارة.",
+        "submit": "أنشئ المعرض",
+        "errorGeneric": "حدث خطأ ما. حاول مرّة أخرى."
+      }
+    },
+    "manage": {
+      "title": "إدارة المعرض",
+      "back": "العودة إلى المعارض",
+      "eyebrow": "إدارة",
+      "shareLabel": "الرابط الخاصّ",
+      "shareHint": "أيّ شخص لديه هذا الرابط يستطيع رؤية المعرض. أرسله عبر محادثات المنصّة عند توفّر الميزة.",
+      "preview": "معاينة كعميل",
+      "stats": "نظرة سريعة",
+      "imagesLabel": "صور",
+      "visitorsLabel": "زوّار",
+      "favoritesLabel": "مفضّلات",
+      "expires": "ينتهي {date}",
+      "noImages": "لا صور في هذا المعرض بعد.",
+      "noImagesHint": "ألصق روابط الصور أعلاه — رابط لكل سطر — للبدء.",
+      "removeImage": "حذف",
+      "topFavorites": "الأكثر تفضيلاً",
+      "noFavoritesYet": "لا مفضّلات بعد. حالما يفتح العميل الرابط ويضع قلبه على بضع صور، تظهر هنا الأكثر تفضيلاً.",
+      "dangerZone": "حذف المعرض",
+      "dangerHint": "يحذف المعرض وكلّ صوره وأيّ اختيارات قام بها العميل. لا يمكن التراجع.",
+      "delete": "احذف المعرض",
+      "deleteConfirm": "هل تريد حذف هذا المعرض وكلّ بياناته؟ لا يمكن التراجع."
+    },
+    "addImages": {
+      "label": "أضف صوراً برابط",
+      "placeholder": "https://images.example.com/01.jpg\nhttps://images.example.com/02.jpg",
+      "hint": "رابط لكلّ سطر. حتى ٥٠ في المرّة الواحدة. الإصدار النهائي يرفع مباشرة إلى Cloudinary.",
+      "submit": "أضف للمعرض",
+      "added": "تمّت الإضافة",
+      "invalid": "أضف رابطاً صحيحاً واحداً على الأقل."
+    },
+    "viewer": {
+      "byCreator": "بواسطة {name}",
+      "imageCount": "{count, plural, zero {لا صور} one {صورة واحدة} two {صورتان} few {# صور} many {# صورة} other {# صورة}}",
+      "youSelected": "{count, plural, zero {لم تختر شيئاً} one {اخترت واحدة} two {اخترت اثنتين} few {اخترت #} many {اخترت #} other {اخترت #}}",
+      "expiresOn": "ينتهي {date}",
+      "expired": "الرابط منتهي",
+      "downloadsAllowed": "التحميل مفعّل",
+      "watermarked": "معاينة فقط",
+      "emptyTitle": "المعرض فارغ.",
+      "emptyHint": "لم يُضِف المبدع صوراً بعد. عُد قريباً.",
+      "footerNote": "سُلِّم عبر حكاية"
+    },
+    "heart": {
+      "favorite": "أضف للمفضّلة",
+      "unfavorite": "أزل من المفضّلة"
+    },
+    "share": {
+      "copy": "انسخ الرابط",
+      "copied": "تمّ النسخ"
+    }
   },
   "portfolioEditor": {
     "title": "حرّر معرض أعمالك",
