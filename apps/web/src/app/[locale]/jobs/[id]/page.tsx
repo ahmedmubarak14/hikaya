@@ -23,6 +23,14 @@ interface Props {
   params: Promise<{ locale: Locale; id: string }>;
 }
 
+export async function generateStaticParams() {
+  const { SEED_JOBS } = await import('@/lib/jobs/mock-data');
+  const { locales } = await import('@/i18n/config');
+  return locales.flatMap((locale) =>
+    SEED_JOBS.map((j) => ({ locale, id: j.id })),
+  );
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, id } = await params;
   const job = getJobById(id);

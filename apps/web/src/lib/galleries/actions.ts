@@ -179,6 +179,8 @@ async function getOrIssueVisitorId(): Promise<string> {
 }
 
 export async function readVisitorId(): Promise<string | null> {
+  // Static export has no cookies — visitor selections aren't persisted.
+  if (process.env.EXPORT === '1') return null;
   const jar = await cookies();
   return jar.get(VISITOR_COOKIE)?.value ?? null;
 }

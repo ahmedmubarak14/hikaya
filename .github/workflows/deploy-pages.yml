@@ -1,0 +1,83 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Pages deploys are mutually-exclusive — cancel any in-flight run when a
+# fresh push lands.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      EXPORT: '1'
+      NEXT_TELEMETRY_DISABLED: '1'
+      # Same dummy values the CI workflow uses — Prisma needs DATABASE_URL
+      # set even though we don't connect, and the api package's env validator
+      # needs JWT_SECRET set even though apps/web doesn't import the api.
+      DATABASE_URL: 'postgresql://hikaya:hikaya@localhost:5432/hikaya?schema=public'
+      JWT_SECRET: 'static-export-jwt-secret-must-be-32-chars-long'
+      AUTH_SECRET: 'static-export-auth-secret-not-used-no-cookies-on-pages'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.18.0'
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build static export
+        run: pnpm --filter @hikaya/web build
+
+      - name: Add root index → /en/ redirect
+        run: |
+          cat > apps/web/out/index.html <<'HTML'
+          <!doctype html>
+          <html><head>
+            <meta charset="utf-8">
+            <title>Hikaya</title>
+            <meta http-equiv="refresh" content="0; url=./en/">
+            <link rel="canonical" href="./en/">
+          </head><body>
+            <p>Redirecting to <a href="./en/">/en/</a>…</p>
+          </body></html>
+          HTML
+
+      - name: Disable Jekyll on the GitHub Pages CDN
+        # Pages otherwise tries to process the output through Jekyll, which
+        # mangles _next/ paths.
+        run: touch apps/web/out/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/web/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

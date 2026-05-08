@@ -17,6 +17,14 @@ interface Props {
   params: Promise<{ locale: Locale; slug: string }>;
 }
 
+export async function generateStaticParams() {
+  const { SEED_GALLERIES } = await import('@/lib/galleries/mock-data');
+  const { locales } = await import('@/i18n/config');
+  return locales.flatMap((locale) =>
+    SEED_GALLERIES.map((g) => ({ locale, slug: g.shareSlug })),
+  );
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const gallery = getGalleryBySlug(slug);

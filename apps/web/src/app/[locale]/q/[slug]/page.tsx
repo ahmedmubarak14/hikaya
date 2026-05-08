@@ -18,6 +18,14 @@ interface Props {
   params: Promise<{ locale: Locale; slug: string }>;
 }
 
+export async function generateStaticParams() {
+  const { SEED_QUOTES } = await import('@/lib/quotes/mock-data');
+  const { locales } = await import('@/i18n/config');
+  return locales.flatMap((locale) =>
+    SEED_QUOTES.map((q) => ({ locale, slug: q.shareSlug })),
+  );
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const quote = getQuoteBySlug(slug);

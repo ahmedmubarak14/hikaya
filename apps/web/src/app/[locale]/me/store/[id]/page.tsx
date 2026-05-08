@@ -17,8 +17,19 @@ import { getProductById } from '@/lib/store/mock-store';
 
 import type { Metadata } from 'next';
 
+import { IS_STATIC_EXPORT } from '@/lib/static-export';
+import { DemoModeNotice } from '@/components/demo-mode-notice';
+
 interface Props {
   params: Promise<{ locale: Locale; id: string }>;
+}
+
+// Auth-gated route — generate one placeholder per locale so Next has
+// something to render; the page itself short-circuits to DemoModeNotice
+// when EXPORT=1, so the placeholder id is never actually used.
+export async function generateStaticParams() {
+  const { locales } = await import('@/i18n/config');
+  return locales.map((locale) => ({ locale, id: '_demo' }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -32,6 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function EditProductPage({ params }: Props) {
   const { locale, id } = await params;
   setRequestLocale(locale);
+  if (IS_STATIC_EXPORT) return <DemoModeNotice locale={locale} />;
 
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/store/${id}`);

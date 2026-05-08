@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { CreatorCard } from '@/components/creators/creator-card';
@@ -7,6 +9,7 @@ import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import type { City, Discipline } from '@/lib/creators/mock-data';
 import { listCreators } from '@/lib/creators/queries';
+import { IS_STATIC_EXPORT } from '@/lib/static-export';
 
 import type { Metadata } from 'next';
 
@@ -35,8 +38,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DiscoverPage({ params, searchParams }: Props) {
   const { locale } = await params;
-  const { city: rawCity, discipline: rawDiscipline, available } = await searchParams;
   setRequestLocale(locale);
+
+  // Skip searchParams in static export — Next would otherwise mark this page
+  // dynamic and refuse the export. Filters work on the live build only.
+  const sp = IS_STATIC_EXPORT ? {} : await searchParams;
+  const { city: rawCity, discipline: rawDiscipline, available } = sp;
 
   const city = rawCity && CITY_VALUES.has(rawCity as City) ? (rawCity as City) : null;
   const discipline =
@@ -67,7 +74,9 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
           <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
         </header>
 
-        <FilterBar city={city} discipline={discipline} availableOnly={availableOnly} />
+        <Suspense>
+          <FilterBar city={city} discipline={discipline} availableOnly={availableOnly} />
+        </Suspense>
 
         <p className="mb-6 font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
           {t('count', { count: creators.length })}

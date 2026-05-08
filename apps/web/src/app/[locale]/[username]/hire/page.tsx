@@ -12,8 +12,19 @@ import { getCreatorByUsername } from '@/lib/creators/queries';
 
 import type { Metadata } from 'next';
 
+import { IS_STATIC_EXPORT } from '@/lib/static-export';
+import { DemoModeNotice } from '@/components/demo-mode-notice';
+
 interface Props {
   params: Promise<{ locale: Locale; username: string }>;
+}
+
+export async function generateStaticParams() {
+  const { CREATORS } = await import('@/lib/creators/mock-data');
+  const { locales } = await import('@/i18n/config');
+  return locales.flatMap((locale) =>
+    CREATORS.map((c) => ({ locale, username: c.username })),
+  );
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -25,6 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function HireCreatorPage({ params }: Props) {
   const { locale, username } = await params;
   setRequestLocale(locale);
+  if (IS_STATIC_EXPORT) return <DemoModeNotice locale={locale} />;
 
   const creator = await getCreatorByUsername(username);
   if (!creator) notFound();

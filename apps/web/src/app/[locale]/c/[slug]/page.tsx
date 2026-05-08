@@ -18,6 +18,15 @@ interface Props {
   params: Promise<{ locale: Locale; slug: string }>;
 }
 
+// No contracts exist at build time (they're born from approved quotes).
+// Generate one placeholder per locale so Next has something to render; the
+// page calls notFound() when the slug doesn't resolve, which produces the
+// standard 404 — correct, since signing requires the live app.
+export async function generateStaticParams() {
+  const { locales } = await import('@/i18n/config');
+  return locales.map((locale) => ({ locale, slug: '_demo' }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const contract = getContractBySlug(slug);

@@ -21,6 +21,24 @@ interface Props {
   params: Promise<{ locale: Locale; username: string; slug: string }>;
 }
 
+export async function generateStaticParams() {
+  const { CREATORS } = await import('@/lib/creators/mock-data');
+  const { SEED_PRODUCTS } = await import('@/lib/store/mock-data');
+  const { locales } = await import('@/i18n/config');
+  // Pre-render every (locale, username, slug) combination from seed data.
+  const out: { locale: string; username: string; slug: string }[] = [];
+  for (const locale of locales) {
+    for (const c of CREATORS) {
+      for (const p of SEED_PRODUCTS) {
+        if (p.creatorId === c.id && p.status === 'ACTIVE') {
+          out.push({ locale, username: c.username, slug: p.slug });
+        }
+      }
+    }
+  }
+  return out;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, username, slug } = await params;
   const creator = await getCreatorByUsername(username);

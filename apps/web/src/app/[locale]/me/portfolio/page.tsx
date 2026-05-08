@@ -13,6 +13,9 @@ import { getMyCreatorProfile } from '@/lib/creators/queries';
 
 import type { Metadata } from 'next';
 
+import { IS_STATIC_EXPORT } from '@/lib/static-export';
+import { DemoModeNotice } from '@/components/demo-mode-notice';
+
 interface Props {
   params: Promise<{ locale: Locale }>;
 }
@@ -26,6 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function MyPortfolioPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+  if (IS_STATIC_EXPORT) return <DemoModeNotice locale={locale} />;
 
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/portfolio`);

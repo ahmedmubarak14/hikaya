@@ -88,6 +88,9 @@ export async function destroySession(): Promise<void> {
 }
 
 export async function getSession(): Promise<Session | null> {
+  // Static export build (GitHub Pages) has no cookies — treat as logged out.
+  if (process.env.EXPORT === '1') return null;
+
   const raw = (await cookies()).get(COOKIE_NAME)?.value;
   if (!raw) return null;
 

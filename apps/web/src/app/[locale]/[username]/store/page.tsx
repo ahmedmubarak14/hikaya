@@ -17,6 +17,14 @@ interface Props {
   params: Promise<{ locale: Locale; username: string }>;
 }
 
+export async function generateStaticParams() {
+  const { CREATORS } = await import('@/lib/creators/mock-data');
+  const { locales } = await import('@/i18n/config');
+  return locales.flatMap((locale) =>
+    CREATORS.map((c) => ({ locale, username: c.username })),
+  );
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, username } = await params;
   const creator = await getCreatorByUsername(username);
