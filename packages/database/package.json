@@ -15,7 +15,7 @@
     "db:reset": "prisma migrate reset",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
-    "lint": "eslint src --ext .ts",
+    "lint": "echo \"@hikaya/database has only schema + seed; no .ts source to lint\"",
     "typecheck": "tsc --noEmit",
     "build": "prisma generate",
     "clean": "rm -rf .turbo dist node_modules/.prisma"

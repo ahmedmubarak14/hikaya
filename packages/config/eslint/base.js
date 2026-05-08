@@ -6,7 +6,11 @@ module.exports = {
     ecmaVersion: 2022,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint', 'import'],
+  // `import` is intentionally NOT listed here — `eslint-config-next` (and
+  // some others) also register it via their extends chain, and ESLint v8
+  // throws a conflict when the same plugin is loaded from two resolved paths.
+  // The `extends: ['plugin:import/recommended']` below still pulls it in.
+  plugins: ['@typescript-eslint'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
