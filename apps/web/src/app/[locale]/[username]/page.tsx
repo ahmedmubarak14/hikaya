@@ -13,6 +13,7 @@ import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { CREATORS } from '@/lib/creators/mock-data';
 import { getCreatorByUsername } from '@/lib/creators/queries';
+import { listActiveProductsByCreator } from '@/lib/store/mock-store';
 
 import type { Metadata } from 'next';
 
@@ -69,6 +70,7 @@ export default async function CreatorProfilePage({ params }: Props) {
 
   const name = locale === 'ar' ? creator.displayNameAr : creator.displayNameEn;
   const bio = locale === 'ar' ? creator.bioAr : creator.bioEn;
+  const hasStore = listActiveProductsByCreator(creator.id).length > 0;
 
   return (
     <>
@@ -136,6 +138,14 @@ export default async function CreatorProfilePage({ params }: Props) {
                 <Button size="md" variant="primary">{t('hireCta')}</Button>
               </Link>
               <StartThreadButton locale={locale} creatorUsername={creator.username} />
+              {hasStore ? (
+                <Link
+                  href={`/${locale}/${creator.username}/store`}
+                  className="rounded-full border border-surface/15 px-5 py-2.5 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+                >
+                  {t('viewStore')} →
+                </Link>
+              ) : null}
             </div>
           </div>
 

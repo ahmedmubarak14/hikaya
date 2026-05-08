@@ -107,7 +107,9 @@
     "quotesLink": "Quotes",
     "contractsLink": "Contracts",
     "messagesLink": "Messages",
-    "jobsLink": "Job board"
+    "jobsLink": "Job board",
+    "storeLink": "My store",
+    "purchasesLink": "My purchases"
   },
   "jobs": {
     "list": {
@@ -225,6 +227,134 @@
       "appliedCta": "Browse briefs",
       "appliedAt": "Applied {when}",
       "jobUnavailable": "This brief is no longer available."
+    }
+  },
+  "store": {
+    "list": {
+      "title": "Your store",
+      "eyebrow": "Store",
+      "headline": "Sell what you make —",
+      "headlineItalic": "keep most of it.",
+      "subtitle": "Presets, LUTs, templates, guides. Hikaya takes 12% per sale; the rest is yours and lands in your wallet instantly.",
+      "backToAccount": "Back to account",
+      "newCta": "New product",
+      "count": "{count, plural, =0 {No products yet} =1 {1 product} other {# products}}",
+      "rowSales": "{count, plural, =0 {No sales} =1 {1 sale} other {# sales}}",
+      "empty": "Your store is empty.",
+      "emptyHint": "Create your first product — drafts are private until you publish.",
+      "stats": {
+        "takeHome": "All-time take-home",
+        "commission": "Platform fee",
+        "products": "Products"
+      },
+      "clientLabel": "Client account",
+      "clientTitle": "The store is for creators.",
+      "clientBody": "You're signed in as a client. Sign in as a creator to sell digital products."
+    },
+    "new": {
+      "title": "New product",
+      "subtitle": "Set up the basics now — you'll publish to the public storefront when you're ready.",
+      "back": "Back to store"
+    },
+    "detail": {
+      "title": "Edit product",
+      "back": "Back to store",
+      "headline": "Editing — {title}",
+      "breakdown": "Price {total} · Your take {take} · Platform fee {commission}",
+      "liveLabel": "Live",
+      "liveBody": "This product is on your public storefront and accepting purchases.",
+      "draftLabel": "Draft",
+      "draftBody": "Drafts are private. Publish to put it on your public storefront.",
+      "archivedLabel": "Archived",
+      "archivedBody": "Hidden from your storefront. Existing purchasers can still download until their link expires.",
+      "preview": "Preview as buyer",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "archive": "Archive",
+      "archiveConfirm": "Archive this product? It will disappear from your storefront immediately.",
+      "archiveTitle": "Archive product",
+      "archiveHint": "Removes the product from your public storefront. Existing purchasers retain their download until their link's 7-day window."
+    },
+    "form": {
+      "titleEn": "Product title (English)",
+      "titleAr": "Product title (Arabic)",
+      "descriptionEn": "Description (English)",
+      "descriptionAr": "Description (Arabic)",
+      "descriptionHint": "20+ characters. What it is, who it's for, what makes it different.",
+      "category": "Category",
+      "status": "Status",
+      "statusHint": "Draft is private. Active is public. Archived hides it.",
+      "price": "Price (SAR)",
+      "priceHint": "ZATCA VAT is added at checkout for KSA buyers.",
+      "fileUrl": "Download URL",
+      "fileUrlHint": "The eventual flow signs a Cloudinary file upload. For now, paste any direct URL.",
+      "freeSampleUrl": "Free sample URL",
+      "freeSampleUrlHint": "Optional. Lets potential buyers try before they buy.",
+      "previewImages": "Preview image URLs",
+      "previewImagesHint": "One per line. First one is the cover. 1–10 images.",
+      "compatibleSoftware": "Compatible software",
+      "compatibleSoftwareHint": "Comma-separated tags. e.g. \"Lightroom Classic, Lightroom Mobile\".",
+      "save": "Save changes",
+      "create": "Create product",
+      "saved": "Saved",
+      "errorGeneric": "Something went wrong. Please review and try again.",
+      "takeHome": {
+        "label": "You take home",
+        "hint": "Hikaya keeps {rate} per sale.",
+        "commission": "Fee {amount}"
+      }
+    },
+    "category": {
+      "PRESET": "Preset",
+      "LUT": "LUT",
+      "TEMPLATE": "Template",
+      "OVERLAY": "Overlay",
+      "GUIDE": "Guide",
+      "OTHER": "Other"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "ACTIVE": "Live",
+      "ARCHIVED": "Archived"
+    },
+    "card": {
+      "sales": "{count, plural, =1 {1 sold} other {# sold}}"
+    },
+    "public": {
+      "title": "{name}'s store",
+      "eyebrow": "Store",
+      "headline": "store —",
+      "subtitle": "Presets, LUTs, templates, and guides — built by the same creator whose work you've been browsing.",
+      "backToProfile": "Back to {name}'s profile",
+      "empty": "Nothing here yet.",
+      "emptyHint": "This creator hasn't published a product yet. Their portfolio's still worth a look."
+    },
+    "product": {
+      "backToStore": "Back to {name}'s store",
+      "byCreator": "By {name}",
+      "sales": "{count, plural, =1 {1 sold} other {# sold}}",
+      "downloadSample": "Download free sample"
+    },
+    "buy": {
+      "buyNow": "Buy now",
+      "viewInPurchases": "View in your purchases",
+      "cantBuyOwn": "You can't buy your own product"
+    },
+    "purchases": {
+      "title": "Your purchases",
+      "eyebrow": "Library",
+      "headline": "Everything you've bought.",
+      "subtitle": "Your downloads live here. Links are valid for seven days from purchase; come back anytime to refresh.",
+      "backToAccount": "Back to account",
+      "purchasedLabel": "Purchase complete",
+      "purchasedBody": "Thanks for supporting a Gulf creator. Your download is ready below.",
+      "empty": "No purchases yet.",
+      "emptyHint": "Find a creator whose work you love, then check their store.",
+      "discoverCta": "Browse creatives",
+      "purchasedAt": "Bought {when}",
+      "linkExpires": "Link expires {when}",
+      "expired": "Link expired",
+      "download": "Download"
     }
   },
   "messages": {
@@ -750,6 +880,7 @@
     "yearsExperience": "{years, plural, =1 {1 year} other {# years}} experience",
     "hireCta": "Hire me",
     "messageCta": "Message",
+    "viewStore": "View store",
     "selectedWork": "Selected work",
     "pieces": "pieces",
     "startingFrom": "Starting from",

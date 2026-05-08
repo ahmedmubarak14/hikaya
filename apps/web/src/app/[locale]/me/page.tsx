@@ -116,6 +116,18 @@ export default async function MePage({ params }: Props) {
               {t('jobsLink')} →
             </Link>
             <Link
+              href={`/${locale}/me/store`}
+              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+            >
+              {t('storeLink')} →
+            </Link>
+            <Link
+              href={`/${locale}/me/purchases`}
+              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+            >
+              {t('purchasesLink')} →
+            </Link>
+            <Link
               href={`/${locale}/me/inquiries`}
               className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
             >

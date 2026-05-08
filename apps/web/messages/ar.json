@@ -107,7 +107,9 @@
     "quotesLink": "عروض الأسعار",
     "contractsLink": "العقود",
     "messagesLink": "الرسائل",
-    "jobsLink": "لوحة الوظائف"
+    "jobsLink": "لوحة الوظائف",
+    "storeLink": "متجري",
+    "purchasesLink": "مشترياتي"
   },
   "jobs": {
     "list": {
@@ -225,6 +227,134 @@
       "appliedCta": "تصفّح الإعلانات",
       "appliedAt": "تقدّمت {when}",
       "jobUnavailable": "هذا الإعلان لم يعد متاحاً."
+    }
+  },
+  "store": {
+    "list": {
+      "title": "متجرك",
+      "eyebrow": "المتجر",
+      "headline": "بِع ما تصنع —",
+      "headlineItalic": "احتفظ بمعظمه.",
+      "subtitle": "بريسِتس، LUTs، قوالب، أدلّة. حكاية تأخذ ١٢٪ من كلّ بيعة، والباقي لك يصل محفظتك فوراً.",
+      "backToAccount": "العودة إلى الحساب",
+      "newCta": "منتج جديد",
+      "count": "{count, plural, zero {لا منتجات بعد} one {منتج واحد} two {منتجان} few {# منتجات} many {# منتجاً} other {# منتج}}",
+      "rowSales": "{count, plural, zero {لا مبيعات} one {بيعة واحدة} two {بيعتان} few {# مبيعات} many {# بيعة} other {# بيعة}}",
+      "empty": "متجرك فارغ.",
+      "emptyHint": "أنشئ أوّل منتج — المسودّات خاصّة حتى تنشرها.",
+      "stats": {
+        "takeHome": "إجمالي مكتسبك",
+        "commission": "عمولة المنصّة",
+        "products": "المنتجات"
+      },
+      "clientLabel": "حساب عميل",
+      "clientTitle": "المتجر للمبدعين.",
+      "clientBody": "أنت مسجّل دخول كعميل. سجّل بحساب مبدع لبيع منتجات رقميّة."
+    },
+    "new": {
+      "title": "منتج جديد",
+      "subtitle": "ضع الأساسيّات الآن — ستنشر على المتجر العام عندما تكون جاهزاً.",
+      "back": "العودة إلى المتجر"
+    },
+    "detail": {
+      "title": "تحرير المنتج",
+      "back": "العودة إلى المتجر",
+      "headline": "تحرير — {title}",
+      "breakdown": "السعر {total} · مكتسبك {take} · عمولة المنصّة {commission}",
+      "liveLabel": "منشور",
+      "liveBody": "هذا المنتج على متجرك العام ويقبل المشتريات.",
+      "draftLabel": "مسودّة",
+      "draftBody": "المسودّات خاصّة. انشر لإضافته إلى متجرك العام.",
+      "archivedLabel": "مؤرشف",
+      "archivedBody": "مخفيّ من متجرك. المشترون السابقون يستطيعون التحميل حتى انتهاء روابطهم.",
+      "preview": "معاينة كمشتري",
+      "publish": "نشر",
+      "unpublish": "إلغاء النشر",
+      "archive": "أرشفة",
+      "archiveConfirm": "أرشفة هذا المنتج؟ سيختفي من متجرك فوراً.",
+      "archiveTitle": "أرشفة المنتج",
+      "archiveHint": "يزيل المنتج من متجرك العام. المشترون السابقون يحتفظون بالتحميل لمدّة ٧ أيّام من الشراء."
+    },
+    "form": {
+      "titleEn": "عنوان المنتج (إنجليزي)",
+      "titleAr": "عنوان المنتج (عربي)",
+      "descriptionEn": "الوصف (إنجليزي)",
+      "descriptionAr": "الوصف (عربي)",
+      "descriptionHint": "٢٠ حرفاً على الأقل. ما هو، لمن، وما الذي يميّزه.",
+      "category": "الفئة",
+      "status": "الحالة",
+      "statusHint": "المسودّة خاصّة. النشط عام. المؤرشف مخفيّ.",
+      "price": "السعر (ر.س)",
+      "priceHint": "ضريبة القيمة المضافة (ZATCA) تُضاف عند الدفع للمشترين في المملكة.",
+      "fileUrl": "رابط التحميل",
+      "fileUrlHint": "الإصدار النهائي يرفع إلى Cloudinary. مؤقّتاً، ألصق أيّ رابط مباشر.",
+      "freeSampleUrl": "رابط عيّنة مجّانيّة",
+      "freeSampleUrlHint": "اختياري. يتيح للمشترين تجربة قبل الشراء.",
+      "previewImages": "روابط الصور",
+      "previewImagesHint": "رابط لكلّ سطر. الأوّل هو الغلاف. ١–١٠ صور.",
+      "compatibleSoftware": "البرامج المتوافقة",
+      "compatibleSoftwareHint": "وسوم مفصولة بفاصلة. مثل: \"Lightroom Classic, Lightroom Mobile\".",
+      "save": "حفظ التعديلات",
+      "create": "أنشئ المنتج",
+      "saved": "تمّ الحفظ",
+      "errorGeneric": "حدث خطأ ما. راجع وحاول مرّة أخرى.",
+      "takeHome": {
+        "label": "ما ستربحه",
+        "hint": "حكاية تأخذ {rate} من كلّ بيعة.",
+        "commission": "العمولة {amount}"
+      }
+    },
+    "category": {
+      "PRESET": "بريسِت",
+      "LUT": "LUT",
+      "TEMPLATE": "قالب",
+      "OVERLAY": "طبقة",
+      "GUIDE": "دليل",
+      "OTHER": "أخرى"
+    },
+    "status": {
+      "DRAFT": "مسودّة",
+      "ACTIVE": "منشور",
+      "ARCHIVED": "مؤرشف"
+    },
+    "card": {
+      "sales": "{count, plural, zero {} one {بِيع مرّة} two {بِيع مرّتين} few {بِيع # مرّات} many {بِيع # مرّة} other {بِيع # مرّة}}"
+    },
+    "public": {
+      "title": "متجر {name}",
+      "eyebrow": "المتجر",
+      "headline": "متجر",
+      "subtitle": "بريسِتس، LUTs، قوالب، وأدلّة — صنعها المبدع نفسه الذي تتصفّح أعماله.",
+      "backToProfile": "العودة إلى ملف {name}",
+      "empty": "لا شيء هنا بعد.",
+      "emptyHint": "هذا المبدع لم ينشر منتجاً بعد. ما زال معرض أعماله يستحقّ الزيارة."
+    },
+    "product": {
+      "backToStore": "العودة إلى متجر {name}",
+      "byCreator": "بواسطة {name}",
+      "sales": "{count, plural, zero {} one {بِيع مرّة} two {بِيع مرّتين} few {بِيع # مرّات} many {بِيع # مرّة} other {بِيع # مرّة}}",
+      "downloadSample": "حمّل عيّنة مجّانيّة"
+    },
+    "buy": {
+      "buyNow": "اشترِ الآن",
+      "viewInPurchases": "اعرض في مشترياتك",
+      "cantBuyOwn": "لا يمكنك شراء منتجك"
+    },
+    "purchases": {
+      "title": "مشترياتك",
+      "eyebrow": "المكتبة",
+      "headline": "كلّ ما اشتريته.",
+      "subtitle": "تحميلاتك تعيش هنا. الروابط صالحة لسبعة أيّام من الشراء؛ عُد متى شئت لتحديثها.",
+      "backToAccount": "العودة إلى الحساب",
+      "purchasedLabel": "اكتمل الشراء",
+      "purchasedBody": "شكراً لدعمك مبدعاً خليجيّاً. تحميلك جاهز أدناه.",
+      "empty": "لا مشتريات بعد.",
+      "emptyHint": "ابحث عن مبدع تحبّ عمله، ثمّ تفقّد متجره.",
+      "discoverCta": "تصفّح المبدعين",
+      "purchasedAt": "اشترِيت {when}",
+      "linkExpires": "ينتهي الرابط {when}",
+      "expired": "الرابط منتهي",
+      "download": "تحميل"
     }
   },
   "messages": {
@@ -750,6 +880,7 @@
     "yearsExperience": "{years, plural, zero {بدون خبرة} one {سنة خبرة} two {سنتان خبرة} few {# سنوات خبرة} many {# سنة خبرة} other {# سنة خبرة}}",
     "hireCta": "وظِّفني",
     "messageCta": "راسلني",
+    "viewStore": "اعرض المتجر",
     "selectedWork": "أعمال مختارة",
     "pieces": "قطعة",
     "startingFrom": "تبدأ من",
