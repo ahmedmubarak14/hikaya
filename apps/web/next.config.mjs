@@ -11,6 +11,8 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'res.cloudinary.com' },
       { protocol: 'https', hostname: 'images.hikaya.sa' },
+      // Used by mock data only — remove once @hikaya/api serves real assets.
+      { protocol: 'https', hostname: 'picsum.photos' },
     ],
   },
   experimental: {

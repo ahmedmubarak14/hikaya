@@ -101,6 +101,59 @@
     "nextLabel": "ما هو التالي",
     "nextBody": "نحن بصدد بناء واجهات الميزات. التسجيل هو الشريحة الأولى — معرض الأعمال، الاستكشاف، وإدارة الاستوديو في الطريق."
   },
+  "discover": {
+    "title": "اكتشف المبدعين",
+    "eyebrow": "اكتشف",
+    "headline": "مصوّرون، مصمّمون، صنّاع أفلام —",
+    "headlineItalic": "أفضل ما في الخليج بهدوء.",
+    "subtitle": "نخبة من المبدعين في كلّ أنحاء المملكة. صفِّ بحسب المدينة أو التخصّص أو التوفّر — أو تصفّح ودَع العمل يتحدّث.",
+    "count": "{count, plural, zero {لا مبدعون} one {مبدع واحد} two {مبدعان} few {# مبدعين} many {# مبدعاً} other {# مبدع}} على حكاية"
+  },
+  "creator": {
+    "verified": "موثَّق",
+    "available": "متاح",
+    "busy": "مشغول",
+    "onVacation": "في إجازة",
+    "yearsExperience": "{years, plural, zero {بدون خبرة} one {سنة خبرة} two {سنتان خبرة} few {# سنوات خبرة} many {# سنة خبرة} other {# سنة خبرة}}",
+    "hireCta": "وظِّفني",
+    "messageCta": "راسلني",
+    "selectedWork": "أعمال مختارة",
+    "pieces": "قطعة",
+    "startingFrom": "تبدأ من",
+    "priceSar": "{price} ر.س",
+    "fromPrice": "من {price} ر.س",
+    "languages": "اللغات",
+    "website": "الموقع"
+  },
+  "disciplines": {
+    "weddingPhoto": "تصوير أعراس",
+    "portraitPhoto": "بورتريه",
+    "commercialPhoto": "تصوير تجاري",
+    "productPhoto": "تصوير منتجات",
+    "eventPhoto": "تصوير فعاليّات",
+    "fashionPhoto": "تصوير موضة",
+    "commercialVideo": "فيديو تجاري",
+    "weddingVideo": "فيديو أعراس",
+    "eventVideo": "فيديو فعاليّات",
+    "documentary": "وثائقي",
+    "graphicDesign": "تصميم جرافيكي",
+    "brandIdentity": "هويّة بصريّة",
+    "motionGraphics": "موشن جرافيك",
+    "videoEditing": "مونتاج فيديو",
+    "colorGrading": "تدرّج ألوان",
+    "retouching": "ريتاتش",
+    "drone": "طائرة بدون طيّار"
+  },
+  "cities": {
+    "RIYADH": "الرياض",
+    "JEDDAH": "جدّة",
+    "DAMMAM": "الدمّام",
+    "KHOBAR": "الخبر",
+    "MAKKAH": "مكّة",
+    "MEDINA": "المدينة",
+    "TABUK": "تبوك",
+    "ABHA": "أبها"
+  },
   "common": {
     "comingSoon": "قريباً"
   }

@@ -101,6 +101,59 @@
     "nextLabel": "What's next",
     "nextBody": "We're currently scaffolding feature surfaces. Auth is the first slice — portfolio, discover, and the studio CRM are queued up."
   },
+  "discover": {
+    "title": "Discover creatives",
+    "eyebrow": "Discover",
+    "headline": "Photographers, designers, filmmakers —",
+    "headlineItalic": "the Gulf's quiet best.",
+    "subtitle": "Curated creatives across Saudi Arabia. Filter by city, discipline, or availability — or just browse and let the work do the talking.",
+    "count": "{count, plural, =1 {1 creative} other {# creatives}} on Hikaya"
+  },
+  "creator": {
+    "verified": "Verified",
+    "available": "Available",
+    "busy": "Busy",
+    "onVacation": "On vacation",
+    "yearsExperience": "{years, plural, =1 {1 year} other {# years}} experience",
+    "hireCta": "Hire me",
+    "messageCta": "Message",
+    "selectedWork": "Selected work",
+    "pieces": "pieces",
+    "startingFrom": "Starting from",
+    "priceSar": "SAR {price}",
+    "fromPrice": "from SAR {price}",
+    "languages": "Languages",
+    "website": "Website"
+  },
+  "disciplines": {
+    "weddingPhoto": "Wedding photo",
+    "portraitPhoto": "Portrait",
+    "commercialPhoto": "Commercial photo",
+    "productPhoto": "Product",
+    "eventPhoto": "Event",
+    "fashionPhoto": "Fashion",
+    "commercialVideo": "Commercial video",
+    "weddingVideo": "Wedding video",
+    "eventVideo": "Event video",
+    "documentary": "Documentary",
+    "graphicDesign": "Graphic design",
+    "brandIdentity": "Brand identity",
+    "motionGraphics": "Motion graphics",
+    "videoEditing": "Video editing",
+    "colorGrading": "Color grading",
+    "retouching": "Retouching",
+    "drone": "Drone"
+  },
+  "cities": {
+    "RIYADH": "Riyadh",
+    "JEDDAH": "Jeddah",
+    "DAMMAM": "Dammam",
+    "KHOBAR": "Khobar",
+    "MAKKAH": "Makkah",
+    "MEDINA": "Medina",
+    "TABUK": "Tabuk",
+    "ABHA": "Abha"
+  },
   "common": {
     "comingSoon": "Coming soon"
   }
