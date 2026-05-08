@@ -1,0 +1,36 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+#
+# One-click deploy: https://render.com/deploy?repo=https://github.com/ahmedmubarak14/hikaya
+#
+# Render reads this file on first connect and provisions every service in
+# `services`. The Free instance class spins down after ~15 min of idle and
+# cold-starts on the next request (~30s) — fine for a demo, upgrade to the
+# Starter plan ($7/mo) for always-on.
+
+services:
+  - type: web
+    name: hikaya-web
+    runtime: node
+    plan: free
+    region: frankfurt          # closest free region to the Gulf; swap if you prefer
+    branch: main
+    autoDeploy: true
+    rootDir: .                 # monorepo root — pnpm-workspace.yaml lives here
+    buildCommand: corepack enable && corepack prepare pnpm@10.33.0 --activate && pnpm install --frozen-lockfile && pnpm --filter @hikaya/web build
+    startCommand: pnpm --filter @hikaya/web start
+    healthCheckPath: /en
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_TELEMETRY_DISABLED
+        value: "1"
+      - key: AUTH_SECRET          # auto-generated 32-byte hex
+        generateValue: true
+      # Set NEXT_PUBLIC_APP_URL after the first deploy so the share-link copy
+      # buttons (gallery, quote, contract) paste the right hostname. The URL
+      # comes back from Render as RENDER_EXTERNAL_URL but it's not available
+      # at build time, so we wire it manually post-deploy.
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false

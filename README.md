@@ -2,9 +2,27 @@
 
 > Tell your story. — احكِ قصتك
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/ahmedmubarak14/hikaya)
+
 All-in-one creative professional platform for the Gulf market. One login to
 showcase work, get hired, manage a studio business, deliver client work, sell
 products, and grow an audience.
+
+## Live demo
+
+Click **Deploy to Render** above. Render reads `render.yaml`, provisions the
+service on the free tier (no credit card), and gives you a public
+`https://<your-name>.onrender.com` URL in ~3 minutes. The free instance
+spins down after 15 min of idle and cold-starts on the next request.
+
+After the first deploy, set `NEXT_PUBLIC_APP_URL` in Render → Environment to
+your assigned `*.onrender.com` URL so the share-link copy buttons (gallery,
+quote, contract pages) paste the right hostname.
+
+Demo accounts (mock auth — data resets when Render redeploys or sleeps):
+
+- `noor@hikaya.sa` / `password123` → creator view
+- `client@hikaya.sa` / `password123` → client view
 
 This repository is the **Phase 1 monorepo scaffold**. It establishes the
 toolchain, design system, database schema, and app skeletons so feature work
