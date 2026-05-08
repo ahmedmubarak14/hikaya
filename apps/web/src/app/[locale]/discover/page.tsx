@@ -1,16 +1,31 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { CreatorCard } from '@/components/creators/creator-card';
+import { FilterBar } from '@/components/creators/filter-bar';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
+import type { City, Discipline } from '@/lib/creators/mock-data';
 import { listCreators } from '@/lib/creators/queries';
 
 import type { Metadata } from 'next';
 
 interface Props {
   params: Promise<{ locale: Locale }>;
+  searchParams: Promise<{ city?: string; discipline?: string; available?: string }>;
 }
+
+const CITY_VALUES = new Set<City>([
+  'RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA',
+]);
+
+const DISCIPLINE_VALUES = new Set<Discipline>([
+  'WEDDING_PHOTOGRAPHY', 'PORTRAIT_PHOTOGRAPHY', 'COMMERCIAL_PHOTOGRAPHY',
+  'PRODUCT_PHOTOGRAPHY', 'EVENT_PHOTOGRAPHY', 'FASHION_PHOTOGRAPHY',
+  'COMMERCIAL_VIDEO', 'WEDDING_VIDEO', 'EVENT_VIDEO', 'DOCUMENTARY',
+  'GRAPHIC_DESIGN', 'BRAND_IDENTITY', 'MOTION_GRAPHICS', 'VIDEO_EDITING',
+  'COLOR_GRADING', 'RETOUCHING', 'DRONE_OPERATION',
+]);
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
@@ -18,12 +33,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: t('title') };
 }
 
-export default async function DiscoverPage({ params }: Props) {
+export default async function DiscoverPage({ params, searchParams }: Props) {
   const { locale } = await params;
+  const { city: rawCity, discipline: rawDiscipline, available } = await searchParams;
   setRequestLocale(locale);
 
+  const city = rawCity && CITY_VALUES.has(rawCity as City) ? (rawCity as City) : null;
+  const discipline =
+    rawDiscipline && DISCIPLINE_VALUES.has(rawDiscipline as Discipline)
+      ? (rawDiscipline as Discipline)
+      : null;
+  const availableOnly = available === '1';
+
   const t = await getTranslations('discover');
-  const creators = await listCreators();
+  const creators = await listCreators({
+    city: city ?? undefined,
+    discipline: discipline ?? undefined,
+    available: availableOnly || undefined,
+  });
 
   return (
     <>
@@ -40,17 +67,26 @@ export default async function DiscoverPage({ params }: Props) {
           <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
         </header>
 
+        <FilterBar city={city} discipline={discipline} availableOnly={availableOnly} />
+
         <p className="mb-6 font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
           {t('count', { count: creators.length })}
         </p>
 
-        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {creators.map((creator) => (
-            <li key={creator.id}>
-              <CreatorCard creator={creator} />
-            </li>
-          ))}
-        </ul>
+        {creators.length === 0 ? (
+          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
+            <p className="text-lg text-surface/70">{t('empty')}</p>
+            <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+          </div>
+        ) : (
+          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {creators.map((creator) => (
+              <li key={creator.id}>
+                <CreatorCard creator={creator} />
+              </li>
+            ))}
+          </ul>
+        )}
       </main>
       <SiteFooter />
     </>

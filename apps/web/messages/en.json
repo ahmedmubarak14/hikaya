@@ -107,7 +107,17 @@
     "headline": "Photographers, designers, filmmakers —",
     "headlineItalic": "the Gulf's quiet best.",
     "subtitle": "Curated creatives across Saudi Arabia. Filter by city, discipline, or availability — or just browse and let the work do the talking.",
-    "count": "{count, plural, =1 {1 creative} other {# creatives}} on Hikaya"
+    "count": "{count, plural, =0 {No creatives match} =1 {1 creative} other {# creatives}} on Hikaya",
+    "empty": "No creatives match these filters yet.",
+    "emptyHint": "Try clearing a filter, or check back soon — we're onboarding more talent every week.",
+    "filters": {
+      "city": "City",
+      "cityPlaceholder": "All cities",
+      "discipline": "Discipline",
+      "disciplinePlaceholder": "All disciplines",
+      "availableOnly": "Available now",
+      "clear": "Clear filters"
+    }
   },
   "creator": {
     "verified": "Verified",
