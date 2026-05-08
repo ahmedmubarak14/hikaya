@@ -103,7 +103,221 @@
     "inquiriesLink": "عرض طلباتي",
     "studioLink": "لوحة الاستوديو",
     "portfolioLink": "تحرير معرض الأعمال",
-    "galleriesLink": "معارض العملاء"
+    "galleriesLink": "معارض العملاء",
+    "quotesLink": "عروض الأسعار",
+    "contractsLink": "العقود"
+  },
+  "quotes": {
+    "list": {
+      "title": "عروض الأسعار",
+      "eyebrow": "العروض",
+      "headline": "ابنِ، أرسل،",
+      "headlineItalic": "اربح المشروع.",
+      "subtitle": "عروض أسعار مفصّلة مع ضريبة القيمة المضافة، صلاحيّة محدّدة، ورابط موافقة بنقرة واحدة لعميلك. لا PDF، لا تبادل بريد إلكتروني.",
+      "backToAccount": "العودة إلى الحساب",
+      "newCta": "عرض جديد",
+      "empty": "لا عروض بعد.",
+      "emptyHint": "ابنِ أوّل عرض — جاهز للإرسال في أقلّ من دقيقة.",
+      "expires": "ينتهي {date}",
+      "noExpiry": "بدون انتهاء",
+      "clientLabel": "حساب عميل",
+      "clientTitle": "عروض الأسعار للمبدعين.",
+      "clientBody": "أنت مسجّل دخول كعميل. سجّل بحساب مبدع لإرسال عروض."
+    },
+    "builder": {
+      "title": "عرض جديد",
+      "subtitle": "حدّد ما ستسلِّمه، ضع السعر، وأرسل. ضريبة القيمة المضافة ١٥٪ تُحتسب تلقائيّاً وفق ZATCA.",
+      "back": "العودة إلى العروض",
+      "client": {
+        "title": "العميل",
+        "name": "اسم العميل",
+        "email": "بريد العميل الإلكتروني",
+        "emailHint": "اختياري — يُستخدم لاحقاً لزرّ الموافقة في البريد."
+      },
+      "items": {
+        "title": "بنود العرض",
+        "maxHint": "حتى ٢٠ بنداً",
+        "descriptionEn": "الوصف (إنجليزي)",
+        "descriptionEnPlaceholder": "Wedding day coverage (8 hours)",
+        "descriptionAr": "الوصف (عربي)",
+        "descriptionArPlaceholder": "تغطية يوم الزفاف (٨ ساعات)",
+        "quantity": "الكميّة",
+        "unit": "سعر الوحدة",
+        "currency": "ر.س",
+        "addRow": "أضف بنداً",
+        "remove": "حذف"
+      },
+      "notes": "شروط وملاحظات",
+      "notesPlaceholder": "تشمل الملفّات الأصليّة للرقصة الأولى فقط. تسليم القرص الصلب خلال ٤ أسابيع.",
+      "expiresInDays": "صالح لـ (أيّام)",
+      "expiresInDaysHint": "الافتراضي ٧. حتى ٩٠.",
+      "discount": "الخصم (ر.س)",
+      "discountHint": "يُطبَّق قبل ضريبة القيمة المضافة.",
+      "totals": {
+        "live": "الإجمالي المباشر",
+        "subtotal": "المجموع الفرعي",
+        "discount": "الخصم",
+        "vat": "ضريبة (١٥٪)",
+        "grand": "الإجمالي الكلّي"
+      },
+      "submit": "احفظ كمسودّة",
+      "submitHint": "ستتمكّن من المعاينة والإرسال من الشاشة التالية.",
+      "errorGeneric": "حدث خطأ ما. راجع النموذج وحاول مرّة أخرى."
+    },
+    "summary": {
+      "quoteFor": "عرض لـ {name}",
+      "expires": "ينتهي",
+      "description": "الوصف",
+      "quantity": "الكميّة",
+      "unit": "الوحدة",
+      "total": "الإجمالي",
+      "subtotal": "المجموع الفرعي",
+      "discount": "الخصم",
+      "vat": "ضريبة (١٥٪)",
+      "grandTotal": "الإجمالي الكلّي",
+      "notes": "ملاحظات"
+    },
+    "detail": {
+      "title": "عرض السعر",
+      "back": "العودة إلى العروض",
+      "headline": "العرض {number}",
+      "subtitle": "للعميل {name}.",
+      "updatedAt": "آخر تحديث {time}",
+      "draftLabel": "مسودّة",
+      "draftBody": "هذا العرض يراه أنت فقط. أرسله لمشاركة رابط الموافقة مع عميلك.",
+      "send": "أرسل للعميل",
+      "delete": "حذف المسودّة",
+      "deleteConfirm": "حذف هذه المسودّة؟ لا يمكن التراجع.",
+      "sentLabel": "أُرسل — بانتظار العميل",
+      "sentBody": "شارك هذا الرابط مع عميلك مباشرة. يستطيع الموافقة أو الرفض من أي جهاز.",
+      "preview": "معاينة كعميل",
+      "approvedLabel": "تمّت الموافقة",
+      "approvedBody": "تمّت الموافقة {when}. العقد جاهز للتوقيع.",
+      "viewContract": "عرض العقد",
+      "rejectedLabel": "مرفوض",
+      "rejectedNoReason": "لم يترك العميل سبباً."
+    },
+    "viewer": {
+      "headline": "عرض سعر",
+      "headlineItalic": "لمشروعك.",
+      "subtitle": "من {creator} عبر حكاية. وافق ليتحوّل إلى عقد توقّعه بنقرة واحدة.",
+      "approveCta": "وافق وتابع",
+      "rejectCta": "رفض",
+      "cancel": "إلغاء",
+      "rejectReason": "لِمَ ترفض؟ (اختياري)",
+      "rejectReasonPlaceholder": "خارج الميزانيّة؛ هل يمكن إعادة التسعير بمصوّرَين بدلاً من ثلاثة؟",
+      "rejectReasonHint": "سيرى المبدع هذا. كن لطيفاً.",
+      "rejectConfirm": "أرسل الرفض",
+      "rejected": "تمّ الإرسال",
+      "expired": "انتهت صلاحيّة هذا العرض. اطلب من المبدع إرسال عرض جديد.",
+      "expiredBadge": "منتهي",
+      "approvedBadge": "موافَق",
+      "rejectedBadge": "مرفوض",
+      "approvedBody": "تمّت الموافقة {when}. العقد جاهز ليوقّعه الطرفان.",
+      "rejectedBody": "تمّ الرفض {when}.",
+      "footerNote": "أُرسل عبر حكاية"
+    },
+    "status": {
+      "DRAFT": "مسودّة",
+      "SENT": "مُرسل",
+      "APPROVED": "موافَق",
+      "REJECTED": "مرفوض",
+      "EXPIRED": "منتهي"
+    }
+  },
+  "contracts": {
+    "list": {
+      "title": "العقود",
+      "eyebrow": "العقود",
+      "headline": "وقّع مرّة،",
+      "headlineItalic": "في مكان واحد.",
+      "subtitle": "تُنشأ العقود تلقائيّاً من عروض الأسعار الموافَق عليها. الطرفان يوقّعان بكتابة الاسم، ثمّ يُقفل المستند بعد توقيع الاثنين.",
+      "backToAccount": "العودة إلى الحساب",
+      "empty": "لا عقود بعد.",
+      "emptyHint": "تُنشأ العقود تلقائيّاً عند موافقة العميل على عرض السعر — ابدأ من هناك.",
+      "newQuoteCta": "ابنِ عرض سعر",
+      "updatedAt": "آخر تحديث {time}",
+      "clientLabel": "حساب عميل",
+      "clientTitle": "العقود للمبدعين.",
+      "clientBody": "أنت مسجّل دخول كعميل. سجّل بحساب مبدع لإدارة العقود."
+    },
+    "detail": {
+      "title": "العقد",
+      "back": "العودة إلى العقود",
+      "headline": "العقد {number}",
+      "subtitle": "مع {client}. الإجمالي {total} (شاملة الضريبة).",
+      "updatedAt": "آخر تحديث {time}",
+      "shareLabel": "رابط توقيع العميل",
+      "shareHint": "أيّ شخص لديه هذا الرابط يستطيع مراجعة وتوقيع جانب العميل.",
+      "preview": "معاينة كعميل",
+      "sectionsTitle": "البنود",
+      "creatorSignature": "توقيعك",
+      "clientSignature": "توقيع العميل",
+      "notSignedYet": "لم يُوقَّع بعد.",
+      "cancelTitle": "إلغاء العقد",
+      "cancelHint": "يلغي العقد ويحرّر الطرفين. لا يمكن التراجع.",
+      "cancelContract": "ألغِ العقد",
+      "cancelConfirm": "إلغاء هذا العقد؟ لا يمكن التراجع.",
+      "signedLabel": "موقَّع بالكامل",
+      "signedBody": "وقّع الطرفان. العقد مقفل ونسخة محفوظة في السجلّ."
+    },
+    "viewer": {
+      "headline": "عقدك،",
+      "headlineItalic": "جاهز للتوقيع.",
+      "subtitle": "من {creator}. الإجمالي {total} (شاملة الضريبة). اقرأ بعناية، ثمّ اكتب اسمك للتوقيع.",
+      "creatorSignature": "توقيع المبدع",
+      "clientSignature": "توقيعك",
+      "awaitingCreator": "بانتظار توقيع المبدع.",
+      "awaitingClient": "اكتب اسمك أدناه للتوقيع.",
+      "cancelled": "أُلغي — لا توقيعات مطلوبة.",
+      "lockedLabel": "موقَّع بالكامل",
+      "lockedBody": "وقّع الطرفان. هذه الوثيقة مقفلة ومحفوظة في حكاية.",
+      "footerNote": "أُرسل عبر حكاية"
+    },
+    "sign": {
+      "label": "وقّع بكتابة اسمك",
+      "hint": "وفقاً لممارسات التوقيع الإلكتروني في المملكة، يُعدّ الاسم المكتوب مع الطابع الزمني توقيعاً ملزماً على حكاية.",
+      "typedName": "اكتب اسمك الكامل",
+      "acceptTerms": "قرأت ووافقت على بنود العقد أعلاه.",
+      "submit": "وقّع الآن",
+      "errorAlready": "وقّع هذا الطرف بالفعل. حدّث الصفحة لرؤية الحالة الأحدث."
+    },
+    "sections": {
+      "save": "احفظ البنود",
+      "saved": "تمّ الحفظ",
+      "scopeOfWork": {
+        "title": "نطاق العمل",
+        "description": "ما الذي سيُسلَّم، بلغة بسيطة."
+      },
+      "deliverables": {
+        "title": "التسليمات",
+        "description": "الملفّات والصيغ ووقت التسليم."
+      },
+      "paymentTerms": {
+        "title": "شروط الدفع",
+        "description": "العربون، الرصيد، والعملة."
+      },
+      "cancellationPolicy": {
+        "title": "سياسة الإلغاء",
+        "description": "ما يحدث إن ألغى أي طرف."
+      },
+      "usageRights": {
+        "title": "حقوق الاستخدام",
+        "description": "استخدام شخصي، ترخيص تجاري، حقوق المعرض."
+      },
+      "additionalTerms": {
+        "title": "شروط إضافيّة",
+        "description": "أيّ شيء آخر — تعديلات، تسوية النزاعات. اختياري."
+      }
+    },
+    "status": {
+      "DRAFT": "مسودّة",
+      "SENT": "بانتظار الطرفين",
+      "CREATOR_SIGNED": "وقّع المبدع",
+      "CLIENT_SIGNED": "وقّع العميل",
+      "SIGNED": "موقَّع بالكامل",
+      "CANCELLED": "أُلغي"
+    }
   },
   "gallery": {
     "list": {

@@ -103,7 +103,221 @@
     "inquiriesLink": "View my inquiries",
     "studioLink": "Studio dashboard",
     "portfolioLink": "Edit portfolio",
-    "galleriesLink": "Client galleries"
+    "galleriesLink": "Client galleries",
+    "quotesLink": "Quotes",
+    "contractsLink": "Contracts"
+  },
+  "quotes": {
+    "list": {
+      "title": "Quotes",
+      "eyebrow": "Quotes",
+      "headline": "Build, send,",
+      "headlineItalic": "win the work.",
+      "subtitle": "Itemized quotes with VAT, an expiry, and a one-click approval link for your client. No PDFs, no email back-and-forth.",
+      "backToAccount": "Back to account",
+      "newCta": "New quote",
+      "empty": "No quotes yet.",
+      "emptyHint": "Build your first quote — it'll be ready to send in under a minute.",
+      "expires": "Expires {date}",
+      "noExpiry": "No expiry",
+      "clientLabel": "Client account",
+      "clientTitle": "Quotes are for creators.",
+      "clientBody": "You're signed in as a client. Sign in as a creator to send quotes."
+    },
+    "builder": {
+      "title": "New quote",
+      "subtitle": "Itemize what you'll deliver, set a price, and send. VAT is calculated at 15% per ZATCA — included automatically.",
+      "back": "Back to quotes",
+      "client": {
+        "title": "Client",
+        "name": "Client name",
+        "email": "Client email",
+        "emailHint": "Optional — used for the email approval CTA in production."
+      },
+      "items": {
+        "title": "Line items",
+        "maxHint": "Up to 20 rows",
+        "descriptionEn": "Description (English)",
+        "descriptionEnPlaceholder": "Wedding day coverage (8 hours)",
+        "descriptionAr": "Description (Arabic)",
+        "descriptionArPlaceholder": "تغطية يوم الزفاف (٨ ساعات)",
+        "quantity": "Qty",
+        "unit": "Unit price",
+        "currency": "SAR",
+        "addRow": "Add line",
+        "remove": "Remove"
+      },
+      "notes": "Terms & notes",
+      "notesPlaceholder": "Includes raw files for the first dance only. Hard drive delivery in 4 weeks.",
+      "expiresInDays": "Valid for (days)",
+      "expiresInDaysHint": "Default 7. Up to 90.",
+      "discount": "Discount (SAR)",
+      "discountHint": "Applied before VAT.",
+      "totals": {
+        "live": "Live total",
+        "subtotal": "Subtotal",
+        "discount": "Discount",
+        "vat": "VAT (15%)",
+        "grand": "Grand total"
+      },
+      "submit": "Save as draft",
+      "submitHint": "You'll be able to preview and send it from the next screen.",
+      "errorGeneric": "Something went wrong. Please review the form and try again."
+    },
+    "summary": {
+      "quoteFor": "Quote for {name}",
+      "expires": "Expires",
+      "description": "Description",
+      "quantity": "Qty",
+      "unit": "Unit",
+      "total": "Total",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "vat": "VAT (15%)",
+      "grandTotal": "Grand total",
+      "notes": "Notes"
+    },
+    "detail": {
+      "title": "Quote",
+      "back": "Back to quotes",
+      "headline": "Quote {number}",
+      "subtitle": "For {name}.",
+      "updatedAt": "Updated {time}",
+      "draftLabel": "Draft",
+      "draftBody": "Only you can see this quote. Send it to share an approval link with your client.",
+      "send": "Send to client",
+      "delete": "Delete draft",
+      "deleteConfirm": "Delete this draft? This cannot be undone.",
+      "sentLabel": "Sent — awaiting client",
+      "sentBody": "Share this link directly with your client. They can approve or reject from any device.",
+      "preview": "Preview as client",
+      "approvedLabel": "Approved",
+      "approvedBody": "Approved {when}. The contract is ready to sign.",
+      "viewContract": "View contract",
+      "rejectedLabel": "Rejected",
+      "rejectedNoReason": "The client didn't leave a reason."
+    },
+    "viewer": {
+      "headline": "A quote for",
+      "headlineItalic": "your project.",
+      "subtitle": "From {creator} via Hikaya. Approve to convert into a contract you can sign in one click.",
+      "approveCta": "Approve and continue",
+      "rejectCta": "Reject",
+      "cancel": "Cancel",
+      "rejectReason": "Why are you rejecting? (optional)",
+      "rejectReasonPlaceholder": "Out of budget; could you re-quote with two photographers instead?",
+      "rejectReasonHint": "The creator will see this. Keep it kind.",
+      "rejectConfirm": "Send rejection",
+      "rejected": "Sent",
+      "expired": "This quote has expired. Ask the creator to send a fresh one.",
+      "expiredBadge": "Expired",
+      "approvedBadge": "Approved",
+      "rejectedBadge": "Rejected",
+      "approvedBody": "Approved {when}. The contract is ready for both parties to sign.",
+      "rejectedBody": "Rejected {when}.",
+      "footerNote": "Sent via Hikaya"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "SENT": "Sent",
+      "APPROVED": "Approved",
+      "REJECTED": "Rejected",
+      "EXPIRED": "Expired"
+    }
+  },
+  "contracts": {
+    "list": {
+      "title": "Contracts",
+      "eyebrow": "Contracts",
+      "headline": "Sign once,",
+      "headlineItalic": "in one place.",
+      "subtitle": "Contracts auto-generate from approved quotes. Both parties sign by typing their name; the document locks once both sign.",
+      "backToAccount": "Back to account",
+      "empty": "No contracts yet.",
+      "emptyHint": "Contracts are created automatically when a client approves a quote — start there.",
+      "newQuoteCta": "Build a quote",
+      "updatedAt": "Updated {time}",
+      "clientLabel": "Client account",
+      "clientTitle": "Contracts are for creators.",
+      "clientBody": "You're signed in as a client. Sign in as a creator to manage contracts."
+    },
+    "detail": {
+      "title": "Contract",
+      "back": "Back to contracts",
+      "headline": "Contract {number}",
+      "subtitle": "With {client}. Total {total} (VAT included).",
+      "updatedAt": "Updated {time}",
+      "shareLabel": "Client signing link",
+      "shareHint": "Anyone with this link can review and sign on the client side.",
+      "preview": "Preview as client",
+      "sectionsTitle": "Terms",
+      "creatorSignature": "Your signature",
+      "clientSignature": "Client signature",
+      "notSignedYet": "Not signed yet.",
+      "cancelTitle": "Cancel contract",
+      "cancelHint": "Cancels the contract and frees both parties. Cannot be undone.",
+      "cancelContract": "Cancel contract",
+      "cancelConfirm": "Cancel this contract? This cannot be undone.",
+      "signedLabel": "Fully signed",
+      "signedBody": "Both parties have signed. The contract is locked and a copy is preserved on file."
+    },
+    "viewer": {
+      "headline": "Your contract,",
+      "headlineItalic": "ready to sign.",
+      "subtitle": "From {creator}. Total {total} (VAT included). Read carefully, then type your name to sign.",
+      "creatorSignature": "Creator signature",
+      "clientSignature": "Your signature",
+      "awaitingCreator": "Awaiting creator's signature.",
+      "awaitingClient": "Type your name below to sign.",
+      "cancelled": "Cancelled — no signatures required.",
+      "lockedLabel": "Fully signed",
+      "lockedBody": "Both parties have signed. This document is locked and on file with Hikaya.",
+      "footerNote": "Sent via Hikaya"
+    },
+    "sign": {
+      "label": "Sign by typing your name",
+      "hint": "Per Saudi e-signature norms, a typed name + timestamp is treated as a binding signature on Hikaya.",
+      "typedName": "Type your full name",
+      "acceptTerms": "I have read and agree to the contract terms above.",
+      "submit": "Sign now",
+      "errorAlready": "This party has already signed. Refresh to see the latest state."
+    },
+    "sections": {
+      "save": "Save terms",
+      "saved": "Saved",
+      "scopeOfWork": {
+        "title": "Scope of work",
+        "description": "What's being delivered, in plain language."
+      },
+      "deliverables": {
+        "title": "Deliverables",
+        "description": "Files, formats, and delivery timing."
+      },
+      "paymentTerms": {
+        "title": "Payment terms",
+        "description": "Retainer, balance, and currency."
+      },
+      "cancellationPolicy": {
+        "title": "Cancellation policy",
+        "description": "What happens if either party cancels."
+      },
+      "usageRights": {
+        "title": "Usage rights",
+        "description": "Personal use, commercial license, portfolio rights."
+      },
+      "additionalTerms": {
+        "title": "Additional terms",
+        "description": "Anything else — amendments, dispute resolution. Optional."
+      }
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "SENT": "Awaiting both",
+      "CREATOR_SIGNED": "Creator signed",
+      "CLIENT_SIGNED": "Client signed",
+      "SIGNED": "Fully signed",
+      "CANCELLED": "Cancelled"
+    }
   },
   "gallery": {
     "list": {
