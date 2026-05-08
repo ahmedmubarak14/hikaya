@@ -100,7 +100,55 @@
     "roleLabel": "Active role",
     "nextLabel": "What's next",
     "nextBody": "We're currently scaffolding feature surfaces. Auth is the first slice — portfolio, discover, and the studio CRM are queued up.",
-    "inquiriesLink": "View my inquiries"
+    "inquiriesLink": "View my inquiries",
+    "studioLink": "Studio dashboard"
+  },
+  "studio": {
+    "title": "Studio dashboard",
+    "eyebrow": "Studio",
+    "headline": "The business side,",
+    "headlineItalic": "in one view.",
+    "subtitle": "Bookings, clients, and revenue in a single command center. Everything below is mocked — wire to @hikaya/api when you're ready.",
+    "backToAccount": "Back to account",
+    "mockNote": "Mock data — bookings + clients live in memory and reset on server restart.",
+    "stats": {
+      "monthRevenue": "Revenue this month",
+      "monthRevenueHint": "Captured to wallet",
+      "monthBookings": "Bookings this month",
+      "monthBookingsHint": "Excluding cancelled",
+      "outstanding": "Outstanding",
+      "outstandingHint": "Across all open bookings",
+      "activeClients": "Active clients",
+      "activeClientsHint": "All-time on file"
+    },
+    "calendar": {
+      "weekStart": "Week starts Saturday"
+    },
+    "upcoming": {
+      "title": "Upcoming",
+      "window": "Next 14 days",
+      "empty": "No bookings in the next two weeks. Quiet stretch — use it."
+    },
+    "clients": {
+      "title": "Clients",
+      "count": "{count, plural, =1 {1 record} other {# records}}",
+      "name": "Name",
+      "tags": "Tags",
+      "bookings": "Bookings",
+      "totalSpend": "Total spend",
+      "lastSession": "Last session",
+      "business": "Business"
+    },
+    "status": {
+      "INQUIRY": "Inquiry",
+      "QUOTED": "Quoted",
+      "CONTRACTED": "Contracted",
+      "CONFIRMED": "Confirmed",
+      "IN_PROGRESS": "In progress",
+      "DELIVERED": "Delivered",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    }
   },
   "inquiry": {
     "title": "Send an inquiry",

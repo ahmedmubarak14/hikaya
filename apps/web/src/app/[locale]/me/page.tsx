@@ -78,12 +78,20 @@ export default async function MePage({ params }: Props) {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
-          <Link
-            href={`/${locale}/me/inquiries`}
-            className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
-          >
-            {t('inquiriesLink')} →
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href={`/${locale}/me/inquiries`}
+              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+            >
+              {t('inquiriesLink')} →
+            </Link>
+            <Link
+              href={`/${locale}/me/studio`}
+              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+            >
+              {t('studioLink')} →
+            </Link>
+          </div>
           <SignOutButton locale={locale} />
         </div>
       </main>

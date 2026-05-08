@@ -100,7 +100,55 @@
     "roleLabel": "الدور النشط",
     "nextLabel": "ما هو التالي",
     "nextBody": "نحن بصدد بناء واجهات الميزات. التسجيل هو الشريحة الأولى — معرض الأعمال، الاستكشاف، وإدارة الاستوديو في الطريق.",
-    "inquiriesLink": "عرض طلباتي"
+    "inquiriesLink": "عرض طلباتي",
+    "studioLink": "لوحة الاستوديو"
+  },
+  "studio": {
+    "title": "لوحة الاستوديو",
+    "eyebrow": "الاستوديو",
+    "headline": "الجانب التجاري،",
+    "headlineItalic": "في عرض واحد.",
+    "subtitle": "الحجوزات والعملاء والإيرادات في مركز قيادة واحد. كلّ ما تراه أدناه محاكاة — سيُربط بـ @hikaya/api لاحقاً.",
+    "backToAccount": "العودة إلى الحساب",
+    "mockNote": "بيانات محاكاة — الحجوزات والعملاء يعيشون في الذاكرة وتُستعاد عند إعادة تشغيل الخادم.",
+    "stats": {
+      "monthRevenue": "إيرادات الشهر",
+      "monthRevenueHint": "محصّلة في المحفظة",
+      "monthBookings": "حجوزات الشهر",
+      "monthBookingsHint": "باستثناء الملغاة",
+      "outstanding": "متبقّي",
+      "outstandingHint": "عبر كل الحجوزات المفتوحة",
+      "activeClients": "العملاء النشطون",
+      "activeClientsHint": "إجماليّ منذ البداية"
+    },
+    "calendar": {
+      "weekStart": "الأسبوع يبدأ السبت"
+    },
+    "upcoming": {
+      "title": "قادم",
+      "window": "الأسبوعين القادمين",
+      "empty": "لا حجوزات في الأسبوعين القادمين. استثمر هذه الفترة الهادئة."
+    },
+    "clients": {
+      "title": "العملاء",
+      "count": "{count, plural, zero {لا سجلات} one {سجل واحد} two {سجلان} few {# سجلات} many {# سجلاً} other {# سجل}}",
+      "name": "الاسم",
+      "tags": "وسوم",
+      "bookings": "حجوزات",
+      "totalSpend": "إجمالي الإنفاق",
+      "lastSession": "آخر جلسة",
+      "business": "أعمال"
+    },
+    "status": {
+      "INQUIRY": "طلب",
+      "QUOTED": "عرض سعر",
+      "CONTRACTED": "تعاقد",
+      "CONFIRMED": "مؤكَّد",
+      "IN_PROGRESS": "قيد التنفيذ",
+      "DELIVERED": "تمّ التسليم",
+      "COMPLETED": "مُكتمل",
+      "CANCELLED": "مُلغى"
+    }
   },
   "inquiry": {
     "title": "أرسل طلباً",
