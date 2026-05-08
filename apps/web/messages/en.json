@@ -106,7 +106,126 @@
     "galleriesLink": "Client galleries",
     "quotesLink": "Quotes",
     "contractsLink": "Contracts",
-    "messagesLink": "Messages"
+    "messagesLink": "Messages",
+    "jobsLink": "Job board"
+  },
+  "jobs": {
+    "list": {
+      "title": "Job board",
+      "eyebrow": "Job board",
+      "headline": "Briefs from Gulf clients —",
+      "headlineItalic": "apply in a click.",
+      "subtitle": "Real briefs from real businesses. Filter by discipline and city; apply with a cover note and a proposed rate. Posts auto-expire after 30 days.",
+      "newCta": "Post a brief",
+      "count": "{count, plural, =0 {No briefs open right now} =1 {1 open brief} other {# open briefs}}",
+      "empty": "No open briefs right now.",
+      "emptyHint": "Check back tomorrow — or post your own."
+    },
+    "card": {
+      "deadline": "Due {date}",
+      "openToProposals": "Open to proposals",
+      "applicants": "{count, plural, =0 {No applicants} =1 {1 applicant} other {# applicants}}"
+    },
+    "detail": {
+      "title": "Job brief",
+      "back": "All briefs",
+      "postedBy": "Posted by {name} · {when}",
+      "budgetLabel": "Budget",
+      "deadlineLabel": "Needed by",
+      "creatorsLabel": "Creators needed",
+      "expiresLabel": "Expires",
+      "openToProposals": "Open",
+      "briefTitle": "Brief",
+      "applied": "Application sent",
+      "appliedBody": "The poster has been notified. You'll hear back through Hikaya messaging if shortlisted.",
+      "appliedAt": "Sent {when}",
+      "signInLabel": "Sign in to apply",
+      "signInBody": "Briefs are open to anyone — but to send an application you need an account.",
+      "signInCta": "Sign in",
+      "clientLabel": "Creator-only",
+      "clientBody": "Only creator accounts can apply. Sign up as a creator (or upgrade your account) to send a proposal.",
+      "notOpenLabel": "Not accepting applications",
+      "notOpenBody": "This brief is filled, expired, or closed. Browse the board for active briefs.",
+      "ownerLabel": "Your brief",
+      "ownerBody": "Mark as filled when you've chosen a creator, or close it if the project is off.",
+      "applicationsTitle": "Applications",
+      "markFilled": "Mark as filled",
+      "close": "Close brief",
+      "closeConfirm": "Close this brief? Applicants won't be able to send new applications."
+    },
+    "post": {
+      "title": "Post a brief",
+      "subtitle": "Tell creatives what you need. The post stays open for 30 days; you can mark it as filled at any point.",
+      "back": "Back to job board",
+      "titleField": "Project title",
+      "discipline": "Discipline needed",
+      "city": "City",
+      "description": "Project description",
+      "descriptionHint": "40+ characters. Mood, deliverables, timing, anything that helps creatives self-select.",
+      "descriptionPlaceholder": "We're launching a campaign in March and need a photographer for one day…",
+      "budgetOpen": "Open to proposals",
+      "budgetOpenHint": "Skip the budget and let creatives quote you. Often gets richer responses for ambiguous briefs.",
+      "budget": "Budget (SAR)",
+      "budgetCurrency": "SAR — total project, ex-VAT.",
+      "creatorsNeeded": "Creators needed",
+      "creatorsNeededHint": "1–20.",
+      "deadline": "Needed by",
+      "company": "Posted as (company)",
+      "companyHint": "Optional. Defaults to your name.",
+      "submit": "Post brief",
+      "expiryNote": "Auto-expires in 30 days.",
+      "errorGeneric": "Something went wrong. Please review and try again."
+    },
+    "apply": {
+      "label": "Apply to this brief",
+      "hint": "Briefs are reviewed by humans. A short, specific note beats a long generic one.",
+      "coverNote": "Cover note",
+      "coverNotePlaceholder": "I shoot fashion editorials in Riyadh — happy to share a relevant gallery and discuss timing…",
+      "proposedRate": "Your proposed rate (SAR)",
+      "proposedRateHint": "Total project, ex-VAT.",
+      "submit": "Send application",
+      "errorAlready": "You've already applied to this brief.",
+      "errorNotCreator": "Only creator accounts can apply. Add a creator profile to apply.",
+      "errorClosed": "This brief is no longer accepting applications.",
+      "errorOwnJob": "You can't apply to your own brief."
+    },
+    "applications": {
+      "shortlist": "Shortlist",
+      "accept": "Accept",
+      "reject": "Reject",
+      "withdraw": "Withdraw",
+      "withdrawConfirm": "Withdraw this application? You can apply again as long as the brief is open.",
+      "empty": "No applications yet.",
+      "emptyHint": "Once creatives apply, you'll review them here."
+    },
+    "applicationStatus": {
+      "SUBMITTED": "Submitted",
+      "SHORTLISTED": "Shortlisted",
+      "REJECTED": "Rejected",
+      "ACCEPTED": "Accepted"
+    },
+    "status": {
+      "OPEN": "Open",
+      "FILLED": "Filled",
+      "EXPIRED": "Expired",
+      "CLOSED": "Closed"
+    },
+    "mine": {
+      "title": "Your briefs & applications",
+      "eyebrow": "My jobs",
+      "headline": "Both sides, one page.",
+      "subtitle": "Briefs you've posted and applications you've sent — together so the next move is always one click away.",
+      "backToAccount": "Back to account",
+      "postedTitle": "Briefs you've posted",
+      "postedCta": "Post a new brief",
+      "postedEmpty": "You haven't posted any briefs yet.",
+      "appliedTitle": "Briefs you've applied to",
+      "appliedEmpty": "You haven't applied to any briefs.",
+      "appliedEmptyHint": "Find a brief whose work matches yours, then send a short, specific note.",
+      "appliedCta": "Browse briefs",
+      "appliedAt": "Applied {when}",
+      "jobUnavailable": "This brief is no longer available."
+    }
   },
   "messages": {
     "list": {
