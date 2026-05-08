@@ -1,0 +1,39 @@
+# Local development dependencies for Hikaya.
+# Run with: docker compose up -d
+# Stop with: docker compose down
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: hikaya-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: hikaya
+      POSTGRES_PASSWORD: hikaya
+      POSTGRES_DB: hikaya
+    ports:
+      - '5432:5432'
+    volumes:
+      - hikaya_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U hikaya -d hikaya']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: hikaya-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - hikaya_redisdata:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  hikaya_pgdata:
+  hikaya_redisdata:
