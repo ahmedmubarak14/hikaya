@@ -1,0 +1,61 @@
+import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
+
+import { Button, Logo } from '@hikaya/ui';
+
+import { type Locale } from '@/i18n/config';
+
+export function SiteHeader() {
+  const t = useTranslations('nav');
+  const locale = useLocale() as Locale;
+  const otherLocale: Locale = locale === 'en' ? 'ar' : 'en';
+
+  return (
+    <header className="sticky top-0 z-40 border-b border-surface/5 bg-bg/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 w-full max-w-8xl items-center justify-between px-6 md:px-10">
+        <Link href={`/${locale}`} className="flex items-center text-surface" aria-label="Hikaya">
+          <Logo arabic={locale === 'ar'} className="h-7" />
+        </Link>
+
+        <nav className="hidden items-center gap-8 md:flex">
+          <NavLink href={`/${locale}/discover`}>{t('discover')}</NavLink>
+          <NavLink href={`/${locale}/jobs`}>{t('jobs')}</NavLink>
+          <NavLink href={`/${locale}/studios`}>{t('studios')}</NavLink>
+          <NavLink href={`/${locale}/blog`}>{t('blog')}</NavLink>
+        </nav>
+
+        <div className="flex items-center gap-3">
+          <Link
+            href={`/${otherLocale}`}
+            hrefLang={otherLocale}
+            className="rounded-full border border-surface/15 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-surface/70 transition-colors hover:border-surface/40 hover:text-surface"
+          >
+            {t('switchLanguage')}
+          </Link>
+          <Link
+            href={`/${locale}/sign-in`}
+            className="hidden rounded-full px-4 py-2 text-sm text-surface/80 transition-colors hover:text-surface md:inline-flex"
+          >
+            {t('signIn')}
+          </Link>
+          <Link href={`/${locale}/sign-up`}>
+            <Button size="sm" variant="primary">
+              {t('joinAsCreator')}
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="text-sm text-surface/70 transition-colors hover:text-surface"
+    >
+      {children}
+    </Link>
+  );
+}

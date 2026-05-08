@@ -33,11 +33,13 @@ const colors = {
 
 const fontFamily = {
   // EN-first stacks; Arabic stacks are scoped via [lang="ar"] in CSS.
-  display: ['"Playfair Display"', 'Georgia', 'serif'],
-  displayAr: ['"Cairo"', 'system-ui', 'sans-serif'],
-  sans: ['"IBM Plex Sans"', 'system-ui', '-apple-system', 'sans-serif'],
-  sansAr: ['"Noto Naskh Arabic"', 'system-ui', 'sans-serif'],
-  mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+  // CSS variables are populated by `next/font` in apps/web/src/app/[locale]/layout.tsx.
+  // Fallbacks ensure tools like Storybook (without next/font) still render.
+  display: ['var(--font-display)', '"Playfair Display"', 'Georgia', 'serif'],
+  displayAr: ['var(--font-display-ar)', '"Cairo"', 'system-ui', 'sans-serif'],
+  sans: ['var(--font-sans)', '"IBM Plex Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+  sansAr: ['var(--font-sans-ar)', '"Noto Naskh Arabic"', 'system-ui', 'sans-serif'],
+  mono: ['var(--font-mono)', '"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
 };
 
 const fontSize = {

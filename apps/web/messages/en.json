@@ -1,0 +1,62 @@
+{
+  "brand": {
+    "name": "Hikaya",
+    "tagline": "Tell your story.",
+    "description": "All-in-one platform for Gulf creative professionals."
+  },
+  "nav": {
+    "discover": "Discover",
+    "jobs": "Jobs",
+    "studios": "Studios",
+    "blog": "Journal",
+    "signIn": "Sign in",
+    "joinAsCreator": "Join as creator",
+    "switchLanguage": "العربية"
+  },
+  "home": {
+    "eyebrow": "From Riyadh, for the Gulf",
+    "headline": {
+      "lineOne": "Every creative",
+      "lineTwoItalic": "deserves",
+      "lineThree": "a single home"
+    },
+    "subheadline": "Photographers, videographers, designers, and editors. Showcase your work, get hired, run your studio, deliver to clients, and sell what you make — without ever leaving the platform.",
+    "ctaPrimary": "Build your portfolio",
+    "ctaSecondary": "Hire a creative",
+    "trustedBy": "Built for the way the Gulf works",
+    "valueProps": {
+      "portfolioTitle": "Portfolio that breathes",
+      "portfolioBody": "Editorial layouts that put the work first. Masonry, full-width spreads, or showreels — your call.",
+      "hireTitle": "Two-way hiring",
+      "hireBody": "Clients send you inquiries. You apply to public job briefs. Conversations stay in one thread, with a paper trail.",
+      "studioTitle": "Studio in your pocket",
+      "studioBody": "Bookings, contracts, quotes, invoices, payouts, and team management — purpose-built for creative businesses.",
+      "deliverTitle": "Deliver beautifully",
+      "deliverBody": "Pixieset-grade client galleries with favorites, downloads, and watermark control. Replaces WeTransfer over WhatsApp."
+    },
+    "phaseLabel": "Phase 1 — Foundation",
+    "phaseTitle": "What's shipping first",
+    "phaseItems": {
+      "design": "Design system + component library",
+      "auth": "Authentication (email + Google)",
+      "profile": "Creator profile + portfolio",
+      "browse": "Client browse + search",
+      "hiring": "Two-way hiring + job board",
+      "messaging": "Real-time messaging",
+      "galleries": "Client galleries",
+      "studio": "Studio CRM (basic) + calendar",
+      "contracts": "Contracts + quotes + templates",
+      "store": "Creator store (digital products)",
+      "dashboard": "Dashboard + analytics",
+      "payments": "Manual payments (pre-Moyasar)"
+    },
+    "footerNote": "حكاية — A story, in Arabic."
+  },
+  "footer": {
+    "rights": "© {year} Hikaya. All rights reserved.",
+    "made": "Made in Riyadh."
+  },
+  "common": {
+    "comingSoon": "Coming soon"
+  }
+}
