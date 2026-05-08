@@ -101,7 +101,75 @@
     "nextLabel": "What's next",
     "nextBody": "We're currently scaffolding feature surfaces. Auth is the first slice — portfolio, discover, and the studio CRM are queued up.",
     "inquiriesLink": "View my inquiries",
-    "studioLink": "Studio dashboard"
+    "studioLink": "Studio dashboard",
+    "portfolioLink": "Edit portfolio"
+  },
+  "portfolioEditor": {
+    "title": "Edit your portfolio",
+    "headline": "Make it",
+    "headlineItalic": "yours.",
+    "subtitle": "Edit your public profile and curate the work that lands when someone searches for you. Changes go live immediately.",
+    "backToAccount": "Back to account",
+    "viewLive": "View {name}'s live profile",
+    "sections": {
+      "profile": "Profile",
+      "profileSubtitle": "What clients see at the top of your page. Both languages, please — bilingual creators rank higher in discover.",
+      "portfolio": "Portfolio",
+      "portfolioSubtitle": "Drag-free reorder via the arrows, hover to delete. Add new images by URL — the eventual flow uploads directly to Cloudinary."
+    },
+    "profile": {
+      "displayNameEn": "Display name (English)",
+      "displayNameAr": "Display name (Arabic)",
+      "bioEn": "Short bio (English)",
+      "bioAr": "Short bio (Arabic)",
+      "bioHint": "Up to 500 characters. Talk to your future client like a person, not a portfolio.",
+      "disciplines": "What you do",
+      "disciplinesHint": "{remaining} more available. Pick the disciplines that best describe your work — first one is your primary.",
+      "city": "Based in",
+      "availability": "Availability",
+      "avail": {
+        "AVAILABLE": "Available",
+        "BUSY": "Busy",
+        "ON_VACATION": "On vacation"
+      },
+      "startingPrice": "Starting price (SAR)",
+      "startingPriceHint": "Optional — appears as \"from SAR …\" on your card.",
+      "layout": "Portfolio layout",
+      "layoutHint": "How your work appears on your public page.",
+      "layouts": {
+        "MASONRY": "Masonry",
+        "MASONRYHint": "Variable-height columns. The default for varied work.",
+        "EDITORIAL": "Editorial",
+        "EDITORIALHint": "Alternating wide + paired tiles, magazine-spread feel.",
+        "REEL": "Reel",
+        "REELHint": "Horizontal scroll for showreels and video work."
+      },
+      "save": "Save changes",
+      "saved": "Saved"
+    },
+    "items": {
+      "empty": "Your portfolio is empty.",
+      "emptyHint": "Add your first piece — even one strong image is better than nine weak ones.",
+      "delete": "Delete",
+      "moveUp": "Move forward",
+      "moveDown": "Move back"
+    },
+    "add": {
+      "open": "+ Add a piece",
+      "close": "Cancel",
+      "url": "Image URL",
+      "urlHint": "Leave empty to insert a placeholder while you find the real image.",
+      "titleEn": "Title (optional)",
+      "add": "Add",
+      "added": "Added"
+    },
+    "noProfile": {
+      "label": "Client account",
+      "title": "You're signed in as a client.",
+      "body": "Only creator accounts have a portfolio. To edit one, sign in as a creator — or create a new account and choose \"Showcase my work\".",
+      "demoHint": "Demo: sign in with noor@hikaya.sa / password123 to see the editor.",
+      "discover": "Browse creatives instead"
+    }
   },
   "studio": {
     "title": "Studio dashboard",

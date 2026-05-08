@@ -55,6 +55,12 @@ export interface PortfolioItem {
 export interface CreatorProfile {
   id: string;
   username: string; // url slug
+  /**
+   * Email of the mock-auth user that owns this profile. When set, the user
+   * with that email can edit /me/portfolio. Seed creators without an owner
+   * are read-only — visible publicly, not editable.
+   */
+  ownerEmail?: string;
   displayNameEn: string;
   displayNameAr: string;
   bioEn: string;
@@ -109,6 +115,8 @@ export const CREATORS: CreatorProfile[] = [
   {
     id: 'cr_noor',
     username: 'noor',
+    // Wired up to the seed mock-auth user noor@hikaya.sa so /me/portfolio works.
+    ownerEmail: 'noor@hikaya.sa',
     displayNameEn: 'Noor Al-Saadi',
     displayNameAr: 'نور السعدي',
     bioEn: 'Wedding & editorial photographer based in Riyadh. Soft, warm light is the whole game.',

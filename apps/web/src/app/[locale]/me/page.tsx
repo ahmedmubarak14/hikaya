@@ -80,6 +80,12 @@ export default async function MePage({ params }: Props) {
         <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap gap-2">
             <Link
+              href={`/${locale}/me/portfolio`}
+              className="rounded-full border border-accent/40 bg-accent/10 px-5 py-2 text-sm text-accent transition-colors hover:bg-accent/15"
+            >
+              {t('portfolioLink')} →
+            </Link>
+            <Link
               href={`/${locale}/me/inquiries`}
               className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
             >
