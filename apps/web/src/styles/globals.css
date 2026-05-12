@@ -3,26 +3,46 @@
 @tailwind utilities;
 
 /* =============================================================================
- * Hikaya — base layer
+ * Hikaya — theme tokens
  *
- * Brand tokens are mirrored from packages/config/tailwind/tokens.js into CSS
- * custom properties so non-Tailwind contexts (e.g. inline SVG, third-party
- * embeds) can pick them up.
+ * LIGHT is the default. Users opt into dark via the header toggle, which
+ * sets `data-theme="dark"` on <html>. Only the three neutral roles change
+ * between themes; brand accents are fixed across both.
  * =============================================================================
  */
 
 :root {
-  --bg: #080808;
-  --surface: #f8f6f1;
+  /* Light (default) */
+  --bg: #fafaf7;
+  --surface: #0f0f10;
+  --line: #ececec;
+  --muted: #6b6b6b;
+
+  /* Fixed brand colors */
   --ink: #080808;
   --paper: #f8f6f1;
   --accent: #e8ff47;
   --accent-secondary: #ff6b35;
-  --muted: #888580;
-  --line: #1a1a1a;
   --sage: #4a7a5a;
   --info: #3a6fd8;
   --purple: #7c52c8;
+}
+
+:root[data-theme='dark'] {
+  --bg: #080808;
+  --surface: #f8f6f1;
+  --line: #1a1a1a;
+  --muted: #888580;
+}
+
+/* Honor OS preference when no explicit choice has been made. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #080808;
+    --surface: #f8f6f1;
+    --line: #1a1a1a;
+    --muted: #888580;
+  }
 }
 
 @layer base {
@@ -31,25 +51,22 @@
     color: var(--surface);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    color-scheme: light;
+  }
+  html[data-theme='dark'] {
+    color-scheme: dark;
   }
 
   body {
     @apply font-sans;
   }
 
-  /* AR body picks up Noto Naskh Arabic + a small optical-size bump per the PRD. */
   html[lang='ar'] body {
-    font-family:
-      'Noto Naskh Arabic',
-      system-ui,
-      sans-serif;
+    font-family: 'Noto Naskh Arabic', system-ui, sans-serif;
     font-size: 1.05em;
   }
 
-  /* Display headings flip typeface by language, matching the brand spec. */
-  h1,
-  h2,
-  h3 {
+  h1, h2, h3 {
     @apply font-display font-bold tracking-tight;
   }
 
@@ -60,29 +77,21 @@
     font-style: normal;
   }
 
-  /* Selection color picks up the brand accent. */
   ::selection {
     background-color: var(--accent);
     color: var(--ink);
   }
 
-  /* Improves cursor + keyboard parity for focus visibility on the dark bg. */
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
     border-radius: 4px;
   }
 
-  /* Smooth scroll for in-page nav. */
   html {
     scroll-behavior: smooth;
   }
 }
-
-/* =============================================================================
- * Editorial helpers
- * =============================================================================
- */
 
 @layer utilities {
   .text-balance {
@@ -96,7 +105,8 @@
     color: transparent;
   }
 
-  /* Subtle film-grain texture used on the hero. */
+  /* Film-grain texture for the hero. Faint enough to be a non-issue on
+     light; gives the dark theme its filmic feel. */
   .grain-overlay::before {
     content: '';
     position: absolute;
