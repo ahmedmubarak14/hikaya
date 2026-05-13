@@ -28,12 +28,6 @@ function Home() {
     { key: 'deliverTitle',   body: 'deliverBody',   tone: 'purple' as const },
   ];
 
-  const phaseKeys = [
-    'design', 'auth', 'profile', 'browse',
-    'hiring', 'messaging', 'galleries', 'studio',
-    'contracts', 'store', 'dashboard', 'payments',
-  ] as const;
-
   return (
     <>
       <SiteHeader />
@@ -92,40 +86,6 @@ function Home() {
                 </CardBody>
               </Card>
             ))}
-          </div>
-        </section>
-
-        {/* PHASE 1 ROADMAP */}
-        <section className="border-t border-surface/5">
-          <div className="mx-auto w-full max-w-8xl px-6 py-22 md:px-10">
-            <div className="mb-10 flex flex-col gap-3">
-              <span className="font-mono text-xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('phaseLabel')}
-              </span>
-              <h2 className="max-w-3xl text-balance text-3xl md:text-5xl">
-                {t('phaseTitle')}
-              </h2>
-            </div>
-
-            <ol className="grid grid-cols-1 gap-x-12 gap-y-3 sm:grid-cols-2 lg:grid-cols-3">
-              {phaseKeys.map((key, idx) => (
-                <li
-                  key={key}
-                  className="flex items-baseline gap-4 border-b border-surface/5 py-4"
-                >
-                  <span className="font-mono text-xs text-surface/40 tabular-nums">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <span className="text-base text-surface/80">
-                    {t(`phaseItems.${key}` as 'phaseItems.design')}
-                  </span>
-                </li>
-              ))}
-            </ol>
-
-            <p className="mt-12 max-w-prose font-mono text-xs uppercase tracking-widest text-surface/30 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-              {t('footerNote')}
-            </p>
           </div>
         </section>
       </main>
