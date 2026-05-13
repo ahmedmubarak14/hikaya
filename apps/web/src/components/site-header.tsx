@@ -3,8 +3,10 @@ import { getLocale, getTranslations } from 'next-intl/server';
 
 import { Button, Logo } from '@hikaya/ui';
 
+import { ThemeToggle } from '@/components/theme-toggle';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
+import { getTheme } from '@/lib/theme/get-theme';
 
 /**
  * Server component — reads the session cookie directly so the right-hand side
@@ -16,6 +18,7 @@ export async function SiteHeader() {
   const locale = (await getLocale()) as Locale;
   const otherLocale: Locale = locale === 'en' ? 'ar' : 'en';
   const session = await getSession();
+  const theme = (await getTheme()) ?? 'light';
 
   return (
     <header className="sticky top-0 z-40 border-b border-surface/5 bg-bg/80 backdrop-blur-md">
@@ -31,11 +34,15 @@ export async function SiteHeader() {
           <NavLink href={`/${locale}/blog`}>{t('blog')}</NavLink>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <ThemeToggle
+            initial={theme}
+            labels={{ switchToLight: t('switchToLight'), switchToDark: t('switchToDark') }}
+          />
           <Link
             href={`/${otherLocale}`}
             hrefLang={otherLocale}
-            className="rounded-full border border-surface/15 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-surface/70 transition-colors hover:border-surface/40 hover:text-surface"
+            className="rounded-full border border-surface/15 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-surface/70 transition-colors hover:border-surface/40 hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
           >
             {t('switchLanguage')}
           </Link>

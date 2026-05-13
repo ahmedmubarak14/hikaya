@@ -5,6 +5,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server';
 import { type ReactNode } from 'react';
 
 import { isRtl, locales, localeMeta, type Locale } from '@/i18n/config';
+import { getTheme } from '@/lib/theme/get-theme';
 
 import '../../styles/globals.css';
 
@@ -59,11 +60,13 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
 
   const dir = isRtl(locale) ? 'rtl' : 'ltr';
   const htmlLang = localeMeta[locale].htmlLang;
+  const theme = await getTheme();
 
   return (
     <html
       lang={htmlLang}
       dir={dir}
+      data-theme={theme ?? undefined}
       className={[
         playfair.variable,
         plexSans.variable,
@@ -72,6 +75,15 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
         notoNaskh.variable,
       ].join(' ')}
     >
+      <head>
+        {/* Anti-FOUC: when no cookie picked the theme server-side, let
+            localStorage win before paint. Honors OS preference otherwise. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var d=document.documentElement;if(d.dataset.theme)return;var s=localStorage.getItem('hikaya_theme');if(s==='dark'||s==='light'){d.dataset.theme=s;return;}var m=window.matchMedia('(prefers-color-scheme: dark)').matches;d.dataset.theme=m?'dark':'light';}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="min-h-dvh bg-bg text-surface antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}

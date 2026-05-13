@@ -59,7 +59,7 @@ async function BrandPanel({ locale }: { locale: Locale }) {
         <Logo arabic={locale === 'ar'} className="h-7 text-surface" />
         <div className="flex flex-col gap-6">
           <h2 className="max-w-md text-balance text-4xl">
-            <em className="font-display italic text-accent">{t('panelLineItalic')}</em>{' '}
+            <span className="font-bold text-accent-secondary">{t('panelLineItalic')}</span>{' '}
             <span>{t('panelLine')}</span>
           </h2>
           <p className="max-w-sm text-sm text-surface/60">{t('panelBody')}</p>

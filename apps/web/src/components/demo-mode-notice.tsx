@@ -24,8 +24,8 @@ export function DemoModeNotice({ locale }: { locale: Locale }) {
             <Badge tone="accent" className="self-start">
               Static demo
             </Badge>
-            <h1 className="text-balance text-3xl">
-              This surface needs the <em className="font-display italic text-accent">live</em> app.
+            <h1 className="text-balance text-2xl font-bold tracking-tight md:text-3xl">
+              This surface needs the <span className="text-accent-secondary">live</span> app.
             </h1>
             <p className="text-surface/70">
               You&apos;re viewing the GitHub Pages preview. It&apos;s a fully-static export
