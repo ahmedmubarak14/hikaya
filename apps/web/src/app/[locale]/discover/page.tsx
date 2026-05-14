@@ -62,33 +62,29 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-8xl px-6 py-22 md:px-10">
-        <header className="mb-12 flex max-w-3xl flex-col gap-3">
-          <span className="text-xs text-accent-secondary">
-            {t('eyebrow')}
-          </span>
-          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
-            <span>{t('headline')}</span>{' '}
-            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
+      <main className="mx-auto w-full max-w-8xl px-6 pb-22 pt-10 md:px-10 md:pt-14">
+        {/* Lightweight utility header — single h1, count inline on the right.
+            Matches the AdPlist/Contra explore pattern. */}
+        <header className="mb-6 flex items-end justify-between gap-4">
+          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+            {t('title')}
           </h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <span className="shrink-0 text-sm text-surface/50">
+            {t('count', { count: creators.length })}
+          </span>
         </header>
 
         <Suspense>
           <FilterBar city={city} discipline={discipline} availableOnly={availableOnly} />
         </Suspense>
 
-        <p className="mb-6 text-2xs text-surface/40">
-          {t('count', { count: creators.length })}
-        </p>
-
         {creators.length === 0 ? (
-          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
+          <div className="mt-10 rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
             <p className="text-lg text-surface/70">{t('empty')}</p>
             <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
           </div>
         ) : (
-          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">
             {creators.map((creator) => (
               <li key={creator.id}>
                 <CreatorCard creator={creator} />

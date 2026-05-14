@@ -21,20 +21,12 @@ interface Props {
   params: Promise<{ locale: Locale; username: string }>;
 }
 
-/**
- * Reserved slugs at the root that must NOT route to /:username. The static
- * routes (sign-in, sign-up, me, discover, jobs, studios, blog) take precedence
- * automatically; this list is just an additional 404 guard for any future
- * top-level pages that haven't been created yet.
- */
 const RESERVED = new Set([
   'sign-in', 'sign-up', 'me', 'discover', 'jobs', 'studios', 'blog',
   'about', 'pricing', 'terms', 'privacy', 'api', 'admin', 'help',
 ]);
 
 export function generateStaticParams() {
-  // Pre-generate the mock creator routes at build time. Real data swaps to a
-  // dynamic fetch + revalidate strategy later.
   return CREATORS.map((c) => ({ username: c.username }));
 }
 
@@ -76,31 +68,18 @@ export default async function CreatorProfilePage({ params }: Props) {
     <>
       <SiteHeader />
       <main>
-        {/* Cover */}
-        <section className="relative">
-          <div className="relative h-[40vh] min-h-[320px] w-full overflow-hidden bg-surface/5">
-            <Image
-              src={creator.coverUrl}
-              alt={`${name} — cover`}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg via-bg/60 to-bg/10" />
-          </div>
-        </section>
-
-        {/* Identity + CTAs */}
-        <section className="mx-auto w-full max-w-8xl px-6 md:px-10">
-          <div className="-mt-16 flex flex-col gap-8 md:-mt-20 md:flex-row md:items-end md:justify-between">
-            <div className="flex flex-col items-start gap-4 md:flex-row md:items-end md:gap-6">
-              <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-bg bg-surface/10 md:h-40 md:w-40">
+        {/* Identity — AdPlist/Contra-style tight header: avatar + name + meta
+            chips + CTAs on one row. No full-bleed cover image. */}
+        <section className="mx-auto w-full max-w-8xl px-6 pt-10 md:px-10 md:pt-14">
+          <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+            <div className="flex flex-col items-start gap-5 sm:flex-row sm:items-center sm:gap-6">
+              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full bg-surface/10 ring-1 ring-surface/10 md:h-28 md:w-28">
                 <Image
                   src={creator.avatarUrl}
                   alt={name}
                   fill
-                  sizes="160px"
+                  priority
+                  sizes="120px"
                   className="object-cover"
                 />
               </div>
@@ -121,18 +100,25 @@ export default async function CreatorProfilePage({ params }: Props) {
                   </Badge>
                 </div>
 
-                <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">{name}</h1>
+                <h1 className="text-balance text-3xl font-bold tracking-tight md:text-4xl">
+                  {name}
+                </h1>
 
-                <div className="flex flex-wrap items-center gap-2 text-2xs text-surface/50">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-surface/60">
                   <span>{tCity(creator.city as 'RIYADH')}</span>
                   <Dot />
                   <span>{t('yearsExperience', { years: creator.yearsExperience })}</span>
                   <Dot />
-                  <span>★ {creator.reviewScore.toFixed(1)} ({creator.reviewCount})</span>
+                  <span>
+                    <span className="text-accent-secondary">★</span>{' '}
+                    {creator.reviewScore.toFixed(1)}
+                    <span className="ms-1 text-surface/40">({creator.reviewCount})</span>
+                  </span>
                 </div>
               </div>
             </div>
 
+            {/* CTAs */}
             <div className="flex flex-wrap items-center gap-2">
               <Link href={`/${locale}/${creator.username}/hire`}>
                 <Button size="md" variant="primary">{t('hireCta')}</Button>
@@ -149,43 +135,47 @@ export default async function CreatorProfilePage({ params }: Props) {
             </div>
           </div>
 
-          {/* Bio */}
-          <div className="mt-12 grid grid-cols-1 gap-12 md:grid-cols-[2fr_1fr]">
-            <div>
-              <p className="max-w-prose text-lg text-surface/80">{bio}</p>
-
-              <div className="mt-6 flex flex-wrap gap-2">
+          {/* Bio + disciplines + facts row */}
+          <div className="mt-8 grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-[2fr_1fr]">
+            <div className="flex flex-col gap-4">
+              <p className="max-w-prose text-base text-surface/80">{bio}</p>
+              <div className="flex flex-wrap gap-1.5">
                 {creator.disciplines.map((d) => (
                   <DisciplineTag key={d} discipline={d} />
                 ))}
               </div>
             </div>
 
-            <aside className="flex flex-col gap-4 rounded-xl border border-surface/10 bg-surface/[0.03] p-6">
+            <aside className="flex flex-col gap-3 text-sm">
               {creator.startingPriceSar ? (
-                <Stat
+                <Fact
                   label={t('startingFrom')}
                   value={t('priceSar', {
                     price: creator.startingPriceSar.toLocaleString(locale === 'ar' ? 'ar-SA' : 'en-SA'),
                   })}
                 />
               ) : null}
-              <Stat label={t('languages')} value={creator.languages.join(' · ').toUpperCase()} />
-              {creator.socialLinks.instagram ? (
-                <SocialLink href={creator.socialLinks.instagram} label="Instagram" />
-              ) : null}
-              {creator.socialLinks.website ? (
-                <SocialLink href={creator.socialLinks.website} label={t('website')} />
-              ) : null}
+              <Fact label={t('languages')} value={creator.languages.join(' · ').toUpperCase()} />
+              <div className="flex flex-wrap gap-2 pt-1">
+                {creator.socialLinks.instagram ? (
+                  <SocialLink href={creator.socialLinks.instagram} label="Instagram" />
+                ) : null}
+                {creator.socialLinks.website ? (
+                  <SocialLink href={creator.socialLinks.website} label={t('website')} />
+                ) : null}
+              </div>
             </aside>
           </div>
         </section>
 
-        {/* Portfolio */}
-        <section className="mx-auto w-full max-w-8xl px-6 py-22 md:px-10">
-          <div className="mb-10 flex items-baseline justify-between">
-            <h2 className="text-3xl md:text-4xl">{t('selectedWork')}</h2>
-            <span className="text-2xs text-surface/40">
+        {/* Portfolio — the work is the centerpiece. Pixieset/ModelManagement
+            give portrait grids most of the page. */}
+        <section className="mx-auto w-full max-w-8xl px-6 pb-22 pt-12 md:px-10 md:pt-16">
+          <div className="mb-6 flex items-baseline justify-between">
+            <h2 className="text-xl font-bold tracking-tight md:text-2xl">
+              {t('selectedWork')}
+            </h2>
+            <span className="text-sm text-surface/50">
               {creator.portfolio.length} {t('pieces')}
             </span>
           </div>
@@ -202,13 +192,11 @@ function Dot() {
   return <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-surface/30" />;
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Fact({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-2xs text-surface/40">
-        {label}
-      </span>
-      <span className="text-base text-surface">{value}</span>
+    <div className="flex items-baseline justify-between gap-3 border-b border-surface/10 pb-2 last:border-0 last:pb-0">
+      <span className="text-surface/50">{label}</span>
+      <span className="text-end font-medium text-surface">{value}</span>
     </div>
   );
 }
@@ -220,12 +208,12 @@ function SocialLink({ href, label }: { href: string; label: string }) {
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        'flex items-center justify-between gap-2 rounded-md border border-surface/10 px-3 py-2',
-        'text-sm text-surface/80 transition-colors hover:border-surface/30 hover:text-surface',
+        'inline-flex items-center gap-1 rounded-full border border-surface/15 px-3 py-1 text-xs text-surface/80',
+        'transition-colors hover:border-surface/40 hover:text-surface',
       )}
     >
       <span>{label}</span>
-      <span aria-hidden>→</span>
+      <span aria-hidden>↗</span>
     </Link>
   );
 }
