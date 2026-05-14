@@ -316,7 +316,7 @@
     "public": {
       "title": "متجر {name}",
       "eyebrow": "المتجر",
-      "headline": "متجر",
+      "headline": "متجر <accent>{name}</accent> —",
       "subtitle": "بريسِتس، LUTs، قوالب، وأدلّة — صنعها المبدع نفسه الذي تتصفّح أعماله.",
       "backToProfile": "العودة إلى ملف {name}",
       "empty": "لا شيء هنا بعد.",

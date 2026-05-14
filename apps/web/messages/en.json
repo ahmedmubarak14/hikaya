@@ -316,7 +316,7 @@
     "public": {
       "title": "{name}'s store",
       "eyebrow": "Store",
-      "headline": "store —",
+      "headline": "<accent>{name}'s</accent> store —",
       "subtitle": "Presets, LUTs, templates, and guides — built by the same creator whose work you've been browsing.",
       "backToProfile": "Back to {name}'s profile",
       "empty": "Nothing here yet.",
