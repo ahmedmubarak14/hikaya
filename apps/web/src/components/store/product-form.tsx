@@ -181,7 +181,7 @@ export function ProductForm({ locale, product }: Props) {
             </p>
           </div>
           <div className="text-end">
-            <p className="font-display text-3xl text-accent-secondary tabular-nums">
+            <p className="text-3xl font-bold tabular-nums tracking-tight text-accent-secondary">
               {formatSarFromHalalas(creatorTakeFor(halalas), locale)}
             </p>
             <p className="font-mono text-2xs text-surface/40">

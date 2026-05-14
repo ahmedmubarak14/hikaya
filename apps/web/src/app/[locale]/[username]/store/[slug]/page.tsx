@@ -139,7 +139,7 @@ export default async function PublicProductPage({ params }: Props) {
               {t('byCreator', { name: creatorName })}
             </Link>
 
-            <p className="font-display text-5xl text-accent-secondary tabular-nums">
+            <p className="text-5xl font-bold tabular-nums tracking-tight text-accent-secondary">
               {formatSarFromHalalas(product.priceHalalas, locale)}
             </p>
 

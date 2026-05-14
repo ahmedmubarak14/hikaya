@@ -100,7 +100,7 @@ export default async function MyQuotesPage({ params }: Props) {
                         </span>
                         <span className="text-lg text-surface">{q.clientName}</span>
                       </div>
-                      <span className="font-mono text-sm text-surface/70 tabular-nums">
+                      <span className="text-sm font-semibold tabular-nums text-surface/80">
                         {formatSarFromHalalas(q.totalHalalas, locale)}
                       </span>
                       <span className="text-2xs text-surface/50">

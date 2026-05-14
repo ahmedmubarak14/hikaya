@@ -28,7 +28,7 @@ export function ThreadCard({ thread, preview, unreadCount, viewerSide }: Props) 
         <CardBody className="flex items-center gap-4 p-5">
           <span
             aria-hidden
-            className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-accent/20 font-display text-xl text-accent-secondary"
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-accent text-xl font-semibold text-ink"
           >
             {otherInitial}
           </span>

@@ -50,7 +50,7 @@ export function ProductCard({ product, href }: Props) {
         <CardBody className="flex flex-col gap-2 p-5">
           <h3 className="line-clamp-2 text-lg text-surface">{title}</h3>
           <div className="flex items-baseline justify-between">
-            <span className="font-display text-2xl text-accent-secondary tabular-nums">
+            <span className="text-2xl font-bold tabular-nums tracking-tight text-accent-secondary">
               {formatSarFromHalalas(product.priceHalalas, locale)}
             </span>
             {product.compatibleSoftware.length > 0 ? (

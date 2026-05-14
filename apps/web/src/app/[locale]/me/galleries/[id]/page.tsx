@@ -227,7 +227,7 @@ export default async function ManageGalleryPage({ params }: Props) {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <li className="flex flex-col gap-1 rounded-md bg-surface/[0.03] py-3">
-      <span className="font-display text-2xl text-surface">{value}</span>
+      <span className="text-2xl font-bold tabular-nums tracking-tight text-surface">{value}</span>
       <span className="text-2xs text-surface/40">
         {label}
       </span>

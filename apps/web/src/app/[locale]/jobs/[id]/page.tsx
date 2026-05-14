@@ -190,7 +190,7 @@ function Stat({ label, value }: { label: string; value: string }) {
       <span className="text-2xs text-surface/40">
         {label}
       </span>
-      <span className="font-display text-xl text-surface">{value}</span>
+      <span className="text-xl font-semibold tabular-nums text-surface">{value}</span>
     </div>
   );
 }

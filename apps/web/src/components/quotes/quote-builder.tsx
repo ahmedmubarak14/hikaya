@@ -258,7 +258,7 @@ function Row({ label, value, accent }: { label: string; value: string; accent?: 
       >
         {label}
       </span>
-      <span className={accent ? 'font-display text-3xl text-accent-secondary tabular-nums' : 'font-mono text-sm text-surface tabular-nums'}>
+      <span className={accent ? 'text-3xl font-bold tabular-nums tracking-tight text-accent-secondary' : 'text-sm tabular-nums text-surface'}>
         {value}
       </span>
     </div>

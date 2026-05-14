@@ -23,7 +23,7 @@ export function QuoteSummary({ quote }: Props) {
           <span className="text-2xs text-surface/40">
             {t('quoteFor', { name: quote.clientName })}
           </span>
-          <h3 className="font-display text-3xl text-surface">{quote.number}</h3>
+          <h3 className="text-3xl font-bold tracking-tight text-surface">{quote.number}</h3>
         </div>
         {quote.expiresAt ? (
           <span className="text-end text-2xs text-surface/40">
@@ -112,8 +112,8 @@ function Row({ label, value, accent }: { label: string; value: string; accent?: 
       <span
         className={
           accent
-            ? 'font-display text-3xl text-accent-secondary tabular-nums'
-            : 'font-mono text-sm text-surface/80 tabular-nums'
+            ? 'text-3xl font-bold tabular-nums tracking-tight text-accent-secondary'
+            : 'text-sm tabular-nums text-surface/80'
         }
       >
         {value}

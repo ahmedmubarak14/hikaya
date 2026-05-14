@@ -174,7 +174,7 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
       <span className="text-2xs text-surface/40">
         {label}
       </span>
-      <span className={accent ? 'font-display text-3xl text-accent-secondary' : 'font-display text-3xl text-surface'}>
+      <span className={accent ? 'text-3xl font-bold tabular-nums tracking-tight text-accent-secondary' : 'text-3xl font-bold tabular-nums tracking-tight text-surface'}>
         {value}
       </span>
     </div>
