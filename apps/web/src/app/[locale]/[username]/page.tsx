@@ -121,7 +121,7 @@ export default async function CreatorProfilePage({ params }: Props) {
                   </Badge>
                 </div>
 
-                <h1 className="text-balance text-5xl md:text-6xl">{name}</h1>
+                <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">{name}</h1>
 
                 <div className="flex flex-wrap items-center gap-2 font-mono text-2xs uppercase tracking-wider text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
                   <span>{tCity(creator.city as 'RIYADH')}</span>

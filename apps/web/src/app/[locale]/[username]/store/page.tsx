@@ -58,8 +58,8 @@ export default async function PublicStorePage({ params }: Props) {
             ← {t('backToProfile', { name })}
           </Link>
           <Badge tone="accent" className="self-start">{t('eyebrow')}</Badge>
-          <h1 className="text-balance text-5xl md:text-6xl">
-            <em className="font-display italic text-accent">{name}'s</em> {t('headline')}
+          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
+            <span className="font-bold text-accent-secondary">{name}'s</span> {t('headline')}
           </h1>
           <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
         </header>

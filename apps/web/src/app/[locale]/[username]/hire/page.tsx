@@ -62,7 +62,7 @@ export default async function HireCreatorPage({ params }: Props) {
               <Image src={creator.avatarUrl} alt={name} fill sizes="96px" className="object-cover" />
             </div>
             <h2 className="max-w-md text-balance text-4xl">
-              <em className="font-display italic text-accent">{t('panelLineItalic')}</em>{' '}
+              <span className="font-bold text-accent-secondary">{t('panelLineItalic')}</span>{' '}
               <span>{t('panelLineWith', { name })}</span>
             </h2>
             <p className="max-w-sm text-sm text-surface/60">{t('panelBody')}</p>

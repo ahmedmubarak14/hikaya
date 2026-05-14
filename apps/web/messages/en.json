@@ -11,46 +11,39 @@
     "blog": "Journal",
     "signIn": "Sign in",
     "joinAsCreator": "Join as creator",
-    "switchLanguage": "العربية"
+    "switchLanguage": "العربية",
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme"
   },
   "home": {
-    "eyebrow": "From Riyadh, for the Gulf",
     "headline": {
-      "lineOne": "Every creative",
-      "lineTwoItalic": "deserves",
-      "lineThree": "a single home"
+      "lineOne": "Where Gulf creatives",
+      "lineTwoItalic": "show up,",
+      "lineThree": "get hired, and get paid."
     },
-    "subheadline": "Photographers, videographers, designers, and editors. Showcase your work, get hired, run your studio, deliver to clients, and sell what you make — without ever leaving the platform.",
-    "ctaPrimary": "Build your portfolio",
-    "ctaSecondary": "Hire a creative",
-    "trustedBy": "Built for the way the Gulf works",
+    "subheadline": "Photographers, videographers, designers, and editors. Showcase your work, get hired, run your studio, and deliver to clients — without leaving the platform.",
+    "ctaPrimary": "Join as a creator",
+    "ctaSecondary": "Explore creators",
+    "featured": {
+      "title": "Featured creators",
+      "viewAll": "Explore all →"
+    },
+    "valuePropsTitle": "Everything you need to run a creative practice.",
     "valueProps": {
-      "portfolioTitle": "Portfolio that breathes",
-      "portfolioBody": "Editorial layouts that put the work first. Masonry, full-width spreads, or showreels — your call.",
+      "portfolioTitle": "A portfolio worth sharing",
+      "portfolioBody": "Photo-first layouts that put the work first. Masonry, full-width, or reels — your call.",
       "hireTitle": "Two-way hiring",
-      "hireBody": "Clients send you inquiries. You apply to public job briefs. Conversations stay in one thread, with a paper trail.",
-      "studioTitle": "Studio in your pocket",
-      "studioBody": "Bookings, contracts, quotes, invoices, payouts, and team management — purpose-built for creative businesses.",
+      "hireBody": "Clients send you inquiries. You apply to public briefs. Conversations stay in one thread.",
+      "studioTitle": "A studio in your pocket",
+      "studioBody": "Bookings, contracts, quotes, invoices, payouts. Built for creative businesses.",
       "deliverTitle": "Deliver beautifully",
-      "deliverBody": "Pixieset-grade client galleries with favorites, downloads, and watermark control. Replaces WeTransfer over WhatsApp."
+      "deliverBody": "Client galleries with favorites, downloads, and watermark control. No more WeTransfer over WhatsApp."
     },
-    "phaseLabel": "Phase 1 — Foundation",
-    "phaseTitle": "What's shipping first",
-    "phaseItems": {
-      "design": "Design system + component library",
-      "auth": "Authentication (email + Google)",
-      "profile": "Creator profile + portfolio",
-      "browse": "Client browse + search",
-      "hiring": "Two-way hiring + job board",
-      "messaging": "Real-time messaging",
-      "galleries": "Client galleries",
-      "studio": "Studio CRM (basic) + calendar",
-      "contracts": "Contracts + quotes + templates",
-      "store": "Creator store (digital products)",
-      "dashboard": "Dashboard + analytics",
-      "payments": "Manual payments (pre-Moyasar)"
-    },
-    "footerNote": "حكاية — A story, in Arabic."
+    "ctaStrip": {
+      "title": "Ready to set up your home on Hikaya?",
+      "body": "It takes a minute. Build a portfolio or hire your first creative — both start here.",
+      "browseJobs": "Browse open briefs"
+    }
   },
   "footer": {
     "rights": "© {year} Hikaya. All rights reserved.",

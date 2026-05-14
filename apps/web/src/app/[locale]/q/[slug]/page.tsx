@@ -83,9 +83,9 @@ export default async function PublicQuotePage({ params }: Props) {
               </Badge>
             ) : null}
           </div>
-          <h1 className="text-balance text-5xl md:text-6xl">
+          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
             <span>{t('headline')}</span>{' '}
-            <em className="font-display italic text-accent">{t('headlineItalic')}</em>
+            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
           </h1>
           <p className="max-w-prose text-surface/60">
             {t('subtitle', { creator: creator ? (locale === 'ar' ? creator.displayNameAr : creator.displayNameEn) : '' })}

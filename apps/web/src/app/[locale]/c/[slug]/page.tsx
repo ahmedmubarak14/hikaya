@@ -81,9 +81,9 @@ export default async function PublicContractPage({ params }: Props) {
               {contract.number}
             </span>
           </div>
-          <h1 className="text-balance text-5xl md:text-6xl">
+          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
             <span>{t('headline')}</span>{' '}
-            <em className="font-display italic text-accent">{t('headlineItalic')}</em>
+            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
           </h1>
           <p className="max-w-prose text-surface/60">
             {t('subtitle', {
@@ -186,7 +186,7 @@ function SigBlock({
       </span>
       {name && at ? (
         <>
-          <p className="mt-2 font-display text-2xl italic text-accent">{name}</p>
+          <p className="mt-2 text-2xl font-bold text-accent-secondary">{name}</p>
           <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
             {formatDateTime(at, locale)}
           </p>

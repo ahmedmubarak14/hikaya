@@ -34,9 +34,9 @@ export default async function JobsPage({ params }: Props) {
       <main className="mx-auto w-full max-w-6xl px-6 py-22 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Badge tone="accent" className="self-start">{t('eyebrow')}</Badge>
-          <h1 className="text-balance text-5xl md:text-6xl">
+          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
             <span>{t('headline')}</span>{' '}
-            <em className="font-display italic text-accent">{t('headlineItalic')}</em>
+            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
           </h1>
           <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
         </header>

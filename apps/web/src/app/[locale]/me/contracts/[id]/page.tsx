@@ -202,7 +202,7 @@ function Signature({
       </span>
       {name && at ? (
         <>
-          <p className="mt-2 font-display text-2xl italic text-accent">{name}</p>
+          <p className="mt-2 text-2xl font-bold text-accent-secondary">{name}</p>
           <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
             {formatDateTime(at, locale)}
           </p>

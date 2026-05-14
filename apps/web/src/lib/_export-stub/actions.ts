@@ -68,3 +68,6 @@ export const createProductAction: any = noop;
 export const updateProductAction: any = noop;
 export const setProductStatusAction: any = noop;
 export const purchaseProductAction: any = noop;
+
+// Theme
+export const setTheme: any = noop;
