@@ -42,7 +42,7 @@ export async function SiteHeader() {
           <Link
             href={`/${otherLocale}`}
             hrefLang={otherLocale}
-            className="rounded-full border border-surface/15 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-surface/70 transition-colors hover:border-surface/40 hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="rounded-full border border-surface/15 px-3 py-1.5 text-xs text-surface/70 transition-colors hover:border-surface/40 hover:text-surface"
           >
             {t('switchLanguage')}
           </Link>
@@ -55,7 +55,7 @@ export async function SiteHeader() {
             >
               <span
                 aria-hidden
-                className="grid h-6 w-6 place-items-center rounded-full bg-accent/20 font-mono text-2xs uppercase text-accent"
+                className="grid h-6 w-6 place-items-center rounded-full bg-accent text-2xs font-semibold uppercase text-ink"
               >
                 {session.user.displayName.charAt(0)}
               </span>

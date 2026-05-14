@@ -64,7 +64,7 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
       <SiteHeader />
       <main className="mx-auto w-full max-w-8xl px-6 py-22 md:px-10">
         <header className="mb-12 flex max-w-3xl flex-col gap-3">
-          <span className="font-mono text-xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <span className="text-xs text-accent-secondary">
             {t('eyebrow')}
           </span>
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
@@ -78,7 +78,7 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
           <FilterBar city={city} discipline={discipline} availableOnly={availableOnly} />
         </Suspense>
 
-        <p className="mb-6 font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+        <p className="mb-6 text-2xs text-surface/40">
           {t('count', { count: creators.length })}
         </p>
 

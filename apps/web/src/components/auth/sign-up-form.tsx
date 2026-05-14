@@ -102,7 +102,7 @@ export function SignUpForm({ locale }: Props) {
             terms: (chunks) => (
               <Link
                 href={`/${locale}/terms`}
-                className="text-surface underline decoration-accent decoration-2 underline-offset-4"
+                className="text-surface underline decoration-accent-secondary decoration-2 underline-offset-4"
               >
                 {chunks}
               </Link>
@@ -110,7 +110,7 @@ export function SignUpForm({ locale }: Props) {
             privacy: (chunks) => (
               <Link
                 href={`/${locale}/privacy`}
-                className="text-surface underline decoration-accent decoration-2 underline-offset-4"
+                className="text-surface underline decoration-accent-secondary decoration-2 underline-offset-4"
               >
                 {chunks}
               </Link>
@@ -132,7 +132,7 @@ export function SignUpForm({ locale }: Props) {
         {t('haveAccount')}{' '}
         <Link
           href={`/${locale}/sign-in`}
-          className="text-surface underline decoration-accent decoration-2 underline-offset-4 hover:text-accent"
+          className="text-surface underline decoration-accent-secondary decoration-2 underline-offset-4 hover:text-accent-secondary"
         >
           {t('signInLink')}
         </Link>

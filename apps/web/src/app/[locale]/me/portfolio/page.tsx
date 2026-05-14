@@ -48,7 +48,7 @@ export default async function MyPortfolioPage({ params }: Props) {
         <header className="mb-12 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('backToAccount')}
           </Link>
@@ -65,7 +65,7 @@ export default async function MyPortfolioPage({ params }: Props) {
               href={`/${locale}/${creator.username}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-2xs uppercase tracking-widest text-accent underline decoration-accent decoration-2 underline-offset-4 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+              className="text-2xs text-accent-secondary underline decoration-accent-secondary decoration-2 underline-offset-4"
             >
               {t('viewLive', { name: displayName })} ↗
             </Link>
@@ -109,7 +109,7 @@ async function NoCreatorProfile({ locale }: { locale: Locale }) {
       <main className="mx-auto w-full max-w-3xl px-6 py-22 md:px-10">
         <Link
           href={`/${locale}/me`}
-          className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+          className="text-2xs text-surface/40 transition-colors hover:text-surface"
         >
           ← {t('backToAccount')}
         </Link>

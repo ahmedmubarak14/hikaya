@@ -49,7 +49,7 @@ export default async function MyGalleriesPage({ params }: Props) {
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('backToAccount')}
           </Link>
@@ -98,7 +98,7 @@ export default async function MyGalleriesPage({ params }: Props) {
                       <CardBody className="flex flex-col gap-3 p-5">
                         <div className="flex items-baseline justify-between gap-3">
                           <h3 className="truncate text-lg text-surface">{title}</h3>
-                          <span className="shrink-0 font-mono text-2xs uppercase tracking-wider text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                          <span className="shrink-0 text-2xs text-surface/50">
                             {t('imageCount', { count: g.images.length })}
                           </span>
                         </div>
@@ -147,7 +147,7 @@ function NoCreatorState({
       <main className="mx-auto w-full max-w-3xl px-6 py-22 md:px-10">
         <Link
           href={`/${locale}/me`}
-          className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+          className="text-2xs text-surface/40 transition-colors hover:text-surface"
         >
           ← {backLabel}
         </Link>

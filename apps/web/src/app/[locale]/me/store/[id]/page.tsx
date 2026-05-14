@@ -66,12 +66,12 @@ export default async function EditProductPage({ params }: Props) {
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/store`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('back')}
           </Link>
           <h1 className="text-balance text-4xl">{t('headline', { title: product.titleEn })}</h1>
-          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <p className="text-2xs text-surface/40">
             {t('breakdown', {
               total: formatSarFromHalalas(product.priceHalalas, locale),
               take: formatSarFromHalalas(creatorTakeFor(product.priceHalalas), locale),

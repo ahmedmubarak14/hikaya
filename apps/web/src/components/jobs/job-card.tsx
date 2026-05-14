@@ -28,7 +28,7 @@ export function JobCard({ job, applicationCount }: Props) {
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
               <DisciplineTag discipline={job.discipline} tone="accent" />
-              <span className="font-mono text-2xs uppercase tracking-wider text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-surface/50">
                 {tCity(job.city as 'RIYADH')}
               </span>
             </div>
@@ -40,7 +40,7 @@ export function JobCard({ job, applicationCount }: Props) {
           <p className="line-clamp-2 max-w-prose text-sm text-surface/60">{job.description}</p>
 
           <div className="flex flex-wrap items-center justify-between gap-3 text-2xs">
-            <span className="font-mono text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal">
+            <span className="font-mono text-surface/50">
               {job.postedByCompany ?? job.postedByName} · {t('deadline', { date: formatDate(job.deadline, locale) })}
             </span>
             <div className="flex items-center gap-2 font-mono text-surface tabular-nums">

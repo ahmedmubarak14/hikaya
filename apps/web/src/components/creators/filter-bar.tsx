@@ -123,7 +123,7 @@ export function FilterBar({ city, discipline, availableOnly }: Props) {
             onClick={() => {
               startTransition(() => router.replace(pathname, { scroll: false }));
             }}
-            className="ms-auto font-mono text-2xs uppercase tracking-widest text-surface/60 underline decoration-accent decoration-2 underline-offset-4 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="ms-auto text-2xs text-surface/60 underline decoration-accent-secondary decoration-2 underline-offset-4 transition-colors hover:text-surface"
           >
             {t('clear')}
           </button>
@@ -142,7 +142,7 @@ export function FilterBar({ city, discipline, availableOnly }: Props) {
                 className={cn(
                   'rounded-full border px-3 py-1.5 text-xs transition-colors',
                   active
-                    ? 'border-accent bg-accent/15 text-accent'
+                    ? 'border-accent bg-accent/15 text-accent-secondary'
                     : 'border-surface/10 bg-surface/5 text-surface/70 hover:border-surface/30 hover:text-surface',
                 )}
               >

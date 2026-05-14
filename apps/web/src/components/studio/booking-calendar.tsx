@@ -52,7 +52,7 @@ export function BookingCalendar({ bookings, anchor = new Date() }: Props) {
     <section className="rounded-xl border border-surface/10 bg-surface/[0.03] p-4 md:p-6">
       <header className="mb-4 flex items-baseline justify-between">
         <h3 className="text-2xl text-surface">{monthLabel}</h3>
-        <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+        <span className="text-2xs text-surface/40">
           {t('weekStart')}
         </span>
       </header>
@@ -61,7 +61,7 @@ export function BookingCalendar({ bookings, anchor = new Date() }: Props) {
         {weekDayLabels.map((label) => (
           <div
             key={label}
-            className="bg-bg p-2 text-center font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="bg-bg p-2 text-center text-2xs text-surface/40"
           >
             {label}
           </div>
@@ -84,7 +84,7 @@ export function BookingCalendar({ bookings, anchor = new Date() }: Props) {
               <div
                 className={cn(
                   'mb-1 font-mono text-2xs',
-                  isToday ? 'text-accent' : 'text-surface/50',
+                  isToday ? 'text-accent-secondary' : 'text-surface/50',
                 )}
               >
                 {new Intl.NumberFormat(locale === 'ar' ? 'ar-SA' : 'en-SA').format(d.getDate())}
@@ -114,8 +114,8 @@ const STATUS_COLORS: Record<BookingStatus, string> = {
   QUOTED: 'bg-info/20 text-info',
   CONTRACTED: 'bg-purple/20 text-purple',
   CONFIRMED: 'bg-sage/20 text-sage',
-  IN_PROGRESS: 'bg-accent/20 text-accent',
-  DELIVERED: 'bg-accent/15 text-accent',
+  IN_PROGRESS: 'bg-accent/20 text-accent-secondary',
+  DELIVERED: 'bg-accent/15 text-accent-secondary',
   COMPLETED: 'bg-surface/10 text-surface/60',
   CANCELLED: 'bg-accent-secondary/20 text-accent-secondary line-through',
 };

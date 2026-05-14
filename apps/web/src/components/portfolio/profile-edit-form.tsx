@@ -157,7 +157,7 @@ export function ProfileEditForm({ locale, creator }: Props) {
                 className={cn(
                   'rounded-full border px-3 py-1.5 text-xs transition-colors',
                   active
-                    ? 'border-accent bg-accent/15 text-accent'
+                    ? 'border-accent bg-accent/15 text-accent-secondary'
                     : 'border-surface/10 bg-surface/5 text-surface/70 hover:border-surface/30 hover:text-surface',
                 )}
               >
@@ -235,7 +235,7 @@ export function ProfileEditForm({ locale, creator }: Props) {
           {t('save')}
         </Button>
         {serverState?.ok ? (
-          <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <span className="text-2xs text-accent-secondary">
             {t('saved')}
           </span>
         ) : null}

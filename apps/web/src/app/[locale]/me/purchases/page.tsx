@@ -47,7 +47,7 @@ export default async function MyPurchasesPage({ params, searchParams }: Props) {
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('backToAccount')}
           </Link>
@@ -59,7 +59,7 @@ export default async function MyPurchasesPage({ params, searchParams }: Props) {
         {bought ? (
           <Card className="mb-8 border-sage/40 bg-sage/10">
             <CardBody className="flex flex-col gap-1 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-sage [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-sage">
                 {t('purchasedLabel')}
               </span>
               <p className="text-sm text-surface/80">{t('purchasedBody')}</p>
@@ -105,7 +105,7 @@ export default async function MyPurchasesPage({ params, searchParams }: Props) {
                             {product ? <CategoryBadge category={product.category} /> : null}
                           </div>
                           <h3 className="text-base text-surface">{item.productTitleEn}</h3>
-                          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                          <p className="text-2xs text-surface/40">
                             {t('purchasedAt', { when: formatDateTime(order.createdAt, locale) })}
                             {' · '}
                             {formatSarFromHalalas(item.unitHalalas, locale)}
@@ -113,7 +113,7 @@ export default async function MyPurchasesPage({ params, searchParams }: Props) {
                         </div>
                         <div className="col-span-2 flex flex-wrap items-center justify-end gap-2 md:col-span-1">
                           {expired ? (
-                            <span className="rounded-full border border-surface/15 px-3 py-1 font-mono text-2xs uppercase tracking-widest text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                            <span className="rounded-full border border-surface/15 px-3 py-1 text-2xs text-surface/50">
                               {t('expired')}
                             </span>
                           ) : product ? (
@@ -127,7 +127,7 @@ export default async function MyPurchasesPage({ params, searchParams }: Props) {
                             </a>
                           ) : null}
                           {!expired ? (
-                            <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                            <span className="text-2xs text-surface/40">
                               {t('linkExpires', { when: formatDateTime(item.downloadExpiresAt, locale) })}
                             </span>
                           ) : null}

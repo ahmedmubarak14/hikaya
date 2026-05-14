@@ -78,7 +78,7 @@ export function SignInForm({ locale }: Props) {
         {t('noAccount')}{' '}
         <Link
           href={`/${locale}/sign-up`}
-          className="text-surface underline decoration-accent decoration-2 underline-offset-4 hover:text-accent"
+          className="text-surface underline decoration-accent-secondary decoration-2 underline-offset-4 hover:text-accent-secondary"
         >
           {t('signUpLink')}
         </Link>

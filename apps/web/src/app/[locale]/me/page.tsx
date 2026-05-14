@@ -55,7 +55,7 @@ export default async function MePage({ params }: Props) {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Card>
             <CardBody className="flex flex-col gap-2 p-6">
-              <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-surface/40">
                 {t('emailLabel')}
               </span>
               <p className="text-base text-surface">{session.user.email}</p>
@@ -64,7 +64,7 @@ export default async function MePage({ params }: Props) {
 
           <Card>
             <CardBody className="flex flex-col gap-2 p-6">
-              <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-surface/40">
                 {t('roleLabel')}
               </span>
               <p className="text-base text-surface">{session.user.role}</p>
@@ -73,7 +73,7 @@ export default async function MePage({ params }: Props) {
 
           <Card className="md:col-span-2">
             <CardBody className="flex flex-col gap-3 p-6">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-accent-secondary">
                 {t('nextLabel')}
               </span>
               <p className="text-base text-surface/70">{t('nextBody')}</p>
@@ -85,7 +85,7 @@ export default async function MePage({ params }: Props) {
           <div className="flex flex-wrap gap-2">
             <Link
               href={`/${locale}/me/portfolio`}
-              className="rounded-full border border-accent/40 bg-accent/10 px-5 py-2 text-sm text-accent transition-colors hover:bg-accent/15"
+              className="rounded-full border border-accent/40 bg-accent/10 px-5 py-2 text-sm text-accent-secondary transition-colors hover:bg-accent/15"
             >
               {t('portfolioLink')} →
             </Link>

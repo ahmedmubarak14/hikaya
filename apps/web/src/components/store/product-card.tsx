@@ -50,11 +50,11 @@ export function ProductCard({ product, href }: Props) {
         <CardBody className="flex flex-col gap-2 p-5">
           <h3 className="line-clamp-2 text-lg text-surface">{title}</h3>
           <div className="flex items-baseline justify-between">
-            <span className="font-display text-2xl text-accent tabular-nums">
+            <span className="font-display text-2xl text-accent-secondary tabular-nums">
               {formatSarFromHalalas(product.priceHalalas, locale)}
             </span>
             {product.compatibleSoftware.length > 0 ? (
-              <span className="line-clamp-1 font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="line-clamp-1 text-2xs text-surface/40">
                 {product.compatibleSoftware[0]}
                 {product.compatibleSoftware.length > 1 ? ` +${product.compatibleSoftware.length - 1}` : ''}
               </span>

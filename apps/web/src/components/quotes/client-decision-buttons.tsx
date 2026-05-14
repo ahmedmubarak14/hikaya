@@ -84,7 +84,7 @@ export function ClientDecisionButtons({ locale, shareSlug, expired }: Props) {
               {t('rejectConfirm')}
             </Button>
             {rejectState?.ok ? (
-              <span className="font-mono text-2xs uppercase tracking-widest text-surface/60 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-surface/60">
                 {t('rejected')}
               </span>
             ) : null}

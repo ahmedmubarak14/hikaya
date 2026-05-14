@@ -64,7 +64,7 @@ export default async function MyContractsPage({ params }: Props) {
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('backToAccount')}
           </Link>
@@ -95,7 +95,7 @@ export default async function MyContractsPage({ params }: Props) {
                   <Card interactive>
                     <CardBody className="grid grid-cols-1 gap-3 p-5 md:grid-cols-[2fr_1fr_1fr_auto] md:items-center">
                       <div className="flex flex-col gap-1">
-                        <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                        <span className="text-2xs text-surface/40">
                           {c.number}
                         </span>
                         <span className="text-lg text-surface">{c.clientName}</span>
@@ -103,7 +103,7 @@ export default async function MyContractsPage({ params }: Props) {
                       <span className="font-mono text-sm text-surface/70 tabular-nums">
                         {formatSarFromHalalas(c.totalHalalas, locale)}
                       </span>
-                      <span className="font-mono text-2xs uppercase tracking-widest text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                      <span className="text-2xs text-surface/50">
                         {t('updatedAt', { time: formatDateTime(c.updatedAt, locale) })}
                       </span>
                       <ContractStatusBadge status={c.status} />

@@ -40,7 +40,7 @@ export function HeartButton({ locale, shareSlug, imageId, initialSelected, selec
         'grid h-9 w-9 place-items-center rounded-full border bg-bg/70 text-base backdrop-blur-sm transition-colors',
         optimistic
           ? 'border-accent-secondary text-accent-secondary'
-          : 'border-surface/30 text-surface/80 hover:text-accent-secondary hover:border-accent-secondary/60',
+          : 'border-surface/30 text-surface/80 hover:text-accent-secondary-secondary hover:border-accent-secondary/60',
       )}
     >
       <span aria-hidden>{optimistic ? '♥' : '♡'}</span>

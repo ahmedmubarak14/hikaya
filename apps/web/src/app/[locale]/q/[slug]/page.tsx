@@ -60,7 +60,7 @@ export default async function PublicQuotePage({ params }: Props) {
           {creator ? (
             <Link
               href={`/${locale}/${creator.username}`}
-              className="flex items-center gap-2 rounded-full border border-surface/20 bg-bg/40 px-3 py-1.5 font-mono text-2xs uppercase tracking-wider text-surface/80 transition-colors hover:border-surface/40 hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+              className="flex items-center gap-2 rounded-full border border-surface/20 bg-bg/40 px-3 py-1.5 text-2xs text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
             >
               <span className="relative h-5 w-5 overflow-hidden rounded-full">
                 <Image src={creator.avatarUrl} alt="" fill sizes="20px" className="object-cover" />
@@ -127,7 +127,7 @@ export default async function PublicQuotePage({ params }: Props) {
           <Link href={`/${locale}`} className="flex items-center text-surface/70 hover:text-surface">
             <Logo arabic={locale === 'ar'} className="h-5" />
           </Link>
-          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <p className="text-2xs text-surface/40">
             {t('footerNote')}
           </p>
         </div>

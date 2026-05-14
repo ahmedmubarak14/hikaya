@@ -49,7 +49,7 @@ export function AddImagesForm({ locale, galleryId }: Props) {
       </label>
 
       {serverState?.ok ? (
-        <p className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+        <p className="text-2xs text-accent-secondary">
           {t('added')}
         </p>
       ) : serverState?.error === 'INVALID_INPUT' ? (

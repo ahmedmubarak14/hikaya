@@ -48,7 +48,7 @@ export function DemoModeNotice({ locale }: { locale: Locale }) {
               <Link href={`/${locale}/q/sara-hassan-wedding-q1`} className={linkClass}>Public quote</Link>
             </div>
 
-            <p className="mt-4 font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <p className="mt-4 text-2xs text-surface/40">
               For the full interactive app, run locally — see the README for instructions.
             </p>
           </CardBody>

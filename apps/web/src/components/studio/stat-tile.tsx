@@ -20,10 +20,10 @@ export function StatTile({ label, value, hint, tone = 'neutral', children }: Pro
           : 'border-surface/10 bg-surface/[0.03]',
       )}
     >
-      <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+      <span className="text-2xs text-surface/40">
         {label}
       </span>
-      <span className={cn('text-3xl font-display', tone === 'accent' ? 'text-accent' : 'text-surface')}>
+      <span className={cn('text-3xl font-display', tone === 'accent' ? 'text-accent-secondary' : 'text-surface')}>
         {value}
       </span>
       {hint ? <span className="text-sm text-surface/50">{hint}</span> : null}

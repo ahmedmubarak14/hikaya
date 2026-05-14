@@ -67,13 +67,13 @@ export default async function QuoteDetailPage({ params }: Props) {
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/quotes`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('back')}
           </Link>
           <div className="flex flex-wrap items-center gap-3">
             <QuoteStatusBadge status={quote.status} />
-            <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-2xs text-surface/40">
               {t('updatedAt', { time: formatDateTime(quote.updatedAt, locale) })}
             </span>
           </div>
@@ -85,7 +85,7 @@ export default async function QuoteDetailPage({ params }: Props) {
         {quote.status === 'DRAFT' ? (
           <Card className="mb-6 border-accent/40 bg-accent/5">
             <CardBody className="flex flex-col gap-3 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-accent-secondary">
                 {t('draftLabel')}
               </span>
               <p className="text-sm text-surface/70">{t('draftBody')}</p>
@@ -100,7 +100,7 @@ export default async function QuoteDetailPage({ params }: Props) {
         {quote.status === 'SENT' ? (
           <Card className="mb-6">
             <CardBody className="flex flex-col gap-3 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-accent-secondary">
                 {t('sentLabel')}
               </span>
               <p className="text-sm text-surface/70">{t('sentBody')}</p>
@@ -126,7 +126,7 @@ export default async function QuoteDetailPage({ params }: Props) {
           <Card className="mb-6 border-sage/40 bg-sage/10">
             <CardBody className="flex flex-col gap-3 p-5 md:flex-row md:items-center md:justify-between">
               <div>
-                <span className="font-mono text-2xs uppercase tracking-widest text-sage [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                <span className="text-2xs text-sage">
                   {t('approvedLabel')}
                 </span>
                 <p className="text-sm text-surface/70">
@@ -148,7 +148,7 @@ export default async function QuoteDetailPage({ params }: Props) {
         {quote.status === 'REJECTED' ? (
           <Card className="mb-6 border-accent-secondary/40 bg-accent-secondary/5">
             <CardBody className="flex flex-col gap-2 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent-secondary [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-accent-secondary">
                 {t('rejectedLabel')}
               </span>
               {quote.rejectReason ? (

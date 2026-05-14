@@ -54,7 +54,7 @@ export function ContractSectionsForm({ locale, contractId, sections, locked }: P
             {t('save')}
           </Button>
           {serverState?.ok ? (
-            <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-2xs text-accent-secondary">
               {t('saved')}
             </span>
           ) : null}
@@ -82,7 +82,7 @@ function SectionField({
   return (
     <div className="rounded-md border border-surface/10 bg-surface/[0.03] p-5">
       <header className="mb-3 flex flex-col gap-0.5">
-        <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+        <span className="text-2xs text-accent-secondary">
           {label}
         </span>
         <span className="text-xs text-surface/50">{description}</span>

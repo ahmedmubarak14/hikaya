@@ -59,7 +59,7 @@ export function ApplicationsList({ locale, applications }: Props) {
                   >
                     {a.applicantName} ↗
                   </Link>
-                  <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                  <span className="text-2xs text-surface/40">
                     @{a.applicantUsername}
                   </span>
                 </div>

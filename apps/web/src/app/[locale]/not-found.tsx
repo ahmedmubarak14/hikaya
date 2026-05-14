@@ -7,7 +7,7 @@ export default function NotFound() {
   const locale = useLocale();
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center gap-8 px-6 text-center">
-      <span className="font-mono text-xs uppercase tracking-widest text-accent-secondary">404</span>
+      <span className="text-xs text-accent-secondary">404</span>
       <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
         Page not found.
       </h1>

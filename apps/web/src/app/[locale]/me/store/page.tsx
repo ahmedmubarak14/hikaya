@@ -81,7 +81,7 @@ export default async function MyStorePage({ params }: Props) {
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('backToAccount')}
           </Link>
@@ -101,7 +101,7 @@ export default async function MyStorePage({ params }: Props) {
         </section>
 
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
-          <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <span className="text-2xs text-surface/40">
             {t('count', { count: products.length })}
           </span>
           <Link href={`/${locale}/me/store/new`}>
@@ -171,10 +171,10 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
           : 'flex flex-col gap-1 rounded-xl border border-surface/10 bg-surface/[0.03] p-5'
       }
     >
-      <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+      <span className="text-2xs text-surface/40">
         {label}
       </span>
-      <span className={accent ? 'font-display text-3xl text-accent' : 'font-display text-3xl text-surface'}>
+      <span className={accent ? 'font-display text-3xl text-accent-secondary' : 'font-display text-3xl text-surface'}>
         {value}
       </span>
     </div>

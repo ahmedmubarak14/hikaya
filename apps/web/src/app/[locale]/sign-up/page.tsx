@@ -40,7 +40,7 @@ export default async function SignUpPage({ params }: Props) {
             </h2>
             <p className="max-w-sm text-sm text-surface/60">{t('panelBody')}</p>
           </div>
-          <p className="font-mono text-xs uppercase tracking-widest text-surface/30 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <p className="text-xs text-surface/30">
             {t('panelFooter')}
           </p>
         </div>
@@ -49,7 +49,7 @@ export default async function SignUpPage({ params }: Props) {
       <div className="flex flex-col items-center justify-center px-6 py-12 md:px-10">
         <div className="flex w-full max-w-md flex-col gap-8">
           <header className="flex flex-col gap-2">
-            <span className="font-mono text-xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-xs text-accent-secondary">
               {t('signUpEyebrow')}
             </span>
             <h1 className="text-balance text-4xl">{t('signUpTitle')}</h1>

@@ -35,7 +35,7 @@ export default async function SignInPage({ params }: Props) {
       <div className="flex flex-col items-center justify-center px-6 py-12 md:px-10">
         <div className="flex w-full max-w-md flex-col gap-8">
           <header className="flex flex-col gap-2">
-            <span className="font-mono text-xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-xs text-accent-secondary">
               {t('signInEyebrow')}
             </span>
             <h1 className="text-balance text-4xl">{t('signInTitle')}</h1>
@@ -64,7 +64,7 @@ async function BrandPanel({ locale }: { locale: Locale }) {
           </h2>
           <p className="max-w-sm text-sm text-surface/60">{t('panelBody')}</p>
         </div>
-        <p className="font-mono text-xs uppercase tracking-widest text-surface/30 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+        <p className="text-xs text-surface/30">
           {t('panelFooter')}
         </p>
       </div>
@@ -76,7 +76,7 @@ async function DemoHint({ locale }: { locale: Locale }) {
   const t = await getTranslations('auth');
   return (
     <div className="rounded-md border border-surface/10 bg-surface/[0.03] p-4">
-      <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+      <p className="text-2xs text-surface/40">
         {t('demoLabel')}
       </p>
       <p className="mt-2 text-sm text-surface/70">

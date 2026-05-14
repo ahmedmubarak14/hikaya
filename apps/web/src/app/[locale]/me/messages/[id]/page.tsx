@@ -73,7 +73,7 @@ export default async function ThreadDetailPage({ params }: Props) {
           <div className="flex flex-col gap-1.5">
             <Link
               href={`/${locale}/me/messages`}
-              className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+              className="text-2xs text-surface/40 transition-colors hover:text-surface"
             >
               ← {t('back')}
             </Link>
@@ -87,7 +87,7 @@ export default async function ThreadDetailPage({ params }: Props) {
         <section className="flex flex-1 flex-col-reverse overflow-y-auto px-6 py-6 md:px-0">
           <ul className="flex flex-col gap-3">
             {messages.length === 0 ? (
-              <li className="py-12 text-center font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <li className="py-12 text-center text-2xs text-surface/40">
                 {t('empty')}
               </li>
             ) : (

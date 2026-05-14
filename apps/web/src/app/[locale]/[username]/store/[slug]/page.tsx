@@ -80,7 +80,7 @@ export default async function PublicProductPage({ params }: Props) {
       <main className="mx-auto w-full max-w-6xl px-6 py-22 md:px-10">
         <Link
           href={`/${locale}/${creator.username}/store`}
-          className="mb-6 inline-block font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+          className="mb-6 inline-block text-2xs text-surface/40 transition-colors hover:text-surface"
         >
           ← {t('backToStore', { name: creatorName })}
         </Link>
@@ -124,7 +124,7 @@ export default async function PublicProductPage({ params }: Props) {
             <div className="flex flex-wrap items-center gap-2">
               <CategoryBadge category={product.category} />
               {product.salesCount > 0 ? (
-                <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                <span className="text-2xs text-surface/40">
                   {t('sales', { count: product.salesCount })}
                 </span>
               ) : null}
@@ -134,12 +134,12 @@ export default async function PublicProductPage({ params }: Props) {
 
             <Link
               href={`/${locale}/${creator.username}`}
-              className="font-mono text-2xs uppercase tracking-widest text-surface/40 underline-offset-4 hover:text-surface hover:underline [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+              className="text-2xs text-surface/40 underline-offset-4 hover:text-surface hover:underline"
             >
               {t('byCreator', { name: creatorName })}
             </Link>
 
-            <p className="font-display text-5xl text-accent tabular-nums">
+            <p className="font-display text-5xl text-accent-secondary tabular-nums">
               {formatSarFromHalalas(product.priceHalalas, locale)}
             </p>
 

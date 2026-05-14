@@ -207,7 +207,7 @@ function AddItemForm({ locale }: { locale: Locale }) {
         </button>
       </div>
       {serverState?.ok ? (
-        <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+        <span className="text-2xs text-accent-secondary">
           {t('added')}
         </span>
       ) : null}

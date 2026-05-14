@@ -173,7 +173,7 @@ export function ProductForm({ locale, product }: Props) {
       <aside className="rounded-md border border-accent/30 bg-accent/5 p-4">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <div>
-            <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-2xs text-accent-secondary">
               {t('takeHome.label')}
             </span>
             <p className="text-sm text-surface/70">
@@ -181,7 +181,7 @@ export function ProductForm({ locale, product }: Props) {
             </p>
           </div>
           <div className="text-end">
-            <p className="font-display text-3xl text-accent tabular-nums">
+            <p className="font-display text-3xl text-accent-secondary tabular-nums">
               {formatSarFromHalalas(creatorTakeFor(halalas), locale)}
             </p>
             <p className="font-mono text-2xs text-surface/40">
@@ -242,7 +242,7 @@ export function ProductForm({ locale, product }: Props) {
           {isEdit ? t('save') : t('create')}
         </Button>
         {serverState?.ok ? (
-          <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <span className="text-2xs text-accent-secondary">
             {t('saved')}
           </span>
         ) : null}

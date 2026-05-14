@@ -123,7 +123,7 @@ export default async function CreatorProfilePage({ params }: Props) {
 
                 <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">{name}</h1>
 
-                <div className="flex flex-wrap items-center gap-2 font-mono text-2xs uppercase tracking-wider text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                <div className="flex flex-wrap items-center gap-2 text-2xs text-surface/50">
                   <span>{tCity(creator.city as 'RIYADH')}</span>
                   <Dot />
                   <span>{t('yearsExperience', { years: creator.yearsExperience })}</span>
@@ -185,7 +185,7 @@ export default async function CreatorProfilePage({ params }: Props) {
         <section className="mx-auto w-full max-w-8xl px-6 py-22 md:px-10">
           <div className="mb-10 flex items-baseline justify-between">
             <h2 className="text-3xl md:text-4xl">{t('selectedWork')}</h2>
-            <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-2xs text-surface/40">
               {creator.portfolio.length} {t('pieces')}
             </span>
           </div>
@@ -205,7 +205,7 @@ function Dot() {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-1">
-      <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+      <span className="text-2xs text-surface/40">
         {label}
       </span>
       <span className="text-base text-surface">{value}</span>

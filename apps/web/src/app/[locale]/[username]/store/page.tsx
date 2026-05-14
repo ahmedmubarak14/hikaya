@@ -53,7 +53,7 @@ export default async function PublicStorePage({ params }: Props) {
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/${creator.username}`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('backToProfile', { name })}
           </Link>

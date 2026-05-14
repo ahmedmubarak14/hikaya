@@ -64,7 +64,7 @@ export default async function JobDetailPage({ params }: Props) {
       <main className="mx-auto w-full max-w-4xl px-6 py-22 md:px-10">
         <Link
           href={`/${locale}/jobs`}
-          className="mb-4 inline-block font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+          className="mb-4 inline-block text-2xs text-surface/40 transition-colors hover:text-surface"
         >
           ← {t('back')}
         </Link>
@@ -72,13 +72,13 @@ export default async function JobDetailPage({ params }: Props) {
         <header className="mb-8 flex flex-col gap-4">
           <div className="flex flex-wrap items-center gap-2">
             <DisciplineTag discipline={job.discipline} tone="accent" />
-            <span className="font-mono text-2xs uppercase tracking-wider text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-2xs text-surface/50">
               {tCity(job.city as 'RIYADH')}
             </span>
             <JobStatusBadge status={job.status} />
           </div>
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">{job.title}</h1>
-          <p className="font-mono text-2xs uppercase tracking-wider text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <p className="text-2xs text-surface/50">
             {t('postedBy', {
               name: job.postedByCompany ?? job.postedByName,
               when: formatDateTime(job.createdAt, locale),
@@ -116,7 +116,7 @@ export default async function JobDetailPage({ params }: Props) {
               <CardBody className="flex flex-col gap-2 p-5">
                 <Badge tone="sage" className="self-start">{t('applied')}</Badge>
                 <p className="text-sm text-surface/70">{t('appliedBody')}</p>
-                <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                <p className="text-2xs text-surface/40">
                   {t('appliedAt', { when: formatDateTime(myApplication.createdAt, locale) })}
                 </p>
               </CardBody>
@@ -187,7 +187,7 @@ export default async function JobDetailPage({ params }: Props) {
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-1 rounded-md bg-surface/[0.03] p-4">
-      <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+      <span className="text-2xs text-surface/40">
         {label}
       </span>
       <span className="font-display text-xl text-surface">{value}</span>

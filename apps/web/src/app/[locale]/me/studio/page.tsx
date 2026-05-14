@@ -73,7 +73,7 @@ export default async function StudioDashboardPage({ params }: Props) {
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('backToAccount')}
           </Link>
@@ -119,7 +119,7 @@ export default async function StudioDashboardPage({ params }: Props) {
           <aside className="flex flex-col gap-4 rounded-xl border border-surface/10 bg-surface/[0.03] p-6">
             <header className="flex items-baseline justify-between">
               <h3 className="text-2xl text-surface">{t('upcoming.title')}</h3>
-              <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-surface/40">
                 {t('upcoming.window')}
               </span>
             </header>
@@ -140,7 +140,7 @@ export default async function StudioDashboardPage({ params }: Props) {
                               {t(`status.${b.status}` as 'status.CONFIRMED')}
                             </Badge>
                           </div>
-                          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                          <p className="text-2xs text-surface/40">
                             {new Intl.DateTimeFormat(locale === 'ar' ? 'ar-SA' : 'en-SA', {
                               month: 'short',
                               day: 'numeric',
@@ -166,7 +166,7 @@ export default async function StudioDashboardPage({ params }: Props) {
         <section className="rounded-xl border border-surface/10 bg-surface/[0.03] overflow-hidden">
           <header className="flex items-baseline justify-between p-6">
             <h3 className="text-2xl text-surface">{t('clients.title')}</h3>
-            <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-2xs text-surface/40">
               {t('clients.count', { count: STUDIO_CLIENTS.length })}
             </span>
           </header>
@@ -174,7 +174,7 @@ export default async function StudioDashboardPage({ params }: Props) {
           <div className="overflow-x-auto">
             <table className="w-full text-start">
               <thead className="border-y border-surface/10 bg-surface/[0.02]">
-                <tr className="text-start font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                <tr className="text-start text-2xs text-surface/40">
                   <Th>{t('clients.name')}</Th>
                   <Th>{t('clients.tags')}</Th>
                   <Th align="end">{t('clients.bookings')}</Th>
@@ -218,7 +218,7 @@ export default async function StudioDashboardPage({ params }: Props) {
           </div>
         </section>
 
-        <p className="mt-10 max-w-prose font-mono text-2xs uppercase tracking-widest text-surface/30 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+        <p className="mt-10 max-w-prose text-2xs text-surface/30">
           {t('mockNote')}
         </p>
       </main>

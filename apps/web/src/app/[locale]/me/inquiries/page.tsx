@@ -60,7 +60,7 @@ export default async function MyInquiriesPage({ params, searchParams }: Props) {
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('backToAccount')}
           </Link>
@@ -71,7 +71,7 @@ export default async function MyInquiriesPage({ params, searchParams }: Props) {
         {sent === '1' ? (
           <Card className="mb-8 border-accent/40 bg-accent/5">
             <CardBody className="flex flex-col gap-1 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-accent-secondary">
                 {t('sentLabel')}
               </span>
               <p className="text-sm text-surface/80">{t('sentBody')}</p>
@@ -109,7 +109,7 @@ export default async function MyInquiriesPage({ params, searchParams }: Props) {
                         >
                           {name}
                         </Link>
-                        <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                        <p className="text-2xs text-surface/40">
                           {tDiscipline(disciplineKey(inq.discipline) as 'weddingPhoto')}
                           {' · '}
                           {tCity(inq.city as 'RIYADH')}

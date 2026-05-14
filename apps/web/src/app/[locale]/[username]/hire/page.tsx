@@ -68,7 +68,7 @@ export default async function HireCreatorPage({ params }: Props) {
             <p className="max-w-sm text-sm text-surface/60">{t('panelBody')}</p>
           </div>
 
-          <p className="font-mono text-xs uppercase tracking-widest text-surface/30 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <p className="text-xs text-surface/30">
             {t('panelFooter')}
           </p>
         </div>
@@ -78,7 +78,7 @@ export default async function HireCreatorPage({ params }: Props) {
         <header className="mb-8 flex flex-col gap-2">
           <Link
             href={`/${locale}/${creator.username}`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('backTo', { name })}
           </Link>

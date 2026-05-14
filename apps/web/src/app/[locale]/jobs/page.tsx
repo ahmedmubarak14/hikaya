@@ -45,7 +45,7 @@ export default async function JobsPage({ params }: Props) {
           <Link href={`/${locale}/jobs/new`}>
             <Button size="md" variant="primary">+ {t('newCta')}</Button>
           </Link>
-          <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <span className="text-2xs text-surface/40">
             {t('count', { count: jobs.length })}
           </span>
         </div>

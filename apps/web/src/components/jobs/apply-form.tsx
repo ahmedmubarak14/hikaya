@@ -47,7 +47,7 @@ export function ApplyForm({ locale, jobId }: Props) {
       noValidate
     >
       <header className="flex flex-col gap-1">
-        <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+        <span className="text-2xs text-accent-secondary">
           {t('label')}
         </span>
         <p className="text-sm text-surface/70">{t('hint')}</p>

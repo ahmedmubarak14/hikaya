@@ -62,7 +62,7 @@ export default async function PublicContractPage({ params }: Props) {
           {creator ? (
             <Link
               href={`/${locale}/${creator.username}`}
-              className="flex items-center gap-2 rounded-full border border-surface/20 bg-bg/40 px-3 py-1.5 font-mono text-2xs uppercase tracking-wider text-surface/80 transition-colors hover:border-surface/40 hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+              className="flex items-center gap-2 rounded-full border border-surface/20 bg-bg/40 px-3 py-1.5 text-2xs text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
             >
               <span className="relative h-5 w-5 overflow-hidden rounded-full">
                 <Image src={creator.avatarUrl} alt="" fill sizes="20px" className="object-cover" />
@@ -77,7 +77,7 @@ export default async function PublicContractPage({ params }: Props) {
         <div className="mb-8 flex flex-col gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <ContractStatusBadge status={contract.status} />
-            <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-2xs text-surface/40">
               {contract.number}
             </span>
           </div>
@@ -144,7 +144,7 @@ export default async function PublicContractPage({ params }: Props) {
 
         {signed ? (
           <section className="mt-10 rounded-xl border border-sage/40 bg-sage/10 p-6">
-            <span className="font-mono text-2xs uppercase tracking-widest text-sage [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-2xs text-sage">
               {t('lockedLabel')}
             </span>
             <p className="mt-2 text-sm text-surface/70">{t('lockedBody')}</p>
@@ -157,7 +157,7 @@ export default async function PublicContractPage({ params }: Props) {
           <Link href={`/${locale}`} className="flex items-center text-surface/70 hover:text-surface">
             <Logo arabic={locale === 'ar'} className="h-5" />
           </Link>
-          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <p className="text-2xs text-surface/40">
             {t('footerNote')}
           </p>
         </div>
@@ -181,13 +181,13 @@ function SigBlock({
 }) {
   return (
     <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-5">
-      <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+      <span className="text-2xs text-surface/40">
         {label}
       </span>
       {name && at ? (
         <>
           <p className="mt-2 text-2xl font-bold text-accent-secondary">{name}</p>
-          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <p className="text-2xs text-surface/40">
             {formatDateTime(at, locale)}
           </p>
         </>

@@ -13,7 +13,7 @@ export function SiteFooter() {
       <div className="mx-auto flex w-full max-w-8xl flex-col gap-6 px-6 py-10 md:flex-row md:items-end md:justify-between md:px-10">
         <div className="flex items-center gap-3 text-surface/80">
           <Logo arabic={locale === 'ar'} className="h-6" />
-          <span className="font-mono text-xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <span className="text-xs text-surface/40">
             {t('made')}
           </span>
         </div>

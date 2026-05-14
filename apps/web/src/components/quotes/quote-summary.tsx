@@ -20,13 +20,13 @@ export function QuoteSummary({ quote }: Props) {
     <article className="rounded-xl border border-surface/10 bg-surface/[0.03] overflow-hidden">
       <header className="flex items-baseline justify-between gap-3 border-b border-surface/10 p-6">
         <div className="flex flex-col gap-0.5">
-          <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <span className="text-2xs text-surface/40">
             {t('quoteFor', { name: quote.clientName })}
           </span>
           <h3 className="font-display text-3xl text-surface">{quote.number}</h3>
         </div>
         {quote.expiresAt ? (
-          <span className="text-end font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <span className="text-end text-2xs text-surface/40">
             {t('expires')}
             <br />
             {new Intl.DateTimeFormat(locale === 'ar' ? 'ar-SA' : 'en-SA', {
@@ -41,7 +41,7 @@ export function QuoteSummary({ quote }: Props) {
       <div className="overflow-x-auto">
         <table className="w-full text-start">
           <thead className="border-b border-surface/10 bg-surface/[0.02]">
-            <tr className="text-start font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <tr className="text-start text-2xs text-surface/40">
               <th className="p-4 text-start">{t('description')}</th>
               <th className="p-4 text-end">{t('quantity')}</th>
               <th className="p-4 text-end">{t('unit')}</th>
@@ -86,7 +86,7 @@ export function QuoteSummary({ quote }: Props) {
 
         {quote.notes ? (
           <div className="mt-4 border-t border-surface/10 pt-4">
-            <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <p className="text-2xs text-surface/40">
               {t('notes')}
             </p>
             <p className="mt-2 max-w-prose text-sm text-surface/70">{quote.notes}</p>
@@ -104,7 +104,7 @@ function Row({ label, value, accent }: { label: string; value: string; accent?: 
         className={
           accent
             ? 'text-base font-medium text-surface'
-            : 'font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case'
+            : 'text-2xs text-surface/40'
         }
       >
         {label}
@@ -112,7 +112,7 @@ function Row({ label, value, accent }: { label: string; value: string; accent?: 
       <span
         className={
           accent
-            ? 'font-display text-3xl text-accent tabular-nums'
+            ? 'font-display text-3xl text-accent-secondary tabular-nums'
             : 'font-mono text-sm text-surface/80 tabular-nums'
         }
       >

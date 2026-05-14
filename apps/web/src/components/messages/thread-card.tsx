@@ -28,7 +28,7 @@ export function ThreadCard({ thread, preview, unreadCount, viewerSide }: Props) 
         <CardBody className="flex items-center gap-4 p-5">
           <span
             aria-hidden
-            className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-accent/20 font-display text-xl text-accent"
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-accent/20 font-display text-xl text-accent-secondary"
           >
             {otherInitial}
           </span>
@@ -36,7 +36,7 @@ export function ThreadCard({ thread, preview, unreadCount, viewerSide }: Props) 
             <div className="flex items-baseline justify-between gap-3">
               <span className="truncate text-base text-surface">{otherName}</span>
               {thread.lastMessageAt ? (
-                <span className="shrink-0 font-mono text-2xs uppercase tracking-wider text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                <span className="shrink-0 text-2xs text-surface/40">
                   {formatRelative(thread.lastMessageAt, locale)}
                 </span>
               ) : null}

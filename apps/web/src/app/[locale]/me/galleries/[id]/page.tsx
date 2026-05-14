@@ -81,7 +81,7 @@ export default async function ManageGalleryPage({ params }: Props) {
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/galleries`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
           >
             ← {t('back')}
           </Link>
@@ -98,7 +98,7 @@ export default async function ManageGalleryPage({ params }: Props) {
         <section className="mb-10 grid grid-cols-1 gap-4 lg:grid-cols-[2fr_1fr]">
           <Card>
             <CardBody className="flex flex-col gap-3 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-accent-secondary">
                 {t('shareLabel')}
               </span>
               <div className="flex flex-wrap items-center gap-3">
@@ -121,7 +121,7 @@ export default async function ManageGalleryPage({ params }: Props) {
 
           <Card>
             <CardBody className="flex flex-col gap-2 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <span className="text-2xs text-surface/40">
                 {t('stats')}
               </span>
               <ul className="grid grid-cols-3 gap-2 text-center">
@@ -133,7 +133,7 @@ export default async function ManageGalleryPage({ params }: Props) {
                 />
               </ul>
               {gallery.expiresAt ? (
-                <p className="mt-1 font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                <p className="mt-1 text-2xs text-surface/40">
                   {t('expires', {
                     date: new Intl.DateTimeFormat(locale === 'ar' ? 'ar-SA' : 'en-SA', {
                       month: 'short',
@@ -228,7 +228,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   return (
     <li className="flex flex-col gap-1 rounded-md bg-surface/[0.03] py-3">
       <span className="font-display text-2xl text-surface">{value}</span>
-      <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+      <span className="text-2xs text-surface/40">
         {label}
       </span>
     </li>

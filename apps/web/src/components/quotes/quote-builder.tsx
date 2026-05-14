@@ -106,7 +106,7 @@ export function QuoteBuilder({ locale }: Props) {
       <section className="flex flex-col gap-4">
         <header className="flex items-baseline justify-between">
           <h2 className="text-xl text-surface">{t('items.title')}</h2>
-          <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <span className="text-2xs text-surface/40">
             {t('items.maxHint')}
           </span>
         </header>
@@ -149,7 +149,7 @@ export function QuoteBuilder({ locale }: Props) {
                   onClick={() => fields.length > 1 && remove(idx)}
                   disabled={fields.length === 1}
                   className={cn(
-                    'self-end rounded-full px-3 py-2 font-mono text-2xs uppercase tracking-widest transition-colors',
+                    'self-end rounded-full px-3 py-2 text-2xs transition-colors',
                     fields.length === 1
                       ? 'cursor-not-allowed text-surface/20'
                       : 'text-accent-secondary hover:bg-accent-secondary/10',
@@ -217,7 +217,7 @@ export function QuoteBuilder({ locale }: Props) {
         </div>
 
         <aside className="flex flex-col gap-2 rounded-xl border border-accent/30 bg-accent/5 p-5">
-          <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <span className="text-2xs text-accent-secondary">
             {t('totals.live')}
           </span>
           <Row label={t('totals.subtotal')} value={formatSarFromHalalas(totals.subtotal, locale)} />
@@ -253,12 +253,12 @@ function Row({ label, value, accent }: { label: string; value: string; accent?: 
         className={
           accent
             ? 'text-base font-medium text-surface'
-            : 'font-mono text-2xs uppercase tracking-widest text-surface/60 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case'
+            : 'text-2xs text-surface/60'
         }
       >
         {label}
       </span>
-      <span className={accent ? 'font-display text-3xl text-accent tabular-nums' : 'font-mono text-sm text-surface tabular-nums'}>
+      <span className={accent ? 'font-display text-3xl text-accent-secondary tabular-nums' : 'font-mono text-sm text-surface tabular-nums'}>
         {value}
       </span>
     </div>

@@ -82,7 +82,7 @@ export default async function PublicGalleryPage({ params }: Props) {
           {creator ? (
             <Link
               href={`/${locale}/${creator.username}`}
-              className="rounded-full border border-surface/20 bg-bg/40 px-3 py-1.5 font-mono text-2xs uppercase tracking-wider text-surface/80 backdrop-blur-sm transition-colors hover:border-surface/40 hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+              className="rounded-full border border-surface/20 bg-bg/40 px-3 py-1.5 text-2xs text-surface/80 backdrop-blur-sm transition-colors hover:border-surface/40 hover:text-surface"
             >
               {t('byCreator', { name: creatorName })}
             </Link>
@@ -119,10 +119,10 @@ export default async function PublicGalleryPage({ params }: Props) {
       {/* Selection summary */}
       <section className="sticky top-0 z-20 border-b border-surface/10 bg-bg/85 backdrop-blur-md">
         <div className="mx-auto flex w-full max-w-8xl items-center justify-between gap-3 px-6 py-3 md:px-10">
-          <p className="font-mono text-2xs uppercase tracking-widest text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <p className="text-2xs text-surface/50">
             {t('imageCount', { count: gallery.images.length })}
           </p>
-          <p className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <p className="text-2xs text-accent-secondary">
             ♥ {t('youSelected', { count: selectedCount })}
           </p>
         </div>
@@ -187,7 +187,7 @@ export default async function PublicGalleryPage({ params }: Props) {
           <Link href={`/${locale}`} className="flex items-center text-surface/70 hover:text-surface">
             <Logo arabic={locale === 'ar'} className="h-5" />
           </Link>
-          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <p className="text-2xs text-surface/40">
             {t('footerNote')}
           </p>
         </div>
