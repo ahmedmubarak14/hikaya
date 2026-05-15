@@ -38,18 +38,19 @@ export default async function MyGalleriesPage({ params }: Props) {
   const tNoProfile = await getTranslations('portfolioEditor.noProfile');
 
   const creator = await getMyCreatorProfile(session.user.email);
-  if (!creator) return <NoCreatorState locale={locale} t={tNoProfile} backLabel={t('backToAccount')} />;
+  if (!creator)
+    return <NoCreatorState locale={locale} t={tNoProfile} backLabel={t('backToAccount')} />;
 
   const galleries = listGalleriesByCreator(creator.id);
 
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('backToAccount')}
           </Link>
@@ -58,9 +59,9 @@ export default async function MyGalleriesPage({ params }: Props) {
           </Badge>
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
             <span>{t('headline')}</span>{' '}
-            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
+            <span className="text-accent-secondary font-bold">{t('headlineItalic')}</span>
           </h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         <div className="mb-8">
@@ -72,9 +73,9 @@ export default async function MyGalleriesPage({ params }: Props) {
         </div>
 
         {galleries.length === 0 ? (
-          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('empty')}</p>
-            <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('empty')}</p>
+            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
           </div>
         ) : (
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -85,29 +86,29 @@ export default async function MyGalleriesPage({ params }: Props) {
                 <li key={g.id}>
                   <Link href={`/${locale}/me/galleries/${g.id}`} className="group block">
                     <Card interactive className="overflow-hidden">
-                      <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface/5">
+                      <div className="bg-surface/5 relative aspect-[16/10] w-full overflow-hidden">
                         <Image
                           src={g.coverUrl}
                           alt={title}
                           fill
                           sizes="(min-width: 1024px) 33vw, 50vw"
-                          className="object-cover transition-transform duration-cinematic ease-out group-hover:scale-[1.03]"
+                          className="duration-cinematic object-cover transition-transform ease-out group-hover:scale-[1.03]"
                         />
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg via-bg/30 to-transparent" />
+                        <div className="from-bg via-bg/30 pointer-events-none absolute inset-0 bg-gradient-to-t to-transparent" />
                       </div>
                       <CardBody className="flex flex-col gap-3 p-5">
                         <div className="flex items-baseline justify-between gap-3">
-                          <h3 className="truncate text-lg text-surface">{title}</h3>
-                          <span className="shrink-0 font-mono text-2xs uppercase tracking-wider text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                          <h3 className="text-surface truncate text-lg">{title}</h3>
+                          <span className="text-2xs text-surface/50 shrink-0">
                             {t('imageCount', { count: g.images.length })}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between text-2xs">
-                          <span className="font-mono text-surface/40 [lang=ar]:font-sansAr">
+                        <div className="text-2xs flex items-center justify-between">
+                          <span className="text-surface/40 [lang=ar]:font-sansAr font-mono">
                             {t('visitorCount', { count: visitors })}
                           </span>
                           {g.expiresAt ? (
-                            <span className="font-mono text-surface/40 [lang=ar]:font-sansAr">
+                            <span className="text-surface/40 [lang=ar]:font-sansAr font-mono">
                               {t('expires', { date: formatDate(new Date(g.expiresAt), locale) })}
                             </span>
                           ) : null}
@@ -144,10 +145,10 @@ function NoCreatorState({
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-3xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <Link
           href={`/${locale}/me`}
-          className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+          className="text-2xs text-surface/40 hover:text-surface transition-colors"
         >
           ← {backLabel}
         </Link>
@@ -158,7 +159,7 @@ function NoCreatorState({
             </Badge>
             <h1 className="text-balance text-3xl">{t('title')}</h1>
             <p className="text-surface/60">{t('body')}</p>
-            <p className="text-sm text-surface/50">{t('demoHint')}</p>
+            <p className="text-surface/50 text-sm">{t('demoHint')}</p>
           </CardBody>
         </Card>
       </main>

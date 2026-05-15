@@ -66,8 +66,12 @@
     font-size: 1.05em;
   }
 
-  h1, h2, h3 {
-    @apply font-display font-bold tracking-tight;
+  /* Headings default to bold sans — Instagram/Contra feel. Pages opt back
+     into the editorial Playfair display when they really want it. */
+  h1,
+  h2,
+  h3 {
+    @apply font-sans font-bold tracking-tight;
   }
 
   html[lang='ar'] h1,

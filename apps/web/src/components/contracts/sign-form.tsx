@@ -58,14 +58,12 @@ export function SignForm({ locale, side, contractRef, defaultName }: Props) {
         if (values.acceptedTerms) fd.set('acceptedTerms', 'on');
         startTransition(() => formAction(fd));
       })}
-      className="flex flex-col gap-4 rounded-xl border border-accent/30 bg-accent/5 p-6"
+      className="border-accent/30 bg-accent/5 flex flex-col gap-4 rounded-xl border p-6"
       noValidate
     >
       <div className="flex flex-col gap-1">
-        <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-          {t('label')}
-        </span>
-        <p className="text-sm text-surface/70">{t('hint')}</p>
+        <span className="text-2xs text-accent-secondary">{t('label')}</span>
+        <p className="text-surface/70 text-sm">{t('hint')}</p>
       </div>
 
       <Input
@@ -75,16 +73,22 @@ export function SignForm({ locale, side, contractRef, defaultName }: Props) {
         required
       />
 
-      <label className="flex cursor-pointer items-start gap-3 text-sm text-surface/80">
-        <input type="checkbox" {...register('acceptedTerms')} className="mt-0.5 h-4 w-4 accent-accent" />
+      <label className="text-surface/80 flex cursor-pointer items-start gap-3 text-sm">
+        <input
+          type="checkbox"
+          {...register('acceptedTerms')}
+          className="accent-accent mt-0.5 h-4 w-4"
+        />
         <span>{t('acceptTerms')}</span>
       </label>
       {errors.acceptedTerms?.message ? (
-        <p className="text-xs text-accent-secondary">{errors.acceptedTerms.message}</p>
+        <p className="text-accent-secondary text-xs">{errors.acceptedTerms.message}</p>
       ) : null}
 
       {serverState?.error === 'ALREADY_SIGNED' ? (
-        <p className="text-xs text-accent-secondary" role="alert">{t('errorAlready')}</p>
+        <p className="text-accent-secondary text-xs" role="alert">
+          {t('errorAlready')}
+        </p>
       ) : null}
 
       <Button type="submit" size="lg" isLoading={isPending} className="self-start">

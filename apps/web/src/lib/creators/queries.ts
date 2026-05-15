@@ -1,11 +1,7 @@
 import 'server-only';
 
 import type { CreatorProfile } from './mock-data';
-import {
-  getAllCreators,
-  getCreatorByOwnerEmail,
-  getCreatorByUsernameRaw,
-} from './mock-store';
+import { getAllCreators, getCreatorByOwnerEmail, getCreatorByUsernameRaw } from './mock-store';
 
 /**
  * Server-only query helpers. Today they read from the mutable mock store; when
@@ -23,7 +19,8 @@ export async function listCreators(filter: ListCreatorsFilter = {}): Promise<Cre
   let results = getAllCreators();
 
   if (filter.city) results = results.filter((c) => c.city === filter.city);
-  if (filter.discipline) results = results.filter((c) => c.disciplines.includes(filter.discipline!));
+  if (filter.discipline)
+    results = results.filter((c) => c.disciplines.includes(filter.discipline!));
   if (filter.available) results = results.filter((c) => c.availability === 'AVAILABLE');
 
   // Sort by verified first, then by review score.

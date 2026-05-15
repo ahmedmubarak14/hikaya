@@ -111,7 +111,11 @@ export interface CreateGalleryInput {
 }
 
 function uniqueSlug(base: string): string {
-  const norm = base.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+  const norm = base
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
   let candidate = norm.length >= 3 ? norm : `gallery-${randomBytes(3).toString('hex')}`;
   let i = 1;
   while ([...store.galleries.values()].some((g) => g.shareSlug === candidate)) {
@@ -135,7 +139,8 @@ export function createGallery(input: CreateGalleryInput): Gallery {
     creatorId: input.creatorId,
     titleEn: input.titleEn,
     titleAr: input.titleAr,
-    coverUrl: input.coverUrl ?? `https://picsum.photos/seed/${randomBytes(4).toString('hex')}/1800/900`,
+    coverUrl:
+      input.coverUrl ?? `https://picsum.photos/seed/${randomBytes(4).toString('hex')}/1800/900`,
     message: input.message,
     access: 'OPEN_LINK',
     allowDownloads: input.allowDownloads,
@@ -156,10 +161,7 @@ export function deleteGallery(id: string): void {
   for (const k of store.selections) if (k.startsWith(prefix)) store.selections.delete(k);
 }
 
-export function addImagesToGallery(
-  galleryId: string,
-  inputs: { url: string }[],
-): GalleryImage[] {
+export function addImagesToGallery(galleryId: string, inputs: { url: string }[]): GalleryImage[] {
   const gallery = store.galleries.get(galleryId);
   if (!gallery) throw new Error('GALLERY_NOT_FOUND');
 

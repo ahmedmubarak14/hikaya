@@ -49,34 +49,36 @@ export default async function MyJobsPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-5xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('backToAccount')}
           </Link>
-          <Badge tone="accent" className="self-start">{t('eyebrow')}</Badge>
+          <Badge tone="accent" className="self-start">
+            {t('eyebrow')}
+          </Badge>
           <h1 className="text-balance text-5xl">{t('headline')}</h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         {/* Posted */}
         <section className="mb-12">
           <header className="mb-4 flex items-baseline justify-between">
-            <h2 className="text-2xl text-surface">{t('postedTitle')}</h2>
+            <h2 className="text-surface text-2xl">{t('postedTitle')}</h2>
             <Link
               href={`/${locale}/jobs/new`}
-              className="rounded-full border border-surface/15 px-4 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-4 py-2 text-sm transition-colors"
             >
               + {t('postedCta')}
             </Link>
           </header>
 
           {myPosts.length === 0 ? (
-            <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-8 text-center">
-              <p className="text-base text-surface/70">{t('postedEmpty')}</p>
+            <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-8 text-center">
+              <p className="text-surface/70 text-base">{t('postedEmpty')}</p>
             </div>
           ) : (
             <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -91,15 +93,15 @@ export default async function MyJobsPage({ params }: Props) {
 
         {/* Applied */}
         <section>
-          <h2 className="mb-4 text-2xl text-surface">{t('appliedTitle')}</h2>
+          <h2 className="text-surface mb-4 text-2xl">{t('appliedTitle')}</h2>
 
           {myApplications.length === 0 ? (
-            <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-8 text-center">
-              <p className="text-base text-surface/70">{t('appliedEmpty')}</p>
-              <p className="mt-2 text-sm text-surface/40">{t('appliedEmptyHint')}</p>
+            <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-8 text-center">
+              <p className="text-surface/70 text-base">{t('appliedEmpty')}</p>
+              <p className="text-surface/40 mt-2 text-sm">{t('appliedEmptyHint')}</p>
               <Link
                 href={`/${locale}/jobs`}
-                className="mt-6 inline-block rounded-full bg-accent px-6 py-2.5 text-sm font-medium text-ink transition-transform hover:scale-[1.02]"
+                className="bg-accent text-ink mt-6 inline-block rounded-full px-6 py-2.5 text-sm font-medium transition-transform hover:scale-[1.02]"
               >
                 {t('appliedCta')}
               </Link>
@@ -116,19 +118,19 @@ export default async function MyJobsPage({ params }: Props) {
                           {job ? (
                             <Link
                               href={`/${locale}/jobs/${job.id}`}
-                              className="text-base text-surface underline-offset-4 hover:underline"
+                              className="text-surface text-base underline-offset-4 hover:underline"
                             >
                               {job.title}
                             </Link>
                           ) : (
-                            <span className="text-base text-surface/60">{t('jobUnavailable')}</span>
+                            <span className="text-surface/60 text-base">{t('jobUnavailable')}</span>
                           )}
-                          <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                          <span className="text-2xs text-surface/40">
                             {t('appliedAt', { when: formatDateTime(a.createdAt, locale) })}
                           </span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="font-mono text-sm text-surface/70 tabular-nums">
+                          <span className="text-surface/70 font-mono text-sm tabular-nums">
                             {formatSarFromHalalas(a.proposedRateHalalas, locale)}
                           </span>
                           <Badge

@@ -66,23 +66,21 @@ export default async function ContractDetailPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-5xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/contracts`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('back')}
           </Link>
           <div className="flex flex-wrap items-center gap-3">
             <ContractStatusBadge status={contract.status} />
-            <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-2xs text-surface/40">
               {t('updatedAt', { time: formatDateTime(contract.updatedAt, locale) })}
             </span>
           </div>
-          <h1 className="text-balance text-4xl">
-            {t('headline', { number: contract.number })}
-          </h1>
+          <h1 className="text-balance text-4xl">{t('headline', { number: contract.number })}</h1>
           <p className="text-surface/60">
             {t('subtitle', {
               client: contract.clientName,
@@ -95,11 +93,9 @@ export default async function ContractDetailPage({ params }: Props) {
         {!locked ? (
           <Card className="mb-6">
             <CardBody className="flex flex-col gap-3 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('shareLabel')}
-              </span>
+              <span className="text-2xs text-accent-secondary">{t('shareLabel')}</span>
               <div className="flex flex-wrap items-center gap-3">
-                <code className="flex-1 break-all rounded-md border border-surface/10 bg-surface/[0.03] px-3 py-2 font-mono text-sm text-surface">
+                <code className="border-surface/10 bg-surface/[0.03] text-surface flex-1 break-all rounded-md border px-3 py-2 font-mono text-sm">
                   {shareUrl}
                 </code>
                 <CopyLinkButton url={shareUrl} />
@@ -107,19 +103,19 @@ export default async function ContractDetailPage({ params }: Props) {
                   href={`/${locale}/c/${contract.shareSlug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full border border-surface/15 px-4 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+                  className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-4 py-2 text-sm transition-colors"
                 >
                   {t('preview')} ↗
                 </Link>
               </div>
-              <p className="text-xs text-surface/50">{t('shareHint')}</p>
+              <p className="text-surface/50 text-xs">{t('shareHint')}</p>
             </CardBody>
           </Card>
         ) : null}
 
         {/* Sections (editable until signed) */}
         <section className="mb-10">
-          <h2 className="mb-4 text-2xl text-surface">{t('sectionsTitle')}</h2>
+          <h2 className="text-surface mb-4 text-2xl">{t('sectionsTitle')}</h2>
           <ContractSectionsForm
             locale={locale}
             contractId={contract.id}
@@ -160,9 +156,9 @@ export default async function ContractDetailPage({ params }: Props) {
 
         {/* Cancel */}
         {!locked ? (
-          <div className="rounded-xl border border-accent-secondary/30 bg-accent-secondary/5 p-5">
-            <h3 className="mb-2 text-lg text-surface">{t('cancelTitle')}</h3>
-            <p className="mb-4 text-xs text-surface/50">{t('cancelHint')}</p>
+          <div className="border-accent-secondary/30 bg-accent-secondary/5 rounded-xl border p-5">
+            <h3 className="text-surface mb-2 text-lg">{t('cancelTitle')}</h3>
+            <p className="text-surface/50 mb-4 text-xs">{t('cancelHint')}</p>
             <CancelContractButton locale={locale} contractId={contract.id} />
           </div>
         ) : null}
@@ -170,10 +166,8 @@ export default async function ContractDetailPage({ params }: Props) {
         {contract.status === 'SIGNED' ? (
           <Card className="border-sage/40 bg-sage/10">
             <CardBody className="p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-sage [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('signedLabel')}
-              </span>
-              <p className="mt-1 text-sm text-surface/70">{t('signedBody')}</p>
+              <span className="text-2xs text-sage">{t('signedLabel')}</span>
+              <p className="text-surface/70 mt-1 text-sm">{t('signedBody')}</p>
             </CardBody>
           </Card>
         ) : null}
@@ -196,19 +190,15 @@ function Signature({
   empty: string;
 }) {
   return (
-    <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-5">
-      <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-        {label}
-      </span>
+    <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
+      <span className="text-2xs text-surface/40">{label}</span>
       {name && at ? (
         <>
-          <p className="mt-2 text-2xl font-bold text-accent-secondary">{name}</p>
-          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-            {formatDateTime(at, locale)}
-          </p>
+          <p className="text-accent-secondary mt-2 text-2xl font-bold">{name}</p>
+          <p className="text-2xs text-surface/40">{formatDateTime(at, locale)}</p>
         </>
       ) : (
-        <p className="mt-2 text-sm text-surface/50">{empty}</p>
+        <p className="text-surface/50 mt-2 text-sm">{empty}</p>
       )}
     </div>
   );

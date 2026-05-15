@@ -10,11 +10,7 @@ import { Button, Input, cn } from '@hikaya/ui';
 import { type Locale } from '@/i18n/config';
 import { createProductAction, updateProductAction, type StoreResult } from '@/lib/store/actions';
 import type { Product, ProductCategory, ProductStatus } from '@/lib/store/mock-data';
-import {
-  PLATFORM_COMMISSION_RATE,
-  commissionFor,
-  creatorTakeFor,
-} from '@/lib/store/mock-data';
+import { PLATFORM_COMMISSION_RATE, commissionFor, creatorTakeFor } from '@/lib/store/mock-data';
 import { formatSarFromHalalas } from '@/lib/format';
 
 const CATEGORIES: ProductCategory[] = ['PRESET', 'LUT', 'TEMPLATE', 'OVERLAY', 'GUIDE', 'OTHER'];
@@ -46,9 +42,10 @@ export function ProductForm({ locale, product }: Props) {
   const tStatus = useTranslations('store.status');
 
   const isEdit = Boolean(product);
-  const action = isEdit && product
-    ? updateProductAction.bind(null, locale, product.id)
-    : createProductAction.bind(null, locale);
+  const action =
+    isEdit && product
+      ? updateProductAction.bind(null, locale, product.id)
+      : createProductAction.bind(null, locale);
 
   const [serverState, formAction] = useFormState<StoreResult | null, FormData>(action, null);
   const [isPending, startTransition] = useTransition();
@@ -116,16 +113,25 @@ export function ProductForm({ locale, product }: Props) {
     >
       {/* Identity */}
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Input label={t('titleEn')} {...register('titleEn')} error={errors.titleEn?.message ?? serverState?.fieldErrors?.titleEn} required />
+        <Input
+          label={t('titleEn')}
+          {...register('titleEn')}
+          error={errors.titleEn?.message ?? serverState?.fieldErrors?.titleEn}
+          required
+        />
         <Input label={t('titleAr')} {...register('titleAr')} error={errors.titleAr?.message} />
       </section>
 
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Field label={t('descriptionEn')} hint={t('descriptionHint')} error={errors.descriptionEn?.message ?? serverState?.fieldErrors?.descriptionEn}>
+        <Field
+          label={t('descriptionEn')}
+          hint={t('descriptionHint')}
+          error={errors.descriptionEn?.message ?? serverState?.fieldErrors?.descriptionEn}
+        >
           <textarea
             rows={5}
             {...register('descriptionEn')}
-            className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
           />
         </Field>
         <Field label={t('descriptionAr')} error={errors.descriptionAr?.message}>
@@ -133,7 +139,7 @@ export function ProductForm({ locale, product }: Props) {
             rows={5}
             dir="rtl"
             {...register('descriptionAr')}
-            className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
           />
         </Field>
       </section>
@@ -142,20 +148,24 @@ export function ProductForm({ locale, product }: Props) {
         <Field label={t('category')} error={errors.category?.message}>
           <select
             {...register('category')}
-            className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
           >
             {CATEGORIES.map((c) => (
-              <option key={c} value={c}>{tCategory(c as 'PRESET')}</option>
+              <option key={c} value={c}>
+                {tCategory(c as 'PRESET')}
+              </option>
             ))}
           </select>
         </Field>
         <Field label={t('status')} hint={t('statusHint')} error={errors.status?.message}>
           <select
             {...register('status')}
-            className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
           >
             {STATUSES.map((s) => (
-              <option key={s} value={s}>{tStatus(s as 'DRAFT')}</option>
+              <option key={s} value={s}>
+                {tStatus(s as 'DRAFT')}
+              </option>
             ))}
           </select>
         </Field>
@@ -170,21 +180,19 @@ export function ProductForm({ locale, product }: Props) {
       </section>
 
       {/* Live take-home for the creator */}
-      <aside className="rounded-md border border-accent/30 bg-accent/5 p-4">
+      <aside className="border-accent/30 bg-accent/5 rounded-md border p-4">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <div>
-            <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-              {t('takeHome.label')}
-            </span>
-            <p className="text-sm text-surface/70">
+            <span className="text-2xs text-accent-secondary">{t('takeHome.label')}</span>
+            <p className="text-surface/70 text-sm">
               {t('takeHome.hint', { rate: `${Math.round(PLATFORM_COMMISSION_RATE * 100)}%` })}
             </p>
           </div>
           <div className="text-end">
-            <p className="font-display text-3xl text-accent tabular-nums">
+            <p className="text-accent-secondary text-3xl font-bold tabular-nums tracking-tight">
               {formatSarFromHalalas(creatorTakeFor(halalas), locale)}
             </p>
-            <p className="font-mono text-2xs text-surface/40">
+            <p className="text-2xs text-surface/40 font-mono">
               {t('takeHome.commission', {
                 amount: formatSarFromHalalas(commissionFor(halalas), locale),
               })}
@@ -220,7 +228,7 @@ export function ProductForm({ locale, product }: Props) {
             rows={4}
             {...register('previewImagesRaw')}
             placeholder={'https://images.example.com/01.jpg\nhttps://images.example.com/02.jpg'}
-            className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 font-mono text-sm text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 font-mono text-sm outline-none"
           />
         </Field>
 
@@ -234,7 +242,9 @@ export function ProductForm({ locale, product }: Props) {
       </section>
 
       {serverState?.error && serverState.error !== 'INVALID_INPUT' ? (
-        <p className="text-sm text-accent-secondary" role="alert">{t('errorGeneric')}</p>
+        <p className="text-accent-secondary text-sm" role="alert">
+          {t('errorGeneric')}
+        </p>
       ) : null}
 
       <div className={cn('flex items-center gap-3')}>
@@ -242,9 +252,7 @@ export function ProductForm({ locale, product }: Props) {
           {isEdit ? t('save') : t('create')}
         </Button>
         {serverState?.ok ? (
-          <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-            {t('saved')}
-          </span>
+          <span className="text-2xs text-accent-secondary">{t('saved')}</span>
         ) : null}
       </div>
     </form>
@@ -264,12 +272,12 @@ function Field({
 }) {
   return (
     <label className="flex w-full flex-col gap-1.5">
-      <span className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr">{label}</span>
+      <span className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium">{label}</span>
       {children}
       {error ? (
-        <span className="text-xs text-accent-secondary">{error}</span>
+        <span className="text-accent-secondary text-xs">{error}</span>
       ) : hint ? (
-        <span className="text-xs text-surface/50">{hint}</span>
+        <span className="text-surface/50 text-xs">{hint}</span>
       ) : null}
     </label>
   );

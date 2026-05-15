@@ -22,8 +22,7 @@ export function StatusButton({ locale, productId, to, variant = 'outline', confi
   const t = useTranslations('store.detail');
   const [isPending, startTransition] = useTransition();
 
-  const labelKey =
-    to === 'ACTIVE' ? 'publish' : to === 'DRAFT' ? 'unpublish' : 'archive';
+  const labelKey = to === 'ACTIVE' ? 'publish' : to === 'DRAFT' ? 'unpublish' : 'archive';
 
   return (
     <form

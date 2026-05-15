@@ -13,7 +13,16 @@ import type { City, Discipline } from '@/lib/creators/mock-data';
 import { submitInquiryAction, type SubmitInquiryFailure } from '@/lib/inquiries/actions';
 import { inquiryFormSchema, type InquiryFormValues } from '@/lib/inquiries/schemas';
 
-const CITIES: City[] = ['RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA'];
+const CITIES: City[] = [
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
+];
 
 const DISCIPLINE_KEYS: Record<Discipline, string> = {
   WEDDING_PHOTOGRAPHY: 'weddingPhoto',
@@ -90,7 +99,7 @@ export function InquiryForm({ locale, username, defaultDiscipline, defaultCity }
         <Field label={t('discipline')} error={errors.discipline?.message}>
           <select
             {...register('discipline')}
-            className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
           >
             {(Object.keys(DISCIPLINE_KEYS) as Discipline[]).map((d) => (
               <option key={d} value={d}>
@@ -103,7 +112,7 @@ export function InquiryForm({ locale, username, defaultDiscipline, defaultCity }
         <Field label={t('city')} error={errors.city?.message}>
           <select
             {...register('city')}
-            className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
           >
             {CITIES.map((c) => (
               <option key={c} value={c}>
@@ -129,11 +138,15 @@ export function InquiryForm({ locale, username, defaultDiscipline, defaultCity }
         error={errors.locationDetail?.message}
       />
 
-      <Field label={t('description')} error={errors.description?.message} hint={t('descriptionHint')}>
+      <Field
+        label={t('description')}
+        error={errors.description?.message}
+        hint={t('descriptionHint')}
+      >
         <textarea
           rows={5}
           {...register('description')}
-          className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
         />
       </Field>
 
@@ -157,7 +170,7 @@ export function InquiryForm({ locale, username, defaultDiscipline, defaultCity }
       </div>
 
       {serverState?.error === 'CREATOR_NOT_FOUND' ? (
-        <p className="text-sm text-accent-secondary" role="alert">
+        <p className="text-accent-secondary text-sm" role="alert">
           {t('errorCreatorNotFound')}
         </p>
       ) : null}
@@ -182,12 +195,12 @@ function Field({
 }) {
   return (
     <label className="flex w-full flex-col gap-1.5">
-      <span className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr">{label}</span>
+      <span className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium">{label}</span>
       {children}
       {error ? (
-        <span className="text-xs text-accent-secondary">{error}</span>
+        <span className="text-accent-secondary text-xs">{error}</span>
       ) : hint ? (
-        <span className="text-xs text-surface/50">{hint}</span>
+        <span className="text-surface/50 text-xs">{hint}</span>
       ) : null}
     </label>
   );

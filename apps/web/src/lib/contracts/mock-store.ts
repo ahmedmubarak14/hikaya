@@ -53,12 +53,17 @@ export function getContractBySlug(slug: string): Contract | null {
 
 function nextContractNumber(): string {
   const year = new Date().getFullYear();
-  const count = [...store.contracts.values()].filter((c) => c.number.startsWith(`C-${year}-`)).length + 1;
+  const count =
+    [...store.contracts.values()].filter((c) => c.number.startsWith(`C-${year}-`)).length + 1;
   return `C-${year}-${String(count).padStart(4, '0')}`;
 }
 
 function uniqueSlug(base: string): string {
-  const norm = base.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+  const norm = base
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
   let candidate = norm.length >= 3 ? norm : `contract-${randomBytes(3).toString('hex')}`;
   let i = 1;
   while ([...store.contracts.values()].some((c) => c.shareSlug === candidate)) {
@@ -71,33 +76,27 @@ function uniqueSlug(base: string): string {
 const DEFAULT_SECTIONS: ContractSection[] = [
   {
     key: 'scopeOfWork',
-    body:
-      'The Photographer agrees to provide creative services as detailed in the attached quote, including pre-session planning, the session(s) listed therein, and post-production through digital delivery.',
+    body: 'The Photographer agrees to provide creative services as detailed in the attached quote, including pre-session planning, the session(s) listed therein, and post-production through digital delivery.',
   },
   {
     key: 'deliverables',
-    body:
-      'Edited digital images delivered via a private Hikaya gallery within four (4) weeks of the session date. Originals (RAW) are not delivered unless explicitly listed in the quote.',
+    body: 'Edited digital images delivered via a private Hikaya gallery within four (4) weeks of the session date. Originals (RAW) are not delivered unless explicitly listed in the quote.',
   },
   {
     key: 'paymentTerms',
-    body:
-      'A 50% non-refundable retainer is due upon signature. The remaining balance is due no later than the day before the session. All payments are processed in SAR including 15% VAT where applicable.',
+    body: 'A 50% non-refundable retainer is due upon signature. The remaining balance is due no later than the day before the session. All payments are processed in SAR including 15% VAT where applicable.',
   },
   {
     key: 'cancellationPolicy',
-    body:
-      'Cancellation by the Client more than 30 days before the session: retainer applied to a future booking within 12 months. Within 30 days: retainer is forfeit. The Photographer may cancel for cause and refund all monies paid; no further liability.',
+    body: 'Cancellation by the Client more than 30 days before the session: retainer applied to a future booking within 12 months. Within 30 days: retainer is forfeit. The Photographer may cancel for cause and refund all monies paid; no further liability.',
   },
   {
     key: 'usageRights',
-    body:
-      'The Client receives a personal-use license to all delivered images. Commercial use, including resale or use in advertising, requires a separate written license. The Photographer retains copyright and may use a representative selection in their portfolio and on social media unless mutually agreed otherwise.',
+    body: 'The Client receives a personal-use license to all delivered images. Commercial use, including resale or use in advertising, requires a separate written license. The Photographer retains copyright and may use a representative selection in their portfolio and on social media unless mutually agreed otherwise.',
   },
   {
     key: 'additionalTerms',
-    body:
-      'Either party may amend this agreement only in writing, signed by both. Disputes shall be resolved per Hikaya\'s published dispute-resolution policy and the laws of the Kingdom of Saudi Arabia.',
+    body: "Either party may amend this agreement only in writing, signed by both. Disputes shall be resolved per Hikaya's published dispute-resolution policy and the laws of the Kingdom of Saudi Arabia.",
   },
 ];
 
@@ -126,10 +125,7 @@ export function createContractFromQuote(quote: Quote): Contract {
   return contract;
 }
 
-export function updateContractSections(
-  id: string,
-  sections: ContractSection[],
-): Contract {
+export function updateContractSections(id: string, sections: ContractSection[]): Contract {
   const existing = store.contracts.get(id);
   if (!existing) throw new Error('CONTRACT_NOT_FOUND');
   if (existing.status === 'SIGNED' || existing.status === 'CANCELLED') {
@@ -140,11 +136,7 @@ export function updateContractSections(
   return updated;
 }
 
-export function signContract(
-  id: string,
-  side: 'creator' | 'client',
-  typedName: string,
-): Contract {
+export function signContract(id: string, side: 'creator' | 'client', typedName: string): Contract {
   const existing = store.contracts.get(id);
   if (!existing) throw new Error('CONTRACT_NOT_FOUND');
   if (existing.status === 'CANCELLED') throw new Error('CONTRACT_CANCELLED');

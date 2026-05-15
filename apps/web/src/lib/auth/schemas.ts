@@ -18,7 +18,7 @@ export const signUpFormSchema = z.object({
   displayName: z.string().min(2).max(80),
   email: z.string().email(),
   password: z.string().min(8, 'At least 8 characters').max(128),
-  role: z.enum(['CREATOR', 'CLIENT']).default('CLIENT'),
+  role: z.enum(['CREATOR', 'STUDIO_OWNER', 'CLIENT']).default('CLIENT'),
   locale: z.enum(locales).default('en'),
   acceptedTerms: z.literal(true, {
     errorMap: () => ({ message: 'You must accept the terms to continue.' }),

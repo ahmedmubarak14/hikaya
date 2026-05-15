@@ -7,7 +7,13 @@ export const createGallerySchema = z.object({
   coverUrl: z.string().url().optional().or(z.literal('')),
   allowDownloads: z.coerce.boolean().default(true),
   watermarkPreviews: z.coerce.boolean().default(false),
-  expiresInDays: z.coerce.number().int().positive().max(365).optional().or(z.nan().transform(() => undefined)),
+  expiresInDays: z.coerce
+    .number()
+    .int()
+    .positive()
+    .max(365)
+    .optional()
+    .or(z.nan().transform(() => undefined)),
 });
 export type CreateGalleryValues = z.infer<typeof createGallerySchema>;
 

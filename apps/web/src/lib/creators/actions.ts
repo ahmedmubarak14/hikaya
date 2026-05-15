@@ -36,7 +36,9 @@ export interface EditorSuccess {
 }
 export type EditorResult = EditorSuccess | EditorFailure;
 
-function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string }[]): Record<string, string> {
+function fieldErrorsFromZod(
+  issues: { path: (string | number)[]; message: string }[],
+): Record<string, string> {
   const out: Record<string, string> = {};
   for (const issue of issues) {
     const key = String(issue.path[0] ?? '_');
@@ -127,7 +129,8 @@ export async function addPortfolioItemAction(
     };
   }
 
-  const url = parsed.data.url || `https://picsum.photos/seed/${randomBytes(6).toString('hex')}/1200/900`;
+  const url =
+    parsed.data.url || `https://picsum.photos/seed/${randomBytes(6).toString('hex')}/1200/900`;
 
   storeAddItem(auth.creator.id, {
     url,

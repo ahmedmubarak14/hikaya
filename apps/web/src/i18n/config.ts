@@ -10,12 +10,10 @@ export const defaultLocale: Locale = 'en';
 /** Locales that flow right-to-left. Drives <html dir="rtl"> on the layout. */
 export const rtlLocales: ReadonlySet<Locale> = new Set(['ar']);
 
-export const localeMeta: Record<
-  Locale,
-  { label: string; nativeLabel: string; htmlLang: string }
-> = {
-  en: { label: 'English', nativeLabel: 'English', htmlLang: 'en' },
-  ar: { label: 'Arabic', nativeLabel: 'العربية', htmlLang: 'ar' },
-};
+export const localeMeta: Record<Locale, { label: string; nativeLabel: string; htmlLang: string }> =
+  {
+    en: { label: 'English', nativeLabel: 'English', htmlLang: 'en' },
+    ar: { label: 'Arabic', nativeLabel: 'العربية', htmlLang: 'ar' },
+  };
 
 export const isRtl = (locale: Locale): boolean => rtlLocales.has(locale);

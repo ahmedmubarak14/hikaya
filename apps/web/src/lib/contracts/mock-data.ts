@@ -16,7 +16,13 @@ export type ContractStatus =
 
 export interface ContractSection {
   /** Stable section key, used as form field name. */
-  key: 'scopeOfWork' | 'deliverables' | 'paymentTerms' | 'cancellationPolicy' | 'usageRights' | 'additionalTerms';
+  key:
+    | 'scopeOfWork'
+    | 'deliverables'
+    | 'paymentTerms'
+    | 'cancellationPolicy'
+    | 'usageRights'
+    | 'additionalTerms';
   body: string;
 }
 

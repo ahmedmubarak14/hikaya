@@ -46,9 +46,17 @@ function Editorial({ items, altPrefix }: { items: PortfolioItem[]; altPrefix: st
         if (!wide) return null;
         const reverse = rIdx % 2 === 1;
         return (
-          <div key={rIdx} className={cn('grid gap-4 md:grid-cols-3', reverse && 'md:[&>:first-child]:order-2')}>
+          <div
+            key={rIdx}
+            className={cn('grid gap-4 md:grid-cols-3', reverse && 'md:[&>:first-child]:order-2')}
+          >
             <div className="md:col-span-2">
-              <PortfolioFigure item={wide} altPrefix={altPrefix} index={rIdx * 3} aspect="aspect-[4/3]" />
+              <PortfolioFigure
+                item={wide}
+                altPrefix={altPrefix}
+                index={rIdx * 3}
+                aspect="aspect-[4/3]"
+              />
             </div>
             <div className="grid gap-4 md:grid-cols-1">
               {pair.map((it, i) => (
@@ -96,7 +104,7 @@ function PortfolioFigure({
   return (
     <figure
       className={cn(
-        'group relative overflow-hidden rounded-md border border-surface/5 bg-surface/[0.03]',
+        'border-surface/5 bg-surface/[0.03] group relative overflow-hidden rounded-md border',
         aspect,
       )}
       style={!aspect ? { aspectRatio: `${item.width} / ${item.height}` } : undefined}
@@ -106,7 +114,7 @@ function PortfolioFigure({
         alt={`${altPrefix} — ${item.titleEn ?? `image ${index + 1}`}`}
         fill
         sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-        className="object-cover transition-transform duration-cinematic ease-out group-hover:scale-[1.02]"
+        className="duration-cinematic object-cover transition-transform ease-out group-hover:scale-[1.02]"
       />
     </figure>
   );

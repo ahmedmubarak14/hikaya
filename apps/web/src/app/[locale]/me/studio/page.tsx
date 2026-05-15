@@ -31,7 +31,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return { title: t('title') };
 }
 
-const STATUS_TONE: Record<BookingStatus, 'neutral' | 'accent' | 'sage' | 'warning' | 'info' | 'purple'> = {
+const STATUS_TONE: Record<
+  BookingStatus,
+  'neutral' | 'accent' | 'sage' | 'warning' | 'info' | 'purple'
+> = {
   INQUIRY: 'neutral',
   QUOTED: 'info',
   CONTRACTED: 'purple',
@@ -69,11 +72,11 @@ export default async function StudioDashboardPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-8xl px-6 py-22 md:px-10">
+      <main className="max-w-8xl py-22 mx-auto w-full px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('backToAccount')}
           </Link>
@@ -82,9 +85,9 @@ export default async function StudioDashboardPage({ params }: Props) {
           </Badge>
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
             <span>{t('headline')}</span>{' '}
-            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
+            <span className="text-accent-secondary font-bold">{t('headlineItalic')}</span>
           </h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         {/* Stats */}
@@ -116,16 +119,14 @@ export default async function StudioDashboardPage({ params }: Props) {
         <section className="mb-10 grid grid-cols-1 gap-6 lg:grid-cols-[2fr_1fr]">
           <BookingCalendar bookings={STUDIO_BOOKINGS} />
 
-          <aside className="flex flex-col gap-4 rounded-xl border border-surface/10 bg-surface/[0.03] p-6">
+          <aside className="border-surface/10 bg-surface/[0.03] flex flex-col gap-4 rounded-xl border p-6">
             <header className="flex items-baseline justify-between">
-              <h3 className="text-2xl text-surface">{t('upcoming.title')}</h3>
-              <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('upcoming.window')}
-              </span>
+              <h3 className="text-surface text-2xl">{t('upcoming.title')}</h3>
+              <span className="text-2xs text-surface/40">{t('upcoming.window')}</span>
             </header>
 
             {stats.upcomingNext14d.length === 0 ? (
-              <p className="text-sm text-surface/50">{t('upcoming.empty')}</p>
+              <p className="text-surface/50 text-sm">{t('upcoming.empty')}</p>
             ) : (
               <ul className="flex flex-col gap-3">
                 {stats.upcomingNext14d.map((b) => {
@@ -135,12 +136,12 @@ export default async function StudioDashboardPage({ params }: Props) {
                       <Card>
                         <CardBody className="flex flex-col gap-1.5 p-4">
                           <div className="flex items-center justify-between gap-2">
-                            <span className="text-base text-surface">{b.clientName}</span>
+                            <span className="text-surface text-base">{b.clientName}</span>
                             <Badge tone={STATUS_TONE[b.status]}>
                               {t(`status.${b.status}` as 'status.CONFIRMED')}
                             </Badge>
                           </div>
-                          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                          <p className="text-2xs text-surface/40">
                             {new Intl.DateTimeFormat(locale === 'ar' ? 'ar-SA' : 'en-SA', {
                               month: 'short',
                               day: 'numeric',
@@ -163,18 +164,18 @@ export default async function StudioDashboardPage({ params }: Props) {
         </section>
 
         {/* Clients */}
-        <section className="rounded-xl border border-surface/10 bg-surface/[0.03] overflow-hidden">
+        <section className="border-surface/10 bg-surface/[0.03] overflow-hidden rounded-xl border">
           <header className="flex items-baseline justify-between p-6">
-            <h3 className="text-2xl text-surface">{t('clients.title')}</h3>
-            <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <h3 className="text-surface text-2xl">{t('clients.title')}</h3>
+            <span className="text-2xs text-surface/40">
               {t('clients.count', { count: STUDIO_CLIENTS.length })}
             </span>
           </header>
 
           <div className="overflow-x-auto">
             <table className="w-full text-start">
-              <thead className="border-y border-surface/10 bg-surface/[0.02]">
-                <tr className="text-start font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+              <thead className="border-surface/10 bg-surface/[0.02] border-y">
+                <tr className="text-2xs text-surface/40 text-start">
                   <Th>{t('clients.name')}</Th>
                   <Th>{t('clients.tags')}</Th>
                   <Th align="end">{t('clients.bookings')}</Th>
@@ -183,22 +184,23 @@ export default async function StudioDashboardPage({ params }: Props) {
                 </tr>
               </thead>
               <tbody>
-                {STUDIO_CLIENTS
-                  .slice()
+                {STUDIO_CLIENTS.slice()
                   .sort((a, b) => b.totalSpendSar - a.totalSpendSar)
                   .map((c) => (
-                    <tr key={c.id} className="border-b border-surface/5 last:border-0">
+                    <tr key={c.id} className="border-surface/5 border-b last:border-0">
                       <Td>
                         <div className="flex flex-col gap-0.5">
-                          <span className="text-base text-surface">{c.name}</span>
-                          <span className="font-mono text-2xs text-surface/40">{c.email}</span>
+                          <span className="text-surface text-base">{c.name}</span>
+                          <span className="text-2xs text-surface/40 font-mono">{c.email}</span>
                         </div>
                       </Td>
                       <Td>
                         <div className="flex flex-wrap gap-1.5">
                           {c.isBusiness ? <Badge tone="info">{t('clients.business')}</Badge> : null}
                           {c.tags.map((tag) => (
-                            <Badge key={tag} tone="neutral">{tag}</Badge>
+                            <Badge key={tag} tone="neutral">
+                              {tag}
+                            </Badge>
                           ))}
                         </div>
                       </Td>
@@ -218,9 +220,7 @@ export default async function StudioDashboardPage({ params }: Props) {
           </div>
         </section>
 
-        <p className="mt-10 max-w-prose font-mono text-2xs uppercase tracking-widest text-surface/30 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-          {t('mockNote')}
-        </p>
+        <p className="text-2xs text-surface/30 mt-10 max-w-prose">{t('mockNote')}</p>
       </main>
     </>
   );
@@ -228,10 +228,7 @@ export default async function StudioDashboardPage({ params }: Props) {
 
 function Th({ children, align = 'start' }: { children: React.ReactNode; align?: 'start' | 'end' }) {
   return (
-    <th
-      className={align === 'end' ? 'p-4 text-end' : 'p-4 text-start'}
-      scope="col"
-    >
+    <th className={align === 'end' ? 'p-4 text-end' : 'p-4 text-start'} scope="col">
       {children}
     </th>
   );

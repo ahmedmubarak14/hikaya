@@ -35,13 +35,17 @@ export default async function MePage({ params }: Props) {
   const t = await getTranslations('me');
   const tAuth = await getTranslations('auth');
 
-  const roleKey: 'roleClient' | 'roleCreator' =
-    session.user.role === 'CREATOR' ? 'roleCreator' : 'roleClient';
+  const roleKey: 'roleClient' | 'roleCreator' | 'roleStudioOwner' =
+    session.user.currentRole === 'CREATOR'
+      ? 'roleCreator'
+      : session.user.currentRole === 'STUDIO_OWNER'
+        ? 'roleStudioOwner'
+        : 'roleClient';
 
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-4xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-4xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Badge tone="accent" className="self-start">
             {tAuth(roleKey)}
@@ -49,34 +53,28 @@ export default async function MePage({ params }: Props) {
           <h1 className="text-balance text-5xl">
             {t('greeting', { name: session.user.displayName })}
           </h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Card>
             <CardBody className="flex flex-col gap-2 p-6">
-              <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('emailLabel')}
-              </span>
-              <p className="text-base text-surface">{session.user.email}</p>
+              <span className="text-2xs text-surface/40">{t('emailLabel')}</span>
+              <p className="text-surface text-base">{session.user.email}</p>
             </CardBody>
           </Card>
 
           <Card>
             <CardBody className="flex flex-col gap-2 p-6">
-              <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('roleLabel')}
-              </span>
-              <p className="text-base text-surface">{session.user.role}</p>
+              <span className="text-2xs text-surface/40">{t('roleLabel')}</span>
+              <p className="text-surface text-base">{tAuth(roleKey)}</p>
             </CardBody>
           </Card>
 
           <Card className="md:col-span-2">
             <CardBody className="flex flex-col gap-3 p-6">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('nextLabel')}
-              </span>
-              <p className="text-base text-surface/70">{t('nextBody')}</p>
+              <span className="text-2xs text-accent-secondary">{t('nextLabel')}</span>
+              <p className="text-surface/70 text-base">{t('nextBody')}</p>
             </CardBody>
           </Card>
         </div>
@@ -85,61 +83,61 @@ export default async function MePage({ params }: Props) {
           <div className="flex flex-wrap gap-2">
             <Link
               href={`/${locale}/me/portfolio`}
-              className="rounded-full border border-accent/40 bg-accent/10 px-5 py-2 text-sm text-accent transition-colors hover:bg-accent/15"
+              className="border-accent/40 bg-accent/10 text-accent-secondary hover:bg-accent/15 rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('portfolioLink')} →
             </Link>
             <Link
               href={`/${locale}/me/messages`}
-              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('messagesLink')} →
             </Link>
             <Link
               href={`/${locale}/me/galleries`}
-              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('galleriesLink')} →
             </Link>
             <Link
               href={`/${locale}/me/quotes`}
-              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('quotesLink')} →
             </Link>
             <Link
               href={`/${locale}/me/contracts`}
-              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('contractsLink')} →
             </Link>
             <Link
               href={`/${locale}/me/jobs`}
-              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('jobsLink')} →
             </Link>
             <Link
               href={`/${locale}/me/store`}
-              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('storeLink')} →
             </Link>
             <Link
               href={`/${locale}/me/purchases`}
-              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('purchasesLink')} →
             </Link>
             <Link
               href={`/${locale}/me/inquiries`}
-              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('inquiriesLink')} →
             </Link>
             <Link
               href={`/${locale}/me/studio`}
-              className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('studioLink')} →
             </Link>

@@ -31,10 +31,10 @@ export function AddImagesForm({ locale, galleryId }: Props) {
           setValue('');
         });
       }}
-      className="flex flex-col gap-3 rounded-xl border border-surface/10 bg-surface/[0.03] p-4"
+      className="border-surface/10 bg-surface/[0.03] flex flex-col gap-3 rounded-xl border p-4"
     >
       <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr">
+        <span className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium">
           {t('label')}
         </span>
         <textarea
@@ -43,17 +43,15 @@ export function AddImagesForm({ locale, galleryId }: Props) {
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder={t('placeholder')}
-          className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 font-mono text-sm text-surface outline-none focus-visible:border-accent"
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 font-mono text-sm outline-none"
         />
-        <span className="text-xs text-surface/50">{t('hint')}</span>
+        <span className="text-surface/50 text-xs">{t('hint')}</span>
       </label>
 
       {serverState?.ok ? (
-        <p className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-          {t('added')}
-        </p>
+        <p className="text-2xs text-accent-secondary">{t('added')}</p>
       ) : serverState?.error === 'INVALID_INPUT' ? (
-        <p className="text-xs text-accent-secondary">
+        <p className="text-accent-secondary text-xs">
           {serverState.fieldErrors?.urls ?? t('invalid')}
         </p>
       ) : null}

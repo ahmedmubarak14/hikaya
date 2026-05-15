@@ -54,9 +54,7 @@ export function ContractSectionsForm({ locale, contractId, sections, locked }: P
             {t('save')}
           </Button>
           {serverState?.ok ? (
-            <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-              {t('saved')}
-            </span>
+            <span className="text-2xs text-accent-secondary">{t('saved')}</span>
           ) : null}
         </div>
       ) : null}
@@ -80,24 +78,22 @@ function SectionField({
   error?: string;
 }) {
   return (
-    <div className="rounded-md border border-surface/10 bg-surface/[0.03] p-5">
+    <div className="border-surface/10 bg-surface/[0.03] rounded-md border p-5">
       <header className="mb-3 flex flex-col gap-0.5">
-        <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-          {label}
-        </span>
-        <span className="text-xs text-surface/50">{description}</span>
+        <span className="text-2xs text-accent-secondary">{label}</span>
+        <span className="text-surface/50 text-xs">{description}</span>
       </header>
       {locked ? (
-        <p className="whitespace-pre-wrap text-sm text-surface/80">{defaultValue}</p>
+        <p className="text-surface/80 whitespace-pre-wrap text-sm">{defaultValue}</p>
       ) : (
         <textarea
           name={name}
           defaultValue={defaultValue}
           rows={5}
-          className="w-full rounded-md border border-surface/15 bg-bg/50 px-3 py-2 text-sm text-surface outline-none focus-visible:border-accent"
+          className="border-surface/15 bg-bg/50 text-surface focus-visible:border-accent w-full rounded-md border px-3 py-2 text-sm outline-none"
         />
       )}
-      {error ? <p className="mt-2 text-xs text-accent-secondary">{error}</p> : null}
+      {error ? <p className="text-accent-secondary mt-2 text-xs">{error}</p> : null}
     </div>
   );
 }

@@ -58,18 +58,25 @@ export function CreateGalleryForm({ locale }: Props) {
       className="flex flex-col gap-5"
       noValidate
     >
-      <Input label={t('titleEn')} {...register('titleEn')} error={errors.titleEn?.message} required />
+      <Input
+        label={t('titleEn')}
+        {...register('titleEn')}
+        error={errors.titleEn?.message}
+        required
+      />
       <Input label={t('titleAr')} {...register('titleAr')} error={errors.titleAr?.message} />
 
       <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr">{t('message')}</span>
+        <span className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium">
+          {t('message')}
+        </span>
         <textarea
           rows={3}
           {...register('message')}
           placeholder={t('messagePlaceholder')}
-          className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
         />
-        <span className="text-xs text-surface/50">{t('messageHint')}</span>
+        <span className="text-surface/50 text-xs">{t('messageHint')}</span>
       </label>
 
       <Input
@@ -89,25 +96,33 @@ export function CreateGalleryForm({ locale }: Props) {
         error={errors.expiresInDays?.message}
       />
 
-      <div className="flex flex-col gap-3 rounded-md border border-surface/10 bg-surface/[0.03] p-4">
-        <label className="flex cursor-pointer items-start gap-3 text-sm text-surface/80">
-          <input type="checkbox" {...register('allowDownloads')} className="mt-0.5 h-4 w-4 accent-accent" />
+      <div className="border-surface/10 bg-surface/[0.03] flex flex-col gap-3 rounded-md border p-4">
+        <label className="text-surface/80 flex cursor-pointer items-start gap-3 text-sm">
+          <input
+            type="checkbox"
+            {...register('allowDownloads')}
+            className="accent-accent mt-0.5 h-4 w-4"
+          />
           <span>
-            <span className="block font-medium text-surface">{t('allowDownloads')}</span>
-            <span className="block text-xs text-surface/50">{t('allowDownloadsHint')}</span>
+            <span className="text-surface block font-medium">{t('allowDownloads')}</span>
+            <span className="text-surface/50 block text-xs">{t('allowDownloadsHint')}</span>
           </span>
         </label>
-        <label className="flex cursor-pointer items-start gap-3 text-sm text-surface/80">
-          <input type="checkbox" {...register('watermarkPreviews')} className="mt-0.5 h-4 w-4 accent-accent" />
+        <label className="text-surface/80 flex cursor-pointer items-start gap-3 text-sm">
+          <input
+            type="checkbox"
+            {...register('watermarkPreviews')}
+            className="accent-accent mt-0.5 h-4 w-4"
+          />
           <span>
-            <span className="block font-medium text-surface">{t('watermarkPreviews')}</span>
-            <span className="block text-xs text-surface/50">{t('watermarkPreviewsHint')}</span>
+            <span className="text-surface block font-medium">{t('watermarkPreviews')}</span>
+            <span className="text-surface/50 block text-xs">{t('watermarkPreviewsHint')}</span>
           </span>
         </label>
       </div>
 
       {serverState?.error && serverState.error !== 'INVALID_INPUT' ? (
-        <p className="text-sm text-accent-secondary" role="alert">
+        <p className="text-accent-secondary text-sm" role="alert">
           {t('errorGeneric')}
         </p>
       ) : null}

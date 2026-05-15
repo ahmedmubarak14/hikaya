@@ -39,7 +39,9 @@ export interface ContractSuccess {
 }
 export type ContractResult = ContractSuccess | ContractFailure;
 
-function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string }[]): Record<string, string> {
+function fieldErrorsFromZod(
+  issues: { path: (string | number)[]; message: string }[],
+): Record<string, string> {
   const out: Record<string, string> = {};
   for (const issue of issues) {
     const key = String(issue.path[0] ?? '_');
@@ -83,7 +85,11 @@ export async function updateContractSectionsAction(
     additionalTerms: formData.get('additionalTerms') || undefined,
   });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   updateContractSections(
@@ -118,7 +124,11 @@ export async function signAsCreatorAction(
     acceptedTerms: formData.get('acceptedTerms') === 'on',
   });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   signContract(contractId, 'creator', parsed.data.typedName);
@@ -164,7 +174,11 @@ export async function signAsClientAction(
     acceptedTerms: formData.get('acceptedTerms') === 'on',
   });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   signContract(contract.id, 'client', parsed.data.typedName);

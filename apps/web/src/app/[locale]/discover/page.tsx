@@ -3,7 +3,10 @@ import { Suspense } from 'react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { CreatorCard } from '@/components/creators/creator-card';
+import { DiscoverHero } from '@/components/creators/discover-hero';
 import { FilterBar } from '@/components/creators/filter-bar';
+import { ProjectsGrid } from '@/components/creators/projects-grid';
+import { ViewToggle, type DiscoverView } from '@/components/creators/view-toggle';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
@@ -15,19 +18,43 @@ import type { Metadata } from 'next';
 
 interface Props {
   params: Promise<{ locale: Locale }>;
-  searchParams: Promise<{ city?: string; discipline?: string; available?: string }>;
+  searchParams: Promise<{
+    city?: string;
+    discipline?: string;
+    available?: string;
+    view?: string;
+  }>;
 }
 
 const CITY_VALUES = new Set<City>([
-  'RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA',
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
 ]);
 
 const DISCIPLINE_VALUES = new Set<Discipline>([
-  'WEDDING_PHOTOGRAPHY', 'PORTRAIT_PHOTOGRAPHY', 'COMMERCIAL_PHOTOGRAPHY',
-  'PRODUCT_PHOTOGRAPHY', 'EVENT_PHOTOGRAPHY', 'FASHION_PHOTOGRAPHY',
-  'COMMERCIAL_VIDEO', 'WEDDING_VIDEO', 'EVENT_VIDEO', 'DOCUMENTARY',
-  'GRAPHIC_DESIGN', 'BRAND_IDENTITY', 'MOTION_GRAPHICS', 'VIDEO_EDITING',
-  'COLOR_GRADING', 'RETOUCHING', 'DRONE_OPERATION',
+  'WEDDING_PHOTOGRAPHY',
+  'PORTRAIT_PHOTOGRAPHY',
+  'COMMERCIAL_PHOTOGRAPHY',
+  'PRODUCT_PHOTOGRAPHY',
+  'EVENT_PHOTOGRAPHY',
+  'FASHION_PHOTOGRAPHY',
+  'COMMERCIAL_VIDEO',
+  'WEDDING_VIDEO',
+  'EVENT_VIDEO',
+  'DOCUMENTARY',
+  'GRAPHIC_DESIGN',
+  'BRAND_IDENTITY',
+  'MOTION_GRAPHICS',
+  'VIDEO_EDITING',
+  'COLOR_GRADING',
+  'RETOUCHING',
+  'DRONE_OPERATION',
 ]);
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -43,7 +70,7 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
   // Skip searchParams in static export — Next would otherwise mark this page
   // dynamic and refuse the export. Filters work on the live build only.
   const sp = IS_STATIC_EXPORT ? {} : await searchParams;
-  const { city: rawCity, discipline: rawDiscipline, available } = sp;
+  const { city: rawCity, discipline: rawDiscipline, available, view: rawView } = sp;
 
   const city = rawCity && CITY_VALUES.has(rawCity as City) ? (rawCity as City) : null;
   const discipline =
@@ -51,6 +78,7 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
       ? (rawDiscipline as Discipline)
       : null;
   const availableOnly = available === '1';
+  const view: DiscoverView = rawView === 'projects' ? 'projects' : 'people';
 
   const t = await getTranslations('discover');
   const creators = await listCreators({
@@ -62,33 +90,37 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-8xl px-6 py-22 md:px-10">
-        <header className="mb-12 flex max-w-3xl flex-col gap-3">
-          <span className="font-mono text-xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-            {t('eyebrow')}
-          </span>
-          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
-            <span>{t('headline')}</span>{' '}
-            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
-          </h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
-        </header>
+      <main className="max-w-8xl pb-22 mx-auto w-full px-6 pt-10 md:px-10 md:pt-14">
+        {/* Centered search hero — Contra-style. */}
+        <DiscoverHero
+          title={t('heroTitle')}
+          placeholder={t('searchPlaceholder')}
+          searchLabel={t('searchAction')}
+        />
+
+        {/* Projects / People segmented toggle */}
+        <div className="mb-6 flex justify-center">
+          <Suspense>
+            <ViewToggle
+              view={view}
+              labels={{ projects: t('viewProjects'), people: t('viewPeople') }}
+            />
+          </Suspense>
+        </div>
 
         <Suspense>
           <FilterBar city={city} discipline={discipline} availableOnly={availableOnly} />
         </Suspense>
 
-        <p className="mb-6 font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-          {t('count', { count: creators.length })}
-        </p>
-
-        {creators.length === 0 ? (
-          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('empty')}</p>
-            <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+        {view === 'projects' ? (
+          <ProjectsGrid locale={locale} creators={creators} emptyLabel={t('empty')} />
+        ) : creators.length === 0 ? (
+          <div className="border-surface/10 bg-surface/[0.03] mt-10 rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('empty')}</p>
+            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
           </div>
         ) : (
-          <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">
             {creators.map((creator) => (
               <li key={creator.id}>
                 <CreatorCard creator={creator} />

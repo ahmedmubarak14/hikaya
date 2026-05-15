@@ -53,16 +53,16 @@ export default async function PublicContractPage({ params }: Props) {
   const signed = contract.status === 'SIGNED';
 
   return (
-    <main className="min-h-dvh bg-bg">
-      <header className="border-b border-surface/5">
+    <main className="bg-bg min-h-dvh">
+      <header className="border-surface/5 border-b">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-6 py-6 md:px-10">
-          <Link href={`/${locale}`} className="flex items-center text-surface" aria-label="Hikaya">
+          <Link href={`/${locale}`} className="text-surface flex items-center" aria-label="Hikaya">
             <Logo arabic={locale === 'ar'} className="h-6" />
           </Link>
           {creator ? (
             <Link
               href={`/${locale}/${creator.username}`}
-              className="flex items-center gap-2 rounded-full border border-surface/20 bg-bg/40 px-3 py-1.5 font-mono text-2xs uppercase tracking-wider text-surface/80 transition-colors hover:border-surface/40 hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+              className="border-surface/20 bg-bg/40 text-2xs text-surface/80 hover:border-surface/40 hover:text-surface flex items-center gap-2 rounded-full border px-3 py-1.5 transition-colors"
             >
               <span className="relative h-5 w-5 overflow-hidden rounded-full">
                 <Image src={creator.avatarUrl} alt="" fill sizes="20px" className="object-cover" />
@@ -77,37 +77,37 @@ export default async function PublicContractPage({ params }: Props) {
         <div className="mb-8 flex flex-col gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <ContractStatusBadge status={contract.status} />
-            <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-              {contract.number}
-            </span>
+            <span className="text-2xs text-surface/40">{contract.number}</span>
           </div>
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
             <span>{t('headline')}</span>{' '}
-            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
+            <span className="text-accent-secondary font-bold">{t('headlineItalic')}</span>
           </h1>
-          <p className="max-w-prose text-surface/60">
+          <p className="text-surface/60 max-w-prose">
             {t('subtitle', {
-              creator: creator ? (locale === 'ar' ? creator.displayNameAr : creator.displayNameEn) : '',
+              creator: creator
+                ? locale === 'ar'
+                  ? creator.displayNameAr
+                  : creator.displayNameEn
+                : '',
               total: formatSarFromHalalas(contract.totalHalalas, locale),
             })}
           </p>
         </div>
 
-        {cancelled ? (
-          <Badge tone="warning">{t('cancelled')}</Badge>
-        ) : null}
+        {cancelled ? <Badge tone="warning">{t('cancelled')}</Badge> : null}
 
         {/* Sections */}
         <article className="mt-8 flex flex-col gap-6">
           {contract.sections.map((s) => (
             <section
               key={s.key}
-              className="rounded-xl border border-surface/10 bg-surface/[0.03] p-5"
+              className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5"
             >
-              <h2 className="mb-2 text-lg text-surface">
+              <h2 className="text-surface mb-2 text-lg">
                 {tSection(`${s.key}.title` as 'scopeOfWork.title')}
               </h2>
-              <p className="whitespace-pre-wrap text-sm text-surface/80">{s.body}</p>
+              <p className="text-surface/80 whitespace-pre-wrap text-sm">{s.body}</p>
             </section>
           ))}
         </article>
@@ -143,23 +143,22 @@ export default async function PublicContractPage({ params }: Props) {
         ) : null}
 
         {signed ? (
-          <section className="mt-10 rounded-xl border border-sage/40 bg-sage/10 p-6">
-            <span className="font-mono text-2xs uppercase tracking-widest text-sage [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-              {t('lockedLabel')}
-            </span>
-            <p className="mt-2 text-sm text-surface/70">{t('lockedBody')}</p>
+          <section className="border-sage/40 bg-sage/10 mt-10 rounded-xl border p-6">
+            <span className="text-2xs text-sage">{t('lockedLabel')}</span>
+            <p className="text-surface/70 mt-2 text-sm">{t('lockedBody')}</p>
           </section>
         ) : null}
       </section>
 
-      <footer className="border-t border-surface/5">
+      <footer className="border-surface/5 border-t">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-6 py-8 md:px-10">
-          <Link href={`/${locale}`} className="flex items-center text-surface/70 hover:text-surface">
+          <Link
+            href={`/${locale}`}
+            className="text-surface/70 hover:text-surface flex items-center"
+          >
             <Logo arabic={locale === 'ar'} className="h-5" />
           </Link>
-          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-            {t('footerNote')}
-          </p>
+          <p className="text-2xs text-surface/40">{t('footerNote')}</p>
         </div>
       </footer>
     </main>
@@ -180,19 +179,15 @@ function SigBlock({
   empty: string;
 }) {
   return (
-    <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-5">
-      <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-        {label}
-      </span>
+    <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
+      <span className="text-2xs text-surface/40">{label}</span>
       {name && at ? (
         <>
-          <p className="mt-2 text-2xl font-bold text-accent-secondary">{name}</p>
-          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-            {formatDateTime(at, locale)}
-          </p>
+          <p className="text-accent-secondary mt-2 text-2xl font-bold">{name}</p>
+          <p className="text-2xs text-surface/40">{formatDateTime(at, locale)}</p>
         </>
       ) : (
-        <p className="mt-2 text-sm text-surface/50">{empty}</p>
+        <p className="text-surface/50 mt-2 text-sm">{empty}</p>
       )}
     </div>
   );

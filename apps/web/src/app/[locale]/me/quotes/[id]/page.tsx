@@ -63,17 +63,17 @@ export default async function QuoteDetailPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-5xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/quotes`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('back')}
           </Link>
           <div className="flex flex-wrap items-center gap-3">
             <QuoteStatusBadge status={quote.status} />
-            <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+            <span className="text-2xs text-surface/40">
               {t('updatedAt', { time: formatDateTime(quote.updatedAt, locale) })}
             </span>
           </div>
@@ -83,12 +83,10 @@ export default async function QuoteDetailPage({ params }: Props) {
 
         {/* State-specific actions */}
         {quote.status === 'DRAFT' ? (
-          <Card className="mb-6 border-accent/40 bg-accent/5">
+          <Card className="border-accent/40 bg-accent/5 mb-6">
             <CardBody className="flex flex-col gap-3 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('draftLabel')}
-              </span>
-              <p className="text-sm text-surface/70">{t('draftBody')}</p>
+              <span className="text-2xs text-accent-secondary">{t('draftLabel')}</span>
+              <p className="text-surface/70 text-sm">{t('draftBody')}</p>
               <div className="flex items-center gap-3">
                 <SendQuoteButton locale={locale} quoteId={quote.id} />
                 <DeleteQuoteButton locale={locale} quoteId={quote.id} />
@@ -100,12 +98,10 @@ export default async function QuoteDetailPage({ params }: Props) {
         {quote.status === 'SENT' ? (
           <Card className="mb-6">
             <CardBody className="flex flex-col gap-3 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('sentLabel')}
-              </span>
-              <p className="text-sm text-surface/70">{t('sentBody')}</p>
+              <span className="text-2xs text-accent-secondary">{t('sentLabel')}</span>
+              <p className="text-surface/70 text-sm">{t('sentBody')}</p>
               <div className="flex flex-wrap items-center gap-3">
-                <code className="flex-1 break-all rounded-md border border-surface/10 bg-surface/[0.03] px-3 py-2 font-mono text-sm text-surface">
+                <code className="border-surface/10 bg-surface/[0.03] text-surface flex-1 break-all rounded-md border px-3 py-2 font-mono text-sm">
                   {shareUrl}
                 </code>
                 <CopyLinkButton url={shareUrl} />
@@ -113,7 +109,7 @@ export default async function QuoteDetailPage({ params }: Props) {
                   href={`/${locale}/q/${quote.shareSlug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full border border-surface/15 px-4 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+                  className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-4 py-2 text-sm transition-colors"
                 >
                   {t('preview')} ↗
                 </Link>
@@ -123,13 +119,11 @@ export default async function QuoteDetailPage({ params }: Props) {
         ) : null}
 
         {quote.status === 'APPROVED' && quote.contractId ? (
-          <Card className="mb-6 border-sage/40 bg-sage/10">
+          <Card className="border-sage/40 bg-sage/10 mb-6">
             <CardBody className="flex flex-col gap-3 p-5 md:flex-row md:items-center md:justify-between">
               <div>
-                <span className="font-mono text-2xs uppercase tracking-widest text-sage [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                  {t('approvedLabel')}
-                </span>
-                <p className="text-sm text-surface/70">
+                <span className="text-2xs text-sage">{t('approvedLabel')}</span>
+                <p className="text-surface/70 text-sm">
                   {t('approvedBody', {
                     when: formatDateTime(quote.approvedAt ?? quote.updatedAt, locale),
                   })}
@@ -137,7 +131,7 @@ export default async function QuoteDetailPage({ params }: Props) {
               </div>
               <Link
                 href={`/${locale}/me/contracts/${quote.contractId}`}
-                className="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-ink transition-transform hover:scale-[1.02]"
+                className="bg-accent text-ink rounded-full px-5 py-2.5 text-sm font-medium transition-transform hover:scale-[1.02]"
               >
                 {t('viewContract')} →
               </Link>
@@ -146,15 +140,13 @@ export default async function QuoteDetailPage({ params }: Props) {
         ) : null}
 
         {quote.status === 'REJECTED' ? (
-          <Card className="mb-6 border-accent-secondary/40 bg-accent-secondary/5">
+          <Card className="border-accent-secondary/40 bg-accent-secondary/5 mb-6">
             <CardBody className="flex flex-col gap-2 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent-secondary [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('rejectedLabel')}
-              </span>
+              <span className="text-2xs text-accent-secondary">{t('rejectedLabel')}</span>
               {quote.rejectReason ? (
-                <p className="text-sm text-surface/70">{quote.rejectReason}</p>
+                <p className="text-surface/70 text-sm">{quote.rejectReason}</p>
               ) : (
-                <p className="text-sm text-surface/50">{t('rejectedNoReason')}</p>
+                <p className="text-surface/50 text-sm">{t('rejectedNoReason')}</p>
               )}
             </CardBody>
           </Card>

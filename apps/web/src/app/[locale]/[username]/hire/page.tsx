@@ -22,9 +22,7 @@ interface Props {
 export async function generateStaticParams() {
   const { CREATORS } = await import('@/lib/creators/mock-data');
   const { locales } = await import('@/i18n/config');
-  return locales.flatMap((locale) =>
-    CREATORS.map((c) => ({ locale, username: c.username })),
-  );
+  return locales.flatMap((locale) => CREATORS.map((c) => ({ locale, username: c.username })));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -51,26 +49,30 @@ export default async function HireCreatorPage({ params }: Props) {
 
   return (
     <main className="grid min-h-dvh grid-cols-1 lg:grid-cols-[1.1fr_1fr]">
-      <aside className="relative hidden overflow-hidden border-e border-surface/5 bg-bg lg:block">
+      <aside className="border-surface/5 bg-bg relative hidden overflow-hidden border-e lg:block">
         <div className="grain-overlay relative flex h-full flex-col justify-between p-10">
-          <Link href={`/${locale}`} className="self-start text-surface" aria-label="Hikaya">
+          <Link href={`/${locale}`} className="text-surface self-start" aria-label="Hikaya">
             <Logo arabic={locale === 'ar'} className="h-7" />
           </Link>
 
           <div className="flex flex-col gap-6">
-            <div className="relative h-24 w-24 overflow-hidden rounded-full border-4 border-bg">
-              <Image src={creator.avatarUrl} alt={name} fill sizes="96px" className="object-cover" />
+            <div className="border-bg relative h-24 w-24 overflow-hidden rounded-full border-4">
+              <Image
+                src={creator.avatarUrl}
+                alt={name}
+                fill
+                sizes="96px"
+                className="object-cover"
+              />
             </div>
             <h2 className="max-w-md text-balance text-4xl">
-              <span className="font-bold text-accent-secondary">{t('panelLineItalic')}</span>{' '}
+              <span className="text-accent-secondary font-bold">{t('panelLineItalic')}</span>{' '}
               <span>{t('panelLineWith', { name })}</span>
             </h2>
-            <p className="max-w-sm text-sm text-surface/60">{t('panelBody')}</p>
+            <p className="text-surface/60 max-w-sm text-sm">{t('panelBody')}</p>
           </div>
 
-          <p className="font-mono text-xs uppercase tracking-widest text-surface/30 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-            {t('panelFooter')}
-          </p>
+          <p className="text-surface/30 text-xs">{t('panelFooter')}</p>
         </div>
       </aside>
 
@@ -78,12 +80,12 @@ export default async function HireCreatorPage({ params }: Props) {
         <header className="mb-8 flex flex-col gap-2">
           <Link
             href={`/${locale}/${creator.username}`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('backTo', { name })}
           </Link>
           <h1 className="text-balance text-4xl">{t('title')}</h1>
-          <p className="text-sm text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 text-sm">{t('subtitle')}</p>
         </header>
 
         <InquiryForm

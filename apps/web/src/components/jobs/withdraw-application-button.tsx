@@ -29,7 +29,7 @@ export function WithdrawApplicationButton({ locale, applicationId }: Props) {
         onClick={(e) => {
           if (!confirm(t('withdrawConfirm'))) e.preventDefault();
         }}
-        className="rounded-full px-3 py-1.5 font-mono text-2xs uppercase tracking-widest text-accent-secondary transition-colors hover:bg-accent-secondary/10 disabled:opacity-50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+        className="text-2xs text-accent-secondary hover:bg-accent-secondary/10 rounded-full px-3 py-1.5 transition-colors disabled:opacity-50"
       >
         {t('withdraw')}
       </button>

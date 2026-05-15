@@ -41,7 +41,9 @@ export interface QuoteSuccess {
 }
 export type QuoteResult = QuoteSuccess | QuoteFailure;
 
-function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string }[]): Record<string, string> {
+function fieldErrorsFromZod(
+  issues: { path: (string | number)[]; message: string }[],
+): Record<string, string> {
   const out: Record<string, string> = {};
   for (const issue of issues) {
     const key = issue.path.join('.');
@@ -99,7 +101,11 @@ export async function createQuoteAction(
     lineItems,
   });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   const quote = createQuote({
@@ -187,7 +193,11 @@ export async function rejectQuoteAction(
 
   const parsed = rejectQuoteSchema.safeParse({ reason: formData.get('reason') ?? '' });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   updateQuoteStatus(quote.id, 'REJECTED', { rejectReason: parsed.data.reason || undefined });

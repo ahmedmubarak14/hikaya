@@ -77,11 +77,11 @@ export default async function ManageGalleryPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-7xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-7xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/galleries`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('back')}
           </Link>
@@ -90,7 +90,7 @@ export default async function ManageGalleryPage({ params }: Props) {
           </Badge>
           <h1 className="text-balance text-5xl">{title}</h1>
           {gallery.message ? (
-            <p className="max-w-prose text-surface/60">{gallery.message}</p>
+            <p className="text-surface/60 max-w-prose">{gallery.message}</p>
           ) : null}
         </header>
 
@@ -98,11 +98,9 @@ export default async function ManageGalleryPage({ params }: Props) {
         <section className="mb-10 grid grid-cols-1 gap-4 lg:grid-cols-[2fr_1fr]">
           <Card>
             <CardBody className="flex flex-col gap-3 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('shareLabel')}
-              </span>
+              <span className="text-2xs text-accent-secondary">{t('shareLabel')}</span>
               <div className="flex flex-wrap items-center gap-3">
-                <code className="flex-1 break-all rounded-md border border-surface/10 bg-surface/[0.03] px-3 py-2 font-mono text-sm text-surface">
+                <code className="border-surface/10 bg-surface/[0.03] text-surface flex-1 break-all rounded-md border px-3 py-2 font-mono text-sm">
                   {shareUrl}
                 </code>
                 <CopyLinkButton url={shareUrl} />
@@ -110,20 +108,18 @@ export default async function ManageGalleryPage({ params }: Props) {
                   href={`/${locale}/g/${gallery.shareSlug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full border border-surface/15 px-4 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+                  className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-4 py-2 text-sm transition-colors"
                 >
                   {t('preview')} ↗
                 </Link>
               </div>
-              <p className="text-xs text-surface/50">{t('shareHint')}</p>
+              <p className="text-surface/50 text-xs">{t('shareHint')}</p>
             </CardBody>
           </Card>
 
           <Card>
             <CardBody className="flex flex-col gap-2 p-5">
-              <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-                {t('stats')}
-              </span>
+              <span className="text-2xs text-surface/40">{t('stats')}</span>
               <ul className="grid grid-cols-3 gap-2 text-center">
                 <Stat label={t('imagesLabel')} value={String(gallery.images.length)} />
                 <Stat label={t('visitorsLabel')} value={String(visitorCount)} />
@@ -133,7 +129,7 @@ export default async function ManageGalleryPage({ params }: Props) {
                 />
               </ul>
               {gallery.expiresAt ? (
-                <p className="mt-1 font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                <p className="text-2xs text-surface/40 mt-1">
                   {t('expires', {
                     date: new Intl.DateTimeFormat(locale === 'ar' ? 'ar-SA' : 'en-SA', {
                       month: 'short',
@@ -152,9 +148,9 @@ export default async function ManageGalleryPage({ params }: Props) {
             <AddImagesForm locale={locale} galleryId={gallery.id} />
 
             {gallery.images.length === 0 ? (
-              <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-                <p className="text-lg text-surface/70">{t('noImages')}</p>
-                <p className="mt-2 text-sm text-surface/40">{t('noImagesHint')}</p>
+              <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
+                <p className="text-surface/70 text-lg">{t('noImages')}</p>
+                <p className="text-surface/40 mt-2 text-sm">{t('noImagesHint')}</p>
               </div>
             ) : (
               <ul className="grid grid-cols-2 gap-3 md:grid-cols-3">
@@ -162,7 +158,7 @@ export default async function ManageGalleryPage({ params }: Props) {
                   const count = selectionCounts.get(img.id) ?? 0;
                   return (
                     <li key={img.id} className="group relative">
-                      <figure className="relative aspect-[4/5] overflow-hidden rounded-md border border-surface/10 bg-surface/5">
+                      <figure className="border-surface/10 bg-surface/5 relative aspect-[4/5] overflow-hidden rounded-md border">
                         <Image
                           src={img.url}
                           alt={img.titleEn ?? title}
@@ -170,12 +166,14 @@ export default async function ManageGalleryPage({ params }: Props) {
                           sizes="(min-width: 768px) 33vw, 50vw"
                           className="object-cover"
                         />
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-bg/40 opacity-0 transition-opacity group-hover:opacity-100" />
-                        <div className="pointer-events-auto absolute inset-x-2 top-2 flex items-center justify-between opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
-                          <Badge tone={count > 0 ? 'accent' : 'neutral'}>
-                            ♥ {count}
-                          </Badge>
-                          <RemoveImageButton locale={locale} galleryId={gallery.id} imageId={img.id} />
+                        <div className="from-bg/80 to-bg/40 pointer-events-none absolute inset-0 bg-gradient-to-t via-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                        <div className="pointer-events-auto absolute inset-x-2 top-2 flex items-center justify-between opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                          <Badge tone={count > 0 ? 'accent' : 'neutral'}>♥ {count}</Badge>
+                          <RemoveImageButton
+                            locale={locale}
+                            galleryId={gallery.id}
+                            imageId={img.id}
+                          />
                         </div>
                       </figure>
                     </li>
@@ -186,24 +184,18 @@ export default async function ManageGalleryPage({ params }: Props) {
           </div>
 
           <aside className="flex flex-col gap-6">
-            <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-5">
-              <h3 className="mb-3 text-lg text-surface">{t('topFavorites')}</h3>
+            <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
+              <h3 className="text-surface mb-3 text-lg">{t('topFavorites')}</h3>
               {topFavorites.length === 0 ? (
-                <p className="text-sm text-surface/50">{t('noFavoritesYet')}</p>
+                <p className="text-surface/50 text-sm">{t('noFavoritesYet')}</p>
               ) : (
                 <ul className="grid grid-cols-3 gap-2">
                   {topFavorites.map(({ img, count }) => (
                     <li key={img.id} className="relative">
                       <div className="relative aspect-square overflow-hidden rounded">
-                        <Image
-                          src={img.url}
-                          alt=""
-                          fill
-                          sizes="120px"
-                          className="object-cover"
-                        />
+                        <Image src={img.url} alt="" fill sizes="120px" className="object-cover" />
                       </div>
-                      <span className="absolute -end-1 -top-1 grid h-6 min-w-6 place-items-center rounded-full bg-accent px-1.5 font-mono text-2xs text-ink">
+                      <span className="bg-accent text-2xs text-ink absolute -end-1 -top-1 grid h-6 min-w-6 place-items-center rounded-full px-1.5 font-mono">
                         ♥{count}
                       </span>
                     </li>
@@ -212,9 +204,9 @@ export default async function ManageGalleryPage({ params }: Props) {
               )}
             </div>
 
-            <div className="rounded-xl border border-accent-secondary/30 bg-accent-secondary/5 p-5">
-              <h3 className="mb-2 text-lg text-surface">{t('dangerZone')}</h3>
-              <p className="mb-4 text-xs text-surface/50">{t('dangerHint')}</p>
+            <div className="border-accent-secondary/30 bg-accent-secondary/5 rounded-xl border p-5">
+              <h3 className="text-surface mb-2 text-lg">{t('dangerZone')}</h3>
+              <p className="text-surface/50 mb-4 text-xs">{t('dangerHint')}</p>
               <DeleteGalleryButton locale={locale} galleryId={gallery.id} />
             </div>
           </aside>
@@ -226,11 +218,9 @@ export default async function ManageGalleryPage({ params }: Props) {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <li className="flex flex-col gap-1 rounded-md bg-surface/[0.03] py-3">
-      <span className="font-display text-2xl text-surface">{value}</span>
-      <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-        {label}
-      </span>
+    <li className="bg-surface/[0.03] flex flex-col gap-1 rounded-md py-3">
+      <span className="text-surface text-2xl font-bold tabular-nums tracking-tight">{value}</span>
+      <span className="text-2xs text-surface/40">{label}</span>
     </li>
   );
 }

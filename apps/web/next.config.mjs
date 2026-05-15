@@ -35,13 +35,14 @@ const nextConfig = {
         output: 'export',
         basePath: '/hikaya',
         trailingSlash: true,
-        // Every `lib/*/actions.ts` (the 'use server' files) gets replaced by
-        // a single no-op stub during the static build. Without this, Next
-        // refuses with "Server Actions are not supported with static export".
+        // Every `lib/*/actions.ts` AND `lib/*/<name>-actions.ts` (the
+        // 'use server' files) gets replaced by a single no-op stub during
+        // the static build. Without this, Next refuses with "Server Actions
+        // are not supported with static export".
         webpack(config, { webpack }) {
           config.plugins.push(
             new webpack.NormalModuleReplacementPlugin(
-              /\/lib\/(?!_export-stub)[a-z]+\/actions(\.ts)?$/,
+              /\/lib\/(?!_export-stub)[a-z]+\/(?:[a-z-]+-)?actions(\.ts)?$/,
               stubPath,
             ),
           );

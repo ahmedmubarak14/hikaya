@@ -14,8 +14,20 @@ export const createQuoteSchema = z.object({
   clientName: z.string().min(2).max(80),
   clientEmail: z.string().email().optional().or(z.literal('')),
   notes: z.string().max(2000).optional().or(z.literal('')),
-  expiresInDays: z.coerce.number().int().positive().max(90).optional().or(z.nan().transform(() => undefined)),
-  discountSar: z.coerce.number().int().nonnegative().max(10_000_000).optional().or(z.nan().transform(() => undefined)),
+  expiresInDays: z.coerce
+    .number()
+    .int()
+    .positive()
+    .max(90)
+    .optional()
+    .or(z.nan().transform(() => undefined)),
+  discountSar: z.coerce
+    .number()
+    .int()
+    .nonnegative()
+    .max(10_000_000)
+    .optional()
+    .or(z.nan().transform(() => undefined)),
   lineItems: z.array(lineItemSchema).min(1, 'Add at least one line item.').max(20),
 });
 export type CreateQuoteValues = z.infer<typeof createQuoteSchema>;

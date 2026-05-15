@@ -22,7 +22,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       {label ? (
         <label
           htmlFor={inputId}
-          className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr"
+          className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium"
         >
           {label}
         </label>
@@ -31,9 +31,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       <div
         className={cn(
           'relative flex items-center gap-2',
-          'h-11 px-4 rounded-md',
-          'bg-surface/5 border border-surface/15',
-          'transition-colors duration-fast ease-out',
+          'h-11 rounded-md px-4',
+          'bg-surface/5 border-surface/15 border',
+          'duration-fast transition-colors ease-out',
           'focus-within:border-accent focus-within:bg-surface/10',
           error && 'border-accent-secondary',
         )}
@@ -46,8 +46,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           aria-describedby={describedBy}
           className={cn(
             'flex-1 bg-transparent outline-none',
-            'text-base text-surface placeholder:text-surface/40',
-            'font-sans [lang=ar]:font-sansAr',
+            'text-surface placeholder:text-surface/40 text-base',
+            '[lang=ar]:font-sansAr font-sans',
             // Arabic body sits ~10% larger at same weight to match optical size.
             '[lang=ar]:text-[1.05em]',
             className,
@@ -58,11 +58,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       </div>
 
       {error ? (
-        <p id={`${inputId}-error`} className="text-xs text-accent-secondary">
+        <p id={`${inputId}-error`} className="text-accent-secondary text-xs">
           {error}
         </p>
       ) : hint ? (
-        <p id={`${inputId}-hint`} className="text-xs text-surface/50">
+        <p id={`${inputId}-hint`} className="text-surface/50 text-xs">
           {hint}
         </p>
       ) : null}

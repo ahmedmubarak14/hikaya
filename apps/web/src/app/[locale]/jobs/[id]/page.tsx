@@ -26,9 +26,7 @@ interface Props {
 export async function generateStaticParams() {
   const { SEED_JOBS } = await import('@/lib/jobs/mock-data');
   const { locales } = await import('@/i18n/config');
-  return locales.flatMap((locale) =>
-    SEED_JOBS.map((j) => ({ locale, id: j.id })),
-  );
+  return locales.flatMap((locale) => SEED_JOBS.map((j) => ({ locale, id: j.id })));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -61,10 +59,10 @@ export default async function JobDetailPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-4xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-4xl px-6 md:px-10">
         <Link
           href={`/${locale}/jobs`}
-          className="mb-4 inline-block font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+          className="text-2xs text-surface/40 hover:text-surface mb-4 inline-block transition-colors"
         >
           ← {t('back')}
         </Link>
@@ -72,13 +70,13 @@ export default async function JobDetailPage({ params }: Props) {
         <header className="mb-8 flex flex-col gap-4">
           <div className="flex flex-wrap items-center gap-2">
             <DisciplineTag discipline={job.discipline} tone="accent" />
-            <span className="font-mono text-2xs uppercase tracking-wider text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-              {tCity(job.city as 'RIYADH')}
-            </span>
+            <span className="text-2xs text-surface/50">{tCity(job.city as 'RIYADH')}</span>
             <JobStatusBadge status={job.status} />
           </div>
-          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">{job.title}</h1>
-          <p className="font-mono text-2xs uppercase tracking-wider text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
+            {job.title}
+          </h1>
+          <p className="text-2xs text-surface/50">
             {t('postedBy', {
               name: job.postedByCompany ?? job.postedByName,
               when: formatDateTime(job.createdAt, locale),
@@ -104,19 +102,21 @@ export default async function JobDetailPage({ params }: Props) {
         </section>
 
         {/* Description */}
-        <section className="mb-10 rounded-xl border border-surface/10 bg-surface/[0.03] p-6">
-          <h2 className="mb-3 text-xl text-surface">{t('briefTitle')}</h2>
-          <p className="whitespace-pre-wrap text-base text-surface/80">{job.description}</p>
+        <section className="border-surface/10 bg-surface/[0.03] mb-10 rounded-xl border p-6">
+          <h2 className="text-surface mb-3 text-xl">{t('briefTitle')}</h2>
+          <p className="text-surface/80 whitespace-pre-wrap text-base">{job.description}</p>
         </section>
 
         {/* Apply / state-aware CTA */}
         {!isOwner && job.status === 'OPEN' ? (
           myApplication ? (
-            <Card className="mb-10 border-sage/40 bg-sage/10">
+            <Card className="border-sage/40 bg-sage/10 mb-10">
               <CardBody className="flex flex-col gap-2 p-5">
-                <Badge tone="sage" className="self-start">{t('applied')}</Badge>
-                <p className="text-sm text-surface/70">{t('appliedBody')}</p>
-                <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                <Badge tone="sage" className="self-start">
+                  {t('applied')}
+                </Badge>
+                <p className="text-surface/70 text-sm">{t('appliedBody')}</p>
+                <p className="text-2xs text-surface/40">
                   {t('appliedAt', { when: formatDateTime(myApplication.createdAt, locale) })}
                 </p>
               </CardBody>
@@ -128,21 +128,25 @@ export default async function JobDetailPage({ params }: Props) {
           ) : !session ? (
             <Card className="mb-10">
               <CardBody className="flex flex-col gap-3 p-5">
-                <Badge tone="neutral" className="self-start">{t('signInLabel')}</Badge>
-                <p className="text-sm text-surface/70">{t('signInBody')}</p>
+                <Badge tone="neutral" className="self-start">
+                  {t('signInLabel')}
+                </Badge>
+                <p className="text-surface/70 text-sm">{t('signInBody')}</p>
                 <Link
                   href={`/${locale}/sign-in?next=/${locale}/jobs/${job.id}`}
-                  className="self-start rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-ink transition-transform hover:scale-[1.02]"
+                  className="bg-accent text-ink self-start rounded-full px-5 py-2.5 text-sm font-medium transition-transform hover:scale-[1.02]"
                 >
                   {t('signInCta')}
                 </Link>
               </CardBody>
             </Card>
           ) : (
-            <Card className="mb-10 border-accent-secondary/40 bg-accent-secondary/5">
+            <Card className="border-accent-secondary/40 bg-accent-secondary/5 mb-10">
               <CardBody className="flex flex-col gap-2 p-5">
-                <Badge tone="warning" className="self-start">{t('clientLabel')}</Badge>
-                <p className="text-sm text-surface/70">{t('clientBody')}</p>
+                <Badge tone="warning" className="self-start">
+                  {t('clientLabel')}
+                </Badge>
+                <p className="text-surface/70 text-sm">{t('clientBody')}</p>
               </CardBody>
             </Card>
           )
@@ -151,8 +155,10 @@ export default async function JobDetailPage({ params }: Props) {
         {!isOwner && job.status !== 'OPEN' ? (
           <Card className="mb-10">
             <CardBody className="p-5">
-              <Badge tone="neutral" className="self-start">{t('notOpenLabel')}</Badge>
-              <p className="mt-2 text-sm text-surface/70">{t('notOpenBody')}</p>
+              <Badge tone="neutral" className="self-start">
+                {t('notOpenLabel')}
+              </Badge>
+              <p className="text-surface/70 mt-2 text-sm">{t('notOpenBody')}</p>
             </CardBody>
           </Card>
         ) : null}
@@ -161,11 +167,13 @@ export default async function JobDetailPage({ params }: Props) {
         {isOwner ? (
           <>
             {job.status === 'OPEN' ? (
-              <Card className="mb-6 border-accent/30 bg-accent/5">
+              <Card className="border-accent/30 bg-accent/5 mb-6">
                 <CardBody className="flex flex-col gap-3 p-5 md:flex-row md:items-center md:justify-between">
                   <div>
-                    <Badge tone="accent" className="self-start">{t('ownerLabel')}</Badge>
-                    <p className="mt-2 text-sm text-surface/70">{t('ownerBody')}</p>
+                    <Badge tone="accent" className="self-start">
+                      {t('ownerLabel')}
+                    </Badge>
+                    <p className="text-surface/70 mt-2 text-sm">{t('ownerBody')}</p>
                   </div>
                   <JobActions locale={locale} jobId={job.id} />
                 </CardBody>
@@ -173,7 +181,7 @@ export default async function JobDetailPage({ params }: Props) {
             ) : null}
 
             <section>
-              <h2 className="mb-4 text-2xl text-surface">{t('applicationsTitle')}</h2>
+              <h2 className="text-surface mb-4 text-2xl">{t('applicationsTitle')}</h2>
               <ApplicationsList locale={locale} applications={applications} />
             </section>
           </>
@@ -186,11 +194,9 @@ export default async function JobDetailPage({ params }: Props) {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-col gap-1 rounded-md bg-surface/[0.03] p-4">
-      <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-        {label}
-      </span>
-      <span className="font-display text-xl text-surface">{value}</span>
+    <div className="bg-surface/[0.03] flex flex-col gap-1 rounded-md p-4">
+      <span className="text-2xs text-surface/40">{label}</span>
+      <span className="text-surface text-xl font-semibold tabular-nums">{value}</span>
     </div>
   );
 }

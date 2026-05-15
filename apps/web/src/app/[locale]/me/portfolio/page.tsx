@@ -44,11 +44,11 @@ export default async function MyPortfolioPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
         <header className="mb-12 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('backToAccount')}
           </Link>
@@ -57,15 +57,15 @@ export default async function MyPortfolioPage({ params }: Props) {
           </Badge>
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
             <span>{t('headline')}</span>{' '}
-            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
+            <span className="text-accent-secondary font-bold">{t('headlineItalic')}</span>
           </h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
           <div className="mt-2">
             <Link
               href={`/${locale}/${creator.username}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-mono text-2xs uppercase tracking-widest text-accent underline decoration-accent decoration-2 underline-offset-4 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+              className="text-2xs text-accent-secondary decoration-accent-secondary underline decoration-2 underline-offset-4"
             >
               {t('viewLive', { name: displayName })} ↗
             </Link>
@@ -80,12 +80,11 @@ export default async function MyPortfolioPage({ params }: Props) {
 
         {/* Portfolio section */}
         <section>
-          <SectionHeader title={t('sections.portfolio')} subtitle={t('sections.portfolioSubtitle')} />
-          <PortfolioEditor
-            locale={locale}
-            items={creator.portfolio}
-            altPrefix={displayName}
+          <SectionHeader
+            title={t('sections.portfolio')}
+            subtitle={t('sections.portfolioSubtitle')}
           />
+          <PortfolioEditor locale={locale} items={creator.portfolio} altPrefix={displayName} />
         </section>
       </main>
     </>
@@ -94,9 +93,9 @@ export default async function MyPortfolioPage({ params }: Props) {
 
 function SectionHeader({ title, subtitle }: { title: string; subtitle: string }) {
   return (
-    <header className="mb-6 flex flex-col gap-1.5 border-b border-surface/10 pb-4">
-      <h2 className="text-3xl text-surface">{title}</h2>
-      <p className="max-w-prose text-sm text-surface/60">{subtitle}</p>
+    <header className="border-surface/10 mb-6 flex flex-col gap-1.5 border-b pb-4">
+      <h2 className="text-surface text-3xl">{title}</h2>
+      <p className="text-surface/60 max-w-prose text-sm">{subtitle}</p>
     </header>
   );
 }
@@ -106,10 +105,10 @@ async function NoCreatorProfile({ locale }: { locale: Locale }) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-3xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <Link
           href={`/${locale}/me`}
-          className="font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+          className="text-2xs text-surface/40 hover:text-surface transition-colors"
         >
           ← {t('backToAccount')}
         </Link>
@@ -120,7 +119,7 @@ async function NoCreatorProfile({ locale }: { locale: Locale }) {
             </Badge>
             <h1 className="text-balance text-3xl">{t('noProfile.title')}</h1>
             <p className="text-surface/60">{t('noProfile.body')}</p>
-            <p className="text-sm text-surface/50">{t('noProfile.demoHint')}</p>
+            <p className="text-surface/50 text-sm">{t('noProfile.demoHint')}</p>
             <div className="mt-2 flex flex-wrap gap-2">
               <Link href={`/${locale}/discover`}>
                 <Button size="md" variant="outline">

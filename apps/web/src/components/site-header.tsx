@@ -3,8 +3,10 @@ import { getLocale, getTranslations } from 'next-intl/server';
 
 import { Button, Logo } from '@hikaya/ui';
 
+import { RoleSwitcher } from '@/components/role-switcher';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { type Locale } from '@/i18n/config';
+import type { MockUserRole } from '@/lib/auth/mock-store';
 import { getSession } from '@/lib/auth/session';
 import { getTheme } from '@/lib/theme/get-theme';
 
@@ -21,14 +23,15 @@ export async function SiteHeader() {
   const theme = (await getTheme()) ?? 'light';
 
   return (
-    <header className="sticky top-0 z-40 border-b border-surface/5 bg-bg/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 w-full max-w-8xl items-center justify-between px-6 md:px-10">
-        <Link href={`/${locale}`} className="flex items-center text-surface" aria-label="Hikaya">
+    <header className="border-surface/5 bg-bg/80 sticky top-0 z-40 border-b backdrop-blur-md">
+      <div className="max-w-8xl mx-auto flex h-16 w-full items-center justify-between px-6 md:px-10">
+        <Link href={`/${locale}`} className="text-surface flex items-center" aria-label="Hikaya">
           <Logo arabic={locale === 'ar'} className="h-7" />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
           <NavLink href={`/${locale}/discover`}>{t('discover')}</NavLink>
+          <NavLink href={`/${locale}/spaces`}>{t('spaces')}</NavLink>
           <NavLink href={`/${locale}/jobs`}>{t('jobs')}</NavLink>
           <NavLink href={`/${locale}/studios`}>{t('studios')}</NavLink>
           <NavLink href={`/${locale}/blog`}>{t('blog')}</NavLink>
@@ -42,20 +45,28 @@ export async function SiteHeader() {
           <Link
             href={`/${otherLocale}`}
             hrefLang={otherLocale}
-            className="rounded-full border border-surface/15 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-surface/70 transition-colors hover:border-surface/40 hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+            className="border-surface/15 text-surface/70 hover:border-surface/40 hover:text-surface rounded-full border px-3 py-1.5 text-xs transition-colors"
           >
             {t('switchLanguage')}
           </Link>
 
+          {session && Array.isArray(session.user.roles) && session.user.roles.length >= 2 ? (
+            <RoleSwitcher
+              current={session.user.currentRole}
+              available={session.user.roles}
+              labels={roleLabels(t)}
+            />
+          ) : null}
+
           {session ? (
             <Link
               href={`/${locale}/me`}
-              className="flex items-center gap-2 rounded-full border border-surface/15 px-3 py-1.5 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors"
               aria-label={session.user.displayName}
             >
               <span
                 aria-hidden
-                className="grid h-6 w-6 place-items-center rounded-full bg-accent/20 font-mono text-2xs uppercase text-accent"
+                className="bg-accent text-2xs text-ink grid h-6 w-6 place-items-center rounded-full font-semibold uppercase"
               >
                 {session.user.displayName.charAt(0)}
               </span>
@@ -65,7 +76,7 @@ export async function SiteHeader() {
             <>
               <Link
                 href={`/${locale}/sign-in`}
-                className="hidden rounded-full px-4 py-2 text-sm text-surface/80 transition-colors hover:text-surface md:inline-flex"
+                className="text-surface/80 hover:text-surface hidden rounded-full px-4 py-2 text-sm transition-colors md:inline-flex"
               >
                 {t('signIn')}
               </Link>
@@ -84,11 +95,23 @@ export async function SiteHeader() {
 
 function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link
-      href={href}
-      className="text-sm text-surface/70 transition-colors hover:text-surface"
-    >
+    <Link href={href} className="text-surface/70 hover:text-surface text-sm transition-colors">
       {children}
     </Link>
   );
+}
+
+/**
+ * Build a fully-typed role-label map. Declaring the type at the binding site
+ * (instead of casting at the usage site) makes TS exhaustiveness-check the
+ * object: adding a new MockUserRole becomes a compile error here.
+ */
+function roleLabels(
+  t: Awaited<ReturnType<typeof getTranslations<'nav'>>>,
+): Record<MockUserRole, string> {
+  return {
+    CREATOR: t('roleCreatorShort'),
+    STUDIO_OWNER: t('roleStudioOwnerShort'),
+    CLIENT: t('roleClientShort'),
+  };
 }

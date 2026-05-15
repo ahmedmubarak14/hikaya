@@ -4,17 +4,17 @@ Shared configuration consumed by every app and package.
 
 ## Exports
 
-| Path                                       | Use                                |
-| ------------------------------------------ | ---------------------------------- |
-| `@hikaya/config/tsconfig/base.json`        | Root preset, all packages extend   |
-| `@hikaya/config/tsconfig/library.json`     | TS libraries (UI, types)           |
-| `@hikaya/config/tsconfig/next.json`        | Next.js apps                       |
-| `@hikaya/config/tsconfig/nest.json`        | NestJS apps                        |
-| `@hikaya/config/eslint/base`               | Base TS rules                      |
-| `@hikaya/config/eslint/next`               | Next + a11y                        |
-| `@hikaya/config/eslint/nest`               | Node-flavored loosened rules       |
-| `@hikaya/config/tailwind/preset`           | Brand-aware Tailwind preset        |
-| `@hikaya/config/tailwind/tokens`           | Raw token JS for non-Tailwind use  |
+| Path                                   | Use                               |
+| -------------------------------------- | --------------------------------- |
+| `@hikaya/config/tsconfig/base.json`    | Root preset, all packages extend  |
+| `@hikaya/config/tsconfig/library.json` | TS libraries (UI, types)          |
+| `@hikaya/config/tsconfig/next.json`    | Next.js apps                      |
+| `@hikaya/config/tsconfig/nest.json`    | NestJS apps                       |
+| `@hikaya/config/eslint/base`           | Base TS rules                     |
+| `@hikaya/config/eslint/next`           | Next + a11y                       |
+| `@hikaya/config/eslint/nest`           | Node-flavored loosened rules      |
+| `@hikaya/config/tailwind/preset`       | Brand-aware Tailwind preset       |
+| `@hikaya/config/tailwind/tokens`       | Raw token JS for non-Tailwind use |
 
 ## Tokens
 

@@ -90,7 +90,11 @@ export const SEED_PRODUCTS: Product[] = [
     category: 'PRESET',
     status: 'ACTIVE',
     priceHalalas: 149 * SAR,
-    previewImageUrls: [pic('warm-1', 1200, 800), pic('warm-2', 1200, 800), pic('warm-3', 1200, 800)],
+    previewImageUrls: [
+      pic('warm-1', 1200, 800),
+      pic('warm-2', 1200, 800),
+      pic('warm-3', 1200, 800),
+    ],
     fileUrl: 'https://files.example.com/warm-light-preset-pack.zip',
     freeSampleUrl: 'https://files.example.com/warm-light-sample.xmp',
     compatibleSoftware: ['Lightroom Classic', 'Lightroom Mobile'],
@@ -106,7 +110,8 @@ export const SEED_PRODUCTS: Product[] = [
     titleAr: 'الساعة الذهبيّة — LUT سينمائي',
     descriptionEn:
       "A single .cube LUT at 33×33 — built for Sony S-Log3 footage but works on Rec.709 with a slight reduction. Exactly the look you'll see on this profile's reels.",
-    descriptionAr: 'ملف .cube مفرد بدقّة ٣٣×٣٣ — مصنوع لمواد Sony S-Log3 ويعمل على Rec.709 بتخفيف بسيط.',
+    descriptionAr:
+      'ملف .cube مفرد بدقّة ٣٣×٣٣ — مصنوع لمواد Sony S-Log3 ويعمل على Rec.709 بتخفيف بسيط.',
     category: 'LUT',
     status: 'ACTIVE',
     priceHalalas: 89 * SAR,
@@ -144,8 +149,9 @@ export const SEED_PRODUCTS: Product[] = [
     titleEn: 'Film grain — overlay pack',
     titleAr: 'حبيبات أفلام — حزمة طبقات',
     descriptionEn:
-      "Twelve high-resolution film-grain overlays (4K PNG, transparent). Drag onto any image in Photoshop or Affinity Photo. Drop opacity to taste.",
-    descriptionAr: 'اثنتا عشرة طبقة حبيبات أفلام بدقّة عالية (PNG شفّاف ٤K). أسقطها على أيّ صورة في Photoshop أو Affinity Photo.',
+      'Twelve high-resolution film-grain overlays (4K PNG, transparent). Drag onto any image in Photoshop or Affinity Photo. Drop opacity to taste.',
+    descriptionAr:
+      'اثنتا عشرة طبقة حبيبات أفلام بدقّة عالية (PNG شفّاف ٤K). أسقطها على أيّ صورة في Photoshop أو Affinity Photo.',
     category: 'OVERLAY',
     status: 'ACTIVE',
     priceHalalas: 65 * SAR,
@@ -163,8 +169,9 @@ export const SEED_PRODUCTS: Product[] = [
     titleEn: 'Wedding workflow — 80-page PDF guide',
     titleAr: 'سير عمل الأعراس — دليل PDF من ٨٠ صفحة',
     descriptionEn:
-      "Everything I learned in seven years of shooting weddings, including my client-onboarding doc, shoot timeline template, and gear list. EN only for now; Arabic translation in progress.",
-    descriptionAr: 'كلّ ما تعلّمته في ٧ سنوات من تصوير الأعراس، بما في ذلك مستند استقبال العملاء، قالب جدول التصوير، وقائمة المعدّات.',
+      'Everything I learned in seven years of shooting weddings, including my client-onboarding doc, shoot timeline template, and gear list. EN only for now; Arabic translation in progress.',
+    descriptionAr:
+      'كلّ ما تعلّمته في ٧ سنوات من تصوير الأعراس، بما في ذلك مستند استقبال العملاء، قالب جدول التصوير، وقائمة المعدّات.',
     category: 'GUIDE',
     status: 'ACTIVE',
     priceHalalas: 350 * SAR,
@@ -183,7 +190,8 @@ export const SEED_PRODUCTS: Product[] = [
     titleAr: 'عود — LUT داخليّ دافئ',
     descriptionEn:
       'Tuned for warm interior light (oud, candles, ambient lamps). Particularly good on skin tones in low light. Single .cube file.',
-    descriptionAr: 'موجَّه للضوء الداخليّ الدافئ (العود، الشموع، المصابيح الخافتة). جيّد بشكل خاص على البشرة في الإضاءة المنخفضة.',
+    descriptionAr:
+      'موجَّه للضوء الداخليّ الدافئ (العود، الشموع، المصابيح الخافتة). جيّد بشكل خاص على البشرة في الإضاءة المنخفضة.',
     category: 'LUT',
     status: 'DRAFT',
     priceHalalas: 79 * SAR,

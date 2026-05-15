@@ -20,9 +20,7 @@ interface Props {
 export async function generateStaticParams() {
   const { SEED_GALLERIES } = await import('@/lib/galleries/mock-data');
   const { locales } = await import('@/i18n/config');
-  return locales.flatMap((locale) =>
-    SEED_GALLERIES.map((g) => ({ locale, slug: g.shareSlug })),
-  );
+  return locales.flatMap((locale) => SEED_GALLERIES.map((g) => ({ locale, slug: g.shareSlug })));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -60,10 +58,10 @@ export default async function PublicGalleryPage({ params }: Props) {
   const expired = gallery.expiresAt ? new Date(gallery.expiresAt) < new Date() : false;
 
   return (
-    <main className="min-h-dvh bg-bg">
+    <main className="bg-bg min-h-dvh">
       {/* Branded header */}
       <header className="relative">
-        <div className="relative h-[50vh] min-h-[360px] w-full overflow-hidden bg-surface/5">
+        <div className="bg-surface/5 relative h-[50vh] min-h-[360px] w-full overflow-hidden">
           <Image
             src={gallery.coverUrl}
             alt={title}
@@ -72,24 +70,24 @@ export default async function PublicGalleryPage({ params }: Props) {
             sizes="100vw"
             className="object-cover"
           />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg via-bg/70 to-bg/30" />
+          <div className="from-bg via-bg/70 to-bg/30 pointer-events-none absolute inset-0 bg-gradient-to-t" />
         </div>
 
-        <div className="absolute inset-x-0 top-0 z-10 mx-auto flex w-full max-w-8xl items-center justify-between px-6 py-6 md:px-10">
-          <Link href={`/${locale}`} className="flex items-center text-surface" aria-label="Hikaya">
+        <div className="max-w-8xl absolute inset-x-0 top-0 z-10 mx-auto flex w-full items-center justify-between px-6 py-6 md:px-10">
+          <Link href={`/${locale}`} className="text-surface flex items-center" aria-label="Hikaya">
             <Logo arabic={locale === 'ar'} className="h-6" />
           </Link>
           {creator ? (
             <Link
               href={`/${locale}/${creator.username}`}
-              className="rounded-full border border-surface/20 bg-bg/40 px-3 py-1.5 font-mono text-2xs uppercase tracking-wider text-surface/80 backdrop-blur-sm transition-colors hover:border-surface/40 hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+              className="border-surface/20 bg-bg/40 text-2xs text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-3 py-1.5 backdrop-blur-sm transition-colors"
             >
               {t('byCreator', { name: creatorName })}
             </Link>
           ) : null}
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 z-10 mx-auto w-full max-w-8xl px-6 pb-10 md:px-10 md:pb-16">
+        <div className="max-w-8xl absolute inset-x-0 bottom-0 z-10 mx-auto w-full px-6 pb-10 md:px-10 md:pb-16">
           <div className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-2">
               {expired ? (
@@ -108,39 +106,42 @@ export default async function PublicGalleryPage({ params }: Props) {
               {gallery.allowDownloads ? <Badge tone="sage">{t('downloadsAllowed')}</Badge> : null}
               {gallery.watermarkPreviews ? <Badge tone="info">{t('watermarked')}</Badge> : null}
             </div>
-            <h1 className="text-balance text-5xl text-surface md:text-7xl">{title}</h1>
+            <h1 className="text-surface text-balance text-5xl md:text-7xl">{title}</h1>
             {gallery.message ? (
-              <p className="max-w-2xl text-balance text-lg text-surface/70">{gallery.message}</p>
+              <p className="text-surface/70 max-w-2xl text-balance text-lg">{gallery.message}</p>
             ) : null}
           </div>
         </div>
       </header>
 
       {/* Selection summary */}
-      <section className="sticky top-0 z-20 border-b border-surface/10 bg-bg/85 backdrop-blur-md">
-        <div className="mx-auto flex w-full max-w-8xl items-center justify-between gap-3 px-6 py-3 md:px-10">
-          <p className="font-mono text-2xs uppercase tracking-widest text-surface/50 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+      <section className="border-surface/10 bg-bg/85 sticky top-0 z-20 border-b backdrop-blur-md">
+        <div className="max-w-8xl mx-auto flex w-full items-center justify-between gap-3 px-6 py-3 md:px-10">
+          <p className="text-2xs text-surface/50">
             {t('imageCount', { count: gallery.images.length })}
           </p>
-          <p className="font-mono text-2xs uppercase tracking-widest text-accent [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+          <p className="text-2xs text-accent-secondary">
             ♥ {t('youSelected', { count: selectedCount })}
           </p>
         </div>
       </section>
 
       {/* Masonry */}
-      <section className="mx-auto w-full max-w-8xl px-4 py-10 md:px-8">
+      <section className="max-w-8xl mx-auto w-full px-4 py-10 md:px-8">
         {gallery.images.length === 0 ? (
-          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('emptyTitle')}</p>
-            <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('emptyTitle')}</p>
+            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
           </div>
         ) : (
           <div className="columns-1 gap-3 sm:columns-2 lg:columns-3 [&>*]:mb-3 [&>*]:break-inside-avoid">
             {gallery.images.map((img, idx) => {
               const isSelected = selected.has(img.id);
               return (
-                <figure key={img.id} className="group relative overflow-hidden rounded-md bg-surface/5">
+                <figure
+                  key={img.id}
+                  className="bg-surface/5 group relative overflow-hidden rounded-md"
+                >
                   <div className="relative" style={{ aspectRatio: `${img.width} / ${img.height}` }}>
                     <Image
                       src={img.url}
@@ -148,14 +149,14 @@ export default async function PublicGalleryPage({ params }: Props) {
                       fill
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                       className={cn(
-                        'object-cover transition-transform duration-cinematic ease-out group-hover:scale-[1.01]',
+                        'duration-cinematic object-cover transition-transform ease-out group-hover:scale-[1.01]',
                         gallery.watermarkPreviews && 'opacity-95',
                       )}
                     />
 
                     {gallery.watermarkPreviews ? (
-                      <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-surface/30">
-                        <span className="rotate-[-30deg] font-display text-3xl tracking-widest md:text-5xl">
+                      <div className="text-surface/30 pointer-events-none absolute inset-0 flex items-center justify-center">
+                        <span className="font-display rotate-[-30deg] text-3xl tracking-widest md:text-5xl">
                           {creatorName.toUpperCase()}
                         </span>
                       </div>
@@ -164,7 +165,7 @@ export default async function PublicGalleryPage({ params }: Props) {
 
                   <div
                     className={cn(
-                      'absolute inset-x-2 top-2 flex items-center justify-end opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100',
+                      'absolute inset-x-2 top-2 flex items-center justify-end opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100',
                       isSelected && 'opacity-100',
                     )}
                   >
@@ -182,14 +183,15 @@ export default async function PublicGalleryPage({ params }: Props) {
         )}
       </section>
 
-      <footer className="border-t border-surface/5">
-        <div className="mx-auto flex w-full max-w-8xl items-center justify-between gap-3 px-6 py-8 md:px-10">
-          <Link href={`/${locale}`} className="flex items-center text-surface/70 hover:text-surface">
+      <footer className="border-surface/5 border-t">
+        <div className="max-w-8xl mx-auto flex w-full items-center justify-between gap-3 px-6 py-8 md:px-10">
+          <Link
+            href={`/${locale}`}
+            className="text-surface/70 hover:text-surface flex items-center"
+          >
             <Logo arabic={locale === 'ar'} className="h-5" />
           </Link>
-          <p className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-            {t('footerNote')}
-          </p>
+          <p className="text-2xs text-surface/40">{t('footerNote')}</p>
         </div>
       </footer>
     </main>

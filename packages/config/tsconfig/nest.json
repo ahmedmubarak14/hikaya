@@ -8,13 +8,10 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "useDefineForClassFields": false,
-    "outDir": "dist",
-    "rootDir": "src",
     "removeComments": true,
     "sourceMap": true,
     "noEmit": false,
     "esModuleInterop": true,
     "verbatimModuleSyntax": false
-  },
-  "include": ["src/**/*.ts"]
+  }
 }

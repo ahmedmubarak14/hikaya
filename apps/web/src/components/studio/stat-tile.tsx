@@ -14,19 +14,20 @@ export function StatTile({ label, value, hint, tone = 'neutral', children }: Pro
   return (
     <div
       className={cn(
-        'flex flex-col gap-2 rounded-xl border p-5',
-        tone === 'accent'
-          ? 'border-accent/30 bg-accent/5'
-          : 'border-surface/10 bg-surface/[0.03]',
+        'flex flex-col gap-1.5 rounded-xl border p-5',
+        tone === 'accent' ? 'border-accent/30 bg-accent/5' : 'border-surface/10 bg-surface/[0.03]',
       )}
     >
-      <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
-        {label}
-      </span>
-      <span className={cn('text-3xl font-display', tone === 'accent' ? 'text-accent' : 'text-surface')}>
+      <span className="text-2xs text-surface/50">{label}</span>
+      <span
+        className={cn(
+          'text-3xl font-bold tabular-nums tracking-tight',
+          tone === 'accent' ? 'text-accent-secondary' : 'text-surface',
+        )}
+      >
         {value}
       </span>
-      {hint ? <span className="text-sm text-surface/50">{hint}</span> : null}
+      {hint ? <span className="text-surface/50 text-sm">{hint}</span> : null}
       {children}
     </div>
   );

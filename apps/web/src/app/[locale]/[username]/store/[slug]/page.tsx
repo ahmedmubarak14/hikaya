@@ -68,7 +68,8 @@ export default async function PublicProductPage({ params }: Props) {
   const isOwn = session?.user.email === creator.ownerEmail;
 
   const title = locale === 'ar' && product.titleAr ? product.titleAr : product.titleEn;
-  const description = locale === 'ar' && product.descriptionAr ? product.descriptionAr : product.descriptionEn;
+  const description =
+    locale === 'ar' && product.descriptionAr ? product.descriptionAr : product.descriptionEn;
   const creatorName = locale === 'ar' ? creator.displayNameAr : creator.displayNameEn;
 
   const cover = product.previewImageUrls[0];
@@ -77,10 +78,10 @@ export default async function PublicProductPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
         <Link
           href={`/${locale}/${creator.username}/store`}
-          className="mb-6 inline-block font-mono text-2xs uppercase tracking-widest text-surface/40 transition-colors hover:text-surface [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+          className="text-2xs text-surface/40 hover:text-surface mb-6 inline-block transition-colors"
         >
           ← {t('backToStore', { name: creatorName })}
         </Link>
@@ -89,7 +90,7 @@ export default async function PublicProductPage({ params }: Props) {
           {/* Gallery */}
           <section className="flex flex-col gap-3">
             {cover ? (
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-surface/10 bg-surface/5">
+              <div className="border-surface/10 bg-surface/5 relative aspect-[4/3] w-full overflow-hidden rounded-xl border">
                 <Image
                   src={cover}
                   alt={title}
@@ -104,7 +105,7 @@ export default async function PublicProductPage({ params }: Props) {
               <ul className="grid grid-cols-3 gap-3">
                 {rest.slice(0, 6).map((url, idx) => (
                   <li key={`${url}-${idx}`}>
-                    <div className="relative aspect-square overflow-hidden rounded-md border border-surface/10 bg-surface/5">
+                    <div className="border-surface/10 bg-surface/5 relative aspect-square overflow-hidden rounded-md border">
                       <Image
                         src={url}
                         alt={`${title} ${idx + 2}`}
@@ -124,7 +125,7 @@ export default async function PublicProductPage({ params }: Props) {
             <div className="flex flex-wrap items-center gap-2">
               <CategoryBadge category={product.category} />
               {product.salesCount > 0 ? (
-                <span className="font-mono text-2xs uppercase tracking-widest text-surface/40 [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case">
+                <span className="text-2xs text-surface/40">
                   {t('sales', { count: product.salesCount })}
                 </span>
               ) : null}
@@ -134,12 +135,12 @@ export default async function PublicProductPage({ params }: Props) {
 
             <Link
               href={`/${locale}/${creator.username}`}
-              className="font-mono text-2xs uppercase tracking-widest text-surface/40 underline-offset-4 hover:text-surface hover:underline [lang=ar]:font-sansAr [lang=ar]:tracking-normal [lang=ar]:normal-case"
+              className="text-2xs text-surface/40 hover:text-surface underline-offset-4 hover:underline"
             >
               {t('byCreator', { name: creatorName })}
             </Link>
 
-            <p className="font-display text-5xl text-accent tabular-nums">
+            <p className="text-accent-secondary text-5xl font-bold tabular-nums tracking-tight">
               {formatSarFromHalalas(product.priceHalalas, locale)}
             </p>
 
@@ -154,7 +155,9 @@ export default async function PublicProductPage({ params }: Props) {
             {product.compatibleSoftware.length > 0 ? (
               <div className="flex flex-wrap gap-2">
                 {product.compatibleSoftware.map((s) => (
-                  <Badge key={s} tone="info">{s}</Badge>
+                  <Badge key={s} tone="info">
+                    {s}
+                  </Badge>
                 ))}
               </div>
             ) : null}
@@ -164,14 +167,14 @@ export default async function PublicProductPage({ params }: Props) {
                 href={product.freeSampleUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="self-start rounded-full border border-surface/15 px-4 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+                className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface self-start rounded-full border px-4 py-2 text-sm transition-colors"
               >
                 {t('downloadSample')} ↗
               </a>
             ) : null}
 
-            <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-5">
-              <p className="whitespace-pre-wrap text-sm text-surface/80">{description}</p>
+            <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
+              <p className="text-surface/80 whitespace-pre-wrap text-sm">{description}</p>
             </div>
           </section>
         </div>

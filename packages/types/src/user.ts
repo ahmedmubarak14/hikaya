@@ -64,7 +64,13 @@ export const creatorProfileSchema = z.object({
 });
 export type CreatorProfile = z.infer<typeof creatorProfileSchema>;
 
-export const updateCreatorProfileSchema = creatorProfileSchema
-  .partial()
-  .omit({ id: true, userId: true, createdAt: true, updatedAt: true, reviewScore: true, reviewCount: true, isVerified: true });
+export const updateCreatorProfileSchema = creatorProfileSchema.partial().omit({
+  id: true,
+  userId: true,
+  createdAt: true,
+  updatedAt: true,
+  reviewScore: true,
+  reviewCount: true,
+  isVerified: true,
+});
 export type UpdateCreatorProfileInput = z.infer<typeof updateCreatorProfileSchema>;

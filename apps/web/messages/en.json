@@ -6,6 +6,7 @@
   },
   "nav": {
     "discover": "Discover",
+    "spaces": "Spaces",
     "jobs": "Jobs",
     "studios": "Studios",
     "blog": "Journal",
@@ -13,7 +14,10 @@
     "joinAsCreator": "Join as creator",
     "switchLanguage": "العربية",
     "switchToLight": "Switch to light theme",
-    "switchToDark": "Switch to dark theme"
+    "switchToDark": "Switch to dark theme",
+    "roleCreatorShort": "Creator",
+    "roleStudioOwnerShort": "Studio",
+    "roleClientShort": "Client"
   },
   "home": {
     "headline": {
@@ -68,6 +72,8 @@
     "roleClientHint": "Brands, businesses, and individuals.",
     "roleCreator": "Showcase my work",
     "roleCreatorHint": "Photographers, videographers, designers.",
+    "roleStudioOwner": "Register a studio",
+    "roleStudioOwnerHint": "Run a production studio with a team and rooms.",
     "acceptTerms": "I agree to Hikaya's <terms>Terms</terms> and <privacy>Privacy Policy</privacy>.",
     "haveAccount": "Already have an account?",
     "signInLink": "Sign in",
@@ -316,7 +322,7 @@
     "public": {
       "title": "{name}'s store",
       "eyebrow": "Store",
-      "headline": "store —",
+      "headline": "<accent>{name}'s</accent> store —",
       "subtitle": "Presets, LUTs, templates, and guides — built by the same creator whose work you've been browsing.",
       "backToProfile": "Back to {name}'s profile",
       "empty": "Nothing here yet.",
@@ -849,6 +855,12 @@
   },
   "discover": {
     "title": "Discover creatives",
+    "heroTitle": "Hire Gulf creatives",
+    "searchPlaceholder": "Search creatives by name, discipline, or city",
+    "searchAction": "Search",
+    "viewProjects": "Projects",
+    "viewPeople": "People",
+    "projectFallback": "Project by {name}",
     "eyebrow": "Discover",
     "headline": "Photographers, designers, filmmakers —",
     "headlineItalic": "the Gulf's quiet best.",
@@ -880,7 +892,27 @@
     "priceSar": "SAR {price}",
     "fromPrice": "from SAR {price}",
     "languages": "Languages",
-    "website": "Website"
+    "website": "Website",
+    "tabs": {
+      "work": "Work",
+      "store": "Store",
+      "about": "About"
+    },
+    "stats": {
+      "projects": "{count, plural, =1 {1 project} other {# projects}}",
+      "rating": "{score} ({count})",
+      "years": "{years, plural, =1 {1 year} other {# years}}"
+    },
+    "about": {
+      "bio": "About",
+      "languages": "Languages",
+      "links": "Links"
+    },
+    "store": {
+      "empty": "No products yet.",
+      "emptyHint": "Check back soon, or browse this creator's work in the meantime.",
+      "backToWork": "Browse work"
+    }
   },
   "disciplines": {
     "weddingPhoto": "Wedding photo",
@@ -913,5 +945,237 @@
   },
   "common": {
     "comingSoon": "Coming soon"
+  },
+  "blog": {
+    "publicList": {
+      "title": "{name}'s Journal",
+      "eyebrow": "Journal",
+      "empty": "No posts yet.",
+      "readingTime": "{minutes} min read",
+      "tags": "Filed under"
+    },
+    "post": {
+      "backToList": "← All posts",
+      "byCreator": "By {name}"
+    },
+    "owner": {
+      "title": "Journal",
+      "eyebrow": "Journal",
+      "subtitle": "Long-form notes from your practice. Drafts are private; publish when you're ready.",
+      "backToAccount": "Back to account",
+      "backToList": "Back to Journal",
+      "new": "+ New post",
+      "published": "Published",
+      "drafts": "Drafts",
+      "empty": "No posts yet. Write your first.",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this post? This cannot be undone.",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "clientLabel": "Client account",
+      "clientTitle": "Journal is for creators.",
+      "clientBody": "You're signed in as a client. Sign in as a creator to write posts."
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Published"
+    },
+    "editor": {
+      "titleLabel": "Title",
+      "coverLabel": "Cover image URL",
+      "tagsLabel": "Tags",
+      "tagsHint": "comma-separated",
+      "bodyLabel": "Body",
+      "bodyHint": "Blank line between paragraphs.",
+      "statusLabel": "Status",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "profile": {
+      "linkToBlog": "Read {count, plural, =1 {1 post} other {# posts}} on Journal →"
+    }
+  },
+  "studios": {
+    "title": "Studios",
+    "eyebrow": "Studios",
+    "headline": "Production studios across the Kingdom.",
+    "count": "{count, plural, =0 {No studios listed yet} =1 {1 studio} other {# studios}}",
+    "empty": "No studios match these filters.",
+    "filterCity": "City",
+    "filterAllCities": "All cities",
+    "filterApply": "Apply",
+    "public": {
+      "eyebrow": "Studio",
+      "capacity": "{count, plural, =1 {1 simultaneous session} other {# simultaneous sessions}}",
+      "inquire": "Send an inquiry",
+      "aboutLabel": "About",
+      "specializationsLabel": "Specializations",
+      "teamLabel": "Team",
+      "contactEmail": "Email",
+      "contactPhone": "Phone"
+    }
+  },
+  "studioSetup": {
+    "title": "Register your studio",
+    "eyebrow": "Studio setup",
+    "headline": "Tell us about",
+    "headlineItalic": "your studio.",
+    "subtitle": "This goes on your public studio page. You can edit any of it later — just get the basics in.",
+    "backToAccount": "Back to account",
+    "nameEn": "Studio name",
+    "nameAr": "Studio name (Arabic)",
+    "city": "City",
+    "address": "Address",
+    "capacity": "Capacity",
+    "capacityHint": "How many simultaneous sessions you can run.",
+    "logoUrl": "Logo URL",
+    "coverUrl": "Cover image URL",
+    "specializations": "Specializations",
+    "specializationsHint": "Pick the disciplines your studio supports.",
+    "descriptionEn": "Description",
+    "descriptionAr": "Description (Arabic)",
+    "contactEmail": "Contact email",
+    "contactPhone": "Contact phone",
+    "submit": "Create studio profile",
+    "cancel": "Cancel",
+    "errors": {
+      "alreadyExists": "You already have a studio profile.",
+      "wrongRole": "Only studio owners can create a studio profile.",
+      "notAuthenticated": "Please sign in to continue."
+    }
+  },
+  "spaces": {
+    "public": {
+      "title": "Studios for rent",
+      "subtitle": "Cyc walls, daylight lofts, podcast sets, rooftops. Book by the hour or the day — Hikaya creators only.",
+      "empty": "No studios match these filters.",
+      "from": "From {price}/day",
+      "fromHourly": "From {price}/hour",
+      "capacity": "{count, plural, =1 {1 person} other {# people}}",
+      "cityFilter": "City",
+      "cityAny": "Anywhere",
+      "capacityFilter": "Min. capacity",
+      "count": "{count, plural, =0 {No studios listed} =1 {1 studio} other {# studios}}"
+    },
+    "detail": {
+      "back": "Back to studios",
+      "book": "Book this space",
+      "equipment": "Equipment included",
+      "hourly": "Hourly",
+      "daily": "Daily",
+      "capacity": "Capacity",
+      "address": "Address",
+      "availabilityTitle": "Check the calendar before booking",
+      "availabilityEmpty": "No upcoming bookings on the books — you've got a clear runway.",
+      "availabilityRow": "{start} → {end}"
+    },
+    "book": {
+      "title": "Reserve this space",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "kindHourly": "Per hour",
+      "kindDaily": "Per day",
+      "submit": "Confirm booking",
+      "total": "Estimated total {price}",
+      "unavailable": "That window is already booked. Try different dates.",
+      "needsSignIn": "Sign in to book a space.",
+      "cannotBookOwn": "You can't book your own space.",
+      "error": "Couldn't confirm the booking. Please review and try again."
+    },
+    "owner": {
+      "eyebrow": "Studios",
+      "title": "Your spaces",
+      "subtitle": "List your studio for rent. Set hourly and daily rates, mark dates, and let creators book the gear-ready bays you've built.",
+      "back": "Back to account",
+      "new": "New space",
+      "empty": "No spaces yet.",
+      "emptyHint": "List your first studio — drafts are private until you publish.",
+      "count": "{count, plural, =0 {No spaces yet} =1 {1 space} other {# spaces}}",
+      "rowHourly": "{price}/hr",
+      "rowDaily": "{price}/day",
+      "edit": "Edit",
+      "pause": "Pause",
+      "activate": "Activate",
+      "publish": "Publish",
+      "status": {
+        "DRAFT": "Draft",
+        "ACTIVE": "Live",
+        "PAUSED": "Paused"
+      }
+    },
+    "new": {
+      "title": "New space",
+      "subtitle": "Sketch the basics now — you can publish to the public marketplace when you're ready.",
+      "back": "Back to spaces"
+    },
+    "edit": {
+      "title": "Edit space",
+      "back": "Back to spaces",
+      "headline": "Editing — {name}",
+      "liveLabel": "Live",
+      "liveBody": "This space is on the public marketplace and accepting bookings.",
+      "draftLabel": "Draft",
+      "draftBody": "Drafts are private. Publish to put it on the marketplace.",
+      "pausedLabel": "Paused",
+      "pausedBody": "Hidden from the marketplace. Existing bookings stay on the calendar."
+    },
+    "form": {
+      "name": "Space name",
+      "description": "Description",
+      "descriptionHint": "20+ characters. What's in the space, what makes it shoot-ready.",
+      "address": "Address",
+      "city": "City",
+      "capacity": "Capacity (people)",
+      "hourly": "Hourly rate (SAR)",
+      "daily": "Daily rate (SAR)",
+      "rateHint": "Set at least one. Bookings round up to the next whole hour or day.",
+      "equipment": "Equipment included",
+      "equipmentHint": "Comma-separated. e.g. \"Cyclorama, Strobes, Backdrops\".",
+      "photos": "Photo URLs",
+      "photosHint": "One per line. First is the hero. 1–10 images.",
+      "status": "Status",
+      "statusHint": "Draft is private. Live is public. Paused hides it.",
+      "submit": "Create space",
+      "save": "Save changes",
+      "saved": "Saved",
+      "errorGeneric": "Something went wrong. Please review and try again."
+    },
+    "bookings": {
+      "eyebrow": "Bookings",
+      "title": "Bookings on your spaces",
+      "subtitle": "Every reservation made on the studios you've listed.",
+      "back": "Back to account",
+      "empty": "No bookings yet.",
+      "emptyHint": "Publish a space and bookings will show up here.",
+      "colSpace": "Space",
+      "colRenter": "Renter",
+      "colDates": "Dates",
+      "colTotal": "Total",
+      "colStatus": "Status",
+      "status": {
+        "PENDING": "Pending",
+        "CONFIRMED": "Confirmed",
+        "CANCELLED": "Cancelled",
+        "COMPLETED": "Completed"
+      }
+    },
+    "rentals": {
+      "eyebrow": "Rentals",
+      "title": "Your space rentals",
+      "subtitle": "Studios you've booked. Cancel up to the start time.",
+      "back": "Back to account",
+      "empty": "No rentals yet.",
+      "emptyHint": "Browse the marketplace and book your first studio.",
+      "browse": "Browse studios",
+      "detail": {
+        "back": "Back to rentals",
+        "title": "Rental — {name}",
+        "dates": "{start} → {end}",
+        "totalLabel": "Total paid"
+      },
+      "cancel": "Cancel booking",
+      "cancelConfirm": "Cancel this booking? This can't be undone."
+    }
   }
 }

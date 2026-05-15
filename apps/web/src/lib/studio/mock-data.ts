@@ -231,15 +231,13 @@ export function computeStudioStats(): StudioStats {
   return {
     monthRevenueSar: monthBookings.reduce((sum, b) => sum + b.paidSar, 0),
     monthBookings: monthBookings.length,
-    outstandingSar: STUDIO_BOOKINGS
-      .filter((b) => b.status !== 'CANCELLED' && b.totalSar > b.paidSar)
-      .reduce((sum, b) => sum + (b.totalSar - b.paidSar), 0),
-    upcomingNext14d: STUDIO_BOOKINGS
-      .filter((b) => {
-        const d = new Date(b.sessionStart);
-        return d >= now && d <= fourteenDaysOut && b.status !== 'CANCELLED';
-      })
-      .sort((a, b) => a.sessionStart.localeCompare(b.sessionStart)),
+    outstandingSar: STUDIO_BOOKINGS.filter(
+      (b) => b.status !== 'CANCELLED' && b.totalSar > b.paidSar,
+    ).reduce((sum, b) => sum + (b.totalSar - b.paidSar), 0),
+    upcomingNext14d: STUDIO_BOOKINGS.filter((b) => {
+      const d = new Date(b.sessionStart);
+      return d >= now && d <= fourteenDaysOut && b.status !== 'CANCELLED';
+    }).sort((a, b) => a.sessionStart.localeCompare(b.sessionStart)),
     pendingResponses: STUDIO_BOOKINGS.filter((b) => b.status === 'INQUIRY').length,
   };
 }

@@ -34,7 +34,8 @@ const store: Store =
         compatibleSoftware: [...p.compatibleSoftware],
       });
     }
-    for (const o of SEED_ORDERS) fresh.orders.set(o.id, { ...o, items: o.items.map((i) => ({ ...i })) });
+    for (const o of SEED_ORDERS)
+      fresh.orders.set(o.id, { ...o, items: o.items.map((i) => ({ ...i })) });
     return fresh;
   })();
 
@@ -75,10 +76,7 @@ export function listOrdersByBuyer(buyerUserId: string): Order[] {
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
-export function findOrderItemForBuyer(
-  buyerUserId: string,
-  productId: string,
-): OrderItem | null {
+export function findOrderItemForBuyer(buyerUserId: string, productId: string): OrderItem | null {
   for (const o of store.orders.values()) {
     if (o.buyerUserId !== buyerUserId) continue;
     const hit = o.items.find((i) => i.productId === productId);
@@ -90,10 +88,16 @@ export function findOrderItemForBuyer(
 /* ---------------------------------- write --------------------------------- */
 
 function uniqueSlug(creatorId: string, base: string): string {
-  const norm = base.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+  const norm = base
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
   let candidate = norm.length >= 3 ? norm : `product-${randomBytes(3).toString('hex')}`;
   let i = 1;
-  while ([...store.products.values()].some((p) => p.creatorId === creatorId && p.slug === candidate)) {
+  while (
+    [...store.products.values()].some((p) => p.creatorId === creatorId && p.slug === candidate)
+  ) {
     i += 1;
     candidate = `${norm}-${i}`;
   }
