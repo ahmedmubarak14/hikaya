@@ -66,13 +66,6 @@ export default async function MePage({ params }: Props) {
               <p className="text-surface text-base">{tAuth(roleKey)}</p>
             </CardBody>
           </Card>
-
-          <Card className="md:col-span-2">
-            <CardBody className="flex flex-col gap-3 p-6">
-              <span className="text-2xs text-accent-secondary">{t('nextLabel')}</span>
-              <p className="text-surface/70 text-base">{t('nextBody')}</p>
-            </CardBody>
-          </Card>
         </div>
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-3">

@@ -101,8 +101,6 @@
     "subtitle": "This is your account home. The dashboard, portfolio editor, bookings, and messages all branch from here.",
     "emailLabel": "Email",
     "roleLabel": "Active role",
-    "nextLabel": "What's next",
-    "nextBody": "We're currently scaffolding feature surfaces. Auth is the first slice — portfolio, discover, and the studio CRM are queued up.",
     "inquiriesLink": "View my inquiries",
     "studioLink": "Studio dashboard",
     "portfolioLink": "Edit portfolio",
