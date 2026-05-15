@@ -20,9 +20,7 @@ interface Props {
 export async function generateStaticParams() {
   const { CREATORS } = await import('@/lib/creators/mock-data');
   const { locales } = await import('@/i18n/config');
-  return locales.flatMap((locale) =>
-    CREATORS.map((c) => ({ locale, username: c.username })),
-  );
+  return locales.flatMap((locale) => CREATORS.map((c) => ({ locale, username: c.username })));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -49,30 +47,30 @@ export default async function PublicStorePage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/${creator.username}`}
-            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('backToProfile', { name })}
           </Link>
-          <Badge tone="accent" className="self-start">{t('eyebrow')}</Badge>
+          <Badge tone="accent" className="self-start">
+            {t('eyebrow')}
+          </Badge>
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
             {t.rich('headline', {
               name,
-              accent: (chunks) => (
-                <span className="font-bold text-accent-secondary">{chunks}</span>
-              ),
+              accent: (chunks) => <span className="text-accent-secondary font-bold">{chunks}</span>,
             })}
           </h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         {products.length === 0 ? (
-          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('empty')}</p>
-            <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('empty')}</p>
+            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
           </div>
         ) : (
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

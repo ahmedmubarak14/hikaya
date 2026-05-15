@@ -38,7 +38,7 @@ export function ViewToggle({ view, labels }: Props) {
     <div
       role="tablist"
       aria-label="View"
-      className="inline-flex items-center gap-1 rounded-full border border-surface/15 bg-surface/[0.04] p-1"
+      className="border-surface/15 bg-surface/[0.04] inline-flex items-center gap-1 rounded-full border p-1"
     >
       {tabs.map((tab) => {
         const active = tab.id === view;
@@ -51,9 +51,7 @@ export function ViewToggle({ view, labels }: Props) {
             scroll={false}
             className={cn(
               'inline-flex h-9 items-center justify-center rounded-full px-5 text-sm transition-colors',
-              active
-                ? 'bg-surface text-bg'
-                : 'text-surface/70 hover:text-surface',
+              active ? 'bg-surface text-bg' : 'text-surface/70 hover:text-surface',
             )}
           >
             {tab.label}

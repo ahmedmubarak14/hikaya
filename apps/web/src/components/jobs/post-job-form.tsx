@@ -13,7 +13,16 @@ import type { City, Discipline } from '@/lib/creators/mock-data';
 import { postJobAction, type JobResult } from '@/lib/jobs/actions';
 import { postJobSchema, type PostJobValues } from '@/lib/jobs/schemas';
 
-const CITIES: City[] = ['RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA'];
+const CITIES: City[] = [
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
+];
 
 const DISCIPLINE_KEYS: Record<Discipline, string> = {
   WEDDING_PHOTOGRAPHY: 'weddingPhoto',
@@ -89,13 +98,18 @@ export function PostJobForm({ locale }: Props) {
       className="flex flex-col gap-5"
       noValidate
     >
-      <Input label={t('titleField')} {...register('title')} error={errors.title?.message} required />
+      <Input
+        label={t('titleField')}
+        {...register('title')}
+        error={errors.title?.message}
+        required
+      />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Field label={t('discipline')} error={errors.discipline?.message}>
           <select
             {...register('discipline')}
-            className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
           >
             {(Object.keys(DISCIPLINE_KEYS) as Discipline[]).map((d) => (
               <option key={d} value={d}>
@@ -108,7 +122,7 @@ export function PostJobForm({ locale }: Props) {
         <Field label={t('city')} error={errors.city?.message}>
           <select
             {...register('city')}
-            className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
           >
             {CITIES.map((c) => (
               <option key={c} value={c}>
@@ -119,21 +133,29 @@ export function PostJobForm({ locale }: Props) {
         </Field>
       </div>
 
-      <Field label={t('description')} hint={t('descriptionHint')} error={errors.description?.message}>
+      <Field
+        label={t('description')}
+        hint={t('descriptionHint')}
+        error={errors.description?.message}
+      >
         <textarea
           rows={6}
           {...register('description')}
           placeholder={t('descriptionPlaceholder')}
-          className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
         />
       </Field>
 
-      <div className="rounded-md border border-surface/10 bg-surface/[0.03] p-4">
-        <label className="flex cursor-pointer items-start gap-3 text-sm text-surface/80">
-          <input type="checkbox" {...register('budgetIsOpen')} className="mt-0.5 h-4 w-4 accent-accent" />
+      <div className="border-surface/10 bg-surface/[0.03] rounded-md border p-4">
+        <label className="text-surface/80 flex cursor-pointer items-start gap-3 text-sm">
+          <input
+            type="checkbox"
+            {...register('budgetIsOpen')}
+            className="accent-accent mt-0.5 h-4 w-4"
+          />
           <span>
-            <span className="block font-medium text-surface">{t('budgetOpen')}</span>
-            <span className="block text-xs text-surface/50">{t('budgetOpenHint')}</span>
+            <span className="text-surface block font-medium">{t('budgetOpen')}</span>
+            <span className="text-surface/50 block text-xs">{t('budgetOpenHint')}</span>
           </span>
         </label>
 
@@ -175,7 +197,7 @@ export function PostJobForm({ locale }: Props) {
       </div>
 
       {serverState?.error && serverState.error !== 'INVALID_INPUT' ? (
-        <p className="text-sm text-accent-secondary" role="alert">
+        <p className="text-accent-secondary text-sm" role="alert">
           {t('errorGeneric')}
         </p>
       ) : null}
@@ -184,7 +206,7 @@ export function PostJobForm({ locale }: Props) {
         <Button type="submit" size="lg" isLoading={isPending}>
           {t('submit')}
         </Button>
-        <span className="text-xs text-surface/50">{t('expiryNote')}</span>
+        <span className="text-surface/50 text-xs">{t('expiryNote')}</span>
       </div>
     </form>
   );
@@ -203,12 +225,12 @@ function Field({
 }) {
   return (
     <label className="flex w-full flex-col gap-1.5">
-      <span className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr">{label}</span>
+      <span className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium">{label}</span>
       {children}
       {error ? (
-        <span className="text-xs text-accent-secondary">{error}</span>
+        <span className="text-accent-secondary text-xs">{error}</span>
       ) : hint ? (
-        <span className="text-xs text-surface/50">{hint}</span>
+        <span className="text-surface/50 text-xs">{hint}</span>
       ) : null}
     </label>
   );

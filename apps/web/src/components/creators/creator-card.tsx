@@ -24,11 +24,8 @@ export function CreatorCard({ creator }: Props) {
   const bio = locale === 'ar' ? creator.bioAr : creator.bioEn;
 
   return (
-    <Link
-      href={`/${locale}/${creator.username}`}
-      className="group flex flex-col gap-3"
-    >
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-surface/5">
+    <Link href={`/${locale}/${creator.username}`} className="group flex flex-col gap-3">
+      <div className="bg-surface/5 relative aspect-[4/5] w-full overflow-hidden rounded-xl">
         <Image
           src={creator.coverUrl}
           alt={`${name} — cover`}
@@ -40,15 +37,15 @@ export function CreatorCard({ creator }: Props) {
 
       <div className="flex flex-col gap-1">
         <div className="flex items-baseline justify-between gap-3">
-          <h3 className="truncate text-base font-semibold group-hover:underline underline-offset-2">
+          <h3 className="truncate text-base font-semibold underline-offset-2 group-hover:underline">
             {name}
           </h3>
-          <span className="shrink-0 text-xs text-surface/50">
+          <span className="text-surface/50 shrink-0 text-xs">
             {tCity(creator.city as 'RIYADH')}
           </span>
         </div>
 
-        <p className="line-clamp-2 text-sm text-surface/60">{bio}</p>
+        <p className="text-surface/60 line-clamp-2 text-sm">{bio}</p>
 
         <div className="mt-1 flex flex-wrap items-center gap-1.5">
           {creator.disciplines.slice(0, 2).map((d) => (
@@ -56,10 +53,10 @@ export function CreatorCard({ creator }: Props) {
           ))}
         </div>
 
-        <div className="mt-2 flex items-center justify-between text-xs text-surface/60">
+        <div className="text-surface/60 mt-2 flex items-center justify-between text-xs">
           <span>
             <span className="text-accent-secondary">★</span> {creator.reviewScore.toFixed(1)}
-            <span className="ms-1 text-surface/40">({creator.reviewCount})</span>
+            <span className="text-surface/40 ms-1">({creator.reviewCount})</span>
           </span>
           {creator.startingPriceSar ? (
             <span>

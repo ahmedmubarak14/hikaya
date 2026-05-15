@@ -28,22 +28,21 @@ export function JobCard({ job, applicationCount }: Props) {
           <div className="flex items-start justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
               <DisciplineTag discipline={job.discipline} tone="accent" />
-              <span className="text-2xs text-surface/50">
-                {tCity(job.city as 'RIYADH')}
-              </span>
+              <span className="text-2xs text-surface/50">{tCity(job.city as 'RIYADH')}</span>
             </div>
             <JobStatusBadge status={job.status} />
           </div>
 
-          <h3 className="text-balance text-xl text-surface">{job.title}</h3>
+          <h3 className="text-surface text-balance text-xl">{job.title}</h3>
 
-          <p className="line-clamp-2 max-w-prose text-sm text-surface/60">{job.description}</p>
+          <p className="text-surface/60 line-clamp-2 max-w-prose text-sm">{job.description}</p>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 text-2xs">
-            <span className="font-mono text-surface/50">
-              {job.postedByCompany ?? job.postedByName} · {t('deadline', { date: formatDate(job.deadline, locale) })}
+          <div className="text-2xs flex flex-wrap items-center justify-between gap-3">
+            <span className="text-surface/50 font-mono">
+              {job.postedByCompany ?? job.postedByName} ·{' '}
+              {t('deadline', { date: formatDate(job.deadline, locale) })}
             </span>
-            <div className="flex items-center gap-2 font-mono text-surface tabular-nums">
+            <div className="text-surface flex items-center gap-2 font-mono tabular-nums">
               {job.budgetIsOpen ? (
                 <Badge tone="purple">{t('openToProposals')}</Badge>
               ) : job.budgetHalalas ? (

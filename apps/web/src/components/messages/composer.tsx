@@ -38,7 +38,10 @@ export function Composer({ locale, threadId }: Props) {
   };
 
   return (
-    <form onSubmit={submit} className="flex items-end gap-2 border-t border-surface/10 bg-bg/85 p-4 backdrop-blur-md">
+    <form
+      onSubmit={submit}
+      className="border-surface/10 bg-bg/85 flex items-end gap-2 border-t p-4 backdrop-blur-md"
+    >
       <textarea
         ref={ref}
         value={value}
@@ -57,7 +60,7 @@ export function Composer({ locale, threadId }: Props) {
         }}
         placeholder={t('placeholder')}
         rows={1}
-        className="flex-1 resize-none rounded-2xl border border-surface/15 bg-surface/5 px-4 py-2.5 text-base text-surface placeholder:text-surface/40 outline-none focus-visible:border-accent"
+        className="border-surface/15 bg-surface/5 text-surface placeholder:text-surface/40 focus-visible:border-accent flex-1 resize-none rounded-2xl border px-4 py-2.5 text-base outline-none"
       />
       <Button type="submit" size="md" isLoading={isPending} disabled={!value.trim()}>
         {t('send')}

@@ -1,7 +1,14 @@
 import { z } from 'zod';
 
 const CITY_VALUES = [
-  'RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA',
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
 ] as const;
 const STATUS_VALUES = ['DRAFT', 'ACTIVE', 'PAUSED'] as const;
 const DURATION_VALUES = ['HOURLY', 'DAILY'] as const;

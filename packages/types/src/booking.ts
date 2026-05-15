@@ -4,13 +4,13 @@ import { citySchema } from './common';
 import { disciplineSchema } from './user';
 
 export const bookingStatusSchema = z.enum([
-  'INQUIRY',         // Client sent inquiry, creator hasn't responded
-  'QUOTED',          // Creator sent a quote
-  'CONTRACTED',      // Quote approved, contract sent
-  'CONFIRMED',       // Both parties signed, deposit paid (escrow)
-  'IN_PROGRESS',     // Session date(s) underway
-  'DELIVERED',       // Gallery delivered, awaiting client review
-  'COMPLETED',       // Funds released to creator wallet
+  'INQUIRY', // Client sent inquiry, creator hasn't responded
+  'QUOTED', // Creator sent a quote
+  'CONTRACTED', // Quote approved, contract sent
+  'CONFIRMED', // Both parties signed, deposit paid (escrow)
+  'IN_PROGRESS', // Session date(s) underway
+  'DELIVERED', // Gallery delivered, awaiting client review
+  'COMPLETED', // Funds released to creator wallet
   'CANCELLED',
   'DISPUTED',
 ]);

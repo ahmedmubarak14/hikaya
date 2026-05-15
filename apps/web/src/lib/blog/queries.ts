@@ -25,10 +25,7 @@ export async function listPublishedPostsByCreator(creatorId: string): Promise<Bl
   return getPublishedPostsByCreatorRaw(creatorId);
 }
 
-export async function getPostBySlug(
-  creatorId: string,
-  slug: string,
-): Promise<BlogPost | null> {
+export async function getPostBySlug(creatorId: string, slug: string): Promise<BlogPost | null> {
   return getPostBySlugRaw(creatorId, slug);
 }
 

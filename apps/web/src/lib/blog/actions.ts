@@ -48,7 +48,9 @@ export interface BlogFailure {
 }
 export type BlogResult = BlogSuccess | BlogFailure;
 
-function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string }[]): Record<string, string> {
+function fieldErrorsFromZod(
+  issues: { path: (string | number)[]; message: string }[],
+): Record<string, string> {
   const out: Record<string, string> = {};
   for (const issue of issues) {
     const key = String(issue.path[0] ?? '_');
@@ -96,7 +98,11 @@ export async function createPostAction(
 
   const parsed = parsePostForm(formData);
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   const post = createPost({
@@ -139,7 +145,11 @@ export async function updatePostAction(
     slug: formData.get('slug') || undefined,
   });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   const post = updatePost(postId, {
@@ -159,10 +169,7 @@ export async function updatePostAction(
   return { ok: true, post, message: 'SAVED' };
 }
 
-export async function deletePostAction(
-  locale: Locale,
-  postId: string,
-): Promise<BlogResult> {
+export async function deletePostAction(locale: Locale, postId: string): Promise<BlogResult> {
   const auth = await requireOwnedCreator();
   if (!auth.ok) return { ok: false, error: auth.error };
 

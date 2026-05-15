@@ -63,21 +63,22 @@ export default async function ThreadDetailPage({ params }: Props) {
   await markThreadReadAction(locale, thread.id);
 
   const messages = getMessagesByThread(thread.id);
-  const otherName = thread.creatorUserId === session.user.id ? thread.clientName : thread.creatorName;
+  const otherName =
+    thread.creatorUserId === session.user.id ? thread.clientName : thread.creatorName;
 
   return (
     <>
       <SiteHeader />
       <main className="mx-auto flex h-[calc(100dvh-4rem)] w-full max-w-3xl flex-col px-0 md:px-6">
-        <header className="flex items-baseline justify-between gap-3 border-b border-surface/10 px-6 py-5 md:px-0">
+        <header className="border-surface/10 flex items-baseline justify-between gap-3 border-b px-6 py-5 md:px-0">
           <div className="flex flex-col gap-1.5">
             <Link
               href={`/${locale}/me/messages`}
-              className="text-2xs text-surface/40 transition-colors hover:text-surface"
+              className="text-2xs text-surface/40 hover:text-surface transition-colors"
             >
               ← {t('back')}
             </Link>
-            <h1 className="text-2xl text-surface">{otherName}</h1>
+            <h1 className="text-surface text-2xl">{otherName}</h1>
           </div>
           <Badge tone={thread.type === 'BOOKING' ? 'sage' : 'neutral'}>
             {t(`type.${thread.type}` as 'type.GENERAL')}
@@ -87,9 +88,7 @@ export default async function ThreadDetailPage({ params }: Props) {
         <section className="flex flex-1 flex-col-reverse overflow-y-auto px-6 py-6 md:px-0">
           <ul className="flex flex-col gap-3">
             {messages.length === 0 ? (
-              <li className="py-12 text-center text-2xs text-surface/40">
-                {t('empty')}
-              </li>
+              <li className="text-2xs text-surface/40 py-12 text-center">{t('empty')}</li>
             ) : (
               messages.map((m) => (
                 <li key={m.id}>

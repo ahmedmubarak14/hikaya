@@ -20,7 +20,10 @@ module.exports = {
   ],
   rules: {
     '@typescript-eslint/consistent-type-imports': ['warn', { prefer: 'type-imports' }],
-    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+    ],
     '@typescript-eslint/no-explicit-any': 'warn',
     'import/order': [
       'warn',
@@ -39,5 +42,14 @@ module.exports = {
       node: true,
     },
   },
-  ignorePatterns: ['dist', 'build', '.next', '.turbo', 'node_modules', 'coverage', '*.config.js', '*.config.cjs'],
+  ignorePatterns: [
+    'dist',
+    'build',
+    '.next',
+    '.turbo',
+    'node_modules',
+    'coverage',
+    '*.config.js',
+    '*.config.cjs',
+  ],
 };

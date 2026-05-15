@@ -4,10 +4,7 @@ import { forwardRef, type HTMLAttributes } from 'react';
 import { cn } from '../utils/cn';
 
 const badgeVariants = cva(
-  cn(
-    'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5',
-    'text-xs font-medium leading-5',
-  ),
+  cn('inline-flex items-center gap-1 rounded-full px-2.5 py-0.5', 'text-xs font-medium leading-5'),
   {
     variants: {
       tone: {
@@ -26,8 +23,7 @@ const badgeVariants = cva(
 );
 
 export interface BadgeProps
-  extends HTMLAttributes<HTMLSpanElement>,
-    VariantProps<typeof badgeVariants> {}
+  extends HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {}
 
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
   { className, tone, ...rest },

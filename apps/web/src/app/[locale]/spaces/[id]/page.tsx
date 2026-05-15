@@ -22,9 +22,7 @@ interface Props {
 export async function generateStaticParams() {
   const { SEED_SPACES } = await import('@/lib/spaces/mock-data');
   const { locales } = await import('@/i18n/config');
-  return locales.flatMap((locale) =>
-    SEED_SPACES.map((s) => ({ locale, id: s.id })),
-  );
+  return locales.flatMap((locale) => SEED_SPACES.map((s) => ({ locale, id: s.id })));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -59,10 +57,10 @@ export default async function SpaceDetailPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
         <Link
           href={`/${locale}/spaces`}
-          className="mb-6 inline-block text-2xs text-surface/40 transition-colors hover:text-surface"
+          className="text-2xs text-surface/40 hover:text-surface mb-6 inline-block transition-colors"
         >
           ← {t('back')}
         </Link>
@@ -71,7 +69,7 @@ export default async function SpaceDetailPage({ params }: Props) {
           {/* Gallery */}
           <section className="flex flex-col gap-3">
             {cover ? (
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-surface/10 bg-surface/5">
+              <div className="border-surface/10 bg-surface/5 relative aspect-[4/3] w-full overflow-hidden rounded-xl border">
                 <Image
                   src={cover}
                   alt={space.name}
@@ -86,7 +84,7 @@ export default async function SpaceDetailPage({ params }: Props) {
               <ul className="grid grid-cols-3 gap-3">
                 {rest.slice(0, 6).map((url, idx) => (
                   <li key={`${url}-${idx}`}>
-                    <div className="relative aspect-square overflow-hidden rounded-md border border-surface/10 bg-surface/5">
+                    <div className="border-surface/10 bg-surface/5 relative aspect-square overflow-hidden rounded-md border">
                       <Image
                         src={url}
                         alt={`${space.name} ${idx + 2}`}
@@ -118,10 +116,10 @@ export default async function SpaceDetailPage({ params }: Props) {
               {t('address')}: <span className="text-surface/80">{space.address}</span>
             </p>
 
-            <div className="flex flex-col gap-1 rounded-xl border border-surface/10 bg-surface/[0.03] p-4">
+            <div className="border-surface/10 bg-surface/[0.03] flex flex-col gap-1 rounded-xl border p-4">
               <div className="flex items-baseline justify-between gap-3">
                 <span className="text-2xs text-surface/40">{t('hourly')}</span>
-                <span className="font-mono text-base text-surface tabular-nums">
+                <span className="text-surface font-mono text-base tabular-nums">
                   {space.hourlyHalalas > 0
                     ? formatSarFromHalalas(space.hourlyHalalas, locale)
                     : '—'}
@@ -129,10 +127,8 @@ export default async function SpaceDetailPage({ params }: Props) {
               </div>
               <div className="flex items-baseline justify-between gap-3">
                 <span className="text-2xs text-surface/40">{t('daily')}</span>
-                <span className="font-mono text-base text-surface tabular-nums">
-                  {space.dailyHalalas > 0
-                    ? formatSarFromHalalas(space.dailyHalalas, locale)
-                    : '—'}
+                <span className="text-surface font-mono text-base tabular-nums">
+                  {space.dailyHalalas > 0 ? formatSarFromHalalas(space.dailyHalalas, locale) : '—'}
                 </span>
               </div>
             </div>
@@ -142,7 +138,9 @@ export default async function SpaceDetailPage({ params }: Props) {
                 <span className="text-2xs text-surface/40">{t('equipment')}</span>
                 <div className="flex flex-wrap gap-2">
                   {space.equipmentIncluded.map((e) => (
-                    <Badge key={e} tone="info">{e}</Badge>
+                    <Badge key={e} tone="info">
+                      {e}
+                    </Badge>
                   ))}
                 </div>
               </div>
@@ -156,21 +154,21 @@ export default async function SpaceDetailPage({ params }: Props) {
               disabledReason={isOwn ? 'OWN' : null}
             />
 
-            <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-5">
-              <p className="whitespace-pre-wrap text-sm text-surface/80">{space.description}</p>
+            <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
+              <p className="text-surface/80 whitespace-pre-wrap text-sm">{space.description}</p>
             </div>
           </section>
         </div>
 
         {/* Availability placeholder — text-only, no calendar widget per spec. */}
-        <section className="mt-12 rounded-xl border border-surface/10 bg-surface/[0.03] p-5">
-          <h2 className="mb-3 text-base font-semibold text-surface">{t('availabilityTitle')}</h2>
+        <section className="border-surface/10 bg-surface/[0.03] mt-12 rounded-xl border p-5">
+          <h2 className="text-surface mb-3 text-base font-semibold">{t('availabilityTitle')}</h2>
           {upcoming.length === 0 ? (
-            <p className="text-sm text-surface/60">{t('availabilityEmpty')}</p>
+            <p className="text-surface/60 text-sm">{t('availabilityEmpty')}</p>
           ) : (
             <ul className="flex flex-col gap-1.5">
               {upcoming.map((b) => (
-                <li key={b.id} className="font-mono text-sm text-surface/70 tabular-nums">
+                <li key={b.id} className="text-surface/70 font-mono text-sm tabular-nums">
                   {t('availabilityRow', {
                     start: formatDate(b.startISO, locale),
                     end: formatDate(b.endISO, locale),

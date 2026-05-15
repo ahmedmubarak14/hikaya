@@ -41,7 +41,7 @@ export function RoleSwitcher({ current, available, labels }: Props) {
     <div
       role="tablist"
       aria-label="Switch active role"
-      className="hidden h-7 items-center gap-0.5 rounded-full border border-surface/15 bg-surface/[0.03] p-0.5 md:flex"
+      className="border-surface/15 bg-surface/[0.03] hidden h-7 items-center gap-0.5 rounded-full border p-0.5 md:flex"
     >
       {available.map((role) => {
         const isActive = role === active;
@@ -53,10 +53,8 @@ export function RoleSwitcher({ current, available, labels }: Props) {
             aria-selected={isActive}
             onClick={() => select(role)}
             className={cn(
-              'rounded-full px-3 py-0.5 text-2xs font-medium transition-colors',
-              isActive
-                ? 'bg-surface text-bg'
-                : 'text-surface/60 hover:text-surface',
+              'text-2xs rounded-full px-3 py-0.5 font-medium transition-colors',
+              isActive ? 'bg-surface text-bg' : 'text-surface/60 hover:text-surface',
             )}
           >
             {labels[role]}

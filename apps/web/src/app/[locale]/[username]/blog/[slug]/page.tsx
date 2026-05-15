@@ -72,16 +72,16 @@ export default async function CreatorBlogPostPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-3xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <Link
           href={`/${locale}/${creator.username}/blog`}
-          className="mb-8 inline-block text-2xs text-surface/40 transition-colors hover:text-surface"
+          className="text-2xs text-surface/40 hover:text-surface mb-8 inline-block transition-colors"
         >
           {t('backToList')}
         </Link>
 
         {post.coverUrl ? (
-          <div className="relative mb-10 aspect-[16/9] w-full overflow-hidden rounded-xl border border-surface/10 bg-surface/5">
+          <div className="border-surface/10 bg-surface/5 relative mb-10 aspect-[16/9] w-full overflow-hidden rounded-xl border">
             <Image
               src={post.coverUrl}
               alt={title}
@@ -94,21 +94,16 @@ export default async function CreatorBlogPostPage({ params }: Props) {
         ) : null}
 
         <header className="mb-10 flex flex-col gap-6">
-          <div className="flex flex-wrap items-center gap-3 text-2xs text-surface/40">
+          <div className="text-2xs text-surface/40 flex flex-wrap items-center gap-3">
             <span>{formatDate(date, locale)}</span>
-            <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-surface/30" />
+            <span aria-hidden className="bg-surface/30 inline-block h-1 w-1 rounded-full" />
             <span>{tList('readingTime', { minutes })}</span>
           </div>
 
-          <h1 className="text-balance text-3xl font-bold tracking-tight md:text-4xl">
-            {title}
-          </h1>
+          <h1 className="text-balance text-3xl font-bold tracking-tight md:text-4xl">{title}</h1>
 
-          <Link
-            href={`/${locale}/${creator.username}`}
-            className="group flex items-center gap-3"
-          >
-            <span className="relative h-10 w-10 overflow-hidden rounded-full bg-surface/10 ring-1 ring-surface/10">
+          <Link href={`/${locale}/${creator.username}`} className="group flex items-center gap-3">
+            <span className="bg-surface/10 ring-surface/10 relative h-10 w-10 overflow-hidden rounded-full ring-1">
               <Image
                 src={creator.avatarUrl}
                 alt={creatorName}
@@ -117,7 +112,7 @@ export default async function CreatorBlogPostPage({ params }: Props) {
                 className="object-cover"
               />
             </span>
-            <span className="text-sm text-surface/80 transition-colors group-hover:text-surface">
+            <span className="text-surface/80 group-hover:text-surface text-sm transition-colors">
               {t('byCreator', { name: creatorName })}
             </span>
           </Link>
@@ -127,7 +122,7 @@ export default async function CreatorBlogPostPage({ params }: Props) {
           {paragraphs.map((p, idx) => (
             <p
               key={`${post.id}-p-${idx}`}
-              className="text-base leading-relaxed text-surface/80"
+              className="text-surface/80 text-base leading-relaxed"
               dir={locale === 'ar' ? 'rtl' : undefined}
             >
               {p}
@@ -136,15 +131,15 @@ export default async function CreatorBlogPostPage({ params }: Props) {
         </article>
 
         {post.tags.length > 0 ? (
-          <footer className="mt-12 flex flex-col gap-3 border-t border-surface/10 pt-6">
-            <span className="text-2xs uppercase tracking-wider text-surface/40">
+          <footer className="border-surface/10 mt-12 flex flex-col gap-3 border-t pt-6">
+            <span className="text-2xs text-surface/40 uppercase tracking-wider">
               {tList('tags')}
             </span>
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full bg-surface/5 px-3 py-1 text-xs text-surface/70"
+                  className="bg-surface/5 text-surface/70 rounded-full px-3 py-1 text-xs"
                 >
                   #{tag}
                 </span>

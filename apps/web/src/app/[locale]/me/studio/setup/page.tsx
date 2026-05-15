@@ -42,11 +42,11 @@ export default async function StudioSetupPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-3xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('backToAccount')}
           </Link>
@@ -55,9 +55,9 @@ export default async function StudioSetupPage({ params }: Props) {
           </Badge>
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
             <span>{t('headline')}</span>{' '}
-            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
+            <span className="text-accent-secondary font-bold">{t('headlineItalic')}</span>
           </h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         <StudioProfileForm locale={locale} />

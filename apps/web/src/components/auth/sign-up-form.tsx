@@ -91,18 +91,18 @@ export function SignUpForm({ locale }: Props) {
         required
       />
 
-      <label className="flex items-start gap-3 text-sm text-surface/70">
+      <label className="text-surface/70 flex items-start gap-3 text-sm">
         <input
           type="checkbox"
           {...register('acceptedTerms')}
-          className="mt-1 h-4 w-4 cursor-pointer accent-accent"
+          className="accent-accent mt-1 h-4 w-4 cursor-pointer"
         />
         <span>
           {t.rich('acceptTerms', {
             terms: (chunks) => (
               <Link
                 href={`/${locale}/terms`}
-                className="text-surface underline decoration-accent-secondary decoration-2 underline-offset-4"
+                className="text-surface decoration-accent-secondary underline decoration-2 underline-offset-4"
               >
                 {chunks}
               </Link>
@@ -110,7 +110,7 @@ export function SignUpForm({ locale }: Props) {
             privacy: (chunks) => (
               <Link
                 href={`/${locale}/privacy`}
-                className="text-surface underline decoration-accent-secondary decoration-2 underline-offset-4"
+                className="text-surface decoration-accent-secondary underline decoration-2 underline-offset-4"
               >
                 {chunks}
               </Link>
@@ -119,7 +119,7 @@ export function SignUpForm({ locale }: Props) {
         </span>
       </label>
       {errors.acceptedTerms?.message ? (
-        <p className="-mt-3 text-xs text-accent-secondary" role="alert">
+        <p className="text-accent-secondary -mt-3 text-xs" role="alert">
           {errors.acceptedTerms.message}
         </p>
       ) : null}
@@ -128,11 +128,11 @@ export function SignUpForm({ locale }: Props) {
         {t('signUpCta')}
       </Button>
 
-      <p className="text-center text-sm text-surface/60">
+      <p className="text-surface/60 text-center text-sm">
         {t('haveAccount')}{' '}
         <Link
           href={`/${locale}/sign-in`}
-          className="text-surface underline decoration-accent-secondary decoration-2 underline-offset-4 hover:text-accent-secondary"
+          className="text-surface decoration-accent-secondary hover:text-accent-secondary underline decoration-2 underline-offset-4"
         >
           {t('signInLink')}
         </Link>
@@ -157,11 +157,15 @@ function RoleToggle({
   const t = useTranslations('auth');
   return (
     <fieldset className="flex flex-col gap-2">
-      <legend className="text-sm font-medium text-surface/80">{t('roleLabel')}</legend>
+      <legend className="text-surface/80 text-sm font-medium">{t('roleLabel')}</legend>
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
         {ROLE_OPTIONS.map((opt) => {
           const Icon =
-            opt.value === 'CLIENT' ? ClientIcon : opt.value === 'CREATOR' ? CreatorIcon : StudioIcon;
+            opt.value === 'CLIENT'
+              ? ClientIcon
+              : opt.value === 'CREATOR'
+                ? CreatorIcon
+                : StudioIcon;
           return (
             <label
               key={opt.value}
@@ -173,11 +177,11 @@ function RoleToggle({
               )}
             >
               <input type="radio" value={opt.value} {...register('role')} className="sr-only" />
-              <span className="mb-1 flex items-center gap-2 text-surface/70">
+              <span className="text-surface/70 mb-1 flex items-center gap-2">
                 <Icon />
               </span>
               <span className="block font-medium">{t(opt.labelKey)}</span>
-              <span className="block text-xs text-surface/50">{t(opt.hintKey)}</span>
+              <span className="text-surface/50 block text-xs">{t(opt.hintKey)}</span>
             </label>
           );
         })}
@@ -188,7 +192,17 @@ function RoleToggle({
 
 function ClientIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
       <circle cx="12" cy="7" r="4" />
     </svg>
@@ -197,7 +211,17 @@ function ClientIcon() {
 
 function CreatorIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
       <rect x="3" y="7" width="18" height="13" rx="2" />
       <circle cx="12" cy="13.5" r="3.5" />
       <path d="M8 7l1.5-3h5L16 7" />
@@ -207,7 +231,17 @@ function CreatorIcon() {
 
 function StudioIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
       <path d="M3 21V8l9-5 9 5v13" />
       <path d="M9 21v-6h6v6" />
       <path d="M3 21h18" />

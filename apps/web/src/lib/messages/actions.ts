@@ -41,7 +41,9 @@ export interface MessageSuccess {
 }
 export type MessageResult = MessageSuccess | MessageFailure;
 
-function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string }[]): Record<string, string> {
+function fieldErrorsFromZod(
+  issues: { path: (string | number)[]; message: string }[],
+): Record<string, string> {
   const out: Record<string, string> = {};
   for (const issue of issues) {
     const key = String(issue.path[0] ?? '_');
@@ -76,7 +78,11 @@ export async function startThreadAction(
     body: formData.get('body') || undefined,
   });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   const creator = await getCreatorByUsername(parsed.data.creatorUsername);
@@ -120,7 +126,11 @@ export async function sendMessageAction(
 
   const parsed = sendMessageSchema.safeParse({ body: formData.get('body') });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   appendMessage(threadId, { senderId: session.user.id, body: parsed.data.body });

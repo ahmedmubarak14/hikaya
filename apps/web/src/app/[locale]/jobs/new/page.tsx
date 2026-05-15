@@ -35,11 +35,11 @@ export default async function NewJobPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-3xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/jobs`}
-            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('back')}
           </Link>

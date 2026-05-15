@@ -20,7 +20,14 @@ interface Props {
 }
 
 const CITY_VALUES = new Set<City>([
-  'RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA',
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
 ]);
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -47,15 +54,17 @@ export default async function StudiosPage({ params, searchParams }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-8xl px-6 pb-22 pt-10 md:px-10 md:pt-14">
+      <main className="max-w-8xl pb-22 mx-auto w-full px-6 pt-10 md:px-10 md:pt-14">
         <header className="mb-6 flex items-end justify-between gap-4">
           <div className="flex flex-col gap-2">
-            <Badge tone="accent" className="self-start">{t('eyebrow')}</Badge>
+            <Badge tone="accent" className="self-start">
+              {t('eyebrow')}
+            </Badge>
             <h1 className="text-balance text-3xl font-bold tracking-tight md:text-4xl">
               {t('headline')}
             </h1>
           </div>
-          <span className="shrink-0 text-sm text-surface/50">
+          <span className="text-surface/50 shrink-0 text-sm">
             {t('count', { count: studios.length })}
           </span>
         </header>
@@ -63,11 +72,11 @@ export default async function StudiosPage({ params, searchParams }: Props) {
         {/* City filter — read-only in static export */}
         {!IS_STATIC_EXPORT ? (
           <form className="mb-8 flex flex-wrap items-center gap-2" method="GET">
-            <label className="text-sm text-surface/60">{t('filterCity')}</label>
+            <label className="text-surface/60 text-sm">{t('filterCity')}</label>
             <select
               name="city"
               defaultValue={city ?? ''}
-              className="rounded-md border border-surface/15 bg-bg px-3 py-1.5 text-sm text-surface"
+              className="border-surface/15 bg-bg text-surface rounded-md border px-3 py-1.5 text-sm"
             >
               <option value="">{t('filterAllCities')}</option>
               {Array.from(CITY_VALUES).map((c) => (
@@ -78,7 +87,7 @@ export default async function StudiosPage({ params, searchParams }: Props) {
             </select>
             <button
               type="submit"
-              className="rounded-full border border-surface/15 px-3 py-1.5 text-xs text-surface/70 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/70 hover:border-surface/40 hover:text-surface rounded-full border px-3 py-1.5 text-xs transition-colors"
             >
               {t('filterApply')}
             </button>
@@ -86,7 +95,7 @@ export default async function StudiosPage({ params, searchParams }: Props) {
         ) : null}
 
         {studios.length === 0 ? (
-          <p className="py-20 text-center text-surface/50">{t('empty')}</p>
+          <p className="text-surface/50 py-20 text-center">{t('empty')}</p>
         ) : (
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {studios.map((studio) => {
@@ -97,7 +106,7 @@ export default async function StudiosPage({ params, searchParams }: Props) {
                     href={`/${locale}/studios/${studio.slug}`}
                     className="group flex flex-col gap-3"
                   >
-                    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-surface/5">
+                    <div className="bg-surface/5 relative aspect-[4/3] w-full overflow-hidden rounded-xl">
                       {studio.coverUrl ? (
                         <Image
                           src={studio.coverUrl}
@@ -107,12 +116,12 @@ export default async function StudiosPage({ params, searchParams }: Props) {
                           className="object-cover"
                         />
                       ) : (
-                        <div className="grid h-full w-full place-items-center text-surface/30">
+                        <div className="text-surface/30 grid h-full w-full place-items-center">
                           —
                         </div>
                       )}
                       {studio.logoUrl ? (
-                        <div className="absolute bottom-3 left-3 h-12 w-12 overflow-hidden rounded-full border border-bg/40 bg-bg shadow-md">
+                        <div className="border-bg/40 bg-bg absolute bottom-3 left-3 h-12 w-12 overflow-hidden rounded-full border shadow-md">
                           <Image
                             src={studio.logoUrl}
                             alt=""
@@ -126,10 +135,10 @@ export default async function StudiosPage({ params, searchParams }: Props) {
 
                     <div className="flex flex-col gap-1">
                       <div className="flex items-baseline justify-between gap-3">
-                        <h3 className="truncate text-base font-semibold group-hover:underline underline-offset-2">
+                        <h3 className="truncate text-base font-semibold underline-offset-2 group-hover:underline">
                           {name}
                         </h3>
-                        <span className="shrink-0 text-xs text-surface/50">
+                        <span className="text-surface/50 shrink-0 text-xs">
                           {tCity(studio.city as 'RIYADH')}
                         </span>
                       </div>

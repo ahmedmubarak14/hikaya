@@ -42,25 +42,25 @@ export function StartThreadButton({ locale, creatorUsername }: Props) {
       action={(fd) => {
         startTransition(() => formAction(fd));
       }}
-      className="flex w-full max-w-xl flex-col gap-3 rounded-xl border border-surface/15 bg-surface/[0.03] p-4"
+      className="border-surface/15 bg-surface/[0.03] flex w-full max-w-xl flex-col gap-3 rounded-xl border p-4"
     >
       <input type="hidden" name="creatorUsername" value={creatorUsername} />
       <label className="flex flex-col gap-1.5">
-        <span className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr">
+        <span className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium">
           {t('label')}
         </span>
         <textarea
           name="body"
           rows={3}
           placeholder={t('placeholder')}
-          className="rounded-md border border-surface/15 bg-bg/40 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+          className="border-surface/15 bg-bg/40 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
         />
       </label>
 
       {serverState?.error === 'CANNOT_MESSAGE_SELF' ? (
-        <p className="text-xs text-accent-secondary">{t('errorSelf')}</p>
+        <p className="text-accent-secondary text-xs">{t('errorSelf')}</p>
       ) : serverState?.error === 'CREATOR_HAS_NO_USER' ? (
-        <p className="text-xs text-accent-secondary">{t('errorNoUser')}</p>
+        <p className="text-accent-secondary text-xs">{t('errorNoUser')}</p>
       ) : null}
 
       <div className="flex items-center gap-2">
@@ -70,7 +70,7 @@ export function StartThreadButton({ locale, creatorUsername }: Props) {
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="rounded-full px-3 py-2 text-sm text-surface/60 transition-colors hover:text-surface"
+          className="text-surface/60 hover:text-surface rounded-full px-3 py-2 text-sm transition-colors"
         >
           {t('cancel')}
         </button>

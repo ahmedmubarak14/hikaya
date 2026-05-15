@@ -37,33 +37,66 @@ export interface StudioProfileFailure {
 }
 
 const cityEnum = z.enum([
-  'RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA',
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
 ]);
 
 const disciplineEnum = z.enum([
-  'WEDDING_PHOTOGRAPHY', 'PORTRAIT_PHOTOGRAPHY', 'COMMERCIAL_PHOTOGRAPHY',
-  'PRODUCT_PHOTOGRAPHY', 'EVENT_PHOTOGRAPHY', 'FASHION_PHOTOGRAPHY',
-  'COMMERCIAL_VIDEO', 'WEDDING_VIDEO', 'EVENT_VIDEO', 'DOCUMENTARY',
-  'GRAPHIC_DESIGN', 'BRAND_IDENTITY', 'MOTION_GRAPHICS', 'VIDEO_EDITING',
-  'COLOR_GRADING', 'RETOUCHING', 'DRONE_OPERATION',
+  'WEDDING_PHOTOGRAPHY',
+  'PORTRAIT_PHOTOGRAPHY',
+  'COMMERCIAL_PHOTOGRAPHY',
+  'PRODUCT_PHOTOGRAPHY',
+  'EVENT_PHOTOGRAPHY',
+  'FASHION_PHOTOGRAPHY',
+  'COMMERCIAL_VIDEO',
+  'WEDDING_VIDEO',
+  'EVENT_VIDEO',
+  'DOCUMENTARY',
+  'GRAPHIC_DESIGN',
+  'BRAND_IDENTITY',
+  'MOTION_GRAPHICS',
+  'VIDEO_EDITING',
+  'COLOR_GRADING',
+  'RETOUCHING',
+  'DRONE_OPERATION',
 ]);
 
 const baseSchema = z.object({
   nameEn: z.string().min(2).max(80),
   nameAr: z.string().max(80).optional(),
-  logoUrl: z.string().url().optional().or(z.literal('').transform(() => undefined)),
-  coverUrl: z.string().url().optional().or(z.literal('').transform(() => undefined)),
+  logoUrl: z
+    .string()
+    .url()
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
+  coverUrl: z
+    .string()
+    .url()
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
   city: cityEnum,
   address: z.string().max(200).optional(),
   specializations: z.array(disciplineEnum).min(1, 'Pick at least one specialization').max(8),
   capacity: z.coerce.number().int().min(1).max(50),
   descriptionEn: z.string().min(20).max(2000),
   descriptionAr: z.string().max(2000).optional(),
-  contactEmail: z.string().email().optional().or(z.literal('').transform(() => undefined)),
+  contactEmail: z
+    .string()
+    .email()
+    .optional()
+    .or(z.literal('').transform(() => undefined)),
   contactPhone: z.string().max(40).optional(),
 });
 
-function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string }[]): Record<string, string> {
+function fieldErrorsFromZod(
+  issues: { path: (string | number)[]; message: string }[],
+): Record<string, string> {
   const out: Record<string, string> = {};
   for (const issue of issues) {
     const key = String(issue.path[0] ?? '_');
@@ -72,7 +105,9 @@ function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string
   return out;
 }
 
-function parseFormData(formData: FormData): z.SafeParseReturnType<unknown, z.infer<typeof baseSchema>> {
+function parseFormData(
+  formData: FormData,
+): z.SafeParseReturnType<unknown, z.infer<typeof baseSchema>> {
   const specializations = formData.getAll('specializations').map(String);
   return baseSchema.safeParse({
     nameEn: formData.get('nameEn'),
@@ -103,7 +138,11 @@ export async function createStudioProfileAction(
 
   const parsed = parseFormData(formData);
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   let studio: StudioProfile;
@@ -135,7 +174,11 @@ export async function updateStudioProfileAction(
 
   const parsed = parseFormData(formData);
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   try {

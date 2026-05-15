@@ -65,7 +65,7 @@ export function SignInForm({ locale }: Props) {
       />
 
       {serverState?.error === 'INVALID_CREDENTIALS' ? (
-        <p className="text-sm text-accent-secondary" role="alert">
+        <p className="text-accent-secondary text-sm" role="alert">
           {tErrors('invalidCredentials')}
         </p>
       ) : null}
@@ -74,11 +74,11 @@ export function SignInForm({ locale }: Props) {
         {t('signInCta')}
       </Button>
 
-      <p className="text-center text-sm text-surface/60">
+      <p className="text-surface/60 text-center text-sm">
         {t('noAccount')}{' '}
         <Link
           href={`/${locale}/sign-up`}
-          className="text-surface underline decoration-accent-secondary decoration-2 underline-offset-4 hover:text-accent-secondary"
+          className="text-surface decoration-accent-secondary hover:text-accent-secondary underline decoration-2 underline-offset-4"
         >
           {t('signUpLink')}
         </Link>

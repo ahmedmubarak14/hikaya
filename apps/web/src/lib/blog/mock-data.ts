@@ -35,8 +35,7 @@ const pic = (seed: string, w: number, h: number): string =>
 
 // Helpers to produce ISO timestamps a few days/weeks back so the seed feels
 // natural without depending on the wall clock.
-const daysAgo = (n: number): string =>
-  new Date(Date.now() - n * 24 * 60 * 60 * 1000).toISOString();
+const daysAgo = (n: number): string => new Date(Date.now() - n * 24 * 60 * 60 * 1000).toISOString();
 
 export const SEED_BLOG_POSTS: BlogPost[] = [
   {

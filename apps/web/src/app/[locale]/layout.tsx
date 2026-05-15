@@ -1,4 +1,10 @@
-import { Cairo, IBM_Plex_Mono, IBM_Plex_Sans, Noto_Naskh_Arabic, Playfair_Display } from 'next/font/google';
+import {
+  Cairo,
+  IBM_Plex_Mono,
+  IBM_Plex_Sans,
+  Noto_Naskh_Arabic,
+  Playfair_Display,
+} from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
@@ -12,13 +18,37 @@ import '../../styles/globals.css';
 import type { Metadata } from 'next';
 
 // EN display + body
-const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-display', display: 'swap' });
-const plexSans = IBM_Plex_Sans({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-sans', display: 'swap' });
-const plexMono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-mono', display: 'swap' });
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+});
+const plexSans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono',
+  display: 'swap',
+});
 
 // AR display + body
-const cairo = Cairo({ subsets: ['arabic'], weight: ['400', '600', '700'], variable: '--font-display-ar', display: 'swap' });
-const notoNaskh = Noto_Naskh_Arabic({ subsets: ['arabic'], weight: ['400', '500', '700'], variable: '--font-sans-ar', display: 'swap' });
+const cairo = Cairo({
+  subsets: ['arabic'],
+  weight: ['400', '600', '700'],
+  variable: '--font-display-ar',
+  display: 'swap',
+});
+const notoNaskh = Noto_Naskh_Arabic({
+  subsets: ['arabic'],
+  weight: ['400', '500', '700'],
+  variable: '--font-sans-ar',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
@@ -84,7 +114,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           }}
         />
       </head>
-      <body className="min-h-dvh bg-bg text-surface antialiased">
+      <body className="bg-bg text-surface min-h-dvh antialiased">
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>

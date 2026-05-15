@@ -24,7 +24,7 @@ export function BuyButton({ locale, username, productSlug, alreadyOwned, isOwn }
 
   if (isOwn) {
     return (
-      <span className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/60">
+      <span className="border-surface/15 text-surface/60 rounded-full border px-5 py-2 text-sm">
         {t('cantBuyOwn')}
       </span>
     );
@@ -33,7 +33,7 @@ export function BuyButton({ locale, username, productSlug, alreadyOwned, isOwn }
     return (
       <a
         href={`/${locale}/me/purchases`}
-        className="rounded-full border border-sage/40 bg-sage/10 px-5 py-2 text-sm text-sage transition-colors hover:bg-sage/20"
+        className="border-sage/40 bg-sage/10 text-sage hover:bg-sage/20 rounded-full border px-5 py-2 text-sm transition-colors"
       >
         {t('viewInPurchases')} →
       </a>

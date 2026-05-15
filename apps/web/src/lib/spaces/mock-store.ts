@@ -169,9 +169,7 @@ export function createSpace(input: CreateSpaceInput): Space {
   return space;
 }
 
-export type SpacePatch = Partial<
-  Omit<Space, 'id' | 'ownerId' | 'createdAt'>
->;
+export type SpacePatch = Partial<Omit<Space, 'id' | 'ownerId' | 'createdAt'>>;
 
 export function updateSpace(id: string, patch: SpacePatch): Space {
   const existing = store.spaces.get(id);

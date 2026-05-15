@@ -31,8 +31,8 @@ export async function ProjectsGrid({ locale, creators, emptyLabel }: Props) {
 
   if (tiles.length === 0) {
     return (
-      <div className="mt-10 rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-        <p className="text-lg text-surface/70">{emptyLabel}</p>
+      <div className="border-surface/10 bg-surface/[0.03] mt-10 rounded-xl border p-10 text-center">
+        <p className="text-surface/70 text-lg">{emptyLabel}</p>
       </div>
     );
   }
@@ -42,25 +42,24 @@ export async function ProjectsGrid({ locale, creators, emptyLabel }: Props) {
       {tiles.map(({ item, creator }, i) => {
         const name = locale === 'ar' ? creator.displayNameAr : creator.displayNameEn;
         const title =
-          (locale === 'ar' ? item.titleAr : item.titleEn) ??
-          t('projectFallback', { name });
+          (locale === 'ar' ? item.titleAr : item.titleEn) ?? t('projectFallback', { name });
         return (
           <li key={`${creator.id}-${item.id}-${i}`}>
             <Link
               href={`/${locale}/${creator.username}`}
-              className="group relative block aspect-square w-full overflow-hidden rounded-xl bg-surface/5 transition-transform hover:-translate-y-0.5"
+              className="bg-surface/5 group relative block aspect-square w-full overflow-hidden rounded-xl transition-transform hover:-translate-y-0.5"
             >
               <Image
                 src={item.url}
                 alt={title}
                 fill
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                className="object-cover transition-transform duration-cinematic ease-out group-hover:scale-[1.02]"
+                className="duration-cinematic object-cover transition-transform ease-out group-hover:scale-[1.02]"
               />
 
               {/* Creator chip — top leading */}
-              <div className="absolute start-2 top-2 z-10 inline-flex max-w-[calc(100%-1rem)] items-center gap-1.5 rounded-full bg-bg/60 py-1 pe-3 ps-1 text-xs backdrop-blur-sm ring-1 ring-surface/10">
-                <span className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full bg-surface/10">
+              <div className="bg-bg/60 ring-surface/10 absolute start-2 top-2 z-10 inline-flex max-w-[calc(100%-1rem)] items-center gap-1.5 rounded-full py-1 pe-3 ps-1 text-xs ring-1 backdrop-blur-sm">
+                <span className="bg-surface/10 relative h-6 w-6 shrink-0 overflow-hidden rounded-full">
                   <Image
                     src={creator.avatarUrl}
                     alt=""
@@ -69,12 +68,12 @@ export async function ProjectsGrid({ locale, creators, emptyLabel }: Props) {
                     className="object-cover"
                   />
                 </span>
-                <span className="truncate font-medium text-surface">{name}</span>
+                <span className="text-surface truncate font-medium">{name}</span>
               </div>
 
               {/* Title — bottom, fades in on hover */}
-              <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/70 via-ink/30 to-transparent p-3 opacity-0 transition-opacity duration-cinematic group-hover:opacity-100">
-                <span className="line-clamp-2 text-xs font-medium text-bg">{title}</span>
+              <div className="from-ink/70 via-ink/30 duration-cinematic pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t to-transparent p-3 opacity-0 transition-opacity group-hover:opacity-100">
+                <span className="text-bg line-clamp-2 text-xs font-medium">{title}</span>
               </div>
             </Link>
           </li>

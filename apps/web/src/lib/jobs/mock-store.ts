@@ -83,10 +83,7 @@ export function listApplicationsByApplicant(userId: string): JobApplication[] {
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
-export function findApplication(
-  jobId: string,
-  applicantUserId: string,
-): JobApplication | null {
+export function findApplication(jobId: string, applicantUserId: string): JobApplication | null {
   for (const a of store.applications.values()) {
     if (a.jobId === jobId && a.applicantUserId === applicantUserId) return a;
   }
@@ -179,10 +176,7 @@ export function createApplication(input: CreateApplicationInput): JobApplication
   return app;
 }
 
-export function updateApplicationStatus(
-  id: string,
-  status: JobApplicationStatus,
-): JobApplication {
+export function updateApplicationStatus(id: string, status: JobApplicationStatus): JobApplication {
   const existing = store.applications.get(id);
   if (!existing) throw new Error('APPLICATION_NOT_FOUND');
   const updated: JobApplication = { ...existing, status, updatedAt: new Date().toISOString() };

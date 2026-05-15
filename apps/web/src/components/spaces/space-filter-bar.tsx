@@ -8,7 +8,16 @@ import { cn } from '@hikaya/ui';
 
 import type { SpaceCity } from '@/lib/spaces/mock-data';
 
-const CITIES: SpaceCity[] = ['RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA'];
+const CITIES: SpaceCity[] = [
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
+];
 
 interface Props {
   city: SpaceCity | null;
@@ -41,13 +50,13 @@ export function SpaceFilterBar({ city, minCapacity }: Props) {
       className={cn('flex flex-wrap items-center gap-2', isPending && 'opacity-70')}
       aria-busy={isPending || undefined}
     >
-      <label className="flex items-center gap-2 text-2xs text-surface/50">
+      <label className="text-2xs text-surface/50 flex items-center gap-2">
         <span>{t('cityFilter')}</span>
         <select
           value={city ?? ''}
           onChange={(e) => setParam('city', e.target.value || null)}
           className={cn(
-            'h-10 cursor-pointer rounded-full border bg-transparent ps-4 pe-9 text-sm outline-none transition-colors',
+            'h-10 cursor-pointer rounded-full border bg-transparent pe-9 ps-4 text-sm outline-none transition-colors',
             city
               ? 'border-surface/40 text-surface'
               : 'border-surface/15 text-surface/70 hover:border-surface/40 hover:text-surface',
@@ -62,7 +71,7 @@ export function SpaceFilterBar({ city, minCapacity }: Props) {
         </select>
       </label>
 
-      <label className="flex items-center gap-2 text-2xs text-surface/50">
+      <label className="text-2xs text-surface/50 flex items-center gap-2">
         <span>{t('capacityFilter')}</span>
         <input
           type="number"
@@ -73,7 +82,7 @@ export function SpaceFilterBar({ city, minCapacity }: Props) {
             const v = e.target.value.trim();
             setParam('minCapacity', v.length > 0 && Number(v) > 0 ? v : null);
           }}
-          className="h-10 w-20 rounded-full border border-surface/15 bg-transparent ps-4 pe-3 text-sm outline-none transition-colors hover:border-surface/40 focus:border-surface/40"
+          className="border-surface/15 hover:border-surface/40 focus:border-surface/40 h-10 w-20 rounded-full border bg-transparent pe-3 ps-4 text-sm outline-none transition-colors"
         />
       </label>
     </div>

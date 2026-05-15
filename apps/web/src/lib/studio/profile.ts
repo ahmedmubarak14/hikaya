@@ -43,8 +43,8 @@ export interface StudioProfile {
 
 interface Store {
   byId: Map<string, StudioProfile>;
-  bySlug: Map<string, string>;     // slug → id
-  byOwnerId: Map<string, string>;  // ownerId → id
+  bySlug: Map<string, string>; // slug → id
+  byOwnerId: Map<string, string>; // ownerId → id
 }
 
 declare global {
@@ -152,12 +152,13 @@ export interface CreateStudioInput {
 
 /** Slugify a studio name. Falls back to a random suffix if collisions occur. */
 function slugify(name: string): string {
-  const base = name
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
-    .slice(0, 60) || 'studio';
+  const base =
+    name
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .slice(0, 60) || 'studio';
 
   let candidate = base;
   let i = 1;
@@ -223,12 +224,8 @@ export function updateStudioProfile(id: string, patch: EditableStudioFields): St
   const updated: StudioProfile = {
     ...existing,
     ...patch,
-    specializations: patch.specializations
-      ? [...patch.specializations]
-      : existing.specializations,
-    teamMemberIds: patch.teamMemberIds
-      ? [...patch.teamMemberIds]
-      : existing.teamMemberIds,
+    specializations: patch.specializations ? [...patch.specializations] : existing.specializations,
+    teamMemberIds: patch.teamMemberIds ? [...patch.teamMemberIds] : existing.teamMemberIds,
   };
   store.byId.set(id, updated);
   return updated;

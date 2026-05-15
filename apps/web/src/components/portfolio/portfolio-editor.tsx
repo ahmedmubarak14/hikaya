@@ -46,9 +46,9 @@ export function PortfolioEditor({ locale, items, altPrefix }: Props) {
       <AddItemForm locale={locale} />
 
       {items.length === 0 ? (
-        <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-          <p className="text-lg text-surface/70">{t('empty')}</p>
-          <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+        <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
+          <p className="text-surface/70 text-lg">{t('empty')}</p>
+          <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
         </div>
       ) : (
         <ul
@@ -60,7 +60,7 @@ export function PortfolioEditor({ locale, items, altPrefix }: Props) {
         >
           {items.map((item, idx) => (
             <li key={item.id} className="group relative">
-              <figure className="relative aspect-[4/5] overflow-hidden rounded-md border border-surface/10 bg-surface/5">
+              <figure className="border-surface/10 bg-surface/5 relative aspect-[4/5] overflow-hidden rounded-md border">
                 <Image
                   src={item.url}
                   alt={`${altPrefix} — ${item.titleEn ?? `${idx + 1}`}`}
@@ -68,22 +68,22 @@ export function PortfolioEditor({ locale, items, altPrefix }: Props) {
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                   className="object-cover"
                 />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-bg/40 opacity-0 transition-opacity group-hover:opacity-100" />
+                <div className="from-bg/80 to-bg/40 pointer-events-none absolute inset-0 bg-gradient-to-t via-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 
-                <div className="pointer-events-auto absolute inset-x-2 top-2 flex items-center justify-between opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
-                  <span className="rounded-full bg-bg/80 px-2 py-1 font-mono text-2xs text-surface/70">
+                <div className="pointer-events-auto absolute inset-x-2 top-2 flex items-center justify-between opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
+                  <span className="bg-bg/80 text-2xs text-surface/70 rounded-full px-2 py-1 font-mono">
                     {String(idx + 1).padStart(2, '0')}
                   </span>
                   <button
                     type="button"
                     onClick={() => remove(item.id)}
-                    className="rounded-full bg-accent-secondary px-3 py-1 text-2xs font-medium text-surface transition-transform hover:scale-105"
+                    className="bg-accent-secondary text-2xs text-surface rounded-full px-3 py-1 font-medium transition-transform hover:scale-105"
                   >
                     {t('delete')}
                   </button>
                 </div>
 
-                <div className="pointer-events-auto absolute inset-x-2 bottom-2 flex items-center justify-end gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+                <div className="pointer-events-auto absolute inset-x-2 bottom-2 flex items-center justify-end gap-1 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
                   <ReorderButton
                     direction="up"
                     label={t('moveUp')}
@@ -124,7 +124,7 @@ function ReorderButton({
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        'grid h-7 w-7 place-items-center rounded-full bg-bg/80 text-surface transition-colors',
+        'bg-bg/80 text-surface grid h-7 w-7 place-items-center rounded-full transition-colors',
         disabled ? 'cursor-not-allowed opacity-30' : 'hover:bg-accent hover:text-ink',
       )}
     >
@@ -159,7 +159,13 @@ function AddItemForm({ locale }: { locale: Locale }) {
 
   if (!open) {
     return (
-      <Button type="button" variant="outline" size="md" onClick={() => setOpen(true)} className="self-start">
+      <Button
+        type="button"
+        variant="outline"
+        size="md"
+        onClick={() => setOpen(true)}
+        className="self-start"
+      >
         {t('open')}
       </Button>
     );
@@ -177,7 +183,7 @@ function AddItemForm({ locale }: { locale: Locale }) {
           // keep the form open so the creator can add several
         });
       })}
-      className="flex flex-col gap-3 rounded-xl border border-surface/10 bg-surface/[0.03] p-4 md:flex-row md:items-end"
+      className="border-surface/10 bg-surface/[0.03] flex flex-col gap-3 rounded-xl border p-4 md:flex-row md:items-end"
       noValidate
     >
       <Input
@@ -201,15 +207,13 @@ function AddItemForm({ locale }: { locale: Locale }) {
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="rounded-full px-3 py-2 text-sm text-surface/60 transition-colors hover:text-surface"
+          className="text-surface/60 hover:text-surface rounded-full px-3 py-2 text-sm transition-colors"
         >
           {t('close')}
         </button>
       </div>
       {serverState?.ok ? (
-        <span className="text-2xs text-accent-secondary">
-          {t('added')}
-        </span>
+        <span className="text-2xs text-accent-secondary">{t('added')}</span>
       ) : null}
     </form>
   );

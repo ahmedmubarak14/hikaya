@@ -67,7 +67,7 @@ export const SEED_GALLERIES: Gallery[] = [
     titleAr: 'سارة وحسن — يوم الزفاف',
     coverUrl: pic('sara-cover', 1800, 900),
     message:
-      'Sara — favorites for the album spread by Friday, and let me know which two go on the parents\' wall.',
+      "Sara — favorites for the album spread by Friday, and let me know which two go on the parents' wall.",
     access: 'OPEN_LINK',
     allowDownloads: true,
     watermarkPreviews: false,
@@ -83,7 +83,8 @@ export const SEED_GALLERIES: Gallery[] = [
     titleEn: 'Reem — Brand portraits',
     titleAr: 'ريم — بورتريه العلامة',
     coverUrl: pic('reem-cover', 1800, 900),
-    message: 'Reem — the natural-light selects are first; studio at the bottom. Heart your top six.',
+    message:
+      'Reem — the natural-light selects are first; studio at the bottom. Heart your top six.',
     access: 'OPEN_LINK',
     allowDownloads: false,
     watermarkPreviews: true,

@@ -19,17 +19,17 @@ export interface QuoteLineItem {
 
 export interface Quote {
   id: string;
-  number: string;          // human-readable, e.g. "Q-2026-0007"
-  shareSlug: string;       // url slug at /q/<slug>
+  number: string; // human-readable, e.g. "Q-2026-0007"
+  shareSlug: string; // url slug at /q/<slug>
   creatorId: string;
   /** Free-text client name; in the real model this is a ClientProfile fk. */
   clientName: string;
   clientEmail?: string;
   notes?: string;
   status: QuoteStatus;
-  expiresAt?: string;      // ISO
-  approvedAt?: string;     // ISO
-  rejectedAt?: string;     // ISO
+  expiresAt?: string; // ISO
+  approvedAt?: string; // ISO
+  rejectedAt?: string; // ISO
   rejectReason?: string;
   /** When set, the quote has been converted to a contract. */
   contractId?: string;
@@ -102,8 +102,7 @@ export const SEED_QUOTES: Quote[] = [
     creatorId: 'cr_noor',
     clientName: 'Sara Al-Harbi',
     clientEmail: 'sara@example.com',
-    notes:
-      'Includes raw files for the first dance only. Hard drive delivery in 4 weeks.',
+    notes: 'Includes raw files for the first dance only. Hard drive delivery in 4 weeks.',
     status: 'SENT',
     expiresAt: inDays(7),
     lineItems: seedItems_sara,

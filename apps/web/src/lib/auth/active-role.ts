@@ -18,11 +18,7 @@ import type { MockUserRole } from './mock-store';
 
 export const ACTIVE_ROLE_COOKIE = 'hikaya_active_role';
 
-const VALID_ROLES: ReadonlySet<MockUserRole> = new Set([
-  'CREATOR',
-  'STUDIO_OWNER',
-  'CLIENT',
-]);
+const VALID_ROLES: ReadonlySet<MockUserRole> = new Set(['CREATOR', 'STUDIO_OWNER', 'CLIENT']);
 
 /**
  * Read the active-role cookie. Returns null in static-export builds (no

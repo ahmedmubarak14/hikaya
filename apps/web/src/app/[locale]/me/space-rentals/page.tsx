@@ -54,26 +54,32 @@ export default async function MySpaceRentalsPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-4xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-4xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('back')}
           </Link>
-          <Badge tone="accent" className="self-start">{t('eyebrow')}</Badge>
-          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">{t('title')}</h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <Badge tone="accent" className="self-start">
+            {t('eyebrow')}
+          </Badge>
+          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
+            {t('title')}
+          </h1>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         {rows.length === 0 ? (
-          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('empty')}</p>
-            <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('empty')}</p>
+            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
             <div className="mt-4 flex justify-center">
               <Link href={`/${locale}/spaces`}>
-                <Button size="md" variant="primary">{t('browse')}</Button>
+                <Button size="md" variant="primary">
+                  {t('browse')}
+                </Button>
               </Link>
             </div>
           </div>
@@ -83,16 +89,18 @@ export default async function MySpaceRentalsPage({ params }: Props) {
               <li key={booking.id}>
                 <Link
                   href={`/${locale}/me/space-rentals/${booking.id}`}
-                  className="block rounded-xl border border-surface/10 bg-surface/[0.03] p-4 transition-colors hover:border-surface/30"
+                  className="border-surface/10 bg-surface/[0.03] hover:border-surface/30 block rounded-xl border p-4 transition-colors"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="text-base text-surface">{space?.name ?? '—'}</span>
-                    <Badge tone={STATUS_TONE[booking.status]}>{tStatus(booking.status as 'PENDING')}</Badge>
+                    <span className="text-surface text-base">{space?.name ?? '—'}</span>
+                    <Badge tone={STATUS_TONE[booking.status]}>
+                      {tStatus(booking.status as 'PENDING')}
+                    </Badge>
                   </div>
-                  <p className="mt-1 font-mono text-2xs text-surface/60 tabular-nums">
+                  <p className="text-2xs text-surface/60 mt-1 font-mono tabular-nums">
                     {formatDate(booking.startISO, locale)} → {formatDate(booking.endISO, locale)}
                   </p>
-                  <p className="mt-1 font-mono text-sm text-surface tabular-nums">
+                  <p className="text-surface mt-1 font-mono text-sm tabular-nums">
                     {formatSarFromHalalas(booking.totalHalalas, locale)}
                   </p>
                 </Link>

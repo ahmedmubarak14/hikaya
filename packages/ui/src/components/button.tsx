@@ -17,16 +17,12 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary:
-          'bg-accent text-ink hover:scale-[1.02] active:scale-[0.99]',
-        secondary:
-          'bg-surface text-ink hover:bg-surface/90 active:scale-[0.99]',
-        ghost:
-          'bg-transparent text-surface hover:bg-surface/10 active:bg-surface/15',
+        primary: 'bg-accent text-ink hover:scale-[1.02] active:scale-[0.99]',
+        secondary: 'bg-surface text-ink hover:bg-surface/90 active:scale-[0.99]',
+        ghost: 'bg-transparent text-surface hover:bg-surface/10 active:bg-surface/15',
         outline:
           'bg-transparent text-surface border-surface/30 hover:bg-surface/5 hover:border-surface/60',
-        destructive:
-          'bg-accent-secondary text-surface hover:brightness-110 active:scale-[0.99]',
+        destructive: 'bg-accent-secondary text-surface hover:brightness-110 active:scale-[0.99]',
       },
       size: {
         sm: 'h-9 px-4 text-sm',
@@ -42,8 +38,7 @@ export const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   /** Visual loading state — disables interaction and dims content. */
   isLoading?: boolean;
 }

@@ -28,7 +28,9 @@ export async function listSpaces(filter: ListSpacesFilter = {}): Promise<Space[]
   return rawGetAllSpaces(filter);
 }
 
-export async function listActiveSpaces(filter: Omit<ListSpacesFilter, 'status'> = {}): Promise<Space[]> {
+export async function listActiveSpaces(
+  filter: Omit<ListSpacesFilter, 'status'> = {},
+): Promise<Space[]> {
   return rawGetAllSpaces({ ...filter, status: 'ACTIVE' });
 }
 
@@ -56,6 +58,10 @@ export async function getBooking(id: string): Promise<SpaceBooking | null> {
   return rawGetBookingById(id);
 }
 
-export async function checkSpaceAvailable(spaceId: string, startISO: string, endISO: string): Promise<boolean> {
+export async function checkSpaceAvailable(
+  spaceId: string,
+  startISO: string,
+  endISO: string,
+): Promise<boolean> {
   return rawIsSpaceAvailable(spaceId, startISO, endISO);
 }

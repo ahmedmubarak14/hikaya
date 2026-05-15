@@ -62,8 +62,8 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
 
   if (disabledReason === 'OWN') {
     return (
-      <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-5">
-        <p className="text-sm text-surface/60">{t('cannotBookOwn')}</p>
+      <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
+        <p className="text-surface/60 text-sm">{t('cannotBookOwn')}</p>
       </div>
     );
   }
@@ -73,13 +73,13 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
       action={(fd) => {
         startTransition(() => formAction(fd));
       }}
-      className="flex flex-col gap-4 rounded-xl border border-surface/10 bg-surface/[0.03] p-5"
+      className="border-surface/10 bg-surface/[0.03] flex flex-col gap-4 rounded-xl border p-5"
       noValidate
     >
-      <h3 className="text-base font-semibold text-surface">{t('title')}</h3>
+      <h3 className="text-surface text-base font-semibold">{t('title')}</h3>
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        <label className="flex flex-col gap-1.5 text-sm text-surface/80">
+        <label className="text-surface/80 flex flex-col gap-1.5 text-sm">
           <span>{t('startDate')}</span>
           <input
             type="date"
@@ -87,11 +87,11 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
             value={startDate}
             min={today}
             onChange={(e) => setStartDate(e.target.value)}
-            className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
             required
           />
         </label>
-        <label className="flex flex-col gap-1.5 text-sm text-surface/80">
+        <label className="text-surface/80 flex flex-col gap-1.5 text-sm">
           <span>{t('endDate')}</span>
           <input
             type="date"
@@ -99,14 +99,14 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
             value={endDate}
             min={startDate}
             onChange={(e) => setEndDate(e.target.value)}
-            className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
             required
           />
         </label>
       </div>
 
       <fieldset className="flex flex-wrap gap-3">
-        <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-surface/15 px-4 py-2 text-sm text-surface/80 has-[:checked]:border-accent has-[:checked]:bg-accent/5 has-[:checked]:text-surface">
+        <label className="border-surface/15 text-surface/80 has-[:checked]:border-accent has-[:checked]:bg-accent/5 has-[:checked]:text-surface inline-flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm">
           <input
             type="radio"
             name="durationKind"
@@ -117,7 +117,7 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
           />
           {t('kindDaily')}
         </label>
-        <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-surface/15 px-4 py-2 text-sm text-surface/80 has-[:checked]:border-accent has-[:checked]:bg-accent/5 has-[:checked]:text-surface">
+        <label className="border-surface/15 text-surface/80 has-[:checked]:border-accent has-[:checked]:bg-accent/5 has-[:checked]:text-surface inline-flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm">
           <input
             type="radio"
             name="durationKind"
@@ -137,7 +137,7 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
       ) : null}
 
       {serverState && !serverState.ok ? (
-        <p className="text-sm text-accent-secondary" role="alert">
+        <p className="text-accent-secondary text-sm" role="alert">
           {serverState.error === 'UNAVAILABLE'
             ? t('unavailable')
             : serverState.error === 'NOT_AUTHENTICATED'

@@ -2,11 +2,7 @@ import 'server-only';
 
 import { randomBytes } from 'node:crypto';
 
-import {
-  type BlogPost,
-  type PostStatus,
-  SEED_BLOG_POSTS,
-} from './mock-data';
+import { type BlogPost, type PostStatus, SEED_BLOG_POSTS } from './mock-data';
 
 /**
  * Mutable in-memory store for creator blog posts. Mirrors the pattern in
@@ -146,7 +142,9 @@ export function updatePost(id: string, patch: PostPatch): BlogPost {
     ...existing,
     ...patch,
     tags: patch.tags ? [...patch.tags] : existing.tags,
-    publishedAt: becomingPublished ? new Date().toISOString() : (patch.publishedAt ?? existing.publishedAt),
+    publishedAt: becomingPublished
+      ? new Date().toISOString()
+      : (patch.publishedAt ?? existing.publishedAt),
     updatedAt: new Date().toISOString(),
   };
   store.posts.set(id, updated);

@@ -19,7 +19,16 @@ import type {
 } from '@/lib/creators/mock-data';
 import { profileEditSchema, type ProfileEditValues } from '@/lib/creators/schemas';
 
-const CITIES: City[] = ['RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA'];
+const CITIES: City[] = [
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
+];
 
 const DISCIPLINE_KEYS: Record<Discipline, string> = {
   WEDDING_PHOTOGRAPHY: 'weddingPhoto',
@@ -128,7 +137,7 @@ export function ProfileEditForm({ locale, creator }: Props) {
           <textarea
             rows={4}
             {...register('bioEn')}
-            className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
           />
         </Field>
         <Field label={t('bioAr')} hint={t('bioHint')} error={errors.bioAr?.message}>
@@ -136,7 +145,7 @@ export function ProfileEditForm({ locale, creator }: Props) {
             rows={4}
             dir="rtl"
             {...register('bioAr')}
-            className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
           />
         </Field>
       </div>
@@ -172,7 +181,7 @@ export function ProfileEditForm({ locale, creator }: Props) {
         <Field label={t('city')} error={errors.city?.message}>
           <select
             {...register('city')}
-            className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
           >
             {CITIES.map((c) => (
               <option key={c} value={c}>
@@ -185,7 +194,7 @@ export function ProfileEditForm({ locale, creator }: Props) {
         <Field label={t('availability')} error={errors.availability?.message}>
           <select
             {...register('availability')}
-            className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
           >
             {AVAILABILITIES.map((a) => (
               <option key={a} value={a}>
@@ -219,9 +228,16 @@ export function ProfileEditForm({ locale, creator }: Props) {
                     : 'border-surface/15 bg-surface/[0.03] text-surface/70 hover:border-surface/30',
                 )}
               >
-                <input type="radio" value={layout} {...register('preferredLayout')} className="sr-only" />
-                <span className="block font-medium">{t(`layouts.${layout}` as 'layouts.MASONRY')}</span>
-                <span className="block text-xs text-surface/50">
+                <input
+                  type="radio"
+                  value={layout}
+                  {...register('preferredLayout')}
+                  className="sr-only"
+                />
+                <span className="block font-medium">
+                  {t(`layouts.${layout}` as 'layouts.MASONRY')}
+                </span>
+                <span className="text-surface/50 block text-xs">
                   {t(`layouts.${layout}Hint` as 'layouts.MASONRYHint')}
                 </span>
               </label>
@@ -235,9 +251,7 @@ export function ProfileEditForm({ locale, creator }: Props) {
           {t('save')}
         </Button>
         {serverState?.ok ? (
-          <span className="text-2xs text-accent-secondary">
-            {t('saved')}
-          </span>
+          <span className="text-2xs text-accent-secondary">{t('saved')}</span>
         ) : null}
       </div>
     </form>
@@ -257,12 +271,12 @@ function Field({
 }) {
   return (
     <label className="flex w-full flex-col gap-1.5">
-      <span className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr">{label}</span>
+      <span className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium">{label}</span>
       {children}
       {error ? (
-        <span className="text-xs text-accent-secondary">{error}</span>
+        <span className="text-accent-secondary text-xs">{error}</span>
       ) : hint ? (
-        <span className="text-xs text-surface/50">{hint}</span>
+        <span className="text-surface/50 text-xs">{hint}</span>
       ) : null}
     </label>
   );

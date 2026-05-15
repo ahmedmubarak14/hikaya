@@ -9,7 +9,10 @@ import type { SignInDto, SignUpDto } from './auth.dto';
 
 export interface AuthResult {
   accessToken: string;
-  user: Pick<User, 'id' | 'email' | 'displayName' | 'roles' | 'activeRole' | 'locale' | 'avatarUrl'>;
+  user: Pick<
+    User,
+    'id' | 'email' | 'displayName' | 'roles' | 'activeRole' | 'locale' | 'avatarUrl'
+  >;
 }
 
 @Injectable()

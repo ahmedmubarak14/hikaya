@@ -46,7 +46,9 @@ export type JobResult = JobSuccess | JobFailure;
 
 const SAR_TO_HALALAS = 100;
 
-function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string }[]): Record<string, string> {
+function fieldErrorsFromZod(
+  issues: { path: (string | number)[]; message: string }[],
+): Record<string, string> {
   const out: Record<string, string> = {};
   for (const issue of issues) {
     const key = String(issue.path[0] ?? '_');
@@ -77,7 +79,11 @@ export async function postJobAction(
     postedByCompany: formData.get('postedByCompany') || undefined,
   });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   const job = createJob({
@@ -180,7 +186,11 @@ export async function applyToJobAction(
     proposedRateSar: formData.get('proposedRateSar'),
   });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   createApplication({

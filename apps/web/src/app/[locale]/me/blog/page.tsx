@@ -44,7 +44,7 @@ export default async function MyBlogPage({ params }: Props) {
     return (
       <>
         <SiteHeader />
-        <main className="mx-auto w-full max-w-3xl px-6 py-22 md:px-10">
+        <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
           <Card>
             <CardBody className="flex flex-col gap-3 p-8">
               <Badge tone="warning" className="self-start">
@@ -68,11 +68,11 @@ export default async function MyBlogPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-5xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('backToAccount')}
           </Link>
@@ -89,20 +89,20 @@ export default async function MyBlogPage({ params }: Props) {
               </Button>
             </Link>
           </div>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         {posts.length === 0 ? (
-          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('empty')}</p>
+          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('empty')}</p>
           </div>
         ) : (
           <div className="flex flex-col gap-10">
             {published.length > 0 ? (
               <section>
-                <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-surface/50">
+                <h2 className="text-surface/50 mb-4 text-xs font-medium uppercase tracking-wider">
                   {t('published')}
-                  <span className="ms-2 text-surface/30">({published.length})</span>
+                  <span className="text-surface/30 ms-2">({published.length})</span>
                 </h2>
                 <ul className="flex flex-col gap-3">
                   {published.map((p) => (
@@ -120,9 +120,9 @@ export default async function MyBlogPage({ params }: Props) {
 
             {drafts.length > 0 ? (
               <section>
-                <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-surface/50">
+                <h2 className="text-surface/50 mb-4 text-xs font-medium uppercase tracking-wider">
                   {t('drafts')}
-                  <span className="ms-2 text-surface/30">({drafts.length})</span>
+                  <span className="text-surface/30 ms-2">({drafts.length})</span>
                 </h2>
                 <ul className="flex flex-col gap-3">
                   {drafts.map((p) => (
@@ -170,13 +170,13 @@ function PostRow({
                   href={`/${locale}/${username}/blog/${post.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-2xs text-surface/50 underline-offset-4 hover:text-surface hover:underline"
+                  className="text-2xs text-surface/50 hover:text-surface underline-offset-4 hover:underline"
                 >
                   /{post.slug} ↗
                 </Link>
               ) : null}
             </div>
-            <h3 className="text-base font-medium text-surface">{title}</h3>
+            <h3 className="text-surface text-base font-medium">{title}</h3>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Link href={`/${locale}/me/blog/${post.id}`}>

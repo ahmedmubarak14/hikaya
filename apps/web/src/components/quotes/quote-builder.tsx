@@ -88,10 +88,15 @@ export function QuoteBuilder({ locale }: Props) {
       noValidate
     >
       {/* Client */}
-      <section className="flex flex-col gap-4 rounded-xl border border-surface/10 bg-surface/[0.03] p-5">
-        <h2 className="text-xl text-surface">{t('client.title')}</h2>
+      <section className="border-surface/10 bg-surface/[0.03] flex flex-col gap-4 rounded-xl border p-5">
+        <h2 className="text-surface text-xl">{t('client.title')}</h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Input label={t('client.name')} {...register('clientName')} error={errors.clientName?.message} required />
+          <Input
+            label={t('client.name')}
+            {...register('clientName')}
+            error={errors.clientName?.message}
+            required
+          />
           <Input
             type="email"
             label={t('client.email')}
@@ -105,15 +110,16 @@ export function QuoteBuilder({ locale }: Props) {
       {/* Line items */}
       <section className="flex flex-col gap-4">
         <header className="flex items-baseline justify-between">
-          <h2 className="text-xl text-surface">{t('items.title')}</h2>
-          <span className="text-2xs text-surface/40">
-            {t('items.maxHint')}
-          </span>
+          <h2 className="text-surface text-xl">{t('items.title')}</h2>
+          <span className="text-2xs text-surface/40">{t('items.maxHint')}</span>
         </header>
 
         <ul className="flex flex-col gap-3">
           {fields.map((field, idx) => (
-            <li key={field.id} className="rounded-md border border-surface/10 bg-surface/[0.03] p-4">
+            <li
+              key={field.id}
+              className="border-surface/10 bg-surface/[0.03] rounded-md border p-4"
+            >
               <div className="grid grid-cols-1 gap-3 md:grid-cols-[2fr_120px_140px_auto]">
                 <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
                   <Input
@@ -149,9 +155,9 @@ export function QuoteBuilder({ locale }: Props) {
                   onClick={() => fields.length > 1 && remove(idx)}
                   disabled={fields.length === 1}
                   className={cn(
-                    'self-end rounded-full px-3 py-2 text-2xs transition-colors',
+                    'text-2xs self-end rounded-full px-3 py-2 transition-colors',
                     fields.length === 1
-                      ? 'cursor-not-allowed text-surface/20'
+                      ? 'text-surface/20 cursor-not-allowed'
                       : 'text-accent-secondary hover:bg-accent-secondary/10',
                   )}
                 >
@@ -163,7 +169,7 @@ export function QuoteBuilder({ locale }: Props) {
         </ul>
 
         {errors.lineItems?.message ? (
-          <p className="text-xs text-accent-secondary">{errors.lineItems.message}</p>
+          <p className="text-accent-secondary text-xs">{errors.lineItems.message}</p>
         ) : null}
 
         <button
@@ -171,9 +177,9 @@ export function QuoteBuilder({ locale }: Props) {
           onClick={() => append({ descriptionEn: '', descriptionAr: '', quantity: 1, unitSar: 0 })}
           disabled={fields.length >= 20}
           className={cn(
-            'self-start rounded-full border border-surface/15 px-4 py-2 text-sm transition-colors',
+            'border-surface/15 self-start rounded-full border px-4 py-2 text-sm transition-colors',
             fields.length >= 20
-              ? 'cursor-not-allowed text-surface/30'
+              ? 'text-surface/30 cursor-not-allowed'
               : 'text-surface/80 hover:border-surface/40 hover:text-surface',
           )}
         >
@@ -185,14 +191,14 @@ export function QuoteBuilder({ locale }: Props) {
       <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="flex flex-col gap-4">
           <label className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr">
+            <span className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium">
               {t('notes')}
             </span>
             <textarea
               rows={4}
               {...register('notes')}
               placeholder={t('notesPlaceholder')}
-              className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+              className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
             />
           </label>
 
@@ -216,22 +222,27 @@ export function QuoteBuilder({ locale }: Props) {
           </div>
         </div>
 
-        <aside className="flex flex-col gap-2 rounded-xl border border-accent/30 bg-accent/5 p-5">
-          <span className="text-2xs text-accent-secondary">
-            {t('totals.live')}
-          </span>
+        <aside className="border-accent/30 bg-accent/5 flex flex-col gap-2 rounded-xl border p-5">
+          <span className="text-2xs text-accent-secondary">{t('totals.live')}</span>
           <Row label={t('totals.subtotal')} value={formatSarFromHalalas(totals.subtotal, locale)} />
           {totals.discount > 0 ? (
-            <Row label={t('totals.discount')} value={`- ${formatSarFromHalalas(totals.discount, locale)}`} />
+            <Row
+              label={t('totals.discount')}
+              value={`- ${formatSarFromHalalas(totals.discount, locale)}`}
+            />
           ) : null}
           <Row label={t('totals.vat')} value={formatSarFromHalalas(totals.vat, locale)} />
-          <hr className="my-1 border-accent/30" />
-          <Row label={t('totals.grand')} value={formatSarFromHalalas(totals.total, locale)} accent />
+          <hr className="border-accent/30 my-1" />
+          <Row
+            label={t('totals.grand')}
+            value={formatSarFromHalalas(totals.total, locale)}
+            accent
+          />
         </aside>
       </section>
 
       {serverState?.error && serverState.error !== 'INVALID_INPUT' ? (
-        <p className="text-sm text-accent-secondary" role="alert">
+        <p className="text-accent-secondary text-sm" role="alert">
           {t('errorGeneric')}
         </p>
       ) : null}
@@ -240,7 +251,7 @@ export function QuoteBuilder({ locale }: Props) {
         <Button type="submit" size="lg" isLoading={isPending}>
           {t('submit')}
         </Button>
-        <span className="text-xs text-surface/50">{t('submitHint')}</span>
+        <span className="text-surface/50 text-xs">{t('submitHint')}</span>
       </div>
     </form>
   );
@@ -249,16 +260,16 @@ export function QuoteBuilder({ locale }: Props) {
 function Row({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
     <div className="flex items-baseline justify-between">
+      <span className={accent ? 'text-surface text-base font-medium' : 'text-2xs text-surface/60'}>
+        {label}
+      </span>
       <span
         className={
           accent
-            ? 'text-base font-medium text-surface'
-            : 'text-2xs text-surface/60'
+            ? 'text-accent-secondary text-3xl font-bold tabular-nums tracking-tight'
+            : 'text-surface text-sm tabular-nums'
         }
       >
-        {label}
-      </span>
-      <span className={accent ? 'text-3xl font-bold tabular-nums tracking-tight text-accent-secondary' : 'text-sm tabular-nums text-surface'}>
         {value}
       </span>
     </div>

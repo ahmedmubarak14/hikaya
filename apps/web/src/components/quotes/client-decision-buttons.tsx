@@ -33,7 +33,7 @@ export function ClientDecisionButtons({ locale, shareSlug, expired }: Props) {
 
   if (expired) {
     return (
-      <div className="rounded-md border border-surface/15 bg-surface/[0.03] p-4 text-sm text-surface/70">
+      <div className="border-surface/15 bg-surface/[0.03] text-surface/70 rounded-md border p-4 text-sm">
         {t('expired')}
       </div>
     );
@@ -56,7 +56,7 @@ export function ClientDecisionButtons({ locale, shareSlug, expired }: Props) {
         <button
           type="button"
           onClick={() => setShowReject((v) => !v)}
-          className="rounded-full border border-surface/15 px-5 py-2 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+          className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
         >
           {showReject ? t('cancel') : t('rejectCta')}
         </button>
@@ -67,26 +67,26 @@ export function ClientDecisionButtons({ locale, shareSlug, expired }: Props) {
           action={(fd) => {
             startReject(() => rejectAction(fd));
           }}
-          className="flex flex-col gap-3 rounded-md border border-surface/10 bg-surface/[0.03] p-4"
+          className="border-surface/10 bg-surface/[0.03] flex flex-col gap-3 rounded-md border p-4"
         >
           <label className="flex flex-col gap-1.5">
-            <span className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr">{t('rejectReason')}</span>
+            <span className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium">
+              {t('rejectReason')}
+            </span>
             <textarea
               name="reason"
               rows={3}
               placeholder={t('rejectReasonPlaceholder')}
-              className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+              className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
             />
-            <span className="text-xs text-surface/50">{t('rejectReasonHint')}</span>
+            <span className="text-surface/50 text-xs">{t('rejectReasonHint')}</span>
           </label>
           <div className="flex items-center gap-2">
             <Button type="submit" size="sm" variant="destructive" isLoading={isRejecting}>
               {t('rejectConfirm')}
             </Button>
             {rejectState?.ok ? (
-              <span className="text-2xs text-surface/60">
-                {t('rejected')}
-              </span>
+              <span className="text-2xs text-surface/60">{t('rejected')}</span>
             ) : null}
           </div>
         </form>

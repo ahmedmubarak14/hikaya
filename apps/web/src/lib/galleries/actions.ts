@@ -44,7 +44,9 @@ export interface GallerySuccess {
 }
 export type GalleryResult = GallerySuccess | GalleryFailure;
 
-function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string }[]): Record<string, string> {
+function fieldErrorsFromZod(
+  issues: { path: (string | number)[]; message: string }[],
+): Record<string, string> {
   const out: Record<string, string> = {};
   for (const issue of issues) {
     const key = String(issue.path[0] ?? '_');
@@ -81,7 +83,11 @@ export async function createGalleryAction(
     expiresInDays: formData.get('expiresInDays') || undefined,
   });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   const gallery = createGallery({
@@ -130,10 +136,17 @@ export async function addImagesAction(
 
   const parsed = addImagesSchema.safeParse({ urls: formData.get('urls') ?? '' });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
-  addImagesToGallery(galleryId, parsed.data.urls.map((url) => ({ url })));
+  addImagesToGallery(
+    galleryId,
+    parsed.data.urls.map((url) => ({ url })),
+  );
 
   revalidatePath(`/${locale}/me/galleries/${galleryId}`);
   revalidatePath(`/${locale}/g/${gallery.shareSlug}`);

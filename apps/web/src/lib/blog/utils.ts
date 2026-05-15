@@ -8,17 +8,19 @@
  * paste. Best-effort transliteration — non-ASCII characters are dropped.
  */
 export function slugify(input: string): string {
-  return input
-    .toLowerCase()
-    .normalize('NFKD')
-    // Strip combining marks left by the NFKD pass.
-    .replace(/[̀-ͯ]/g, '')
-    // Anything else non-ASCII (Arabic, emoji) gets dropped — the eventual
-    // server-side slug-generator will fall back to a random suffix for posts
-    // titled entirely in Arabic.
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 80);
+  return (
+    input
+      .toLowerCase()
+      .normalize('NFKD')
+      // Strip combining marks left by the NFKD pass.
+      .replace(/[̀-ͯ]/g, '')
+      // Anything else non-ASCII (Arabic, emoji) gets dropped — the eventual
+      // server-side slug-generator will fall back to a random suffix for posts
+      // titled entirely in Arabic.
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 80)
+  );
 }
 
 /**

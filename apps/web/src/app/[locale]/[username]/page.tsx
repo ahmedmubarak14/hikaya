@@ -29,8 +29,20 @@ interface Props {
 }
 
 const RESERVED = new Set([
-  'sign-in', 'sign-up', 'me', 'discover', 'jobs', 'studios', 'blog',
-  'about', 'pricing', 'terms', 'privacy', 'api', 'admin', 'help',
+  'sign-in',
+  'sign-up',
+  'me',
+  'discover',
+  'jobs',
+  'studios',
+  'blog',
+  'about',
+  'pricing',
+  'terms',
+  'privacy',
+  'api',
+  'admin',
+  'help',
 ]);
 
 export function generateStaticParams() {
@@ -67,8 +79,7 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
   // Static export drops searchParams. Default tab is "work" either way.
   const sp = IS_STATIC_EXPORT ? {} : await searchParams;
   const rawTab = sp.tab;
-  const tab: ProfileTab =
-    rawTab === 'store' ? 'store' : rawTab === 'about' ? 'about' : 'work';
+  const tab: ProfileTab = rawTab === 'store' ? 'store' : rawTab === 'about' ? 'about' : 'work';
 
   const t = await getTranslations('creator');
   const tCity = await getTranslations('cities');
@@ -86,12 +97,12 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-8xl px-6 pb-22 pt-10 md:px-10 md:pt-12">
+      <main className="max-w-8xl pb-22 mx-auto w-full px-6 pt-10 md:px-10 md:pt-12">
         {/* Identity row — Instagram-style horizontal: avatar + stacked name/stats/bio,
             CTAs pinned to the trailing edge on md+. */}
         <section className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-8">
-            <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-full bg-surface/10 ring-1 ring-surface/10 md:h-36 md:w-36">
+            <div className="bg-surface/10 ring-surface/10 relative h-32 w-32 shrink-0 overflow-hidden rounded-full ring-1 md:h-36 md:w-36">
               <Image
                 src={creator.avatarUrl}
                 alt={name}
@@ -105,9 +116,7 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
             <div className="flex flex-col gap-3">
               {/* Availability + verified — above name */}
               <div className="flex flex-wrap items-center gap-2">
-                {creator.isVerified ? (
-                  <Badge tone="accent">{t('verified')}</Badge>
-                ) : null}
+                {creator.isVerified ? <Badge tone="accent">{t('verified')}</Badge> : null}
                 <Badge tone={AVAILABILITY_TONE[creator.availability]}>
                   {t(
                     creator.availability === 'AVAILABLE'
@@ -119,15 +128,11 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
                 </Badge>
               </div>
 
-              <h1 className="text-balance text-3xl font-bold tracking-tight md:text-4xl">
-                {name}
-              </h1>
+              <h1 className="text-balance text-3xl font-bold tracking-tight md:text-4xl">{name}</h1>
 
               {/* Stats pills row */}
-              <ul className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-surface/70">
-                <Stat>
-                  {t('stats.projects', { count: creator.portfolio.length })}
-                </Stat>
+              <ul className="text-surface/70 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+                <Stat>{t('stats.projects', { count: creator.portfolio.length })}</Stat>
                 <Dot />
                 <Stat>
                   <span className="text-accent-secondary">★</span>{' '}
@@ -142,11 +147,11 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
                 <Stat>{tCity(creator.city as 'RIYADH')}</Stat>
               </ul>
 
-              <p className="max-w-prose text-base text-surface/80">{bio}</p>
+              <p className="text-surface/80 max-w-prose text-base">{bio}</p>
               {publishedPostCount > 0 ? (
                 <Link
                   href={`/${locale}/${creator.username}/blog`}
-                  className="self-start text-sm text-accent-secondary underline-offset-4 hover:underline"
+                  className="text-accent-secondary self-start text-sm underline-offset-4 hover:underline"
                 >
                   {tBlog('linkToBlog', { count: publishedPostCount })}
                 </Link>
@@ -171,7 +176,7 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
             {hasStore ? (
               <Link
                 href={`/${locale}/${creator.username}?tab=store`}
-                className="inline-flex items-center justify-center rounded-full border border-surface/15 px-5 py-2.5 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+                className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface inline-flex items-center justify-center rounded-full border px-5 py-2.5 text-sm transition-colors"
               >
                 {t('viewStore')}
               </Link>
@@ -222,11 +227,7 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
               instagram={creator.socialLinks.instagram}
               website={creator.socialLinks.website}
               websiteLabel={t('website')}
-              priceLabel={
-                creator.startingPriceSar
-                  ? t('startingFrom')
-                  : null
-              }
+              priceLabel={creator.startingPriceSar ? t('startingFrom') : null}
               priceValue={
                 creator.startingPriceSar
                   ? t('priceSar', {
@@ -252,7 +253,7 @@ function Stat({ children }: { children: React.ReactNode }) {
 function Dot() {
   return (
     <li aria-hidden className="inline-block">
-      <span className="inline-block h-1 w-1 rounded-full bg-surface/30" />
+      <span className="bg-surface/30 inline-block h-1 w-1 rounded-full" />
     </li>
   );
 }
@@ -283,24 +284,18 @@ function AboutTab({
   return (
     <div className="mx-auto grid max-w-4xl grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-[2fr_1fr]">
       <div className="flex flex-col gap-4">
-        <p className="text-base leading-relaxed text-surface/80">{bio}</p>
+        <p className="text-surface/80 text-base leading-relaxed">{bio}</p>
       </div>
 
       <aside className="flex flex-col gap-3 text-sm">
-        {priceLabel && priceValue ? (
-          <Fact label={priceLabel} value={priceValue} />
-        ) : null}
+        {priceLabel && priceValue ? <Fact label={priceLabel} value={priceValue} /> : null}
         <Fact label={languagesLabel} value={languages} />
-        {(instagram || website) ? (
+        {instagram || website ? (
           <div className="flex flex-col gap-2 pt-1">
             <span className="text-surface/50">{linksLabel}</span>
             <div className="flex flex-wrap gap-2">
-              {instagram ? (
-                <SocialLink href={instagram} label="Instagram" />
-              ) : null}
-              {website ? (
-                <SocialLink href={website} label={websiteLabel} />
-              ) : null}
+              {instagram ? <SocialLink href={instagram} label="Instagram" /> : null}
+              {website ? <SocialLink href={website} label={websiteLabel} /> : null}
             </div>
           </div>
         ) : null}
@@ -311,9 +306,9 @@ function AboutTab({
 
 function Fact({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-baseline justify-between gap-3 border-b border-surface/10 pb-2 last:border-0 last:pb-0">
+    <div className="border-surface/10 flex items-baseline justify-between gap-3 border-b pb-2 last:border-0 last:pb-0">
       <span className="text-surface/50">{label}</span>
-      <span className="text-end font-medium text-surface">{value}</span>
+      <span className="text-surface text-end font-medium">{value}</span>
     </div>
   );
 }
@@ -325,8 +320,8 @@ function SocialLink({ href, label }: { href: string; label: string }) {
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        'inline-flex items-center gap-1 rounded-full border border-surface/15 px-3 py-1 text-xs text-surface/80',
-        'transition-colors hover:border-surface/40 hover:text-surface',
+        'border-surface/15 text-surface/80 inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs',
+        'hover:border-surface/40 hover:text-surface transition-colors',
       )}
     >
       <span>{label}</span>

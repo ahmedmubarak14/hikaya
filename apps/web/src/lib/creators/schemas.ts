@@ -1,15 +1,34 @@
 import { z } from 'zod';
 
 const CITY_VALUES = [
-  'RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA',
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
 ] as const;
 
 const DISCIPLINE_VALUES = [
-  'WEDDING_PHOTOGRAPHY', 'PORTRAIT_PHOTOGRAPHY', 'COMMERCIAL_PHOTOGRAPHY',
-  'PRODUCT_PHOTOGRAPHY', 'EVENT_PHOTOGRAPHY', 'FASHION_PHOTOGRAPHY',
-  'COMMERCIAL_VIDEO', 'WEDDING_VIDEO', 'EVENT_VIDEO', 'DOCUMENTARY',
-  'GRAPHIC_DESIGN', 'BRAND_IDENTITY', 'MOTION_GRAPHICS', 'VIDEO_EDITING',
-  'COLOR_GRADING', 'RETOUCHING', 'DRONE_OPERATION',
+  'WEDDING_PHOTOGRAPHY',
+  'PORTRAIT_PHOTOGRAPHY',
+  'COMMERCIAL_PHOTOGRAPHY',
+  'PRODUCT_PHOTOGRAPHY',
+  'EVENT_PHOTOGRAPHY',
+  'FASHION_PHOTOGRAPHY',
+  'COMMERCIAL_VIDEO',
+  'WEDDING_VIDEO',
+  'EVENT_VIDEO',
+  'DOCUMENTARY',
+  'GRAPHIC_DESIGN',
+  'BRAND_IDENTITY',
+  'MOTION_GRAPHICS',
+  'VIDEO_EDITING',
+  'COLOR_GRADING',
+  'RETOUCHING',
+  'DRONE_OPERATION',
 ] as const;
 
 export const profileEditSchema = z.object({
@@ -19,7 +38,12 @@ export const profileEditSchema = z.object({
   bioAr: z.string().max(500).optional().or(z.literal('')),
   city: z.enum(CITY_VALUES),
   disciplines: z.array(z.enum(DISCIPLINE_VALUES)).min(1).max(5),
-  startingPriceSar: z.coerce.number().int().nonnegative().optional().or(z.nan().transform(() => undefined)),
+  startingPriceSar: z.coerce
+    .number()
+    .int()
+    .nonnegative()
+    .optional()
+    .or(z.nan().transform(() => undefined)),
   availability: z.enum(['AVAILABLE', 'BUSY', 'ON_VACATION']),
   preferredLayout: z.enum(['MASONRY', 'EDITORIAL', 'REEL']),
 });

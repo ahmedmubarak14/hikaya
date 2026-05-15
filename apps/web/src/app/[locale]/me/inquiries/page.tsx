@@ -49,43 +49,39 @@ export default async function MyInquiriesPage({ params, searchParams }: Props) {
   const inquiries = listInquiriesByClient(session.user.id);
 
   // Resolve creator names for the rows; mock-store stores only the username.
-  const creators = await Promise.all(
-    inquiries.map((i) => getCreatorByUsername(i.creatorUsername)),
-  );
+  const creators = await Promise.all(inquiries.map((i) => getCreatorByUsername(i.creatorUsername)));
 
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-5xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('backToAccount')}
           </Link>
           <h1 className="text-balance text-5xl">{t('title')}</h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         {sent === '1' ? (
-          <Card className="mb-8 border-accent/40 bg-accent/5">
+          <Card className="border-accent/40 bg-accent/5 mb-8">
             <CardBody className="flex flex-col gap-1 p-5">
-              <span className="text-2xs text-accent-secondary">
-                {t('sentLabel')}
-              </span>
-              <p className="text-sm text-surface/80">{t('sentBody')}</p>
+              <span className="text-2xs text-accent-secondary">{t('sentLabel')}</span>
+              <p className="text-surface/80 text-sm">{t('sentBody')}</p>
             </CardBody>
           </Card>
         ) : null}
 
         {inquiries.length === 0 ? (
-          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('empty')}</p>
-            <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('empty')}</p>
+            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
             <Link
               href={`/${locale}/discover`}
-              className="mt-6 inline-block rounded-full bg-accent px-6 py-2.5 text-sm font-medium text-ink transition-transform hover:scale-[1.02]"
+              className="bg-accent text-ink mt-6 inline-block rounded-full px-6 py-2.5 text-sm font-medium transition-transform hover:scale-[1.02]"
             >
               {t('discoverCta')}
             </Link>
@@ -105,7 +101,7 @@ export default async function MyInquiriesPage({ params, searchParams }: Props) {
                       <div className="flex flex-col gap-1.5">
                         <Link
                           href={`/${locale}/${creator.username}`}
-                          className="text-lg text-surface underline-offset-4 hover:underline"
+                          className="text-surface text-lg underline-offset-4 hover:underline"
                         >
                           {name}
                         </Link>
@@ -116,14 +112,16 @@ export default async function MyInquiriesPage({ params, searchParams }: Props) {
                           {' · '}
                           {formatDate(sessionDate, locale)}
                         </p>
-                        <p className="line-clamp-2 max-w-prose text-sm text-surface/60">
+                        <p className="text-surface/60 line-clamp-2 max-w-prose text-sm">
                           {inq.description}
                         </p>
                       </div>
 
                       <div className="flex flex-col items-end gap-2">
-                        <Badge tone={STATUS_TONE[inq.status]}>{t(`status.${inq.status}` as 'status.PENDING')}</Badge>
-                        <span className="font-mono text-2xs text-surface/40">
+                        <Badge tone={STATUS_TONE[inq.status]}>
+                          {t(`status.${inq.status}` as 'status.PENDING')}
+                        </Badge>
+                        <span className="text-2xs text-surface/40 font-mono">
                           {t('sentAgo', { time: formatRelative(createdAt, locale) })}
                         </span>
                       </div>

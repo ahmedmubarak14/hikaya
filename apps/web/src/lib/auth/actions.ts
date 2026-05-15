@@ -16,11 +16,7 @@ import { createSession, destroySession } from './session';
  * Successful actions redirect — they do not return.
  */
 
-export type AuthErrorKey =
-  | 'INVALID_INPUT'
-  | 'INVALID_CREDENTIALS'
-  | 'EMAIL_TAKEN'
-  | 'UNKNOWN';
+export type AuthErrorKey = 'INVALID_INPUT' | 'INVALID_CREDENTIALS' | 'EMAIL_TAKEN' | 'UNKNOWN';
 
 export interface AuthFailure {
   ok: false;
@@ -28,7 +24,9 @@ export interface AuthFailure {
   fieldErrors?: Record<string, string>;
 }
 
-function fieldErrorsFromZod(issues: { path: (string | number)[]; message: string }[]): Record<string, string> {
+function fieldErrorsFromZod(
+  issues: { path: (string | number)[]; message: string }[],
+): Record<string, string> {
   const out: Record<string, string> = {};
   for (const issue of issues) {
     const key = String(issue.path[0] ?? '_');
@@ -47,7 +45,11 @@ export async function signInAction(
     password: formData.get('password'),
   });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   const user = authenticate(parsed.data.email, parsed.data.password);
@@ -71,7 +73,11 @@ export async function signUpAction(
     acceptedTerms: formData.get('acceptedTerms') === 'on',
   });
   if (!parsed.success) {
-    return { ok: false, error: 'INVALID_INPUT', fieldErrors: fieldErrorsFromZod(parsed.error.issues) };
+    return {
+      ok: false,
+      error: 'INVALID_INPUT',
+      fieldErrors: fieldErrorsFromZod(parsed.error.issues),
+    };
   }
 
   let user;
@@ -93,8 +99,7 @@ export async function signUpAction(
   await createSession(user.id);
   // Path B: standalone Studio Owner registration drops straight into the
   // studio-profile onboarding wizard. Other roles land on the account home.
-  const next =
-    parsed.data.role === 'STUDIO_OWNER' ? '/me/studio/setup' : '/me';
+  const next = parsed.data.role === 'STUDIO_OWNER' ? '/me/studio/setup' : '/me';
   redirect(`/${locale ?? defaultLocale}${next}`);
 }
 

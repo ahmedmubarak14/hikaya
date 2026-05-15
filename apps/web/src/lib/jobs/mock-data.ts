@@ -79,7 +79,7 @@ export const SEED_JOBS: Job[] = [
     discipline: 'FASHION_PHOTOGRAPHY',
     city: 'RIYADH',
     description:
-      'We\'re launching the AW collection in early March and need a photographer for a one-day editorial shoot. Indoor location confirmed (Diriyah). Looking for warm, soft-light energy with strong portrait fundamentals. Hair + makeup provided. Final delivery: 35–50 retouched images within 10 days.',
+      "We're launching the AW collection in early March and need a photographer for a one-day editorial shoot. Indoor location confirmed (Diriyah). Looking for warm, soft-light energy with strong portrait fundamentals. Hair + makeup provided. Final delivery: 35–50 retouched images within 10 days.",
     budgetHalalas: 4_500_000, // 45,000 SAR
     budgetIsOpen: false,
     creatorsNeeded: 1,

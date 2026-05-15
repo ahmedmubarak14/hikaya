@@ -52,11 +52,11 @@ export default async function EditSpacePage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-4xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-4xl px-6 md:px-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/spaces`}
-            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('back')}
           </Link>
@@ -64,11 +64,13 @@ export default async function EditSpacePage({ params }: Props) {
         </header>
 
         {space.status === 'ACTIVE' ? (
-          <Card className="mb-6 border-sage/30 bg-sage/10">
+          <Card className="border-sage/30 bg-sage/10 mb-6">
             <CardBody className="flex flex-col gap-3 p-5 md:flex-row md:items-center md:justify-between">
               <div>
-                <Badge tone="sage" className="self-start">{t('liveLabel')}</Badge>
-                <p className="mt-2 text-sm text-surface/70">{t('liveBody')}</p>
+                <Badge tone="sage" className="self-start">
+                  {t('liveLabel')}
+                </Badge>
+                <p className="text-surface/70 mt-2 text-sm">{t('liveBody')}</p>
               </div>
               <SpaceStatusButton locale={locale} spaceId={space.id} to="PAUSED" variant="outline" />
             </CardBody>
@@ -77,18 +79,22 @@ export default async function EditSpacePage({ params }: Props) {
           <Card className="mb-6">
             <CardBody className="flex flex-col gap-3 p-5 md:flex-row md:items-center md:justify-between">
               <div>
-                <Badge tone="neutral" className="self-start">{t('draftLabel')}</Badge>
-                <p className="mt-2 text-sm text-surface/70">{t('draftBody')}</p>
+                <Badge tone="neutral" className="self-start">
+                  {t('draftLabel')}
+                </Badge>
+                <p className="text-surface/70 mt-2 text-sm">{t('draftBody')}</p>
               </div>
               <SpaceStatusButton locale={locale} spaceId={space.id} to="ACTIVE" variant="primary" />
             </CardBody>
           </Card>
         ) : (
-          <Card className="mb-6 border-accent-secondary/30 bg-accent-secondary/5">
+          <Card className="border-accent-secondary/30 bg-accent-secondary/5 mb-6">
             <CardBody className="flex flex-col gap-3 p-5 md:flex-row md:items-center md:justify-between">
               <div>
-                <Badge tone="warning" className="self-start">{t('pausedLabel')}</Badge>
-                <p className="mt-2 text-sm text-surface/70">{t('pausedBody')}</p>
+                <Badge tone="warning" className="self-start">
+                  {t('pausedLabel')}
+                </Badge>
+                <p className="text-surface/70 mt-2 text-sm">{t('pausedBody')}</p>
               </div>
               <SpaceStatusButton locale={locale} spaceId={space.id} to="ACTIVE" variant="primary" />
             </CardBody>

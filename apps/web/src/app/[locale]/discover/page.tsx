@@ -27,15 +27,34 @@ interface Props {
 }
 
 const CITY_VALUES = new Set<City>([
-  'RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA',
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
 ]);
 
 const DISCIPLINE_VALUES = new Set<Discipline>([
-  'WEDDING_PHOTOGRAPHY', 'PORTRAIT_PHOTOGRAPHY', 'COMMERCIAL_PHOTOGRAPHY',
-  'PRODUCT_PHOTOGRAPHY', 'EVENT_PHOTOGRAPHY', 'FASHION_PHOTOGRAPHY',
-  'COMMERCIAL_VIDEO', 'WEDDING_VIDEO', 'EVENT_VIDEO', 'DOCUMENTARY',
-  'GRAPHIC_DESIGN', 'BRAND_IDENTITY', 'MOTION_GRAPHICS', 'VIDEO_EDITING',
-  'COLOR_GRADING', 'RETOUCHING', 'DRONE_OPERATION',
+  'WEDDING_PHOTOGRAPHY',
+  'PORTRAIT_PHOTOGRAPHY',
+  'COMMERCIAL_PHOTOGRAPHY',
+  'PRODUCT_PHOTOGRAPHY',
+  'EVENT_PHOTOGRAPHY',
+  'FASHION_PHOTOGRAPHY',
+  'COMMERCIAL_VIDEO',
+  'WEDDING_VIDEO',
+  'EVENT_VIDEO',
+  'DOCUMENTARY',
+  'GRAPHIC_DESIGN',
+  'BRAND_IDENTITY',
+  'MOTION_GRAPHICS',
+  'VIDEO_EDITING',
+  'COLOR_GRADING',
+  'RETOUCHING',
+  'DRONE_OPERATION',
 ]);
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -71,7 +90,7 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-8xl px-6 pb-22 pt-10 md:px-10 md:pt-14">
+      <main className="max-w-8xl pb-22 mx-auto w-full px-6 pt-10 md:px-10 md:pt-14">
         {/* Centered search hero — Contra-style. */}
         <DiscoverHero
           title={t('heroTitle')}
@@ -96,9 +115,9 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
         {view === 'projects' ? (
           <ProjectsGrid locale={locale} creators={creators} emptyLabel={t('empty')} />
         ) : creators.length === 0 ? (
-          <div className="mt-10 rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('empty')}</p>
-            <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+          <div className="border-surface/10 bg-surface/[0.03] mt-10 rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('empty')}</p>
+            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
           </div>
         ) : (
           <ul className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">

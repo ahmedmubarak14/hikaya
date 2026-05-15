@@ -51,10 +51,12 @@ export default async function MyStorePage({ params }: Props) {
     return (
       <>
         <SiteHeader />
-        <main className="mx-auto w-full max-w-3xl px-6 py-22 md:px-10">
+        <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
           <Card>
             <CardBody className="flex flex-col gap-3 p-8">
-              <Badge tone="warning" className="self-start">{t('clientLabel')}</Badge>
+              <Badge tone="warning" className="self-start">
+                {t('clientLabel')}
+              </Badge>
               <h1 className="text-3xl">{t('clientTitle')}</h1>
               <p className="text-surface/60">{t('clientBody')}</p>
             </CardBody>
@@ -67,52 +69,58 @@ export default async function MyStorePage({ params }: Props) {
   const products = listAllProductsByCreator(creator.id);
 
   // Aggregate take-home over all sales for the dashboard tile.
-  const totalSalesHalalas = products.reduce(
-    (sum, p) => sum + p.priceHalalas * p.salesCount,
-    0,
-  );
+  const totalSalesHalalas = products.reduce((sum, p) => sum + p.priceHalalas * p.salesCount, 0);
   const totalTake = creatorTakeFor(totalSalesHalalas);
   const totalCommission = commissionFor(totalSalesHalalas);
 
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('backToAccount')}
           </Link>
-          <Badge tone="accent" className="self-start">{t('eyebrow')}</Badge>
+          <Badge tone="accent" className="self-start">
+            {t('eyebrow')}
+          </Badge>
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
             <span>{t('headline')}</span>{' '}
-            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
+            <span className="text-accent-secondary font-bold">{t('headlineItalic')}</span>
           </h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         {/* Top-line stats */}
         <section className="mb-8 grid grid-cols-2 gap-3 md:grid-cols-3">
-          <Stat label={t('stats.takeHome')} value={formatSarFromHalalas(totalTake, locale)} accent />
-          <Stat label={t('stats.commission')} value={formatSarFromHalalas(totalCommission, locale)} />
+          <Stat
+            label={t('stats.takeHome')}
+            value={formatSarFromHalalas(totalTake, locale)}
+            accent
+          />
+          <Stat
+            label={t('stats.commission')}
+            value={formatSarFromHalalas(totalCommission, locale)}
+          />
           <Stat label={t('stats.products')} value={String(products.length)} />
         </section>
 
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
-          <span className="text-2xs text-surface/40">
-            {t('count', { count: products.length })}
-          </span>
+          <span className="text-2xs text-surface/40">{t('count', { count: products.length })}</span>
           <Link href={`/${locale}/me/store/new`}>
-            <Button size="md" variant="primary">+ {t('newCta')}</Button>
+            <Button size="md" variant="primary">
+              + {t('newCta')}
+            </Button>
           </Link>
         </div>
 
         {products.length === 0 ? (
-          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('empty')}</p>
-            <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('empty')}</p>
+            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
           </div>
         ) : (
           <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -123,7 +131,7 @@ export default async function MyStorePage({ params }: Props) {
                   <Link href={`/${locale}/me/store/${p.id}`} className="block">
                     <Card interactive className="overflow-hidden">
                       <div className="grid grid-cols-[112px_1fr] gap-4 p-3">
-                        <div className="relative aspect-square overflow-hidden rounded-md bg-surface/5">
+                        <div className="bg-surface/5 relative aspect-square overflow-hidden rounded-md">
                           {p.previewImageUrls[0] ? (
                             <Image
                               src={p.previewImageUrls[0]}
@@ -137,10 +145,12 @@ export default async function MyStorePage({ params }: Props) {
                         <div className="flex flex-col gap-2 py-1">
                           <div className="flex items-center justify-between gap-2">
                             <CategoryBadge category={p.category} />
-                            <Badge tone={STATUS_TONE[p.status]}>{tStatus(p.status as 'DRAFT')}</Badge>
+                            <Badge tone={STATUS_TONE[p.status]}>
+                              {tStatus(p.status as 'DRAFT')}
+                            </Badge>
                           </div>
-                          <h3 className="line-clamp-2 text-base text-surface">{title}</h3>
-                          <div className="mt-auto flex items-baseline justify-between gap-2 font-mono text-2xs">
+                          <h3 className="text-surface line-clamp-2 text-base">{title}</h3>
+                          <div className="text-2xs mt-auto flex items-baseline justify-between gap-2 font-mono">
                             <span className="text-surface/70 tabular-nums">
                               {formatSarFromHalalas(p.priceHalalas, locale)}
                             </span>
@@ -167,14 +177,18 @@ function Stat({ label, value, accent }: { label: string; value: string; accent?:
     <div
       className={
         accent
-          ? 'flex flex-col gap-1 rounded-xl border border-accent/30 bg-accent/5 p-5'
-          : 'flex flex-col gap-1 rounded-xl border border-surface/10 bg-surface/[0.03] p-5'
+          ? 'border-accent/30 bg-accent/5 flex flex-col gap-1 rounded-xl border p-5'
+          : 'border-surface/10 bg-surface/[0.03] flex flex-col gap-1 rounded-xl border p-5'
       }
     >
-      <span className="text-2xs text-surface/40">
-        {label}
-      </span>
-      <span className={accent ? 'text-3xl font-bold tabular-nums tracking-tight text-accent-secondary' : 'text-3xl font-bold tabular-nums tracking-tight text-surface'}>
+      <span className="text-2xs text-surface/40">{label}</span>
+      <span
+        className={
+          accent
+            ? 'text-accent-secondary text-3xl font-bold tabular-nums tracking-tight'
+            : 'text-surface text-3xl font-bold tabular-nums tracking-tight'
+        }
+      >
         {value}
       </span>
     </div>

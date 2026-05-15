@@ -23,9 +23,9 @@ export async function SiteHeader() {
   const theme = (await getTheme()) ?? 'light';
 
   return (
-    <header className="sticky top-0 z-40 border-b border-surface/5 bg-bg/80 backdrop-blur-md">
-      <div className="mx-auto flex h-16 w-full max-w-8xl items-center justify-between px-6 md:px-10">
-        <Link href={`/${locale}`} className="flex items-center text-surface" aria-label="Hikaya">
+    <header className="border-surface/5 bg-bg/80 sticky top-0 z-40 border-b backdrop-blur-md">
+      <div className="max-w-8xl mx-auto flex h-16 w-full items-center justify-between px-6 md:px-10">
+        <Link href={`/${locale}`} className="text-surface flex items-center" aria-label="Hikaya">
           <Logo arabic={locale === 'ar'} className="h-7" />
         </Link>
 
@@ -45,7 +45,7 @@ export async function SiteHeader() {
           <Link
             href={`/${otherLocale}`}
             hrefLang={otherLocale}
-            className="rounded-full border border-surface/15 px-3 py-1.5 text-xs text-surface/70 transition-colors hover:border-surface/40 hover:text-surface"
+            className="border-surface/15 text-surface/70 hover:border-surface/40 hover:text-surface rounded-full border px-3 py-1.5 text-xs transition-colors"
           >
             {t('switchLanguage')}
           </Link>
@@ -67,12 +67,12 @@ export async function SiteHeader() {
           {session ? (
             <Link
               href={`/${locale}/me`}
-              className="flex items-center gap-2 rounded-full border border-surface/15 px-3 py-1.5 text-sm text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors"
               aria-label={session.user.displayName}
             >
               <span
                 aria-hidden
-                className="grid h-6 w-6 place-items-center rounded-full bg-accent text-2xs font-semibold uppercase text-ink"
+                className="bg-accent text-2xs text-ink grid h-6 w-6 place-items-center rounded-full font-semibold uppercase"
               >
                 {session.user.displayName.charAt(0)}
               </span>
@@ -82,7 +82,7 @@ export async function SiteHeader() {
             <>
               <Link
                 href={`/${locale}/sign-in`}
-                className="hidden rounded-full px-4 py-2 text-sm text-surface/80 transition-colors hover:text-surface md:inline-flex"
+                className="text-surface/80 hover:text-surface hidden rounded-full px-4 py-2 text-sm transition-colors md:inline-flex"
               >
                 {t('signIn')}
               </Link>
@@ -101,10 +101,7 @@ export async function SiteHeader() {
 
 function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link
-      href={href}
-      className="text-sm text-surface/70 transition-colors hover:text-surface"
-    >
+    <Link href={href} className="text-surface/70 hover:text-surface text-sm transition-colors">
       {children}
     </Link>
   );

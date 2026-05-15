@@ -25,7 +25,7 @@ export function RemoveImageButton({ locale, galleryId, imageId }: Props) {
           void removeImageAction(locale, galleryId, imageId);
         })
       }
-      className="rounded-full bg-accent-secondary px-3 py-1 text-2xs font-medium text-surface transition-transform hover:scale-105 disabled:opacity-50"
+      className="bg-accent-secondary text-2xs text-surface rounded-full px-3 py-1 font-medium transition-transform hover:scale-105 disabled:opacity-50"
     >
       {t('removeImage')}
     </button>

@@ -2,7 +2,13 @@ import 'server-only';
 
 import { randomBytes, randomUUID } from 'node:crypto';
 
-import { computeQuoteTotals, SEED_QUOTES, type Quote, type QuoteLineItem, type QuoteStatus } from './mock-data';
+import {
+  computeQuoteTotals,
+  SEED_QUOTES,
+  type Quote,
+  type QuoteLineItem,
+  type QuoteStatus,
+} from './mock-data';
 
 interface Store {
   quotes: Map<string, Quote>;
@@ -55,19 +61,29 @@ export interface CreateQuoteInput {
   clientEmail?: string;
   notes?: string;
   expiresInDays?: number;
-  lineItems: { descriptionEn: string; descriptionAr?: string; quantity: number; unitHalalas: number }[];
+  lineItems: {
+    descriptionEn: string;
+    descriptionAr?: string;
+    quantity: number;
+    unitHalalas: number;
+  }[];
   discountHalalas?: number;
 }
 
 function nextQuoteNumber(): string {
   const year = new Date().getFullYear();
   // Count existing quotes this year — fine for the mock; real backend uses a sequence.
-  const count = [...store.quotes.values()].filter((q) => q.number.startsWith(`Q-${year}-`)).length + 1;
+  const count =
+    [...store.quotes.values()].filter((q) => q.number.startsWith(`Q-${year}-`)).length + 1;
   return `Q-${year}-${String(count).padStart(4, '0')}`;
 }
 
 function uniqueSlug(base: string): string {
-  const norm = base.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60);
+  const norm = base
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
   let candidate = norm.length >= 3 ? norm : `quote-${randomBytes(3).toString('hex')}`;
   let i = 1;
   while ([...store.quotes.values()].some((q) => q.shareSlug === candidate)) {

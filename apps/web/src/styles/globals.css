@@ -68,7 +68,9 @@
 
   /* Headings default to bold sans — Instagram/Contra feel. Pages opt back
      into the editorial Playfair display when they really want it. */
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     @apply font-sans font-bold tracking-tight;
   }
 

@@ -60,11 +60,11 @@ export default async function SpaceRentalDetailPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-3xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/space-rentals`}
-            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {tDetail('back')}
           </Link>
@@ -82,36 +82,34 @@ export default async function SpaceRentalDetailPage({ params }: Props) {
               {space ? (
                 <Link
                   href={`/${locale}/spaces/${space.id}`}
-                  className="text-2xs text-surface/40 underline-offset-4 hover:text-surface hover:underline"
+                  className="text-2xs text-surface/40 hover:text-surface underline-offset-4 hover:underline"
                 >
                   {space.name} ↗
                 </Link>
               ) : null}
             </div>
 
-            <p className="font-mono text-sm text-surface/80 tabular-nums">
+            <p className="text-surface/80 font-mono text-sm tabular-nums">
               {tDetail('dates', {
                 start: formatDateTime(booking.startISO, locale),
                 end: formatDateTime(booking.endISO, locale),
               })}
             </p>
 
-            <div className="flex items-baseline justify-between gap-3 border-t border-surface/10 pt-4">
+            <div className="border-surface/10 flex items-baseline justify-between gap-3 border-t pt-4">
               <span className="text-2xs text-surface/40">{tDetail('totalLabel')}</span>
-              <span className="font-mono text-2xl text-surface tabular-nums">
+              <span className="text-surface font-mono text-2xl tabular-nums">
                 {formatSarFromHalalas(booking.totalHalalas, locale)}
               </span>
             </div>
 
             {canCancel ? (
-              <div className="border-t border-surface/10 pt-4">
+              <div className="border-surface/10 border-t pt-4">
                 <CancelBookingButton locale={locale} bookingId={booking.id} />
               </div>
             ) : null}
 
-            <p className="text-2xs text-surface/40">
-              {t('subtitle')}
-            </p>
+            <p className="text-2xs text-surface/40">{t('subtitle')}</p>
           </CardBody>
         </Card>
       </main>

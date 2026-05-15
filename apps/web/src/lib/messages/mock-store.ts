@@ -31,8 +31,11 @@ declare global {
   var __hikayaMessagesStore: Store | undefined;
 }
 
-const store: Store =
-  globalThis.__hikayaMessagesStore ?? { threads: new Map(), messages: new Map(), seeded: false };
+const store: Store = globalThis.__hikayaMessagesStore ?? {
+  threads: new Map(),
+  messages: new Map(),
+  seeded: false,
+};
 
 if (process.env.NODE_ENV !== 'production') {
   globalThis.__hikayaMessagesStore = store;
@@ -104,10 +107,7 @@ export function countUnreadFor(thread: Thread, userId: string): number {
 }
 
 /** Find an existing thread between two users (any direction); used by "Message" CTA. */
-export function findThreadBetween(
-  creatorUserId: string,
-  clientUserId: string,
-): Thread | null {
+export function findThreadBetween(creatorUserId: string, clientUserId: string): Thread | null {
   seedIfNeeded();
   for (const t of store.threads.values()) {
     if (t.creatorUserId === creatorUserId && t.clientUserId === clientUserId) return t;

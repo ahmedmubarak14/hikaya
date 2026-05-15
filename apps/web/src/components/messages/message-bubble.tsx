@@ -28,7 +28,7 @@ export function MessageBubble({ message, mine }: Props) {
         <p className="whitespace-pre-wrap break-words">{message.body}</p>
         <div
           className={cn(
-            'mt-1 flex items-center justify-end gap-1.5 font-mono text-2xs',
+            'text-2xs mt-1 flex items-center justify-end gap-1.5 font-mono',
             mine ? 'text-ink/60' : 'text-surface/40',
           )}
         >

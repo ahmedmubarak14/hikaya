@@ -25,8 +25,7 @@ interface SessionPayload {
   iat: number; // issued at (unix seconds)
 }
 
-export interface SessionUser
-  extends Pick<MockUser, 'id' | 'email' | 'displayName' | 'locale'> {
+export interface SessionUser extends Pick<MockUser, 'id' | 'email' | 'displayName' | 'locale'> {
   /** All roles the user holds. */
   roles: MockUserRole[];
   /** Default role for redirects when no active-role cookie is set. */
@@ -54,7 +53,10 @@ function base64urlEncode(input: Buffer | string): string {
 }
 
 function base64urlDecode(input: string): Buffer {
-  const padded = input.replace(/-/g, '+').replace(/_/g, '/').padEnd(input.length + ((4 - (input.length % 4)) % 4), '=');
+  const padded = input
+    .replace(/-/g, '+')
+    .replace(/_/g, '/')
+    .padEnd(input.length + ((4 - (input.length % 4)) % 4), '=');
   return Buffer.from(padded, 'base64');
 }
 

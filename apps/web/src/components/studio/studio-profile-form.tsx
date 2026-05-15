@@ -9,25 +9,41 @@ import { Button, Input, cn } from '@hikaya/ui';
 
 import { type Locale } from '@/i18n/config';
 import type { City, Discipline } from '@/lib/creators/mock-data';
-import {
-  createStudioProfileAction,
-  type StudioProfileFailure,
-} from '@/lib/studio/profile-actions';
+import { createStudioProfileAction, type StudioProfileFailure } from '@/lib/studio/profile-actions';
 
 interface Props {
   locale: Locale;
 }
 
 const CITIES: City[] = [
-  'RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA',
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
 ];
 
 const DISCIPLINES: Discipline[] = [
-  'WEDDING_PHOTOGRAPHY', 'PORTRAIT_PHOTOGRAPHY', 'COMMERCIAL_PHOTOGRAPHY',
-  'PRODUCT_PHOTOGRAPHY', 'EVENT_PHOTOGRAPHY', 'FASHION_PHOTOGRAPHY',
-  'COMMERCIAL_VIDEO', 'WEDDING_VIDEO', 'EVENT_VIDEO', 'DOCUMENTARY',
-  'GRAPHIC_DESIGN', 'BRAND_IDENTITY', 'MOTION_GRAPHICS', 'VIDEO_EDITING',
-  'COLOR_GRADING', 'RETOUCHING', 'DRONE_OPERATION',
+  'WEDDING_PHOTOGRAPHY',
+  'PORTRAIT_PHOTOGRAPHY',
+  'COMMERCIAL_PHOTOGRAPHY',
+  'PRODUCT_PHOTOGRAPHY',
+  'EVENT_PHOTOGRAPHY',
+  'FASHION_PHOTOGRAPHY',
+  'COMMERCIAL_VIDEO',
+  'WEDDING_VIDEO',
+  'EVENT_VIDEO',
+  'DOCUMENTARY',
+  'GRAPHIC_DESIGN',
+  'BRAND_IDENTITY',
+  'MOTION_GRAPHICS',
+  'VIDEO_EDITING',
+  'COLOR_GRADING',
+  'RETOUCHING',
+  'DRONE_OPERATION',
 ];
 
 const DISCIPLINE_KEYS: Record<Discipline, string> = {
@@ -95,20 +111,15 @@ export function StudioProfileForm({ locale }: Props) {
         error={fieldErr.nameEn}
         required
       />
-      <Input
-        label={t('nameAr')}
-        name="nameAr"
-        dir="rtl"
-        error={fieldErr.nameAr}
-      />
+      <Input label={t('nameAr')} name="nameAr" dir="rtl" error={fieldErr.nameAr} />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <label className="flex flex-col gap-1.5 text-sm">
-          <span className="font-medium text-surface/80">{t('city')}</span>
+          <span className="text-surface/80 font-medium">{t('city')}</span>
           <select
             name="city"
             defaultValue="RIYADH"
-            className="rounded-md border border-surface/15 bg-bg px-3 py-2 text-sm text-surface"
+            className="border-surface/15 bg-bg text-surface rounded-md border px-3 py-2 text-sm"
             required
           >
             {CITIES.map((c) => (
@@ -156,8 +167,8 @@ export function StudioProfileForm({ locale }: Props) {
       />
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-sm font-medium text-surface/80">{t('specializations')}</legend>
-        <p className="text-xs text-surface/50">{t('specializationsHint')}</p>
+        <legend className="text-surface/80 text-sm font-medium">{t('specializations')}</legend>
+        <p className="text-surface/50 text-xs">{t('specializationsHint')}</p>
         <div className="flex flex-wrap gap-1.5">
           {DISCIPLINES.map((d) => {
             const isActive = selectedDisciplines.includes(d);
@@ -180,34 +191,34 @@ export function StudioProfileForm({ locale }: Props) {
           })}
         </div>
         {fieldErr.specializations ? (
-          <p className="text-xs text-accent-secondary" role="alert">
+          <p className="text-accent-secondary text-xs" role="alert">
             {fieldErr.specializations}
           </p>
         ) : null}
       </fieldset>
 
       <label className="flex flex-col gap-1.5 text-sm">
-        <span className="font-medium text-surface/80">{t('descriptionEn')}</span>
+        <span className="text-surface/80 font-medium">{t('descriptionEn')}</span>
         <textarea
           name="descriptionEn"
           rows={5}
-          className="rounded-md border border-surface/15 bg-bg px-3 py-2 text-sm text-surface"
+          className="border-surface/15 bg-bg text-surface rounded-md border px-3 py-2 text-sm"
           required
         />
         {fieldErr.descriptionEn ? (
-          <span className="text-xs text-accent-secondary" role="alert">
+          <span className="text-accent-secondary text-xs" role="alert">
             {fieldErr.descriptionEn}
           </span>
         ) : null}
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm">
-        <span className="font-medium text-surface/80">{t('descriptionAr')}</span>
+        <span className="text-surface/80 font-medium">{t('descriptionAr')}</span>
         <textarea
           name="descriptionAr"
           rows={5}
           dir="rtl"
-          className="rounded-md border border-surface/15 bg-bg px-3 py-2 text-sm text-surface"
+          className="border-surface/15 bg-bg text-surface rounded-md border px-3 py-2 text-sm"
         />
       </label>
 
@@ -229,17 +240,17 @@ export function StudioProfileForm({ locale }: Props) {
       </div>
 
       {serverState?.error === 'STUDIO_ALREADY_EXISTS' ? (
-        <p className="text-sm text-accent-secondary" role="alert">
+        <p className="text-accent-secondary text-sm" role="alert">
           {t('errors.alreadyExists')}
         </p>
       ) : null}
       {serverState?.error === 'WRONG_ROLE' ? (
-        <p className="text-sm text-accent-secondary" role="alert">
+        <p className="text-accent-secondary text-sm" role="alert">
           {t('errors.wrongRole')}
         </p>
       ) : null}
       {serverState?.error === 'NOT_AUTHENTICATED' ? (
-        <p className="text-sm text-accent-secondary" role="alert">
+        <p className="text-accent-secondary text-sm" role="alert">
           {t('errors.notAuthenticated')}
         </p>
       ) : null}
@@ -247,7 +258,7 @@ export function StudioProfileForm({ locale }: Props) {
       <div className="mt-2 flex items-center justify-between gap-3">
         <Link
           href={`/${locale}/me`}
-          className="text-sm text-surface/60 transition-colors hover:text-surface"
+          className="text-surface/60 hover:text-surface text-sm transition-colors"
         >
           ← {t('cancel')}
         </Link>

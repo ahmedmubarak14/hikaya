@@ -41,7 +41,7 @@ export function ProfileTabs({ active, labels, storeEnabled }: Props) {
     <div
       role="tablist"
       aria-label="Profile sections"
-      className="flex items-center justify-center gap-1 border-b border-surface/10"
+      className="border-surface/10 flex items-center justify-center gap-1 border-b"
     >
       {tabs.map((tab) => {
         const isActive = tab.id === active;
@@ -51,7 +51,7 @@ export function ProfileTabs({ active, labels, storeEnabled }: Props) {
               key={tab.id}
               role="tab"
               aria-disabled
-              className="inline-flex h-12 cursor-not-allowed items-center px-5 text-sm uppercase tracking-wide text-surface/30"
+              className="text-surface/30 inline-flex h-12 cursor-not-allowed items-center px-5 text-sm uppercase tracking-wide"
             >
               {tab.label}
             </span>
@@ -66,9 +66,7 @@ export function ProfileTabs({ active, labels, storeEnabled }: Props) {
             scroll={false}
             className={cn(
               'relative inline-flex h-12 items-center px-5 text-sm uppercase tracking-wide transition-colors',
-              isActive
-                ? 'text-surface'
-                : 'text-surface/50 hover:text-surface/80',
+              isActive ? 'text-surface' : 'text-surface/50 hover:text-surface/80',
             )}
           >
             {tab.label}

@@ -6,8 +6,8 @@ export const userRoleSchema = z.enum([
   'CREATOR',
   'STUDIO_OWNER',
   'CLIENT',
-  'AGENCY',          // Phase 3
-  'RENTAL_COMPANY',  // Phase 2
+  'AGENCY', // Phase 3
+  'RENTAL_COMPANY', // Phase 2
   'ADMIN',
 ]);
 export type UserRole = z.infer<typeof userRoleSchema>;

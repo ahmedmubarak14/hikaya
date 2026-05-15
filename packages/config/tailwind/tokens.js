@@ -25,8 +25,8 @@ const colors = {
   paper: '#f8f6f1',
 
   // Accents — same in both themes.
-  accent: '#e8ff47',           // Electric yellow-green CTA
-  accentSecondary: '#ff6b35',  // Orange highlight
+  accent: '#e8ff47', // Electric yellow-green CTA
+  accentSecondary: '#ff6b35', // Orange highlight
 
   // Tertiaries — same in both themes.
   sage: '#4a7a5a',

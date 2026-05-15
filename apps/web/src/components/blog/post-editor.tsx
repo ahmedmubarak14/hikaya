@@ -36,9 +36,10 @@ export function PostEditor({ locale, post }: Props) {
   const router = useRouter();
 
   const isEdit = Boolean(post);
-  const action = isEdit && post
-    ? updatePostAction.bind(null, locale, post.id)
-    : createPostAction.bind(null, locale);
+  const action =
+    isEdit && post
+      ? updatePostAction.bind(null, locale, post.id)
+      : createPostAction.bind(null, locale);
 
   const [serverState, formAction] = useFormState<BlogResult | null, FormData>(action, null);
   const [isPending, startTransition] = useTransition();
@@ -125,7 +126,7 @@ export function PostEditor({ locale, post }: Props) {
         <textarea
           rows={16}
           {...register('bodyEn')}
-          className="min-h-96 rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent min-h-96 rounded-md border px-3 py-2 text-base outline-none"
         />
       </Field>
 
@@ -138,7 +139,7 @@ export function PostEditor({ locale, post }: Props) {
           rows={12}
           dir="rtl"
           {...register('bodyAr')}
-          className="min-h-72 rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent min-h-72 rounded-md border px-3 py-2 text-base outline-none"
         />
       </Field>
 
@@ -155,13 +156,13 @@ export function PostEditor({ locale, post }: Props) {
           {STATUSES.map((s) => (
             <label
               key={s}
-              className="flex cursor-pointer items-center gap-2 rounded-full border border-surface/15 px-4 py-2 text-sm transition-colors has-[:checked]:border-accent has-[:checked]:bg-accent/10"
+              className="border-surface/15 has-[:checked]:border-accent has-[:checked]:bg-accent/10 flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors"
             >
               <input
                 type="radio"
                 value={s}
                 {...register('status')}
-                className="h-3 w-3 accent-accent"
+                className="accent-accent h-3 w-3"
               />
               <span className="text-surface/80">{tStatus(s as 'DRAFT')}</span>
             </label>
@@ -170,7 +171,7 @@ export function PostEditor({ locale, post }: Props) {
       </Field>
 
       {serverState?.error && serverState.error !== 'INVALID_INPUT' ? (
-        <p className="text-sm text-accent-secondary" role="alert">
+        <p className="text-accent-secondary text-sm" role="alert">
           {serverState.error}
         </p>
       ) : null}
@@ -205,12 +206,12 @@ function Field({
 }) {
   return (
     <label className="flex w-full flex-col gap-1.5">
-      <span className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr">{label}</span>
+      <span className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium">{label}</span>
       {children}
       {error ? (
-        <span className="text-xs text-accent-secondary">{error}</span>
+        <span className="text-accent-secondary text-xs">{error}</span>
       ) : hint ? (
-        <span className="text-xs text-surface/50">{hint}</span>
+        <span className="text-surface/50 text-xs">{hint}</span>
       ) : null}
     </label>
   );

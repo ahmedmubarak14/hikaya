@@ -27,7 +27,7 @@ export function SpaceCard({ space, href, locale }: Props) {
   return (
     <Link href={href} className="block">
       <Card interactive className="overflow-hidden">
-        <div className="relative aspect-[4/3] w-full bg-surface/5">
+        <div className="bg-surface/5 relative aspect-[4/3] w-full">
           {cover ? (
             <Image
               src={cover}
@@ -39,11 +39,11 @@ export function SpaceCard({ space, href, locale }: Props) {
           ) : null}
         </div>
         <div className="flex flex-col gap-1.5 p-4">
-          <h3 className="line-clamp-1 text-base text-surface">{space.name}</h3>
+          <h3 className="text-surface line-clamp-1 text-base">{space.name}</h3>
           <p className="text-2xs text-surface/50">
             {tCity(space.city as 'RIYADH')} · {t('capacity', { count: space.capacity })}
           </p>
-          <p className="mt-1 font-mono text-sm text-surface tabular-nums">
+          <p className="text-surface mt-1 font-mono text-sm tabular-nums">
             {space.dailyHalalas > 0
               ? t('from', { price: formatSarFromHalalas(space.dailyHalalas, locale) })
               : t('fromHourly', { price: formatSarFromHalalas(space.hourlyHalalas, locale) })}

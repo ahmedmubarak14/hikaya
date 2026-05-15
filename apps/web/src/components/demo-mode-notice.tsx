@@ -18,7 +18,7 @@ export function DemoModeNotice({ locale }: { locale: Locale }) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-2xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-2xl px-6 md:px-10">
         <Card>
           <CardBody className="flex flex-col gap-4 p-8">
             <Badge tone="accent" className="self-start">
@@ -28,27 +28,41 @@ export function DemoModeNotice({ locale }: { locale: Locale }) {
               This surface needs the <span className="text-accent-secondary">live</span> app.
             </h1>
             <p className="text-surface/70">
-              You&apos;re viewing the GitHub Pages preview. It&apos;s a fully-static export
-              of the codebase, which means anything that mutates state — sign-in, posting
-              a job, sending a message, building a quote, signing a contract,
-              buying a product — needs the server-rendered version.
+              You&apos;re viewing the GitHub Pages preview. It&apos;s a fully-static export of the
+              codebase, which means anything that mutates state — sign-in, posting a job, sending a
+              message, building a quote, signing a contract, buying a product — needs the
+              server-rendered version.
             </p>
-            <p className="text-sm text-surface/50">
-              The pages below all work on this preview. They&apos;re seeded with realistic
-              demo data so you can browse the design end-to-end.
+            <p className="text-surface/50 text-sm">
+              The pages below all work on this preview. They&apos;re seeded with realistic demo data
+              so you can browse the design end-to-end.
             </p>
 
             <div className="mt-2 flex flex-wrap gap-2">
-              <Link href={`/${locale}`} className={linkClass}>← Home</Link>
-              <Link href={`/${locale}/discover`} className={linkClass}>Discover creatives</Link>
-              <Link href={`/${locale}/jobs`} className={linkClass}>Job board</Link>
-              <Link href={`/${locale}/noor`} className={linkClass}>Creator profile</Link>
-              <Link href={`/${locale}/noor/store`} className={linkClass}>Storefront</Link>
-              <Link href={`/${locale}/g/sara-hassan-wedding`} className={linkClass}>Public gallery</Link>
-              <Link href={`/${locale}/q/sara-hassan-wedding-q1`} className={linkClass}>Public quote</Link>
+              <Link href={`/${locale}`} className={linkClass}>
+                ← Home
+              </Link>
+              <Link href={`/${locale}/discover`} className={linkClass}>
+                Discover creatives
+              </Link>
+              <Link href={`/${locale}/jobs`} className={linkClass}>
+                Job board
+              </Link>
+              <Link href={`/${locale}/noor`} className={linkClass}>
+                Creator profile
+              </Link>
+              <Link href={`/${locale}/noor/store`} className={linkClass}>
+                Storefront
+              </Link>
+              <Link href={`/${locale}/g/sara-hassan-wedding`} className={linkClass}>
+                Public gallery
+              </Link>
+              <Link href={`/${locale}/q/sara-hassan-wedding-q1`} className={linkClass}>
+                Public quote
+              </Link>
             </div>
 
-            <p className="mt-4 text-2xs text-surface/40">
+            <p className="text-2xs text-surface/40 mt-4">
               For the full interactive app, run locally — see the README for instructions.
             </p>
           </CardBody>

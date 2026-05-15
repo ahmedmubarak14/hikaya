@@ -49,20 +49,15 @@ export function BookingCalendar({ bookings, anchor = new Date() }: Props) {
   const byDate = groupByIsoDate(bookings);
 
   return (
-    <section className="rounded-xl border border-surface/10 bg-surface/[0.03] p-4 md:p-6">
+    <section className="border-surface/10 bg-surface/[0.03] rounded-xl border p-4 md:p-6">
       <header className="mb-4 flex items-baseline justify-between">
-        <h3 className="text-2xl text-surface">{monthLabel}</h3>
-        <span className="text-2xs text-surface/40">
-          {t('weekStart')}
-        </span>
+        <h3 className="text-surface text-2xl">{monthLabel}</h3>
+        <span className="text-2xs text-surface/40">{t('weekStart')}</span>
       </header>
 
-      <div className="grid grid-cols-7 gap-px overflow-hidden rounded-md border border-surface/10 bg-surface/10">
+      <div className="border-surface/10 bg-surface/10 grid grid-cols-7 gap-px overflow-hidden rounded-md border">
         {weekDayLabels.map((label) => (
-          <div
-            key={label}
-            className="bg-bg p-2 text-center text-2xs text-surface/40"
-          >
+          <div key={label} className="bg-bg text-2xs text-surface/40 p-2 text-center">
             {label}
           </div>
         ))}
@@ -76,14 +71,14 @@ export function BookingCalendar({ bookings, anchor = new Date() }: Props) {
             <div
               key={iso}
               className={cn(
-                'min-h-24 bg-bg p-2',
+                'bg-bg min-h-24 p-2',
                 !inMonth && 'opacity-40',
                 isToday && 'bg-accent/[0.08]',
               )}
             >
               <div
                 className={cn(
-                  'mb-1 font-mono text-2xs',
+                  'text-2xs mb-1 font-mono',
                   isToday ? 'text-accent-secondary' : 'text-surface/50',
                 )}
               >
@@ -96,9 +91,7 @@ export function BookingCalendar({ bookings, anchor = new Date() }: Props) {
                   </li>
                 ))}
                 {dayBookings.length > 3 ? (
-                  <li className="font-mono text-2xs text-surface/40">
-                    +{dayBookings.length - 3}
-                  </li>
+                  <li className="text-2xs text-surface/40 font-mono">+{dayBookings.length - 3}</li>
                 ) : null}
               </ul>
             </div>
@@ -125,7 +118,7 @@ function BookingChip({ booking }: { booking: StudioBooking }) {
     <span
       title={`${booking.clientName} · ${booking.discipline}`}
       className={cn(
-        'block truncate rounded px-1.5 py-0.5 text-2xs font-medium',
+        'text-2xs block truncate rounded px-1.5 py-0.5 font-medium',
         STATUS_COLORS[booking.status],
       )}
     >
@@ -135,7 +128,11 @@ function BookingChip({ booking }: { booking: StudioBooking }) {
 }
 
 function isSameDay(a: Date, b: Date): boolean {
-  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
 }
 
 function toIsoDate(d: Date): string {

@@ -8,7 +8,16 @@ import { cn } from '@hikaya/ui';
 
 import type { City, Discipline } from '@/lib/creators/mock-data';
 
-const CITIES: City[] = ['RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA'];
+const CITIES: City[] = [
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
+];
 
 // Subset for the filter chip rail. Full list available via the discipline dropdown.
 const FEATURED_DISCIPLINES: Discipline[] = [
@@ -135,7 +144,7 @@ export function FilterBar({ city, discipline, availableOnly }: Props) {
             onClick={() => {
               startTransition(() => router.replace(pathname, { scroll: false }));
             }}
-            className="ms-auto text-sm text-surface/60 underline underline-offset-4 transition-colors hover:text-surface"
+            className="text-surface/60 hover:text-surface ms-auto text-sm underline underline-offset-4 transition-colors"
           >
             {t('clear')}
           </button>
@@ -193,7 +202,7 @@ function Select({
       value={value}
       onChange={(e) => onChange(e.target.value || null)}
       className={cn(
-        'h-10 cursor-pointer rounded-full border bg-transparent ps-4 pe-9 text-sm outline-none transition-colors',
+        'h-10 cursor-pointer rounded-full border bg-transparent pe-9 ps-4 text-sm outline-none transition-colors',
         active
           ? 'border-surface/40 text-surface'
           : 'border-surface/15 text-surface/70 hover:border-surface/40 hover:text-surface',

@@ -15,9 +15,7 @@ export function StatTile({ label, value, hint, tone = 'neutral', children }: Pro
     <div
       className={cn(
         'flex flex-col gap-1.5 rounded-xl border p-5',
-        tone === 'accent'
-          ? 'border-accent/30 bg-accent/5'
-          : 'border-surface/10 bg-surface/[0.03]',
+        tone === 'accent' ? 'border-accent/30 bg-accent/5' : 'border-surface/10 bg-surface/[0.03]',
       )}
     >
       <span className="text-2xs text-surface/50">{label}</span>
@@ -29,7 +27,7 @@ export function StatTile({ label, value, hint, tone = 'neutral', children }: Pro
       >
         {value}
       </span>
-      {hint ? <span className="text-sm text-surface/50">{hint}</span> : null}
+      {hint ? <span className="text-surface/50 text-sm">{hint}</span> : null}
       {children}
     </div>
   );

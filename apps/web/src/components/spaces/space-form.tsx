@@ -11,7 +11,16 @@ import { type Locale } from '@/i18n/config';
 import { createSpaceAction, updateSpaceAction, type SpacesResult } from '@/lib/spaces/actions';
 import type { Space, SpaceCity, SpaceStatus } from '@/lib/spaces/mock-data';
 
-const CITIES: SpaceCity[] = ['RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA'];
+const CITIES: SpaceCity[] = [
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
+];
 const STATUSES: SpaceStatus[] = ['DRAFT', 'ACTIVE', 'PAUSED'];
 
 interface Props {
@@ -119,7 +128,7 @@ export function SpaceForm({ locale, space }: Props) {
         <textarea
           rows={5}
           {...register('description')}
-          className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 text-base text-surface outline-none focus-visible:border-accent"
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
         />
       </Field>
 
@@ -133,10 +142,12 @@ export function SpaceForm({ locale, space }: Props) {
         <Field label={t('city')} error={errors.city?.message}>
           <select
             {...register('city')}
-            className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
           >
             {CITIES.map((c) => (
-              <option key={c} value={c}>{tCity(c as 'RIYADH')}</option>
+              <option key={c} value={c}>
+                {tCity(c as 'RIYADH')}
+              </option>
             ))}
           </select>
         </Field>
@@ -171,10 +182,12 @@ export function SpaceForm({ locale, space }: Props) {
       <Field label={t('status')} hint={t('statusHint')} error={errors.status?.message}>
         <select
           {...register('status')}
-          className="h-11 rounded-md border border-surface/15 bg-surface/5 px-3 text-base text-surface outline-none focus-visible:border-accent"
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
         >
           {STATUSES.map((s) => (
-            <option key={s} value={s}>{tStatus(s as 'DRAFT')}</option>
+            <option key={s} value={s}>
+              {tStatus(s as 'DRAFT')}
+            </option>
           ))}
         </select>
       </Field>
@@ -188,7 +201,7 @@ export function SpaceForm({ locale, space }: Props) {
           rows={4}
           {...register('photosRaw')}
           placeholder={'https://images.example.com/01.jpg\nhttps://images.example.com/02.jpg'}
-          className="rounded-md border border-surface/15 bg-surface/5 px-3 py-2 font-mono text-sm text-surface outline-none focus-visible:border-accent"
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 font-mono text-sm outline-none"
         />
       </Field>
 
@@ -201,7 +214,9 @@ export function SpaceForm({ locale, space }: Props) {
       />
 
       {serverState?.error && serverState.error !== 'INVALID_INPUT' ? (
-        <p className="text-sm text-accent-secondary" role="alert">{t('errorGeneric')}</p>
+        <p className="text-accent-secondary text-sm" role="alert">
+          {t('errorGeneric')}
+        </p>
       ) : null}
 
       <div className={cn('flex items-center gap-3')}>
@@ -229,12 +244,12 @@ function Field({
 }) {
   return (
     <label className="flex w-full flex-col gap-1.5">
-      <span className="text-sm font-medium text-surface/80 [lang=ar]:font-sansAr">{label}</span>
+      <span className="text-surface/80 [lang=ar]:font-sansAr text-sm font-medium">{label}</span>
       {children}
       {error ? (
-        <span className="text-xs text-accent-secondary">{error}</span>
+        <span className="text-accent-secondary text-xs">{error}</span>
       ) : hint ? (
-        <span className="text-xs text-surface/50">{hint}</span>
+        <span className="text-surface/50 text-xs">{hint}</span>
       ) : null}
     </label>
   );

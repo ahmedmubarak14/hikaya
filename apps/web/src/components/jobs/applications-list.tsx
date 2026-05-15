@@ -30,9 +30,9 @@ export function ApplicationsList({ locale, applications }: Props) {
 
   if (applications.length === 0) {
     return (
-      <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-8 text-center">
-        <p className="text-base text-surface/70">{t('empty')}</p>
-        <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+      <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-8 text-center">
+        <p className="text-surface/70 text-base">{t('empty')}</p>
+        <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
       </div>
     );
   }
@@ -44,7 +44,10 @@ export function ApplicationsList({ locale, applications }: Props) {
   };
 
   return (
-    <ul className={cn('flex flex-col gap-3', isPending && 'opacity-70')} aria-busy={isPending || undefined}>
+    <ul
+      className={cn('flex flex-col gap-3', isPending && 'opacity-70')}
+      aria-busy={isPending || undefined}
+    >
       {applications.map((a) => (
         <li key={a.id}>
           <Card>
@@ -53,25 +56,23 @@ export function ApplicationsList({ locale, applications }: Props) {
                 <div className="flex flex-col gap-0.5">
                   <Link
                     href={`/${locale}/${a.applicantUsername}`}
-                    className="text-base text-surface underline-offset-4 hover:underline"
+                    className="text-surface text-base underline-offset-4 hover:underline"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     {a.applicantName} ↗
                   </Link>
-                  <span className="text-2xs text-surface/40">
-                    @{a.applicantUsername}
-                  </span>
+                  <span className="text-2xs text-surface/40">@{a.applicantUsername}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge tone={TONE[a.status]}>{tStatus(a.status as 'SUBMITTED')}</Badge>
                 </div>
               </div>
 
-              <p className="whitespace-pre-wrap text-sm text-surface/80">{a.coverNote}</p>
+              <p className="text-surface/80 whitespace-pre-wrap text-sm">{a.coverNote}</p>
 
-              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-surface/10 pt-3">
-                <span className="font-mono text-sm text-surface/80 tabular-nums">
+              <div className="border-surface/10 flex flex-wrap items-center justify-between gap-3 border-t pt-3">
+                <span className="text-surface/80 font-mono text-sm tabular-nums">
                   {formatSarFromHalalas(a.proposedRateHalalas, locale)}
                 </span>
                 <div className="flex flex-wrap items-center gap-2">

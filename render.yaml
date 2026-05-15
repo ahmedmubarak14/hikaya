@@ -12,10 +12,10 @@ services:
     name: hikaya-web
     runtime: node
     plan: free
-    region: frankfurt          # closest free region to the Gulf; swap if you prefer
+    region: frankfurt # closest free region to the Gulf; swap if you prefer
     branch: main
     autoDeploy: true
-    rootDir: .                 # monorepo root — pnpm-workspace.yaml lives here
+    rootDir: . # monorepo root — pnpm-workspace.yaml lives here
     buildCommand: corepack enable && corepack prepare pnpm@10.33.0 --activate && pnpm install --frozen-lockfile && pnpm --filter @hikaya/web build
     startCommand: pnpm --filter @hikaya/web start
     healthCheckPath: /en
@@ -25,8 +25,8 @@ services:
       - key: NODE_ENV
         value: production
       - key: NEXT_TELEMETRY_DISABLED
-        value: "1"
-      - key: AUTH_SECRET          # auto-generated 32-byte hex
+        value: '1'
+      - key: AUTH_SECRET # auto-generated 32-byte hex
         generateValue: true
       # Set NEXT_PUBLIC_APP_URL after the first deploy so the share-link copy
       # buttons (gallery, quote, contract) paste the right hostname. The URL

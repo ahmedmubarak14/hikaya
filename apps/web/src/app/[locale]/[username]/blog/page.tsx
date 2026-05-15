@@ -22,9 +22,7 @@ interface Props {
 export async function generateStaticParams() {
   const { CREATORS } = await import('@/lib/creators/mock-data');
   const { locales } = await import('@/i18n/config');
-  return locales.flatMap((locale) =>
-    CREATORS.map((c) => ({ locale, username: c.username })),
-  );
+  return locales.flatMap((locale) => CREATORS.map((c) => ({ locale, username: c.username })));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -51,11 +49,11 @@ export default async function CreatorBlogListPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-6xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/${creator.username}`}
-            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {name}
           </Link>
@@ -68,8 +66,8 @@ export default async function CreatorBlogListPage({ params }: Props) {
         </header>
 
         {posts.length === 0 ? (
-          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('empty')}</p>
+          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('empty')}</p>
           </div>
         ) : (
           <ul className="grid grid-cols-1 gap-8 lg:grid-cols-2">
@@ -86,7 +84,7 @@ export default async function CreatorBlogListPage({ params }: Props) {
                     className="group block"
                   >
                     {p.coverUrl ? (
-                      <div className="relative mb-5 aspect-[16/9] w-full overflow-hidden rounded-xl border border-surface/10 bg-surface/5">
+                      <div className="border-surface/10 bg-surface/5 relative mb-5 aspect-[16/9] w-full overflow-hidden rounded-xl border">
                         <Image
                           src={p.coverUrl}
                           alt={title}
@@ -96,28 +94,31 @@ export default async function CreatorBlogListPage({ params }: Props) {
                         />
                       </div>
                     ) : (
-                      <div className="mb-5 aspect-[16/9] w-full overflow-hidden rounded-xl border border-surface/10 bg-gradient-to-br from-accent/20 via-accent-secondary/10 to-info/15" />
+                      <div className="border-surface/10 from-accent/20 via-accent-secondary/10 to-info/15 mb-5 aspect-[16/9] w-full overflow-hidden rounded-xl border bg-gradient-to-br" />
                     )}
 
                     <div className="flex flex-col gap-3">
-                      <div className="flex items-center gap-2 text-2xs text-surface/40">
+                      <div className="text-2xs text-surface/40 flex items-center gap-2">
                         <span>{formatDate(date, locale)}</span>
-                        <span aria-hidden className="inline-block h-1 w-1 rounded-full bg-surface/30" />
+                        <span
+                          aria-hidden
+                          className="bg-surface/30 inline-block h-1 w-1 rounded-full"
+                        />
                         <span>{t('readingTime', { minutes })}</span>
                       </div>
 
-                      <h3 className="text-balance text-2xl font-bold tracking-tight text-surface transition-colors group-hover:text-accent-secondary">
+                      <h3 className="text-surface group-hover:text-accent-secondary text-balance text-2xl font-bold tracking-tight transition-colors">
                         {title}
                       </h3>
 
-                      <p className="line-clamp-3 text-surface/70">{firstParagraph}</p>
+                      <p className="text-surface/70 line-clamp-3">{firstParagraph}</p>
 
                       {p.tags.length > 0 ? (
                         <div className="flex flex-wrap gap-1.5 pt-1">
                           {p.tags.slice(0, 4).map((tag) => (
                             <span
                               key={tag}
-                              className="rounded-full bg-surface/5 px-2.5 py-1 text-2xs text-surface/60"
+                              className="bg-surface/5 text-2xs text-surface/60 rounded-full px-2.5 py-1"
                             >
                               #{tag}
                             </span>

@@ -21,9 +21,7 @@ interface Props {
 export async function generateStaticParams() {
   const { SEED_QUOTES } = await import('@/lib/quotes/mock-data');
   const { locales } = await import('@/i18n/config');
-  return locales.flatMap((locale) =>
-    SEED_QUOTES.map((q) => ({ locale, slug: q.shareSlug })),
-  );
+  return locales.flatMap((locale) => SEED_QUOTES.map((q) => ({ locale, slug: q.shareSlug })));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -51,23 +49,21 @@ export default async function PublicQuotePage({ params }: Props) {
   const decided = quote.status === 'APPROVED' || quote.status === 'REJECTED';
 
   return (
-    <main className="min-h-dvh bg-bg">
-      <header className="border-b border-surface/5">
+    <main className="bg-bg min-h-dvh">
+      <header className="border-surface/5 border-b">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-6 py-6 md:px-10">
-          <Link href={`/${locale}`} className="flex items-center text-surface" aria-label="Hikaya">
+          <Link href={`/${locale}`} className="text-surface flex items-center" aria-label="Hikaya">
             <Logo arabic={locale === 'ar'} className="h-6" />
           </Link>
           {creator ? (
             <Link
               href={`/${locale}/${creator.username}`}
-              className="flex items-center gap-2 rounded-full border border-surface/20 bg-bg/40 px-3 py-1.5 text-2xs text-surface/80 transition-colors hover:border-surface/40 hover:text-surface"
+              className="border-surface/20 bg-bg/40 text-2xs text-surface/80 hover:border-surface/40 hover:text-surface flex items-center gap-2 rounded-full border px-3 py-1.5 transition-colors"
             >
               <span className="relative h-5 w-5 overflow-hidden rounded-full">
                 <Image src={creator.avatarUrl} alt="" fill sizes="20px" className="object-cover" />
               </span>
-              <span>
-                {locale === 'ar' ? creator.displayNameAr : creator.displayNameEn}
-              </span>
+              <span>{locale === 'ar' ? creator.displayNameAr : creator.displayNameEn}</span>
             </Link>
           ) : null}
         </div>
@@ -85,10 +81,16 @@ export default async function PublicQuotePage({ params }: Props) {
           </div>
           <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
             <span>{t('headline')}</span>{' '}
-            <span className="font-bold text-accent-secondary">{t('headlineItalic')}</span>
+            <span className="text-accent-secondary font-bold">{t('headlineItalic')}</span>
           </h1>
-          <p className="max-w-prose text-surface/60">
-            {t('subtitle', { creator: creator ? (locale === 'ar' ? creator.displayNameAr : creator.displayNameEn) : '' })}
+          <p className="text-surface/60 max-w-prose">
+            {t('subtitle', {
+              creator: creator
+                ? locale === 'ar'
+                  ? creator.displayNameAr
+                  : creator.displayNameEn
+                : '',
+            })}
           </p>
         </div>
 
@@ -100,18 +102,24 @@ export default async function PublicQuotePage({ params }: Props) {
           ) : null}
 
           {quote.status === 'APPROVED' && quote.contractId ? (
-            <div className="rounded-md border border-sage/40 bg-sage/10 p-5">
-              <p className="text-sm text-surface/70">{t('approvedBody', { when: formatDateTime(quote.approvedAt ?? quote.updatedAt, locale) })}</p>
+            <div className="border-sage/40 bg-sage/10 rounded-md border p-5">
+              <p className="text-surface/70 text-sm">
+                {t('approvedBody', {
+                  when: formatDateTime(quote.approvedAt ?? quote.updatedAt, locale),
+                })}
+              </p>
             </div>
           ) : null}
 
           {quote.status === 'REJECTED' ? (
-            <div className="rounded-md border border-accent-secondary/40 bg-accent-secondary/5 p-5">
-              <p className="text-sm text-surface/70">
-                {t('rejectedBody', { when: formatDateTime(quote.rejectedAt ?? quote.updatedAt, locale) })}
+            <div className="border-accent-secondary/40 bg-accent-secondary/5 rounded-md border p-5">
+              <p className="text-surface/70 text-sm">
+                {t('rejectedBody', {
+                  when: formatDateTime(quote.rejectedAt ?? quote.updatedAt, locale),
+                })}
               </p>
               {quote.rejectReason ? (
-                <p className="mt-2 text-sm text-surface/60">{quote.rejectReason}</p>
+                <p className="text-surface/60 mt-2 text-sm">{quote.rejectReason}</p>
               ) : null}
             </div>
           ) : null}
@@ -122,14 +130,15 @@ export default async function PublicQuotePage({ params }: Props) {
         </section>
       </section>
 
-      <footer className="border-t border-surface/5">
+      <footer className="border-surface/5 border-t">
         <div className="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 px-6 py-8 md:px-10">
-          <Link href={`/${locale}`} className="flex items-center text-surface/70 hover:text-surface">
+          <Link
+            href={`/${locale}`}
+            className="text-surface/70 hover:text-surface flex items-center"
+          >
             <Logo arabic={locale === 'ar'} className="h-5" />
           </Link>
-          <p className="text-2xs text-surface/40">
-            {t('footerNote')}
-          </p>
+          <p className="text-2xs text-surface/40">{t('footerNote')}</p>
         </div>
       </footer>
     </main>

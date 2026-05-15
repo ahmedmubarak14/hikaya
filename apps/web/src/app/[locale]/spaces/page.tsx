@@ -19,7 +19,14 @@ interface Props {
 }
 
 const CITY_VALUES = new Set<SpaceCity>([
-  'RIYADH', 'JEDDAH', 'DAMMAM', 'KHOBAR', 'MAKKAH', 'MEDINA', 'TABUK', 'ABHA',
+  'RIYADH',
+  'JEDDAH',
+  'DAMMAM',
+  'KHOBAR',
+  'MAKKAH',
+  'MEDINA',
+  'TABUK',
+  'ABHA',
 ]);
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -51,15 +58,15 @@ export default async function PublicSpacesPage({ params, searchParams }: Props) 
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-8xl px-6 pb-22 pt-10 md:px-10 md:pt-14">
+      <main className="max-w-8xl pb-22 mx-auto w-full px-6 pt-10 md:px-10 md:pt-14">
         <header className="mb-6 flex flex-col gap-3">
           <div className="flex items-end justify-between gap-4">
             <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{t('title')}</h1>
-            <span className="shrink-0 text-sm text-surface/50">
+            <span className="text-surface/50 shrink-0 text-sm">
               {t('count', { count: spaces.length })}
             </span>
           </div>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         <div className="mb-8">
@@ -69,8 +76,8 @@ export default async function PublicSpacesPage({ params, searchParams }: Props) 
         </div>
 
         {spaces.length === 0 ? (
-          <div className="mt-10 rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('empty')}</p>
+          <div className="border-surface/10 bg-surface/[0.03] mt-10 rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('empty')}</p>
           </div>
         ) : (
           <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">

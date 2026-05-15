@@ -64,28 +64,32 @@ export default async function MySpaceBookingsPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-5xl px-6 py-22 md:px-10">
+      <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
-            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+            className="text-2xs text-surface/40 hover:text-surface transition-colors"
           >
             ← {t('back')}
           </Link>
-          <Badge tone="accent" className="self-start">{t('eyebrow')}</Badge>
-          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">{t('title')}</h1>
-          <p className="max-w-prose text-surface/60">{t('subtitle')}</p>
+          <Badge tone="accent" className="self-start">
+            {t('eyebrow')}
+          </Badge>
+          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
+            {t('title')}
+          </h1>
+          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
         {rows.length === 0 ? (
-          <div className="rounded-xl border border-surface/10 bg-surface/[0.03] p-10 text-center">
-            <p className="text-lg text-surface/70">{t('empty')}</p>
-            <p className="mt-2 text-sm text-surface/40">{t('emptyHint')}</p>
+          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
+            <p className="text-surface/70 text-lg">{t('empty')}</p>
+            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-surface/10">
+          <div className="border-surface/10 overflow-x-auto rounded-xl border">
             <table className="w-full text-sm">
-              <thead className="bg-surface/[0.04] text-2xs uppercase text-surface/50">
+              <thead className="bg-surface/[0.04] text-2xs text-surface/50 uppercase">
                 <tr>
                   <th className="px-4 py-3 text-start font-medium">{t('colSpace')}</th>
                   <th className="px-4 py-3 text-start font-medium">{t('colRenter')}</th>
@@ -96,13 +100,13 @@ export default async function MySpaceBookingsPage({ params }: Props) {
               </thead>
               <tbody>
                 {rows.map(({ booking, spaceName, renterName }) => (
-                  <tr key={booking.id} className="border-t border-surface/10">
-                    <td className="px-4 py-3 text-surface">{spaceName}</td>
-                    <td className="px-4 py-3 text-surface/70">{renterName}</td>
-                    <td className="px-4 py-3 font-mono text-2xs text-surface/70 tabular-nums">
+                  <tr key={booking.id} className="border-surface/10 border-t">
+                    <td className="text-surface px-4 py-3">{spaceName}</td>
+                    <td className="text-surface/70 px-4 py-3">{renterName}</td>
+                    <td className="text-2xs text-surface/70 px-4 py-3 font-mono tabular-nums">
                       {formatDate(booking.startISO, locale)} → {formatDate(booking.endISO, locale)}
                     </td>
-                    <td className="px-4 py-3 text-end font-mono text-surface tabular-nums">
+                    <td className="text-surface px-4 py-3 text-end font-mono tabular-nums">
                       {formatSarFromHalalas(booking.totalHalalas, locale)}
                     </td>
                     <td className="px-4 py-3 text-end">

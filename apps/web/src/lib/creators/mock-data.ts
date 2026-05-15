@@ -141,7 +141,8 @@ export const CREATORS: CreatorProfile[] = [
     username: 'yara',
     displayNameEn: 'Yara Hejazi',
     displayNameAr: 'يارا الحجازي',
-    bioEn: 'Commercial videographer. Brand films for the way the Gulf actually feels — slow, considered, cinematic.',
+    bioEn:
+      'Commercial videographer. Brand films for the way the Gulf actually feels — slow, considered, cinematic.',
     bioAr: 'صانعة فيديو تجاري. أفلام علامات تجاريّة بإيقاع الخليج الحقيقي — متأنّي، سينمائي.',
     avatarUrl: pic('avatar-yara', 200, 200),
     coverUrl: pic('cover-yara', 1800, 800),
@@ -229,7 +230,8 @@ export const CREATORS: CreatorProfile[] = [
     username: 'huda',
     displayNameEn: 'Huda Al-Mutairi',
     displayNameAr: 'هدى المطيري',
-    bioEn: 'Fashion & editorial. Shooting for Riyadh Fashion Week and a few quiet labels you should know.',
+    bioEn:
+      'Fashion & editorial. Shooting for Riyadh Fashion Week and a few quiet labels you should know.',
     bioAr: 'موضة وتحرير. أصوّر لأسبوع الرياض للموضة وعدد من الماركات الهادئة التي يجب أن تعرفها.',
     avatarUrl: pic('avatar-huda', 200, 200),
     coverUrl: pic('cover-huda', 1800, 800),

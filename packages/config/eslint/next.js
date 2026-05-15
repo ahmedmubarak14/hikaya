@@ -25,7 +25,10 @@ module.exports = {
   ],
   rules: {
     '@typescript-eslint/consistent-type-imports': ['warn', { prefer: 'type-imports' }],
-    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+    ],
     '@typescript-eslint/no-explicit-any': 'warn',
     'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
     'react/jsx-key': 'error',
@@ -33,5 +36,14 @@ module.exports = {
     '@next/next/no-html-link-for-pages': 'off',
     'jsx-a11y/anchor-is-valid': 'warn',
   },
-  ignorePatterns: ['dist', 'build', '.next', '.turbo', 'node_modules', 'coverage', '*.config.js', '*.config.cjs'],
+  ignorePatterns: [
+    'dist',
+    'build',
+    '.next',
+    '.turbo',
+    'node_modules',
+    'coverage',
+    '*.config.js',
+    '*.config.cjs',
+  ],
 };
