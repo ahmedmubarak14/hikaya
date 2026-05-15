@@ -9,7 +9,8 @@ import { Badge, Button, cn } from '@hikaya/ui';
 
 import { DisciplineTag } from '@/components/creators/discipline-tag';
 import { PortfolioGrid } from '@/components/creators/portfolio-grid';
-import { ProfileTabs, type ProfileTab } from '@/components/creators/profile-tabs';
+import { type ProfileTab } from '@/components/creators/profile-tabs';
+import { ProfileTabsSwitcher } from '@/components/creators/profile-tabs-switcher';
 import { StartThreadButton } from '@/components/messages/start-thread-button';
 import { ProductCard } from '@/components/store/product-card';
 import { SiteFooter } from '@/components/site-footer';
@@ -184,62 +185,60 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
           </div>
         </section>
 
-        {/* Tabs */}
-        <div className="mt-10">
-          <Suspense>
-            <ProfileTabs
-              active={effectiveTab}
-              labels={{
-                work: t('tabs.work'),
-                store: t('tabs.store'),
-                about: t('tabs.about'),
-              }}
-              storeEnabled={hasStore}
-            />
-          </Suspense>
-        </div>
-
-        {/* Tab content */}
-        <div className="mt-8">
-          {effectiveTab === 'work' ? (
-            <PortfolioGrid
-              items={creator.portfolio}
-              layout={creator.preferredLayout}
-              altPrefix={name}
-            />
-          ) : effectiveTab === 'store' ? (
-            <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {products.map((p) => (
-                <li key={p.id}>
-                  <ProductCard
-                    product={p}
-                    href={`/${locale}/${creator.username}/store/${p.slug}`}
-                  />
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <AboutTab
-              bio={bio}
-              languages={creator.languages.join(' · ').toUpperCase()}
-              languagesLabel={t('languages')}
-              linksLabel={t('about.links')}
-              instagram={creator.socialLinks.instagram}
-              website={creator.socialLinks.website}
-              websiteLabel={t('website')}
-              priceLabel={creator.startingPriceSar ? t('startingFrom') : null}
-              priceValue={
-                creator.startingPriceSar
-                  ? t('priceSar', {
-                      price: creator.startingPriceSar.toLocaleString(
-                        locale === 'ar' ? 'ar-SA' : 'en-SA',
-                      ),
-                    })
-                  : null
-              }
-            />
-          )}
-        </div>
+        {/* Tabs — render all three panels server-side; the client switcher
+            flips visibility on `?tab=` so the toggle works in static export
+            (no server runtime to react to URL changes). */}
+        <Suspense>
+          <ProfileTabsSwitcher
+            initial={effectiveTab}
+            labels={{
+              work: t('tabs.work'),
+              store: t('tabs.store'),
+              about: t('tabs.about'),
+            }}
+            storeEnabled={hasStore}
+            workNode={
+              <PortfolioGrid
+                items={creator.portfolio}
+                layout={creator.preferredLayout}
+                altPrefix={name}
+              />
+            }
+            storeNode={
+              <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {products.map((p) => (
+                  <li key={p.id}>
+                    <ProductCard
+                      product={p}
+                      href={`/${locale}/${creator.username}/store/${p.slug}`}
+                    />
+                  </li>
+                ))}
+              </ul>
+            }
+            aboutNode={
+              <AboutTab
+                bio={bio}
+                languages={creator.languages.join(' · ').toUpperCase()}
+                languagesLabel={t('languages')}
+                linksLabel={t('about.links')}
+                instagram={creator.socialLinks.instagram}
+                website={creator.socialLinks.website}
+                websiteLabel={t('website')}
+                priceLabel={creator.startingPriceSar ? t('startingFrom') : null}
+                priceValue={
+                  creator.startingPriceSar
+                    ? t('priceSar', {
+                        price: creator.startingPriceSar.toLocaleString(
+                          locale === 'ar' ? 'ar-SA' : 'en-SA',
+                        ),
+                      })
+                    : null
+                }
+              />
+            }
+          />
+        </Suspense>
       </main>
       <SiteFooter />
     </>

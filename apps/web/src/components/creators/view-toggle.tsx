@@ -10,6 +10,13 @@ export type DiscoverView = 'people' | 'projects';
 interface Props {
   view: DiscoverView;
   labels: { people: string; projects: string };
+  /**
+   * When provided, switches via local state on click instead of (only) via
+   * URL navigation. Used in the static-export build where the server can't
+   * react to URL changes — the client switcher reads + writes URL itself
+   * to keep the choice bookmarkable.
+   */
+  onChange?: (next: DiscoverView) => void;
 }
 
 /**
@@ -17,7 +24,7 @@ interface Props {
  * URL is the source of truth (`?view=projects|people`) and the choice is
  * bookmarkable. Existing search params are preserved.
  */
-export function ViewToggle({ view, labels }: Props) {
+export function ViewToggle({ view, labels, onChange }: Props) {
   const pathname = usePathname();
   const params = useSearchParams();
 
@@ -49,6 +56,13 @@ export function ViewToggle({ view, labels }: Props) {
             role="tab"
             aria-selected={active}
             scroll={false}
+            onClick={
+              onChange
+                ? () => {
+                    onChange(tab.id);
+                  }
+                : undefined
+            }
             className={cn(
               'inline-flex h-9 items-center justify-center rounded-full px-5 text-sm transition-colors',
               active ? 'bg-surface text-bg' : 'text-surface/70 hover:text-surface',
