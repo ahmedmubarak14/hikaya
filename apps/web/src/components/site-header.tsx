@@ -3,8 +3,10 @@ import { getLocale, getTranslations } from 'next-intl/server';
 
 import { Button, Logo } from '@hikaya/ui';
 
+import { RoleSwitcher } from '@/components/role-switcher';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { type Locale } from '@/i18n/config';
+import type { MockUserRole } from '@/lib/auth/mock-store';
 import { getSession } from '@/lib/auth/session';
 import { getTheme } from '@/lib/theme/get-theme';
 
@@ -29,6 +31,7 @@ export async function SiteHeader() {
 
         <nav className="hidden items-center gap-8 md:flex">
           <NavLink href={`/${locale}/discover`}>{t('discover')}</NavLink>
+          <NavLink href={`/${locale}/spaces`}>{t('spaces')}</NavLink>
           <NavLink href={`/${locale}/jobs`}>{t('jobs')}</NavLink>
           <NavLink href={`/${locale}/studios`}>{t('studios')}</NavLink>
           <NavLink href={`/${locale}/blog`}>{t('blog')}</NavLink>
@@ -46,6 +49,20 @@ export async function SiteHeader() {
           >
             {t('switchLanguage')}
           </Link>
+
+          {session && session.user.roles.length >= 2 ? (
+            <RoleSwitcher
+              current={session.user.currentRole}
+              available={session.user.roles}
+              labels={
+                {
+                  CREATOR: t('roleCreatorShort'),
+                  STUDIO_OWNER: t('roleStudioOwnerShort'),
+                  CLIENT: t('roleClientShort'),
+                } as Record<MockUserRole, string>
+              }
+            />
+          ) : null}
 
           {session ? (
             <Link

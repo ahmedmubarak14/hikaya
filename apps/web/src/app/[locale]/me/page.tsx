@@ -35,8 +35,12 @@ export default async function MePage({ params }: Props) {
   const t = await getTranslations('me');
   const tAuth = await getTranslations('auth');
 
-  const roleKey: 'roleClient' | 'roleCreator' =
-    session.user.role === 'CREATOR' ? 'roleCreator' : 'roleClient';
+  const roleKey: 'roleClient' | 'roleCreator' | 'roleStudioOwner' =
+    session.user.currentRole === 'CREATOR'
+      ? 'roleCreator'
+      : session.user.currentRole === 'STUDIO_OWNER'
+        ? 'roleStudioOwner'
+        : 'roleClient';
 
   return (
     <>
@@ -67,7 +71,7 @@ export default async function MePage({ params }: Props) {
               <span className="text-2xs text-surface/40">
                 {t('roleLabel')}
               </span>
-              <p className="text-base text-surface">{session.user.role}</p>
+              <p className="text-base text-surface">{tAuth(roleKey)}</p>
             </CardBody>
           </Card>
 
