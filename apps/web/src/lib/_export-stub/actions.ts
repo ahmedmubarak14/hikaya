@@ -69,5 +69,11 @@ export const updateProductAction: any = noop;
 export const setProductStatusAction: any = noop;
 export const purchaseProductAction: any = noop;
 
+// Blog
+export const createPostAction: any = noop;
+export const updatePostAction: any = noop;
+export const deletePostAction: any = noop;
+export const publishPostAction: any = noop;
+
 // Theme
 export const setTheme: any = noop;

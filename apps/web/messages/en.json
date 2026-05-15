@@ -6,6 +6,7 @@
   },
   "nav": {
     "discover": "Discover",
+    "spaces": "Spaces",
     "jobs": "Jobs",
     "studios": "Studios",
     "blog": "Journal",
@@ -913,5 +914,55 @@
   },
   "common": {
     "comingSoon": "Coming soon"
+  },
+  "blog": {
+    "publicList": {
+      "title": "{name}'s Journal",
+      "eyebrow": "Journal",
+      "empty": "No posts yet.",
+      "readingTime": "{minutes} min read",
+      "tags": "Filed under"
+    },
+    "post": {
+      "backToList": "← All posts",
+      "byCreator": "By {name}"
+    },
+    "owner": {
+      "title": "Journal",
+      "eyebrow": "Journal",
+      "subtitle": "Long-form notes from your practice. Drafts are private; publish when you're ready.",
+      "backToAccount": "Back to account",
+      "backToList": "Back to Journal",
+      "new": "+ New post",
+      "published": "Published",
+      "drafts": "Drafts",
+      "empty": "No posts yet. Write your first.",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this post? This cannot be undone.",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "clientLabel": "Client account",
+      "clientTitle": "Journal is for creators.",
+      "clientBody": "You're signed in as a client. Sign in as a creator to write posts."
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Published"
+    },
+    "editor": {
+      "titleLabel": "Title",
+      "coverLabel": "Cover image URL",
+      "tagsLabel": "Tags",
+      "tagsHint": "comma-separated",
+      "bodyLabel": "Body",
+      "bodyHint": "Blank line between paragraphs.",
+      "statusLabel": "Status",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "profile": {
+      "linkToBlog": "Read {count, plural, =1 {1 post} other {# posts}} on Journal →"
+    }
   }
 }

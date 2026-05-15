@@ -6,6 +6,7 @@
   },
   "nav": {
     "discover": "اكتشف",
+    "spaces": "استوديوهات للإيجار",
     "jobs": "وظائف",
     "studios": "استوديوهات",
     "blog": "المجلة",
@@ -913,5 +914,55 @@
   },
   "common": {
     "comingSoon": "قريباً"
+  },
+  "blog": {
+    "publicList": {
+      "title": "مدوّنة {name}",
+      "eyebrow": "المدوّنة",
+      "empty": "لا توجد منشورات بعد.",
+      "readingTime": "قراءة {minutes} د",
+      "tags": "ضمن قسم"
+    },
+    "post": {
+      "backToList": "← كلّ المنشورات",
+      "byCreator": "بقلم {name}"
+    },
+    "owner": {
+      "title": "المدوّنة",
+      "eyebrow": "المدوّنة",
+      "subtitle": "ملاحظات مطوّلة من ممارستك. المسوّدات خاصّة بك حتى تنشرها.",
+      "backToAccount": "العودة إلى الحساب",
+      "backToList": "العودة إلى المدوّنة",
+      "new": "+ منشور جديد",
+      "published": "منشور",
+      "drafts": "مسوّدات",
+      "empty": "لا توجد منشورات بعد. اكتب أوّل منشور.",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "deleteConfirm": "هل تريد حذف هذا المنشور؟ لا يمكن التراجع.",
+      "publish": "نشر",
+      "unpublish": "إلغاء النشر",
+      "clientLabel": "حساب عميل",
+      "clientTitle": "المدوّنة للمبدعين.",
+      "clientBody": "أنت مسجَّل دخولاً كعميل. سجّل دخولك كمبدِع لكتابة المنشورات."
+    },
+    "status": {
+      "DRAFT": "مسوّدة",
+      "PUBLISHED": "منشور"
+    },
+    "editor": {
+      "titleLabel": "العنوان",
+      "coverLabel": "رابط صورة الغلاف",
+      "tagsLabel": "الوسوم",
+      "tagsHint": "افصِل بفواصل",
+      "bodyLabel": "النصّ",
+      "bodyHint": "اترك سطراً فارغاً بين الفقرات.",
+      "statusLabel": "الحالة",
+      "save": "حفظ",
+      "cancel": "إلغاء"
+    },
+    "profile": {
+      "linkToBlog": "اقرأ {count, plural, =1 {منشوراً واحداً} =2 {منشورين} few {# منشورات} many {# منشوراً} other {# منشور}} على المدوّنة →"
+    }
   }
 }

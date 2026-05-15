@@ -11,6 +11,7 @@ import { StartThreadButton } from '@/components/messages/start-thread-button';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
+import { getPublishedPostsByCreator } from '@/lib/blog/mock-store';
 import { CREATORS } from '@/lib/creators/mock-data';
 import { getCreatorByUsername } from '@/lib/creators/queries';
 import { listActiveProductsByCreator } from '@/lib/store/mock-store';
@@ -59,10 +60,12 @@ export default async function CreatorProfilePage({ params }: Props) {
 
   const t = await getTranslations('creator');
   const tCity = await getTranslations('cities');
+  const tBlog = await getTranslations('blog.profile');
 
   const name = locale === 'ar' ? creator.displayNameAr : creator.displayNameEn;
   const bio = locale === 'ar' ? creator.bioAr : creator.bioEn;
   const hasStore = listActiveProductsByCreator(creator.id).length > 0;
+  const publishedPostCount = getPublishedPostsByCreator(creator.id).length;
 
   return (
     <>
@@ -139,6 +142,14 @@ export default async function CreatorProfilePage({ params }: Props) {
           <div className="mt-8 grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-[2fr_1fr]">
             <div className="flex flex-col gap-4">
               <p className="max-w-prose text-base text-surface/80">{bio}</p>
+              {publishedPostCount > 0 ? (
+                <Link
+                  href={`/${locale}/${creator.username}/blog`}
+                  className="self-start text-sm text-accent-secondary underline-offset-4 hover:underline"
+                >
+                  {tBlog('linkToBlog', { count: publishedPostCount })}
+                </Link>
+              ) : null}
               <div className="flex flex-wrap gap-1.5">
                 {creator.disciplines.map((d) => (
                   <DisciplineTag key={d} discipline={d} />
