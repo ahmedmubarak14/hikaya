@@ -50,3 +50,6 @@ coverage/
 
 # Sentry
 .sentryclirc
+
+# Claude Code harness state (local settings + agent worktrees)
+.claude/
