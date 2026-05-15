@@ -9,11 +9,9 @@ import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getCreatorByUsername } from '@/lib/creators/queries';
 import { listInquiriesByClient, type InquiryStatus } from '@/lib/inquiries/mock-store';
+import { IS_STATIC_EXPORT } from '@/lib/static-export';
 
 import type { Metadata } from 'next';
-
-import { IS_STATIC_EXPORT } from '@/lib/static-export';
-import { DemoModeNotice } from '@/components/demo-mode-notice';
 
 interface Props {
   params: Promise<{ locale: Locale }>;
@@ -36,8 +34,8 @@ const STATUS_TONE: Record<InquiryStatus, 'neutral' | 'accent' | 'sage' | 'warnin
 export default async function MyInquiriesPage({ params, searchParams }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  if (IS_STATIC_EXPORT) return <DemoModeNotice locale={locale} />;
-  const { sent } = await searchParams;
+  // Static export drops searchParams.
+  const { sent } = IS_STATIC_EXPORT ? {} : await searchParams;
 
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/inquiries`);

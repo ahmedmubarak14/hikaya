@@ -4,9 +4,10 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { CreatorCard } from '@/components/creators/creator-card';
 import { DiscoverHero } from '@/components/creators/discover-hero';
+import { DiscoverViewSwitcher } from '@/components/creators/discover-view-switcher';
 import { FilterBar } from '@/components/creators/filter-bar';
 import { ProjectsGrid } from '@/components/creators/projects-grid';
-import { ViewToggle, type DiscoverView } from '@/components/creators/view-toggle';
+import { type DiscoverView } from '@/components/creators/view-toggle';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
@@ -98,36 +99,39 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
           searchLabel={t('searchAction')}
         />
 
-        {/* Projects / People segmented toggle */}
-        <div className="mb-6 flex justify-center">
-          <Suspense>
-            <ViewToggle
-              view={view}
-              labels={{ projects: t('viewProjects'), people: t('viewPeople') }}
-            />
-          </Suspense>
-        </div>
-
+        {/* Render BOTH grids server-side; the client switcher flips visibility
+            based on `?view=` so the toggle works on the static-export deploy
+            (which has no server runtime to react to URL changes). */}
         <Suspense>
-          <FilterBar city={city} discipline={discipline} availableOnly={availableOnly} />
+          <DiscoverViewSwitcher
+            initial={view}
+            labels={{ projects: t('viewProjects'), people: t('viewPeople') }}
+            peopleNode={
+              <>
+                <Suspense>
+                  <FilterBar city={city} discipline={discipline} availableOnly={availableOnly} />
+                </Suspense>
+                {creators.length === 0 ? (
+                  <div className="border-surface/10 bg-surface/[0.03] mt-10 rounded-xl border p-10 text-center">
+                    <p className="text-surface/70 text-lg">{t('empty')}</p>
+                    <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
+                  </div>
+                ) : (
+                  <ul className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">
+                    {creators.map((creator) => (
+                      <li key={creator.id}>
+                        <CreatorCard creator={creator} />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            }
+            projectsNode={
+              <ProjectsGrid locale={locale} creators={creators} emptyLabel={t('empty')} />
+            }
+          />
         </Suspense>
-
-        {view === 'projects' ? (
-          <ProjectsGrid locale={locale} creators={creators} emptyLabel={t('empty')} />
-        ) : creators.length === 0 ? (
-          <div className="border-surface/10 bg-surface/[0.03] mt-10 rounded-xl border p-10 text-center">
-            <p className="text-surface/70 text-lg">{t('empty')}</p>
-            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
-          </div>
-        ) : (
-          <ul className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">
-            {creators.map((creator) => (
-              <li key={creator.id}>
-                <CreatorCard creator={creator} />
-              </li>
-            ))}
-          </ul>
-        )}
       </main>
       <SiteFooter />
     </>

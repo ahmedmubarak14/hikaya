@@ -12,6 +12,13 @@ interface Props {
   labels: { work: string; store: string; about: string };
   /** When false, the Store tab is rendered as a disabled hint instead of a link. */
   storeEnabled: boolean;
+  /**
+   * When provided, switches via local state on click — used by
+   * `<ProfileTabsSwitcher>` so the tab works in static-export builds where
+   * the server can't read `?tab=` per request. The URL is still updated by
+   * the underlying `<Link>` so the choice stays bookmarkable.
+   */
+  onChange?: (next: ProfileTab) => void;
 }
 
 /**
@@ -19,7 +26,7 @@ interface Props {
  * `?tab=work|store|about` URL param so the active section is bookmarkable and
  * the page itself stays server-rendered.
  */
-export function ProfileTabs({ active, labels, storeEnabled }: Props) {
+export function ProfileTabs({ active, labels, storeEnabled, onChange }: Props) {
   const pathname = usePathname();
   const params = useSearchParams();
 
@@ -65,6 +72,13 @@ export function ProfileTabs({ active, labels, storeEnabled }: Props) {
             href={hrefFor(tab.id)}
             aria-current={isActive ? 'page' : undefined}
             scroll={false}
+            onClick={
+              onChange
+                ? () => {
+                    onChange(tab.id);
+                  }
+                : undefined
+            }
             className={cn(
               'relative inline-flex h-12 items-center px-5 text-sm uppercase tracking-wide transition-colors',
               isActive ? 'text-surface' : 'text-surface/50 hover:text-surface/80',

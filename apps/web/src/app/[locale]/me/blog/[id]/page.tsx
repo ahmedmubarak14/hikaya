@@ -4,13 +4,11 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { PostEditor } from '@/components/blog/post-editor';
 import { PostStatusBadge } from '@/components/blog/post-status-badge';
-import { DemoModeNotice } from '@/components/demo-mode-notice';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getPostById } from '@/lib/blog/queries';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
-import { IS_STATIC_EXPORT } from '@/lib/static-export';
 
 import type { Metadata } from 'next';
 
@@ -23,7 +21,14 @@ interface Props {
 // placeholder id is never actually used.
 export async function generateStaticParams() {
   const { locales } = await import('@/i18n/config');
-  return locales.map((locale) => ({ locale, id: '_demo' }));
+  const { getPostsByCreator } = await import('@/lib/blog/mock-store');
+  const items = getPostsByCreator('cr_noor');
+  return locales.flatMap((locale) => {
+    const real = items.map((item) => ({ locale, id: item.id }));
+    // Always include a `_demo` placeholder so Next has a path to render
+    // even when no items have been seeded for this entity.
+    return real.length > 0 ? real : [{ locale, id: '_demo' }];
+  });
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -38,7 +43,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function EditPostPage({ params }: Props) {
   const { locale, id } = await params;
   setRequestLocale(locale);
-  if (IS_STATIC_EXPORT) return <DemoModeNotice locale={locale} />;
 
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/blog/${id}`);

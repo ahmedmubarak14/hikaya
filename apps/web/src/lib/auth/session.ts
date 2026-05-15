@@ -5,7 +5,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { cookies } from 'next/headers';
 
 import { getActiveRole } from './active-role';
-import { findUserById, type MockUser, type MockUserRole } from './mock-store';
+import { findUserByEmail, findUserById, type MockUser, type MockUserRole } from './mock-store';
 
 /**
  * Cookie-based session for the mock auth flow.
@@ -105,8 +105,26 @@ export async function destroySession(): Promise<void> {
 }
 
 export async function getSession(): Promise<Session | null> {
-  // Static export build (GitHub Pages) has no cookies — treat as logged out.
-  if (process.env.EXPORT === '1') return null;
+  // Static export build (GitHub Pages) has no cookies. We auto-sign-in as
+  // Noor — the seeded Creator + Studio Owner — so the entire authenticated
+  // experience renders on the public preview. Mutations are stubbed to
+  // no-ops by the export-stub action map, so reading the dashboards works
+  // but write actions are inert.
+  if (process.env.EXPORT === '1') {
+    const noor = findUserByEmail('noor@hikaya.sa');
+    if (!noor) return null;
+    return {
+      user: {
+        id: noor.id,
+        email: noor.email,
+        displayName: noor.displayName,
+        roles: [...noor.roles],
+        primaryRole: noor.primaryRole,
+        currentRole: noor.primaryRole,
+        locale: noor.locale,
+      },
+    };
+  }
 
   const raw = (await cookies()).get(COOKIE_NAME)?.value;
   if (!raw) return null;

@@ -7,7 +7,6 @@ import { Badge, Button, Card, CardBody } from '@hikaya/ui';
 import { DeletePostButton } from '@/components/blog/delete-post-button';
 import { PostStatusBadge } from '@/components/blog/post-status-badge';
 import { PublishPostButton } from '@/components/blog/publish-post-button';
-import { DemoModeNotice } from '@/components/demo-mode-notice';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -15,7 +14,6 @@ import type { BlogPost } from '@/lib/blog/mock-data';
 import { listPostsByCreator } from '@/lib/blog/queries';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
 import { formatDate } from '@/lib/format';
-import { IS_STATIC_EXPORT } from '@/lib/static-export';
 
 import type { Metadata } from 'next';
 
@@ -32,7 +30,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function MyBlogPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  if (IS_STATIC_EXPORT) return <DemoModeNotice locale={locale} />;
 
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/blog`);
