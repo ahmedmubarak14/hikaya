@@ -855,6 +855,12 @@
   },
   "discover": {
     "title": "Discover creatives",
+    "heroTitle": "Hire Gulf creatives",
+    "searchPlaceholder": "Search creatives by name, discipline, or city",
+    "searchAction": "Search",
+    "viewProjects": "Projects",
+    "viewPeople": "People",
+    "projectFallback": "Project by {name}",
     "eyebrow": "Discover",
     "headline": "Photographers, designers, filmmakers —",
     "headlineItalic": "the Gulf's quiet best.",
@@ -886,7 +892,27 @@
     "priceSar": "SAR {price}",
     "fromPrice": "from SAR {price}",
     "languages": "Languages",
-    "website": "Website"
+    "website": "Website",
+    "tabs": {
+      "work": "Work",
+      "store": "Store",
+      "about": "About"
+    },
+    "stats": {
+      "projects": "{count, plural, =1 {1 project} other {# projects}}",
+      "rating": "{score} ({count})",
+      "years": "{years, plural, =1 {1 year} other {# years}}"
+    },
+    "about": {
+      "bio": "About",
+      "languages": "Languages",
+      "links": "Links"
+    },
+    "store": {
+      "empty": "No products yet.",
+      "emptyHint": "Check back soon, or browse this creator's work in the meantime.",
+      "backToWork": "Browse work"
+    }
   },
   "disciplines": {
     "weddingPhoto": "Wedding photo",

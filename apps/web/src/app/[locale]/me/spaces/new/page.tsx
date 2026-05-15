@@ -1,0 +1,54 @@
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+
+import { SpaceForm } from '@/components/spaces/space-form';
+import { SiteHeader } from '@/components/site-header';
+import { type Locale } from '@/i18n/config';
+import { getSession } from '@/lib/auth/session';
+
+import type { Metadata } from 'next';
+
+import { DemoModeNotice } from '@/components/demo-mode-notice';
+import { IS_STATIC_EXPORT } from '@/lib/static-export';
+
+interface Props {
+  params: Promise<{ locale: Locale }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'spaces.new' });
+  return { title: t('title') };
+}
+
+export default async function NewSpacePage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  if (IS_STATIC_EXPORT) return <DemoModeNotice locale={locale} />;
+
+  const session = await getSession();
+  if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/spaces/new`);
+
+  const t = await getTranslations('spaces.new');
+
+  return (
+    <>
+      <SiteHeader />
+      <main className="mx-auto w-full max-w-3xl px-6 py-22 md:px-10">
+        <header className="mb-8 flex flex-col gap-3">
+          <Link
+            href={`/${locale}/me/spaces`}
+            className="text-2xs text-surface/40 transition-colors hover:text-surface"
+          >
+            ← {t('back')}
+          </Link>
+          <h1 className="text-balance text-4xl">{t('title')}</h1>
+          <p className="text-surface/60">{t('subtitle')}</p>
+        </header>
+
+        <SpaceForm locale={locale} />
+      </main>
+    </>
+  );
+}
