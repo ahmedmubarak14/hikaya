@@ -849,6 +849,12 @@
   },
   "discover": {
     "title": "اكتشف المبدعين",
+    "heroTitle": "وظِّف مبدعي الخليج",
+    "searchPlaceholder": "ابحث عن مبدع بالاسم أو التخصّص أو المدينة",
+    "searchAction": "بحث",
+    "viewProjects": "المشاريع",
+    "viewPeople": "المبدعون",
+    "projectFallback": "مشروع لـ {name}",
     "eyebrow": "اكتشف",
     "headline": "مصوّرون، مصمّمون، صنّاع أفلام —",
     "headlineItalic": "أفضل ما في الخليج بهدوء.",
@@ -880,7 +886,27 @@
     "priceSar": "{price} ر.س",
     "fromPrice": "من {price} ر.س",
     "languages": "اللغات",
-    "website": "الموقع"
+    "website": "الموقع",
+    "tabs": {
+      "work": "الأعمال",
+      "store": "المتجر",
+      "about": "نبذة"
+    },
+    "stats": {
+      "projects": "{count, plural, zero {لا مشاريع} one {مشروع واحد} two {مشروعان} few {# مشاريع} many {# مشروعاً} other {# مشروع}}",
+      "rating": "{score} ({count})",
+      "years": "{years, plural, zero {بدون خبرة} one {سنة} two {سنتان} few {# سنوات} many {# سنة} other {# سنة}}"
+    },
+    "about": {
+      "bio": "نبذة",
+      "languages": "اللغات",
+      "links": "الروابط"
+    },
+    "store": {
+      "empty": "لا توجد منتجات بعد.",
+      "emptyHint": "عُد قريباً، أو تصفّح أعمال هذا المبدع الآن.",
+      "backToWork": "تصفّح الأعمال"
+    }
   },
   "disciplines": {
     "weddingPhoto": "تصوير أعراس",
