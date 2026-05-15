@@ -2,6 +2,7 @@ import 'server-only';
 
 import type { BlogPost, PostStatus } from './mock-data';
 import {
+  getAllPublishedPosts as getAllPublishedPostsRaw,
   getPostById as getPostByIdRaw,
   getPostBySlug as getPostBySlugRaw,
   getPostsByCreator as getPostsByCreatorRaw,
@@ -31,4 +32,8 @@ export async function getPostBySlug(creatorId: string, slug: string): Promise<Bl
 
 export async function getPostById(id: string): Promise<BlogPost | null> {
   return getPostByIdRaw(id);
+}
+
+export async function listAllPublishedPosts(limit?: number): Promise<BlogPost[]> {
+  return getAllPublishedPostsRaw(limit);
 }

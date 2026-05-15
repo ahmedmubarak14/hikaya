@@ -947,6 +947,12 @@
     "comingSoon": "قريباً"
   },
   "blog": {
+    "feed": {
+      "title": "المدوّنة",
+      "subtitle": "ملاحظات وكواليس ومقالات حِرفيّة من مبدعي حكاية.",
+      "empty": "لا توجد منشورات بعد.",
+      "readingTime": "قراءة {minutes} د"
+    },
     "publicList": {
       "title": "مدوّنة {name}",
       "eyebrow": "المدوّنة",
