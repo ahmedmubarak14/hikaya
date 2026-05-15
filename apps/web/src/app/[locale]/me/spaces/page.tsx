@@ -109,7 +109,7 @@ export default async function MySpacesPage({ params }: Props) {
                         >
                           {s.name}
                         </Link>
-                        <Badge tone={STATUS_TONE[s.status]}>{tStatus(s.status as 'DRAFT')}</Badge>
+                        <Badge tone={STATUS_TONE[s.status]}>{tStatus(s.status)}</Badge>
                       </div>
                       <p className="text-2xs text-surface/60 font-mono tabular-nums">
                         {s.hourlyHalalas > 0

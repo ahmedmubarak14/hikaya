@@ -34,13 +34,14 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
   const [serverState, formAction] = useFormState<SpacesResult | null, FormData>(action, null);
   const [isPending, startTransition] = useTransition();
 
-  // Default to today + tomorrow so the estimated-total preview has values.
-  const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
-  const tomorrow = useMemo(() => {
+  // Default to today + tomorrow. Computed per render (not memoized) so the
+  // min-date constraint stays correct if the form is open across midnight.
+  const today = new Date().toISOString().slice(0, 10);
+  const tomorrow = (() => {
     const d = new Date();
     d.setDate(d.getDate() + 1);
     return d.toISOString().slice(0, 10);
-  }, []);
+  })();
 
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(tomorrow);

@@ -110,9 +110,7 @@ export default async function MySpaceBookingsPage({ params }: Props) {
                       {formatSarFromHalalas(booking.totalHalalas, locale)}
                     </td>
                     <td className="px-4 py-3 text-end">
-                      <Badge tone={STATUS_TONE[booking.status]}>
-                        {tStatus(booking.status as 'PENDING')}
-                      </Badge>
+                      <Badge tone={STATUS_TONE[booking.status]}>{tStatus(booking.status)}</Badge>
                     </td>
                   </tr>
                 ))}

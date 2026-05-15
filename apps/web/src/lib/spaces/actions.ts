@@ -232,10 +232,12 @@ export async function bookSpaceAction(
     };
   }
 
-  // Interpret HOURLY as 9am→6pm same-day default if start === end day;
-  // we just keep the date strings — date input UX is intentionally simple.
-  const startISO = new Date(`${parsed.data.startDate}T09:00:00.000Z`).toISOString();
-  const endISO = new Date(`${parsed.data.endDate}T18:00:00.000Z`).toISOString();
+  // 9am→6pm assumed default in Riyadh local time (UTC+3) — the platform is
+  // Gulf-first, so users will read these times in Riyadh hours. We construct
+  // the timestamps with an explicit +03:00 offset, then toISOString() shifts
+  // them back to canonical UTC for storage.
+  const startISO = new Date(`${parsed.data.startDate}T09:00:00+03:00`).toISOString();
+  const endISO = new Date(`${parsed.data.endDate}T18:00:00+03:00`).toISOString();
 
   if (!isSpaceAvailable(spaceId, startISO, endISO)) {
     return { ok: false, error: 'UNAVAILABLE' };

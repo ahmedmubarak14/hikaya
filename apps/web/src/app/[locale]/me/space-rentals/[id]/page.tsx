@@ -76,9 +76,7 @@ export default async function SpaceRentalDetailPage({ params }: Props) {
         <Card>
           <CardBody className="flex flex-col gap-5 p-6">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <Badge tone={STATUS_TONE[booking.status]}>
-                {tStatus(booking.status as 'PENDING')}
-              </Badge>
+              <Badge tone={STATUS_TONE[booking.status]}>{tStatus(booking.status)}</Badge>
               {space ? (
                 <Link
                   href={`/${locale}/spaces/${space.id}`}

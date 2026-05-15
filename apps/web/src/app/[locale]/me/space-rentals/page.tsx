@@ -93,9 +93,7 @@ export default async function MySpaceRentalsPage({ params }: Props) {
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className="text-surface text-base">{space?.name ?? '—'}</span>
-                    <Badge tone={STATUS_TONE[booking.status]}>
-                      {tStatus(booking.status as 'PENDING')}
-                    </Badge>
+                    <Badge tone={STATUS_TONE[booking.status]}>{tStatus(booking.status)}</Badge>
                   </div>
                   <p className="text-2xs text-surface/60 mt-1 font-mono tabular-nums">
                     {formatDate(booking.startISO, locale)} → {formatDate(booking.endISO, locale)}

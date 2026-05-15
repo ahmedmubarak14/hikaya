@@ -145,9 +145,7 @@ export default async function MyStorePage({ params }: Props) {
                         <div className="flex flex-col gap-2 py-1">
                           <div className="flex items-center justify-between gap-2">
                             <CategoryBadge category={p.category} />
-                            <Badge tone={STATUS_TONE[p.status]}>
-                              {tStatus(p.status as 'DRAFT')}
-                            </Badge>
+                            <Badge tone={STATUS_TONE[p.status]}>{tStatus(p.status)}</Badge>
                           </div>
                           <h3 className="text-surface line-clamp-2 text-base">{title}</h3>
                           <div className="text-2xs mt-auto flex items-baseline justify-between gap-2 font-mono">

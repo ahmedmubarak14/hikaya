@@ -53,7 +53,7 @@ export function DiscoverHero({ title, placeholder, searchLabel, onSearch }: Prop
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder={placeholder}
-          aria-label={placeholder}
+          aria-label={searchLabel}
           className="text-surface placeholder:text-surface/40 h-full flex-1 bg-transparent text-base focus:outline-none"
         />
         <button

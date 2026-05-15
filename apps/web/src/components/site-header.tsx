@@ -50,17 +50,11 @@ export async function SiteHeader() {
             {t('switchLanguage')}
           </Link>
 
-          {session && session.user.roles.length >= 2 ? (
+          {session && Array.isArray(session.user.roles) && session.user.roles.length >= 2 ? (
             <RoleSwitcher
               current={session.user.currentRole}
               available={session.user.roles}
-              labels={
-                {
-                  CREATOR: t('roleCreatorShort'),
-                  STUDIO_OWNER: t('roleStudioOwnerShort'),
-                  CLIENT: t('roleClientShort'),
-                } as Record<MockUserRole, string>
-              }
+              labels={roleLabels(t)}
             />
           ) : null}
 
@@ -105,4 +99,19 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
       {children}
     </Link>
   );
+}
+
+/**
+ * Build a fully-typed role-label map. Declaring the type at the binding site
+ * (instead of casting at the usage site) makes TS exhaustiveness-check the
+ * object: adding a new MockUserRole becomes a compile error here.
+ */
+function roleLabels(
+  t: Awaited<ReturnType<typeof getTranslations<'nav'>>>,
+): Record<MockUserRole, string> {
+  return {
+    CREATOR: t('roleCreatorShort'),
+    STUDIO_OWNER: t('roleStudioOwnerShort'),
+    CLIENT: t('roleClientShort'),
+  };
 }

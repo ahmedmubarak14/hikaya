@@ -27,11 +27,12 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale, id } = await params;
-  const post = await getPostById(id);
-  if (!post) return {};
+  // Don't leak post.titleEn here — generateMetadata runs before the page's
+  // auth+ownership check. Anyone holding a valid id could otherwise read a
+  // private draft's title via this route's HTML <title>. Generic label only.
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'blog.owner' });
-  return { title: `${t('edit')} · ${post.titleEn}` };
+  return { title: t('edit') };
 }
 
 export default async function EditPostPage({ params }: Props) {

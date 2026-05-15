@@ -37,9 +37,12 @@ export function ProfileTabs({ active, labels, storeEnabled }: Props) {
     { id: 'about', label: labels.about },
   ];
 
+  // These are route-driven section links, not a managed tabs widget. Using
+  // <nav> + aria-current="page" tells screen readers it's navigation, not a
+  // tablist (which would imply tabpanel relationships + arrow-key behavior
+  // that don't exist here).
   return (
-    <div
-      role="tablist"
+    <nav
       aria-label="Profile sections"
       className="border-surface/10 flex items-center justify-center gap-1 border-b"
     >
@@ -49,7 +52,6 @@ export function ProfileTabs({ active, labels, storeEnabled }: Props) {
           return (
             <span
               key={tab.id}
-              role="tab"
               aria-disabled
               className="text-surface/30 inline-flex h-12 cursor-not-allowed items-center px-5 text-sm uppercase tracking-wide"
             >
@@ -61,8 +63,7 @@ export function ProfileTabs({ active, labels, storeEnabled }: Props) {
           <Link
             key={tab.id}
             href={hrefFor(tab.id)}
-            role="tab"
-            aria-selected={isActive}
+            aria-current={isActive ? 'page' : undefined}
             scroll={false}
             className={cn(
               'relative inline-flex h-12 items-center px-5 text-sm uppercase tracking-wide transition-colors',
@@ -80,6 +81,6 @@ export function ProfileTabs({ active, labels, storeEnabled }: Props) {
           </Link>
         );
       })}
-    </div>
+    </nav>
   );
 }
