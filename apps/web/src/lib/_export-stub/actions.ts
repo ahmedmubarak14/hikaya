@@ -69,6 +69,13 @@ export const updateProductAction: any = noop;
 export const setProductStatusAction: any = noop;
 export const purchaseProductAction: any = noop;
 
+// Spaces (studio rentals)
+export const createSpaceAction: any = noop;
+export const updateSpaceAction: any = noop;
+export const setSpaceStatusAction: any = noop;
+export const bookSpaceAction: any = noop;
+export const cancelBookingAction: any = noop;
+
 // Blog
 export const createPostAction: any = noop;
 export const updatePostAction: any = noop;
@@ -77,3 +84,10 @@ export const publishPostAction: any = noop;
 
 // Theme
 export const setTheme: any = noop;
+
+// Active role (multi-role accounts)
+export const setActiveRole: any = noop;
+
+// Studio public profile
+export const createStudioProfileAction: any = noop;
+export const updateStudioProfileAction: any = noop;

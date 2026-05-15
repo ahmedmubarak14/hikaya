@@ -4,7 +4,8 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 
 import { cookies } from 'next/headers';
 
-import { findUserById, type MockUser } from './mock-store';
+import { getActiveRole } from './active-role';
+import { findUserById, type MockUser, type MockUserRole } from './mock-store';
 
 /**
  * Cookie-based session for the mock auth flow.
@@ -24,8 +25,22 @@ interface SessionPayload {
   iat: number; // issued at (unix seconds)
 }
 
+export interface SessionUser
+  extends Pick<MockUser, 'id' | 'email' | 'displayName' | 'locale'> {
+  /** All roles the user holds. */
+  roles: MockUserRole[];
+  /** Default role for redirects when no active-role cookie is set. */
+  primaryRole: MockUserRole;
+  /**
+   * The role currently active in this session — derived from the
+   * `hikaya_active_role` cookie when set and present in `roles`, otherwise
+   * `primaryRole`. Use this for any "is this view appropriate?" decision.
+   */
+  currentRole: MockUserRole;
+}
+
 export interface Session {
-  user: Pick<MockUser, 'id' | 'email' | 'displayName' | 'role' | 'locale'>;
+  user: SessionUser;
 }
 
 function getSecret(): string {
@@ -100,12 +115,21 @@ export async function getSession(): Promise<Session | null> {
   const user = findUserById(payload.uid);
   if (!user) return null;
 
+  // Resolve the active role: cookie wins iff the value is still in the
+  // user's roles[]. Otherwise fall back to primaryRole. This means revoking
+  // a role automatically drops the user out of that view.
+  const cookieRole = await getActiveRole();
+  const currentRole: MockUserRole =
+    cookieRole && user.roles.includes(cookieRole) ? cookieRole : user.primaryRole;
+
   return {
     user: {
       id: user.id,
       email: user.email,
       displayName: user.displayName,
-      role: user.role,
+      roles: [...user.roles],
+      primaryRole: user.primaryRole,
+      currentRole,
       locale: user.locale,
     },
   };

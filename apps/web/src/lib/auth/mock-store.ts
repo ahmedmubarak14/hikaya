@@ -22,7 +22,15 @@ export interface MockUser {
   email: string;
   passwordHash: string;
   displayName: string;
-  role: MockUserRole;
+  /**
+   * The set of roles the user holds. Multi-role is a first-class concept:
+   * one user can be a Creator AND a Studio Owner AND a Client. The active
+   * role for the current session is tracked separately via a cookie (see
+   * `active-role.ts`); when unset we fall back to `primaryRole`.
+   */
+  roles: MockUserRole[];
+  /** Default role for redirects when no active-role cookie is present. */
+  primaryRole: MockUserRole;
   locale: Locale;
   createdAt: string;
 }
@@ -42,19 +50,32 @@ const store: Store =
   (() => {
     const fresh: Store = { users: new Map(), byEmail: new Map() };
 
-    // Seed two demo accounts so devs can sign in immediately.
+    // Seed demo accounts so devs can sign in immediately.
+    // Noor holds both Creator and Studio Owner roles — demonstrates the
+    // multi-role switcher in the header.
     seedUser(fresh, {
       email: 'noor@hikaya.sa',
       password: 'password123',
       displayName: 'Noor Al-Saadi',
-      role: 'CREATOR',
+      roles: ['CREATOR', 'STUDIO_OWNER'],
+      primaryRole: 'CREATOR',
       locale: 'en',
     });
     seedUser(fresh, {
       email: 'client@hikaya.sa',
       password: 'password123',
       displayName: 'Sample Client',
-      role: 'CLIENT',
+      roles: ['CLIENT'],
+      primaryRole: 'CLIENT',
+      locale: 'en',
+    });
+    // Standalone studio owner — Path B onboarding target.
+    seedUser(fresh, {
+      email: 'studio@hikaya.sa',
+      password: 'password123',
+      displayName: 'Crescent Studio',
+      roles: ['STUDIO_OWNER'],
+      primaryRole: 'STUDIO_OWNER',
       locale: 'en',
     });
 
@@ -67,7 +88,14 @@ if (process.env.NODE_ENV !== 'production') {
 
 function seedUser(
   s: Store,
-  data: { email: string; password: string; displayName: string; role: MockUserRole; locale: Locale },
+  data: {
+    email: string;
+    password: string;
+    displayName: string;
+    roles: MockUserRole[];
+    primaryRole: MockUserRole;
+    locale: Locale;
+  },
 ): void {
   const id = randomUUID();
   const user: MockUser = {
@@ -75,7 +103,8 @@ function seedUser(
     email: data.email.toLowerCase(),
     passwordHash: hashPassword(data.password),
     displayName: data.displayName,
-    role: data.role,
+    roles: [...data.roles],
+    primaryRole: data.primaryRole,
     locale: data.locale,
     createdAt: new Date().toISOString(),
   };
@@ -111,7 +140,8 @@ export function createUser(input: CreateUserInput): MockUser {
     email,
     passwordHash: hashPassword(input.password),
     displayName: input.displayName,
-    role: input.role,
+    roles: [input.role],
+    primaryRole: input.role,
     locale: input.locale,
     createdAt: new Date().toISOString(),
   };

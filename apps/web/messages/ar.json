@@ -14,7 +14,10 @@
     "joinAsCreator": "انضمّ كصانع محتوى",
     "switchLanguage": "English",
     "switchToLight": "التبديل إلى الوضع الفاتح",
-    "switchToDark": "التبديل إلى الوضع الداكن"
+    "switchToDark": "التبديل إلى الوضع الداكن",
+    "roleCreatorShort": "مبدع",
+    "roleStudioOwnerShort": "استوديو",
+    "roleClientShort": "عميل"
   },
   "home": {
     "headline": {
@@ -69,6 +72,8 @@
     "roleClientHint": "علامات تجاريّة، شركات، وأفراد.",
     "roleCreator": "عرض أعمالي",
     "roleCreatorHint": "مصوّرون، صنّاع فيديو، مصمّمون.",
+    "roleStudioOwner": "تسجيل استوديو",
+    "roleStudioOwnerHint": "أدير استوديو إنتاج بفريق وغرف.",
     "acceptTerms": "أوافق على <terms>شروط</terms> و<privacy>سياسة الخصوصيّة</privacy> الخاصّة بحكاية.",
     "haveAccount": "لديك حساب بالفعل؟",
     "signInLink": "سجّل الدخول",
@@ -963,6 +968,55 @@
     },
     "profile": {
       "linkToBlog": "اقرأ {count, plural, =1 {منشوراً واحداً} =2 {منشورين} few {# منشورات} many {# منشوراً} other {# منشور}} على المدوّنة →"
+    }
+  },
+  "studios": {
+    "title": "الاستوديوهات",
+    "eyebrow": "الاستوديوهات",
+    "headline": "استوديوهات إنتاج في المملكة.",
+    "count": "{count, plural, =0 {لا توجد استوديوهات بعد} =1 {استوديو واحد} =2 {استوديوهان} few {# استوديوهات} many {# استوديوهاً} other {# استوديو}}",
+    "empty": "لا توجد استوديوهات تطابق هذه الفلاتر.",
+    "filterCity": "المدينة",
+    "filterAllCities": "كلّ المدن",
+    "filterApply": "تطبيق",
+    "public": {
+      "eyebrow": "استوديو",
+      "capacity": "{count, plural, =1 {جلسة واحدة في الوقت ذاته} other {# جلسات في الوقت ذاته}}",
+      "inquire": "أرسل استفساراً",
+      "aboutLabel": "نبذة",
+      "specializationsLabel": "التخصّصات",
+      "teamLabel": "الفريق",
+      "contactEmail": "البريد الإلكتروني",
+      "contactPhone": "الهاتف"
+    }
+  },
+  "studioSetup": {
+    "title": "سجّل استوديوك",
+    "eyebrow": "إعداد الاستوديو",
+    "headline": "أخبرنا عن",
+    "headlineItalic": "استوديوك.",
+    "subtitle": "تظهر هذه المعلومات في صفحة استوديوك العامّة. يمكنك تعديل أيّ شيء لاحقاً — املأ الأساسيّات فقط.",
+    "backToAccount": "العودة إلى الحساب",
+    "nameEn": "اسم الاستوديو",
+    "nameAr": "اسم الاستوديو (بالعربية)",
+    "city": "المدينة",
+    "address": "العنوان",
+    "capacity": "السعة",
+    "capacityHint": "كم جلسة يمكنك تشغيلها بالتوازي.",
+    "logoUrl": "رابط الشعار",
+    "coverUrl": "رابط صورة الغلاف",
+    "specializations": "التخصّصات",
+    "specializationsHint": "اختر التخصّصات التي يدعمها استوديوك.",
+    "descriptionEn": "الوصف",
+    "descriptionAr": "الوصف (بالعربية)",
+    "contactEmail": "بريد التواصل",
+    "contactPhone": "هاتف التواصل",
+    "submit": "إنشاء صفحة الاستوديو",
+    "cancel": "إلغاء",
+    "errors": {
+      "alreadyExists": "لديك ملفّ استوديو بالفعل.",
+      "wrongRole": "إنشاء ملفّ الاستوديو مقتصر على ملّاك الاستوديوهات.",
+      "notAuthenticated": "يرجى تسجيل الدخول للمتابعة."
     }
   }
 }

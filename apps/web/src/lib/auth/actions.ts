@@ -91,7 +91,11 @@ export async function signUpAction(
   }
 
   await createSession(user.id);
-  redirect(`/${locale ?? defaultLocale}/me`);
+  // Path B: standalone Studio Owner registration drops straight into the
+  // studio-profile onboarding wizard. Other roles land on the account home.
+  const next =
+    parsed.data.role === 'STUDIO_OWNER' ? '/me/studio/setup' : '/me';
+  redirect(`/${locale ?? defaultLocale}${next}`);
 }
 
 export async function signOutAction(locale: Locale): Promise<void> {
