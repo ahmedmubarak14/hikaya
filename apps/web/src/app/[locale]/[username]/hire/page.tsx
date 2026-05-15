@@ -12,9 +12,6 @@ import { getCreatorByUsername } from '@/lib/creators/queries';
 
 import type { Metadata } from 'next';
 
-import { IS_STATIC_EXPORT } from '@/lib/static-export';
-import { DemoModeNotice } from '@/components/demo-mode-notice';
-
 interface Props {
   params: Promise<{ locale: Locale; username: string }>;
 }
@@ -34,7 +31,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function HireCreatorPage({ params }: Props) {
   const { locale, username } = await params;
   setRequestLocale(locale);
-  if (IS_STATIC_EXPORT) return <DemoModeNotice locale={locale} />;
 
   const creator = await getCreatorByUsername(username);
   if (!creator) notFound();

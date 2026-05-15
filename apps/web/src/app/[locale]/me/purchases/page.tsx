@@ -11,11 +11,9 @@ import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { formatDateTime, formatSarFromHalalas } from '@/lib/format';
 import { getProductById, listOrdersByBuyer } from '@/lib/store/mock-store';
+import { IS_STATIC_EXPORT } from '@/lib/static-export';
 
 import type { Metadata } from 'next';
-
-import { IS_STATIC_EXPORT } from '@/lib/static-export';
-import { DemoModeNotice } from '@/components/demo-mode-notice';
 
 interface Props {
   params: Promise<{ locale: Locale }>;
@@ -31,8 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function MyPurchasesPage({ params, searchParams }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  if (IS_STATIC_EXPORT) return <DemoModeNotice locale={locale} />;
-  const { bought } = await searchParams;
+  const { bought } = IS_STATIC_EXPORT ? {} : await searchParams;
 
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/purchases`);

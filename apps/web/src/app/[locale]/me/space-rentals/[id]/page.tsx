@@ -14,16 +14,20 @@ import { getBooking, getSpace } from '@/lib/spaces/queries';
 
 import type { Metadata } from 'next';
 
-import { DemoModeNotice } from '@/components/demo-mode-notice';
-import { IS_STATIC_EXPORT } from '@/lib/static-export';
-
 interface Props {
   params: Promise<{ locale: Locale; id: string }>;
 }
 
 export async function generateStaticParams() {
   const { locales } = await import('@/i18n/config');
-  return locales.map((locale) => ({ locale, id: '_demo' }));
+  const { getBookingsByRenter } = await import('@/lib/spaces/mock-store');
+  const items = getBookingsByRenter('u_noor_demo');
+  return locales.flatMap((locale) => {
+    const real = items.map((item) => ({ locale, id: item.id }));
+    // Always include a `_demo` placeholder so Next has a path to render
+    // even when no items have been seeded for this entity.
+    return real.length > 0 ? real : [{ locale, id: '_demo' }];
+  });
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -42,7 +46,6 @@ const STATUS_TONE: Record<BookingStatus, 'neutral' | 'sage' | 'warning' | 'accen
 export default async function SpaceRentalDetailPage({ params }: Props) {
   const { locale, id } = await params;
   setRequestLocale(locale);
-  if (IS_STATIC_EXPORT) return <DemoModeNotice locale={locale} />;
 
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/space-rentals/${id}`);

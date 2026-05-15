@@ -14,9 +14,6 @@ import { getSpaceById } from '@/lib/spaces/mock-store';
 
 import type { Metadata } from 'next';
 
-import { DemoModeNotice } from '@/components/demo-mode-notice';
-import { IS_STATIC_EXPORT } from '@/lib/static-export';
-
 interface Props {
   params: Promise<{ locale: Locale }>;
 }
@@ -37,7 +34,6 @@ const STATUS_TONE: Record<BookingStatus, 'neutral' | 'sage' | 'warning' | 'accen
 export default async function MySpaceRentalsPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  if (IS_STATIC_EXPORT) return <DemoModeNotice locale={locale} />;
 
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/space-rentals`);
