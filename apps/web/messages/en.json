@@ -947,6 +947,12 @@
     "comingSoon": "Coming soon"
   },
   "blog": {
+    "feed": {
+      "title": "The Journal",
+      "subtitle": "Notes, behind-the-scenes, and craft from creatives on Hikaya.",
+      "empty": "No posts published yet.",
+      "readingTime": "{minutes} min read"
+    },
     "publicList": {
       "title": "{name}'s Journal",
       "eyebrow": "Journal",

@@ -61,6 +61,21 @@ export function getPublishedPostsByCreator(creatorId: string): BlogPost[] {
   return getPostsByCreator(creatorId, { status: 'PUBLISHED' });
 }
 
+/**
+ * All published posts across every creator, newest-first. Powers the
+ * top-level `/[locale]/blog` aggregate feed.
+ */
+export function getAllPublishedPosts(limit?: number): BlogPost[] {
+  const out = [...store.posts.values()]
+    .filter((p) => p.status === 'PUBLISHED')
+    .sort((a, b) => {
+      const ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
+      const tb = b.publishedAt ? Date.parse(b.publishedAt) : 0;
+      return tb - ta;
+    });
+  return typeof limit === 'number' ? out.slice(0, limit) : out;
+}
+
 export function getPostBySlug(creatorId: string, slug: string): BlogPost | null {
   for (const p of store.posts.values()) {
     if (p.creatorId === creatorId && p.slug === slug) return p;
