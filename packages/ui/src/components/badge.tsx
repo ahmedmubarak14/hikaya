@@ -8,14 +8,13 @@ const badgeVariants = cva(
   {
     variants: {
       tone: {
-        neutral: 'bg-surface/10 text-surface/80',
-        // accent is yellow-green — readable only when used as a fill, not as
-        // text-color. Use solid fill with ink text so it works in both themes.
-        accent: 'bg-accent text-ink',
-        sage: 'bg-sage/15 text-sage',
-        info: 'bg-info/15 text-info',
-        purple: 'bg-purple/15 text-purple',
-        warning: 'bg-accent-secondary/15 text-accent-secondary',
+        neutral: 'bg-surface/10 text-surface/75 ring-1 ring-surface/10',
+        accent: 'bg-[var(--accent)]/25 text-surface ring-1 ring-[var(--accent)]/35',
+        sage: 'bg-[var(--sage)]/18 text-surface ring-1 ring-[var(--sage)]/30',
+        info: 'bg-[var(--info)]/18 text-surface ring-1 ring-[var(--info)]/30',
+        purple: 'bg-[var(--purple)]/18 text-surface ring-1 ring-[var(--purple)]/30',
+        warning:
+          'bg-[var(--accent-secondary)]/18 text-surface ring-1 ring-[var(--accent-secondary)]/30',
       },
     },
     defaultVariants: { tone: 'neutral' },

@@ -31,11 +31,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       <div
         className={cn(
           'relative flex items-center gap-2',
-          'h-11 rounded-md px-4',
-          'bg-surface/5 border-surface/15 border',
+          'h-11 rounded-lg px-4',
+          'border border-surface/15 bg-bg/55 shadow-sm shadow-ink/5',
           'duration-fast transition-colors ease-out',
-          'focus-within:border-accent focus-within:bg-surface/10',
-          error && 'border-accent-secondary',
+          'focus-within:border-[var(--accent)] focus-within:bg-bg',
+          error && 'border-[var(--accent-secondary)]',
         )}
       >
         {leadingIcon ? <span className="text-surface/60">{leadingIcon}</span> : null}
@@ -58,7 +58,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
       </div>
 
       {error ? (
-        <p id={`${inputId}-error`} className="text-accent-secondary text-xs">
+        <p id={`${inputId}-error`} className="text-xs text-[var(--accent-secondary)]">
           {error}
         </p>
       ) : hint ? (

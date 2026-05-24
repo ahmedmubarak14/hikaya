@@ -13,35 +13,35 @@
 
 :root {
   /* Light (default) */
-  --bg: #fafaf7;
-  --surface: #0f0f10;
-  --line: #ececec;
-  --muted: #6b6b6b;
+  --bg: #f4f1ea;
+  --surface: #151412;
+  --line: #e3ddd2;
+  --muted: #756f66;
 
   /* Fixed brand colors */
-  --ink: #080808;
-  --paper: #f8f6f1;
-  --accent: #e8ff47;
-  --accent-secondary: #ff6b35;
-  --sage: #4a7a5a;
-  --info: #3a6fd8;
-  --purple: #7c52c8;
+  --ink: #151412;
+  --paper: #f4f1ea;
+  --accent: #8fb7a4;
+  --accent-secondary: #a786a5;
+  --sage: #789988;
+  --info: #7896a9;
+  --purple: #9285a8;
 }
 
 :root[data-theme='dark'] {
-  --bg: #080808;
-  --surface: #f8f6f1;
-  --line: #1a1a1a;
-  --muted: #888580;
+  --bg: #151412;
+  --surface: #f4f1ea;
+  --line: #2d2923;
+  --muted: #aaa296;
 }
 
 /* Honor OS preference when no explicit choice has been made. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    --bg: #080808;
-    --surface: #f8f6f1;
-    --line: #1a1a1a;
-    --muted: #888580;
+    --bg: #151412;
+    --surface: #f4f1ea;
+    --line: #2d2923;
+    --muted: #aaa296;
   }
 }
 
@@ -103,7 +103,7 @@
   }
 
   .text-gradient-accent {
-    background: linear-gradient(135deg, var(--accent) 0%, #c9ff00 100%);
+    background: linear-gradient(135deg, var(--accent) 0%, #a9b8c2 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
