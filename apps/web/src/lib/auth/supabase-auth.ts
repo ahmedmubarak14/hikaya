@@ -137,6 +137,10 @@ export async function supabaseSignOut(): Promise<void> {
  * for the mock-store getSession().
  */
 export async function getSupabaseSession(): Promise<{ user: SessionUser } | null> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return null;
+  }
+
   const supabase = await createClient();
 
   const {
