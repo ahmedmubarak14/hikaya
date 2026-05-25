@@ -53,3 +53,4 @@ coverage/
 
 # Claude Code harness state (local settings + agent worktrees)
 .claude/
+packages/database/.env
