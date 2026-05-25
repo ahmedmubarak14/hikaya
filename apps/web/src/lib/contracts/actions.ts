@@ -6,14 +6,8 @@ import { redirect } from 'next/navigation';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
+import { createClient } from '@/lib/supabase/server';
 
-import {
-  cancelContract as storeCancel,
-  getContractById,
-  getContractBySlug,
-  signContract,
-  updateContractSections,
-} from './mock-store';
 import { sectionKeys, signContractSchema, updateSectionsSchema } from './schemas';
 
 export type ContractErrorKey =
@@ -69,10 +63,17 @@ export async function updateContractSectionsAction(
   const auth = await requireOwnedCreator();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const contract = getContractById(contractId);
-  if (!contract) return { ok: false, error: 'CONTRACT_NOT_FOUND' };
-  if (contract.creatorId !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
-  if (contract.status === 'SIGNED' || contract.status === 'CANCELLED') {
+  const supabase = await createClient();
+
+  const { data: contract, error: fetchErr } = await supabase
+    .from('Contract')
+    .select('id, creatorId, status, shareSlug')
+    .eq('id', contractId)
+    .maybeSingle();
+
+  if (fetchErr || !contract) return { ok: false, error: 'CONTRACT_NOT_FOUND' };
+  if ((contract.creatorId as string) !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+  if ((contract.status as string) === 'SIGNED' || (contract.status as string) === 'CANCELLED') {
     return { ok: false, error: 'WRONG_STATE' };
   }
 
@@ -92,13 +93,20 @@ export async function updateContractSectionsAction(
     };
   }
 
-  updateContractSections(
-    contractId,
-    sectionKeys.map((key) => ({ key, body: parsed.data[key] ?? '' })),
-  );
+  const sections = sectionKeys.map((key) => ({ key, body: parsed.data[key] ?? '' }));
+
+  const { error: updateErr } = await supabase
+    .from('Contract')
+    .update({ sections, updatedAt: new Date().toISOString() })
+    .eq('id', contractId);
+
+  if (updateErr) {
+    console.error('[contracts/actions] updateContractSectionsAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
 
   revalidatePath(`/${locale}/me/contracts/${contractId}`);
-  if (contract.shareSlug) revalidatePath(`/${locale}/c/${contract.shareSlug}`);
+  if (contract.shareSlug) revalidatePath(`/${locale}/c/${contract.shareSlug as string}`);
   return { ok: true, message: 'SECTIONS_SAVED' };
 }
 
@@ -111,11 +119,18 @@ export async function signAsCreatorAction(
   const auth = await requireOwnedCreator();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const contract = getContractById(contractId);
-  if (!contract) return { ok: false, error: 'CONTRACT_NOT_FOUND' };
-  if (contract.creatorId !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
+
+  const { data: contract, error: fetchErr } = await supabase
+    .from('Contract')
+    .select('id, creatorId, status, shareSlug, creatorSignedAt, clientSignedAt')
+    .eq('id', contractId)
+    .maybeSingle();
+
+  if (fetchErr || !contract) return { ok: false, error: 'CONTRACT_NOT_FOUND' };
+  if ((contract.creatorId as string) !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
   if (contract.creatorSignedAt) return { ok: false, error: 'ALREADY_SIGNED' };
-  if (contract.status === 'CANCELLED' || contract.status === 'DRAFT') {
+  if ((contract.status as string) === 'CANCELLED' || (contract.status as string) === 'DRAFT') {
     return { ok: false, error: 'WRONG_STATE' };
   }
 
@@ -131,9 +146,27 @@ export async function signAsCreatorAction(
     };
   }
 
-  signContract(contractId, 'creator', parsed.data.typedName);
+  const now = new Date().toISOString();
+  const bothSigned = !!contract.clientSignedAt;
+  const newStatus = bothSigned ? 'SIGNED' : 'CREATOR_SIGNED';
+
+  const { error: updateErr } = await supabase
+    .from('Contract')
+    .update({
+      creatorSignedName: parsed.data.typedName,
+      creatorSignedAt: now,
+      status: newStatus,
+      updatedAt: now,
+    })
+    .eq('id', contractId);
+
+  if (updateErr) {
+    console.error('[contracts/actions] signAsCreatorAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
   revalidatePath(`/${locale}/me/contracts/${contractId}`);
-  if (contract.shareSlug) revalidatePath(`/${locale}/c/${contract.shareSlug}`);
+  if (contract.shareSlug) revalidatePath(`/${locale}/c/${contract.shareSlug as string}`);
   return { ok: true, message: 'SIGNED' };
 }
 
@@ -144,12 +177,28 @@ export async function cancelContractAction(
   const auth = await requireOwnedCreator();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const contract = getContractById(contractId);
-  if (!contract) return { ok: false, error: 'CONTRACT_NOT_FOUND' };
-  if (contract.creatorId !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
-  if (contract.status === 'SIGNED') return { ok: false, error: 'WRONG_STATE' };
+  const supabase = await createClient();
 
-  storeCancel(contractId);
+  const { data: contract, error: fetchErr } = await supabase
+    .from('Contract')
+    .select('id, creatorId, status')
+    .eq('id', contractId)
+    .maybeSingle();
+
+  if (fetchErr || !contract) return { ok: false, error: 'CONTRACT_NOT_FOUND' };
+  if ((contract.creatorId as string) !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+  if ((contract.status as string) === 'SIGNED') return { ok: false, error: 'WRONG_STATE' };
+
+  const { error: updateErr } = await supabase
+    .from('Contract')
+    .update({ status: 'CANCELLED', updatedAt: new Date().toISOString() })
+    .eq('id', contractId);
+
+  if (updateErr) {
+    console.error('[contracts/actions] cancelContractAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
   revalidatePath(`/${locale}/me/contracts`);
   redirect(`/${locale}/me/contracts`);
 }
@@ -162,10 +211,17 @@ export async function signAsClientAction(
   _prev: ContractResult | null,
   formData: FormData,
 ): Promise<ContractResult> {
-  const contract = getContractBySlug(shareSlug);
-  if (!contract) return { ok: false, error: 'CONTRACT_NOT_FOUND' };
+  const supabase = await createClient();
+
+  const { data: contract, error: fetchErr } = await supabase
+    .from('Contract')
+    .select('id, status, shareSlug, clientSignedAt, creatorSignedAt')
+    .eq('shareSlug', shareSlug)
+    .maybeSingle();
+
+  if (fetchErr || !contract) return { ok: false, error: 'CONTRACT_NOT_FOUND' };
   if (contract.clientSignedAt) return { ok: false, error: 'ALREADY_SIGNED' };
-  if (contract.status === 'CANCELLED' || contract.status === 'DRAFT') {
+  if ((contract.status as string) === 'CANCELLED' || (contract.status as string) === 'DRAFT') {
     return { ok: false, error: 'WRONG_STATE' };
   }
 
@@ -181,8 +237,26 @@ export async function signAsClientAction(
     };
   }
 
-  signContract(contract.id, 'client', parsed.data.typedName);
+  const now = new Date().toISOString();
+  const bothSigned = !!contract.creatorSignedAt;
+  const newStatus = bothSigned ? 'SIGNED' : 'CLIENT_SIGNED';
+
+  const { error: updateErr } = await supabase
+    .from('Contract')
+    .update({
+      clientSignedName: parsed.data.typedName,
+      clientSignedAt: now,
+      status: newStatus,
+      updatedAt: now,
+    })
+    .eq('id', contract.id as string);
+
+  if (updateErr) {
+    console.error('[contracts/actions] signAsClientAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
   revalidatePath(`/${locale}/c/${shareSlug}`);
-  revalidatePath(`/${locale}/me/contracts/${contract.id}`);
+  revalidatePath(`/${locale}/me/contracts/${contract.id as string}`);
   return { ok: true, message: 'SIGNED' };
 }

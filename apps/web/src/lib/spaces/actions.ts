@@ -1,21 +1,14 @@
 'use server';
 
+import { randomBytes } from 'node:crypto';
+
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
+import { createClient } from '@/lib/supabase/server';
 
-import {
-  createBooking,
-  createSpace,
-  getBookingById,
-  getSpaceById,
-  isSpaceAvailable,
-  setBookingStatus,
-  setSpaceStatus,
-  updateSpace,
-} from './mock-store';
 import { bookSpaceSchema, spaceSchema } from './schemas';
 
 export type SpacesErrorKey =
@@ -96,23 +89,36 @@ export async function createSpaceAction(
     };
   }
 
-  const space = createSpace({
-    ownerId: auth.session.user.id,
-    name: parsed.data.name,
-    description: parsed.data.description,
-    address: parsed.data.address,
-    city: parsed.data.city,
-    capacity: parsed.data.capacity,
-    hourlyHalalas: parsed.data.hourlySar * SAR_TO_HALALAS,
-    dailyHalalas: parsed.data.dailySar * SAR_TO_HALALAS,
-    equipmentIncluded: parsed.data.equipmentRaw,
-    photos: parsed.data.photosRaw,
-    status: parsed.data.status,
-  });
+  const supabase = await createClient();
+  const spaceId = `sp_${randomBytes(6).toString('hex')}`;
+  const now = new Date().toISOString();
+
+  const { error } = await supabase
+    .from('Space')
+    .insert({
+      id: spaceId,
+      ownerId: auth.session.user.id,
+      name: parsed.data.name,
+      description: parsed.data.description,
+      address: parsed.data.address,
+      city: parsed.data.city,
+      capacity: parsed.data.capacity,
+      hourlyHalalas: parsed.data.hourlySar * SAR_TO_HALALAS,
+      dailyHalalas: parsed.data.dailySar * SAR_TO_HALALAS,
+      equipmentIncluded: parsed.data.equipmentRaw,
+      photos: parsed.data.photosRaw,
+      status: parsed.data.status,
+      createdAt: now,
+    });
+
+  if (error) {
+    console.error('[spaces/actions] createSpaceAction error:', error.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
 
   revalidatePath(`/${locale}/me/spaces`);
   revalidatePath(`/${locale}/spaces`);
-  redirect(`/${locale}/me/spaces/${space.id}`);
+  redirect(`/${locale}/me/spaces/${spaceId}`);
 }
 
 export async function updateSpaceAction(
@@ -124,9 +130,16 @@ export async function updateSpaceAction(
   const auth = await requireSession();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const space = getSpaceById(spaceId);
-  if (!space) return { ok: false, error: 'SPACE_NOT_FOUND' };
-  if (space.ownerId !== auth.session.user.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
+
+  const { data: space, error: fetchErr } = await supabase
+    .from('Space')
+    .select('id, ownerId')
+    .eq('id', spaceId)
+    .maybeSingle();
+
+  if (fetchErr || !space) return { ok: false, error: 'SPACE_NOT_FOUND' };
+  if ((space.ownerId as string) !== auth.session.user.id) return { ok: false, error: 'NOT_OWNER' };
 
   const parsed = parseSpaceForm(formData);
   if (!parsed.success) {
@@ -137,18 +150,26 @@ export async function updateSpaceAction(
     };
   }
 
-  updateSpace(spaceId, {
-    name: parsed.data.name,
-    description: parsed.data.description,
-    address: parsed.data.address,
-    city: parsed.data.city,
-    capacity: parsed.data.capacity,
-    hourlyHalalas: parsed.data.hourlySar * SAR_TO_HALALAS,
-    dailyHalalas: parsed.data.dailySar * SAR_TO_HALALAS,
-    equipmentIncluded: parsed.data.equipmentRaw,
-    photos: parsed.data.photosRaw,
-    status: parsed.data.status,
-  });
+  const { error: updateErr } = await supabase
+    .from('Space')
+    .update({
+      name: parsed.data.name,
+      description: parsed.data.description,
+      address: parsed.data.address,
+      city: parsed.data.city,
+      capacity: parsed.data.capacity,
+      hourlyHalalas: parsed.data.hourlySar * SAR_TO_HALALAS,
+      dailyHalalas: parsed.data.dailySar * SAR_TO_HALALAS,
+      equipmentIncluded: parsed.data.equipmentRaw,
+      photos: parsed.data.photosRaw,
+      status: parsed.data.status,
+    })
+    .eq('id', spaceId);
+
+  if (updateErr) {
+    console.error('[spaces/actions] updateSpaceAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
 
   revalidatePath(`/${locale}/me/spaces`);
   revalidatePath(`/${locale}/me/spaces/${spaceId}`);
@@ -165,11 +186,26 @@ export async function setSpaceStatusAction(
   const auth = await requireSession();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const space = getSpaceById(spaceId);
-  if (!space) return { ok: false, error: 'SPACE_NOT_FOUND' };
-  if (space.ownerId !== auth.session.user.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
 
-  setSpaceStatus(spaceId, status);
+  const { data: space, error: fetchErr } = await supabase
+    .from('Space')
+    .select('id, ownerId')
+    .eq('id', spaceId)
+    .maybeSingle();
+
+  if (fetchErr || !space) return { ok: false, error: 'SPACE_NOT_FOUND' };
+  if ((space.ownerId as string) !== auth.session.user.id) return { ok: false, error: 'NOT_OWNER' };
+
+  const { error: updateErr } = await supabase
+    .from('Space')
+    .update({ status })
+    .eq('id', spaceId);
+
+  if (updateErr) {
+    console.error('[spaces/actions] setSpaceStatusAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
 
   revalidatePath(`/${locale}/me/spaces`);
   revalidatePath(`/${locale}/me/spaces/${spaceId}`);
@@ -212,10 +248,17 @@ export async function bookSpaceAction(
     redirect(`/${locale}/sign-in?next=/${locale}/spaces/${spaceId}`);
   }
 
-  const space = getSpaceById(spaceId);
-  if (!space) return { ok: false, error: 'SPACE_NOT_FOUND' };
-  if (space.status !== 'ACTIVE') return { ok: false, error: 'SPACE_NOT_ACTIVE' };
-  if (space.ownerId === auth.session.user.id) {
+  const supabase = await createClient();
+
+  const { data: space, error: spaceFetchErr } = await supabase
+    .from('Space')
+    .select('id, ownerId, status, hourlyHalalas, dailyHalalas')
+    .eq('id', spaceId)
+    .maybeSingle();
+
+  if (spaceFetchErr || !space) return { ok: false, error: 'SPACE_NOT_FOUND' };
+  if ((space.status as string) !== 'ACTIVE') return { ok: false, error: 'SPACE_NOT_ACTIVE' };
+  if ((space.ownerId as string) === auth.session.user.id) {
     return { ok: false, error: 'CANNOT_BOOK_OWN' };
   }
 
@@ -232,14 +275,20 @@ export async function bookSpaceAction(
     };
   }
 
-  // 9am→6pm assumed default in Riyadh local time (UTC+3) — the platform is
-  // Gulf-first, so users will read these times in Riyadh hours. We construct
-  // the timestamps with an explicit +03:00 offset, then toISOString() shifts
-  // them back to canonical UTC for storage.
   const startISO = new Date(`${parsed.data.startDate}T09:00:00+03:00`).toISOString();
   const endISO = new Date(`${parsed.data.endDate}T18:00:00+03:00`).toISOString();
 
-  if (!isSpaceAvailable(spaceId, startISO, endISO)) {
+  // Check availability: no overlapping non-cancelled bookings
+  const { data: overlapping } = await supabase
+    .from('SpaceBooking')
+    .select('id')
+    .eq('spaceId', spaceId)
+    .neq('status', 'CANCELLED')
+    .lt('startISO', endISO)
+    .gt('endISO', startISO)
+    .limit(1);
+
+  if (overlapping && overlapping.length > 0) {
     return { ok: false, error: 'UNAVAILABLE' };
   }
 
@@ -247,23 +296,36 @@ export async function bookSpaceAction(
     Date.parse(startISO),
     Date.parse(endISO),
     parsed.data.durationKind,
-    space.hourlyHalalas,
-    space.dailyHalalas,
+    space.hourlyHalalas as number,
+    space.dailyHalalas as number,
   );
 
-  const booking = createBooking({
-    spaceId,
-    renterId: auth.session.user.id,
-    startISO,
-    endISO,
-    durationKind: parsed.data.durationKind,
-    totalHalalas: total,
-  });
+  const bookingId = `sb_${randomBytes(6).toString('hex')}`;
+  const now = new Date().toISOString();
+
+  const { error: bookingErr } = await supabase
+    .from('SpaceBooking')
+    .insert({
+      id: bookingId,
+      spaceId,
+      renterId: auth.session.user.id,
+      startISO,
+      endISO,
+      durationKind: parsed.data.durationKind,
+      totalHalalas: total,
+      status: 'PENDING',
+      createdAt: now,
+    });
+
+  if (bookingErr) {
+    console.error('[spaces/actions] bookSpaceAction error:', bookingErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
 
   revalidatePath(`/${locale}/spaces/${spaceId}`);
   revalidatePath(`/${locale}/me/space-rentals`);
   revalidatePath(`/${locale}/me/space-bookings`);
-  redirect(`/${locale}/me/space-rentals/${booking.id}`);
+  redirect(`/${locale}/me/space-rentals/${bookingId}`);
 }
 
 export async function cancelBookingAction(
@@ -273,21 +335,45 @@ export async function cancelBookingAction(
   const auth = await requireSession();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const booking = getBookingById(bookingId);
-  if (!booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+  const supabase = await createClient();
 
-  const space = getSpaceById(booking.spaceId);
-  const isRenter = booking.renterId === auth.session.user.id;
-  const isOwner = space?.ownerId === auth.session.user.id;
+  const { data: booking, error: fetchErr } = await supabase
+    .from('SpaceBooking')
+    .select('id, spaceId, renterId')
+    .eq('id', bookingId)
+    .maybeSingle();
+
+  if (fetchErr || !booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+
+  // Check if user is the renter or the space owner
+  const isRenter = (booking.renterId as string) === auth.session.user.id;
+  let isOwner = false;
+  if (!isRenter) {
+    const { data: space } = await supabase
+      .from('Space')
+      .select('ownerId')
+      .eq('id', booking.spaceId as string)
+      .maybeSingle();
+    isOwner = !!space && (space.ownerId as string) === auth.session.user.id;
+  }
+
   if (!isRenter && !isOwner) return { ok: false, error: 'NOT_RENTER' };
 
-  setBookingStatus(bookingId, 'CANCELLED');
+  const { error: updateErr } = await supabase
+    .from('SpaceBooking')
+    .update({ status: 'CANCELLED' })
+    .eq('id', bookingId);
+
+  if (updateErr) {
+    console.error('[spaces/actions] cancelBookingAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
 
   revalidatePath(`/${locale}/me/space-rentals`);
   revalidatePath(`/${locale}/me/space-rentals/${bookingId}`);
   revalidatePath(`/${locale}/me/space-bookings`);
-  if (space) {
-    revalidatePath(`/${locale}/spaces/${space.id}`);
+  if (booking.spaceId) {
+    revalidatePath(`/${locale}/spaces/${booking.spaceId as string}`);
   }
   return { ok: true };
 }
