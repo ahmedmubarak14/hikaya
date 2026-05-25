@@ -1,14 +1,23 @@
 import createMiddleware from 'next-intl/middleware';
+import { type NextRequest } from 'next/server';
 
 import { defaultLocale, locales } from './i18n/config';
+import { updateSession } from './lib/supabase/middleware';
 
-export default createMiddleware({
+const intlMiddleware = createMiddleware({
   locales: [...locales],
   defaultLocale,
   localePrefix: 'always',
 });
 
+export async function middleware(request: NextRequest) {
+  // 1. Refresh the Supabase session cookie (keeps auth alive).
+  await updateSession(request);
+
+  // 2. Run the next-intl locale middleware (redirect, rewrite, etc.)
+  return intlMiddleware(request);
+}
+
 export const config = {
-  // Match everything except API routes, static, and image-optimisation paths.
   matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
 };

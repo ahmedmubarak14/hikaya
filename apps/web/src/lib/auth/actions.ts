@@ -4,17 +4,8 @@ import { redirect } from 'next/navigation';
 
 import { defaultLocale, type Locale } from '@/i18n/config';
 
-import { authenticate, createUser } from './mock-store';
 import { signInFormSchema, signUpFormSchema } from './schemas';
-import { createSession, destroySession } from './session';
-
-/**
- * Server actions for the mock auth flow.
- *
- * Action results follow a `{ ok: false, error: 'KEY' }` pattern so the form
- * can render translated error copy without hard-coding English in the action.
- * Successful actions redirect — they do not return.
- */
+import { supabaseSignIn, supabaseSignOut, supabaseSignUp } from './supabase-auth';
 
 export type AuthErrorKey = 'INVALID_INPUT' | 'INVALID_CREDENTIALS' | 'EMAIL_TAKEN' | 'UNKNOWN';
 
@@ -52,10 +43,15 @@ export async function signInAction(
     };
   }
 
-  const user = authenticate(parsed.data.email, parsed.data.password);
-  if (!user) return { ok: false, error: 'INVALID_CREDENTIALS' };
+  const result = await supabaseSignIn({
+    email: parsed.data.email,
+    password: parsed.data.password,
+  });
 
-  await createSession(user.id);
+  if (!result.ok) {
+    return { ok: false, error: 'INVALID_CREDENTIALS' };
+  }
+
   redirect(`/${locale ?? defaultLocale}/me`);
 }
 
@@ -80,30 +76,26 @@ export async function signUpAction(
     };
   }
 
-  let user;
-  try {
-    user = createUser({
-      email: parsed.data.email,
-      password: parsed.data.password,
-      displayName: parsed.data.displayName,
-      role: parsed.data.role,
-      locale: parsed.data.locale,
-    });
-  } catch (err) {
-    if (err instanceof Error && err.message === 'EMAIL_TAKEN') {
+  const result = await supabaseSignUp({
+    email: parsed.data.email,
+    password: parsed.data.password,
+    displayName: parsed.data.displayName,
+    role: parsed.data.role,
+    locale: parsed.data.locale,
+  });
+
+  if (!result.ok) {
+    if (result.error === 'EMAIL_TAKEN') {
       return { ok: false, error: 'EMAIL_TAKEN', fieldErrors: { email: 'EMAIL_TAKEN' } };
     }
     return { ok: false, error: 'UNKNOWN' };
   }
 
-  await createSession(user.id);
-  // Path B: standalone Studio Owner registration drops straight into the
-  // studio-profile onboarding wizard. Other roles land on the account home.
   const next = parsed.data.role === 'STUDIO_OWNER' ? '/me/studio/setup' : '/me';
   redirect(`/${locale ?? defaultLocale}${next}`);
 }
 
 export async function signOutAction(locale: Locale): Promise<void> {
-  await destroySession();
+  await supabaseSignOut();
   redirect(`/${locale ?? defaultLocale}`);
 }
