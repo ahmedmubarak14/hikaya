@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 
 import { getActiveRole } from './active-role';
 import { findUserByEmail, findUserById, type MockUser, type MockUserRole } from './mock-store';
+import { getSupabaseSession } from './supabase-auth';
 
 /**
  * Cookie-based session for the mock auth flow.
@@ -107,9 +108,7 @@ export async function destroySession(): Promise<void> {
 export async function getSession(): Promise<Session | null> {
   // Static export build (GitHub Pages) has no cookies. We auto-sign-in as
   // Noor — the seeded Creator + Studio Owner — so the entire authenticated
-  // experience renders on the public preview. Mutations are stubbed to
-  // no-ops by the export-stub action map, so reading the dashboards works
-  // but write actions are inert.
+  // experience renders on the public preview.
   if (process.env.EXPORT === '1') {
     const noor = findUserByEmail('noor@hikaya.sa');
     if (!noor) return null;
@@ -126,6 +125,13 @@ export async function getSession(): Promise<Session | null> {
     };
   }
 
+  // Try Supabase Auth first (real production path). If a Supabase session
+  // exists, we use it — this is the path real users take after sign-up/in.
+  const supaSession = await getSupabaseSession();
+  if (supaSession) return supaSession;
+
+  // Fallback to the legacy HMAC-cookie session for backwards compat during
+  // migration. Once all users are on Supabase Auth, this block can be removed.
   const raw = (await cookies()).get(COOKIE_NAME)?.value;
   if (!raw) return null;
 
