@@ -1,20 +1,15 @@
 'use server';
 
+import { randomBytes } from 'node:crypto';
+
 import { revalidatePath } from 'next/cache';
 
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
+import { createClient } from '@/lib/supabase/server';
 
 import type { BlogPost } from './mock-data';
-import {
-  createPost,
-  deletePost,
-  getPostById,
-  publishPost,
-  unpublishPost,
-  updatePost,
-} from './mock-store';
 import { createPostSchema, updatePostSchema } from './schemas';
 
 /**
@@ -88,6 +83,68 @@ function revalidateAuthorPaths(locale: Locale, username: string, slug?: string) 
   revalidatePath(`/${locale}/${username}`);
 }
 
+/**
+ * Generate a URL-safe slug from a title string, ensuring uniqueness per
+ * creator by querying Supabase.
+ */
+async function uniqueSlug(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  creatorId: string,
+  base: string,
+): Promise<string> {
+  const norm = base
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80);
+  const candidate = norm.length >= 3 ? norm : `post-${randomBytes(3).toString('hex')}`;
+
+  // Check for slug collisions
+  const { data: existing } = await supabase
+    .from('BlogPost')
+    .select('id')
+    .eq('creatorId', creatorId)
+    .eq('slug', candidate)
+    .maybeSingle();
+
+  if (!existing) return candidate;
+
+  // Add suffix until unique
+  let i = 2;
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const suffixed = `${norm}-${i}`;
+    const { data: collision } = await supabase
+      .from('BlogPost')
+      .select('id')
+      .eq('creatorId', creatorId)
+      .eq('slug', suffixed)
+      .maybeSingle();
+    if (!collision) return suffixed;
+    i += 1;
+  }
+}
+
+function mapRowToPost(row: Record<string, unknown>): BlogPost {
+  return {
+    id: row.id as string,
+    creatorId: row.creatorId as string,
+    slug: row.slug as string,
+    titleEn: row.titleEn as string,
+    titleAr: (row.titleAr as string) ?? undefined,
+    coverUrl: (row.coverUrl as string) ?? undefined,
+    bodyEn: row.bodyEn as string,
+    bodyAr: (row.bodyAr as string) ?? undefined,
+    tags: (row.tags as string[]) ?? [],
+    status: row.status as BlogPost['status'],
+    publishedAt: (row.publishedAt as string) ?? undefined,
+    createdAt: row.createdAt as string,
+    updatedAt: row.updatedAt as string,
+  };
+}
+
 export async function createPostAction(
   locale: Locale,
   _prev: BlogResult | null,
@@ -105,20 +162,37 @@ export async function createPostAction(
     };
   }
 
-  const post = createPost({
-    creatorId: auth.creator.id,
-    titleEn: parsed.data.titleEn,
-    titleAr: parsed.data.titleAr || undefined,
-    coverUrl: parsed.data.coverUrl || undefined,
-    bodyEn: parsed.data.bodyEn,
-    bodyAr: parsed.data.bodyAr || undefined,
-    tags: parsed.data.tagsRaw,
-    status: parsed.data.status,
-    slug: parsed.data.slug || undefined,
-  });
+  const supabase = await createClient();
+  const now = new Date().toISOString();
+  const slug = await uniqueSlug(supabase, auth.creator.id, parsed.data.slug || parsed.data.titleEn);
+  const isPublished = parsed.data.status === 'PUBLISHED';
 
-  revalidateAuthorPaths(locale, auth.creator.username, post.slug);
-  return { ok: true, post };
+  const { data: post, error } = await supabase
+    .from('BlogPost')
+    .insert({
+      creatorId: auth.creator.id,
+      slug,
+      titleEn: parsed.data.titleEn,
+      titleAr: parsed.data.titleAr || null,
+      coverUrl: parsed.data.coverUrl || null,
+      bodyEn: parsed.data.bodyEn,
+      bodyAr: parsed.data.bodyAr || null,
+      tags: parsed.data.tagsRaw,
+      status: parsed.data.status,
+      publishedAt: isPublished ? now : null,
+      createdAt: now,
+      updatedAt: now,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error('[blog/actions] createPostAction error:', error.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidateAuthorPaths(locale, auth.creator.username, post.slug as string);
+  return { ok: true, post: mapRowToPost(post as Record<string, unknown>) };
 }
 
 export async function updatePostAction(
@@ -130,9 +204,17 @@ export async function updatePostAction(
   const auth = await requireOwnedCreator();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const existing = getPostById(postId);
-  if (!existing) return { ok: false, error: 'POST_NOT_FOUND' };
-  if (existing.creatorId !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
+
+  // Fetch existing post to verify ownership
+  const { data: existing, error: fetchErr } = await supabase
+    .from('BlogPost')
+    .select('id, creatorId, slug, status, publishedAt')
+    .eq('id', postId)
+    .maybeSingle();
+
+  if (fetchErr || !existing) return { ok: false, error: 'POST_NOT_FOUND' };
+  if ((existing.creatorId as string) !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
 
   const parsed = updatePostSchema.safeParse({
     titleEn: formData.get('titleEn'),
@@ -141,7 +223,7 @@ export async function updatePostAction(
     bodyEn: formData.get('bodyEn'),
     bodyAr: formData.get('bodyAr') || undefined,
     tagsRaw: formData.get('tagsRaw') ?? '',
-    status: formData.get('status') ?? existing.status,
+    status: formData.get('status') ?? (existing.status as string),
     slug: formData.get('slug') || undefined,
   });
   if (!parsed.success) {
@@ -152,33 +234,67 @@ export async function updatePostAction(
     };
   }
 
-  const post = updatePost(postId, {
-    titleEn: parsed.data.titleEn,
-    titleAr: parsed.data.titleAr || undefined,
-    coverUrl: parsed.data.coverUrl || undefined,
-    bodyEn: parsed.data.bodyEn,
-    bodyAr: parsed.data.bodyAr || undefined,
-    tags: parsed.data.tagsRaw,
-    status: parsed.data.status,
-  });
+  // Determine if this is a first-time publish
+  const becomingPublished =
+    parsed.data.status === 'PUBLISHED' &&
+    (existing.status as string) !== 'PUBLISHED' &&
+    !existing.publishedAt;
 
-  revalidateAuthorPaths(locale, auth.creator.username, existing.slug);
-  if (post.slug !== existing.slug) {
-    revalidatePath(`/${locale}/${auth.creator.username}/blog/${post.slug}`);
+  const now = new Date().toISOString();
+
+  const { data: post, error: updateErr } = await supabase
+    .from('BlogPost')
+    .update({
+      titleEn: parsed.data.titleEn,
+      titleAr: parsed.data.titleAr || null,
+      coverUrl: parsed.data.coverUrl || null,
+      bodyEn: parsed.data.bodyEn,
+      bodyAr: parsed.data.bodyAr || null,
+      tags: parsed.data.tagsRaw,
+      status: parsed.data.status,
+      publishedAt: becomingPublished ? now : (existing.publishedAt as string | null),
+      updatedAt: now,
+    })
+    .eq('id', postId)
+    .select()
+    .single();
+
+  if (updateErr) {
+    console.error('[blog/actions] updatePostAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
   }
-  return { ok: true, post, message: 'SAVED' };
+
+  const mappedPost = mapRowToPost(post as Record<string, unknown>);
+  revalidateAuthorPaths(locale, auth.creator.username, existing.slug as string);
+  if (mappedPost.slug !== (existing.slug as string)) {
+    revalidatePath(`/${locale}/${auth.creator.username}/blog/${mappedPost.slug}`);
+  }
+  return { ok: true, post: mappedPost, message: 'SAVED' };
 }
 
 export async function deletePostAction(locale: Locale, postId: string): Promise<BlogResult> {
   const auth = await requireOwnedCreator();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const existing = getPostById(postId);
-  if (!existing) return { ok: false, error: 'POST_NOT_FOUND' };
-  if (existing.creatorId !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
 
-  deletePost(postId);
-  revalidateAuthorPaths(locale, auth.creator.username, existing.slug);
+  const { data: existing, error: fetchErr } = await supabase
+    .from('BlogPost')
+    .select('id, creatorId, slug')
+    .eq('id', postId)
+    .maybeSingle();
+
+  if (fetchErr || !existing) return { ok: false, error: 'POST_NOT_FOUND' };
+  if ((existing.creatorId as string) !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+
+  const { error: deleteErr } = await supabase.from('BlogPost').delete().eq('id', postId);
+
+  if (deleteErr) {
+    console.error('[blog/actions] deletePostAction error:', deleteErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidateAuthorPaths(locale, auth.creator.username, existing.slug as string);
   return { ok: true };
 }
 
@@ -190,11 +306,36 @@ export async function publishPostAction(
   const auth = await requireOwnedCreator();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const existing = getPostById(postId);
-  if (!existing) return { ok: false, error: 'POST_NOT_FOUND' };
-  if (existing.creatorId !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
 
-  const post = publish ? publishPost(postId) : unpublishPost(postId);
-  revalidateAuthorPaths(locale, auth.creator.username, existing.slug);
-  return { ok: true, post };
+  const { data: existing, error: fetchErr } = await supabase
+    .from('BlogPost')
+    .select('id, creatorId, slug, status, publishedAt')
+    .eq('id', postId)
+    .maybeSingle();
+
+  if (fetchErr || !existing) return { ok: false, error: 'POST_NOT_FOUND' };
+  if ((existing.creatorId as string) !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+
+  const now = new Date().toISOString();
+  const isFirstPublish = publish && !existing.publishedAt;
+
+  const { data: post, error: updateErr } = await supabase
+    .from('BlogPost')
+    .update({
+      status: publish ? 'PUBLISHED' : 'DRAFT',
+      publishedAt: isFirstPublish ? now : (existing.publishedAt as string | null),
+      updatedAt: now,
+    })
+    .eq('id', postId)
+    .select()
+    .single();
+
+  if (updateErr) {
+    console.error('[blog/actions] publishPostAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidateAuthorPaths(locale, auth.creator.username, existing.slug as string);
+  return { ok: true, post: mapRowToPost(post as Record<string, unknown>) };
 }

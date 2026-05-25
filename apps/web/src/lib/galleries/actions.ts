@@ -1,6 +1,6 @@
 'use server';
 
-import { randomUUID } from 'node:crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
@@ -9,16 +9,8 @@ import { redirect } from 'next/navigation';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
+import { createClient } from '@/lib/supabase/server';
 
-import {
-  addImagesToGallery,
-  createGallery,
-  deleteGallery,
-  getGalleryById,
-  getGalleryBySlug,
-  removeImageFromGallery,
-  toggleVisitorSelection,
-} from './mock-store';
 import { addImagesSchema, createGallerySchema } from './schemas';
 
 const VISITOR_COOKIE = 'hikaya_visitor';
@@ -63,6 +55,43 @@ async function requireOwnedCreator() {
   return { ok: true as const, creator, session };
 }
 
+/**
+ * Generate a URL-safe slug for a gallery, ensuring uniqueness by querying
+ * the Collection table.
+ */
+async function uniqueSlug(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  base: string,
+): Promise<string> {
+  const norm = base
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
+  const candidate = norm.length >= 3 ? norm : `gallery-${randomBytes(3).toString('hex')}`;
+
+  const { data: existing } = await supabase
+    .from('Collection')
+    .select('id')
+    .eq('shareSlug', candidate)
+    .maybeSingle();
+
+  if (!existing) return candidate;
+
+  let i = 2;
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const suffixed = `${norm}-${i}`;
+    const { data: collision } = await supabase
+      .from('Collection')
+      .select('id')
+      .eq('shareSlug', suffixed)
+      .maybeSingle();
+    if (!collision) return suffixed;
+    i += 1;
+  }
+}
+
 /* ----------------------------- creator actions ----------------------------- */
 
 export async function createGalleryAction(
@@ -90,19 +119,45 @@ export async function createGalleryAction(
     };
   }
 
-  const gallery = createGallery({
-    creatorId: auth.creator.id,
-    titleEn: parsed.data.titleEn,
-    titleAr: parsed.data.titleAr || undefined,
-    message: parsed.data.message || undefined,
-    coverUrl: parsed.data.coverUrl || undefined,
-    allowDownloads: parsed.data.allowDownloads,
-    watermarkPreviews: parsed.data.watermarkPreviews,
-    expiresInDays: parsed.data.expiresInDays,
-  });
+  const supabase = await createClient();
+  const now = new Date().toISOString();
+  const shareSlug = await uniqueSlug(supabase, parsed.data.titleEn);
+  const expiresAt =
+    parsed.data.expiresInDays && parsed.data.expiresInDays > 0
+      ? new Date(Date.now() + parsed.data.expiresInDays * 24 * 60 * 60 * 1000).toISOString()
+      : null;
+
+  const coverUrl =
+    parsed.data.coverUrl ||
+    `https://picsum.photos/seed/${randomBytes(4).toString('hex')}/1800/900`;
+
+  const { data: gallery, error } = await supabase
+    .from('Collection')
+    .insert({
+      creatorId: auth.creator.id,
+      shareSlug,
+      titleEn: parsed.data.titleEn,
+      titleAr: parsed.data.titleAr || null,
+      coverUrl,
+      message: parsed.data.message || null,
+      access: 'OPEN_LINK',
+      allowDownloads: parsed.data.allowDownloads,
+      watermarkPreviews: parsed.data.watermarkPreviews,
+      expiresAt,
+      publishedAt: now,
+      createdAt: now,
+      updatedAt: now,
+    })
+    .select('id')
+    .single();
+
+  if (error || !gallery) {
+    console.error('[galleries/actions] createGalleryAction error:', error?.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
 
   revalidatePath(`/${locale}/me/galleries`);
-  redirect(`/${locale}/me/galleries/${gallery.id}`);
+  redirect(`/${locale}/me/galleries/${gallery.id as string}`);
 }
 
 export async function deleteGalleryAction(
@@ -112,11 +167,28 @@ export async function deleteGalleryAction(
   const auth = await requireOwnedCreator();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const gallery = getGalleryById(galleryId);
-  if (!gallery) return { ok: false, error: 'GALLERY_NOT_FOUND' };
-  if (gallery.creatorId !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
 
-  deleteGallery(galleryId);
+  const { data: gallery, error: fetchErr } = await supabase
+    .from('Collection')
+    .select('id, creatorId')
+    .eq('id', galleryId)
+    .maybeSingle();
+
+  if (fetchErr || !gallery) return { ok: false, error: 'GALLERY_NOT_FOUND' };
+  if ((gallery.creatorId as string) !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+
+  // Delete associated images and selections (cascading should handle this via FK,
+  // but we delete explicitly to be safe)
+  await supabase.from('CollectionSelection').delete().eq('collectionId', galleryId);
+  await supabase.from('CollectionImage').delete().eq('collectionId', galleryId);
+  const { error: deleteErr } = await supabase.from('Collection').delete().eq('id', galleryId);
+
+  if (deleteErr) {
+    console.error('[galleries/actions] deleteGalleryAction error:', deleteErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
   revalidatePath(`/${locale}/me/galleries`);
   redirect(`/${locale}/me/galleries`);
 }
@@ -130,9 +202,16 @@ export async function addImagesAction(
   const auth = await requireOwnedCreator();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const gallery = getGalleryById(galleryId);
-  if (!gallery) return { ok: false, error: 'GALLERY_NOT_FOUND' };
-  if (gallery.creatorId !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
+
+  const { data: gallery, error: fetchErr } = await supabase
+    .from('Collection')
+    .select('id, creatorId, shareSlug')
+    .eq('id', galleryId)
+    .maybeSingle();
+
+  if (fetchErr || !gallery) return { ok: false, error: 'GALLERY_NOT_FOUND' };
+  if ((gallery.creatorId as string) !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
 
   const parsed = addImagesSchema.safeParse({ urls: formData.get('urls') ?? '' });
   if (!parsed.success) {
@@ -143,13 +222,40 @@ export async function addImagesAction(
     };
   }
 
-  addImagesToGallery(
-    galleryId,
-    parsed.data.urls.map((url) => ({ url })),
-  );
+  // Determine the current max orderIndex
+  const { data: lastImage } = await supabase
+    .from('CollectionImage')
+    .select('orderIndex')
+    .eq('collectionId', galleryId)
+    .order('orderIndex', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  let nextIndex = ((lastImage?.orderIndex as number | null) ?? -1) + 1;
+  const now = new Date().toISOString();
+
+  const rows = parsed.data.urls.map((url) => {
+    const row = {
+      collectionId: galleryId,
+      url,
+      width: 1200,
+      height: 900,
+      orderIndex: nextIndex,
+      createdAt: now,
+    };
+    nextIndex += 1;
+    return row;
+  });
+
+  const { error: insertErr } = await supabase.from('CollectionImage').insert(rows);
+
+  if (insertErr) {
+    console.error('[galleries/actions] addImagesAction error:', insertErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
 
   revalidatePath(`/${locale}/me/galleries/${galleryId}`);
-  revalidatePath(`/${locale}/g/${gallery.shareSlug}`);
+  revalidatePath(`/${locale}/g/${gallery.shareSlug as string}`);
 
   return { ok: true, message: 'IMAGES_ADDED' };
 }
@@ -162,14 +268,32 @@ export async function removeImageAction(
   const auth = await requireOwnedCreator();
   if (!auth.ok) return { ok: false, error: auth.error };
 
-  const gallery = getGalleryById(galleryId);
-  if (!gallery) return { ok: false, error: 'GALLERY_NOT_FOUND' };
-  if (gallery.creatorId !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
 
-  removeImageFromGallery(galleryId, imageId);
+  const { data: gallery, error: fetchErr } = await supabase
+    .from('Collection')
+    .select('id, creatorId, shareSlug')
+    .eq('id', galleryId)
+    .maybeSingle();
+
+  if (fetchErr || !gallery) return { ok: false, error: 'GALLERY_NOT_FOUND' };
+  if ((gallery.creatorId as string) !== auth.creator.id) return { ok: false, error: 'NOT_OWNER' };
+
+  // Delete any selections for this image first
+  await supabase.from('CollectionSelection').delete().eq('imageId', imageId);
+  const { error: deleteErr } = await supabase
+    .from('CollectionImage')
+    .delete()
+    .eq('id', imageId)
+    .eq('collectionId', galleryId);
+
+  if (deleteErr) {
+    console.error('[galleries/actions] removeImageAction error:', deleteErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
 
   revalidatePath(`/${locale}/me/galleries/${galleryId}`);
-  revalidatePath(`/${locale}/g/${gallery.shareSlug}`);
+  revalidatePath(`/${locale}/g/${gallery.shareSlug as string}`);
 
   return { ok: true };
 }
@@ -208,14 +332,44 @@ export async function toggleSelectionAction(
   shareSlug: string,
   imageId: string,
 ): Promise<GalleryResult> {
-  const gallery = getGalleryBySlug(shareSlug);
-  if (!gallery) return { ok: false, error: 'GALLERY_NOT_FOUND' };
+  const supabase = await createClient();
+
+  const { data: gallery, error: fetchErr } = await supabase
+    .from('Collection')
+    .select('id')
+    .eq('shareSlug', shareSlug)
+    .maybeSingle();
+
+  if (fetchErr || !gallery) return { ok: false, error: 'GALLERY_NOT_FOUND' };
 
   const visitorId = await getOrIssueVisitorId();
-  toggleVisitorSelection(gallery.id, visitorId, imageId);
+  const collectionId = gallery.id as string;
+
+  // Check if selection already exists
+  const { data: existingSelection } = await supabase
+    .from('CollectionSelection')
+    .select('id')
+    .eq('collectionId', collectionId)
+    .eq('imageId', imageId)
+    .eq('clientEmail', visitorId)
+    .maybeSingle();
+
+  if (existingSelection) {
+    // Remove selection (un-heart)
+    await supabase.from('CollectionSelection').delete().eq('id', existingSelection.id as string);
+  } else {
+    // Add selection (heart)
+    const now = new Date().toISOString();
+    await supabase.from('CollectionSelection').insert({
+      collectionId,
+      imageId,
+      clientEmail: visitorId,
+      createdAt: now,
+    });
+  }
 
   revalidatePath(`/${locale}/g/${shareSlug}`);
-  revalidatePath(`/${locale}/me/galleries/${gallery.id}`);
+  revalidatePath(`/${locale}/me/galleries/${collectionId}`);
 
   return { ok: true };
 }

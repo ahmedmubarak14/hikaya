@@ -6,17 +6,8 @@ import { redirect } from 'next/navigation';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
+import { createClient } from '@/lib/supabase/server';
 
-import {
-  createApplication,
-  createJob,
-  findApplication,
-  getJobById,
-  listApplicationsByApplicant,
-  updateApplicationStatus,
-  updateJobStatus,
-  withdrawApplication as storeWithdraw,
-} from './mock-store';
 import { applyToJobSchema, postJobSchema } from './schemas';
 
 export type JobErrorKey =
@@ -86,34 +77,65 @@ export async function postJobAction(
     };
   }
 
-  const job = createJob({
-    postedByUserId: session.user.id,
-    postedByName: session.user.displayName,
-    postedByCompany: parsed.data.postedByCompany || undefined,
-    title: parsed.data.title,
-    discipline: parsed.data.discipline,
-    city: parsed.data.city,
-    description: parsed.data.description,
-    budgetHalalas: parsed.data.budgetIsOpen ? null : (parsed.data.budgetSar ?? 0) * SAR_TO_HALALAS,
-    budgetIsOpen: parsed.data.budgetIsOpen,
-    creatorsNeeded: parsed.data.creatorsNeeded,
-    deadline: new Date(parsed.data.deadline).toISOString(),
-  });
+  const supabase = await createClient();
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
+  const { data: job, error } = await supabase
+    .from('Job')
+    .insert({
+      postedById: session.user.id,
+      title: parsed.data.title,
+      discipline: parsed.data.discipline,
+      city: parsed.data.city,
+      description: parsed.data.description,
+      budgetHalalas: parsed.data.budgetIsOpen ? null : (parsed.data.budgetSar ?? 0) * SAR_TO_HALALAS,
+      budgetIsOpen: parsed.data.budgetIsOpen,
+      creatorsNeeded: parsed.data.creatorsNeeded,
+      deadline: new Date(parsed.data.deadline).toISOString(),
+      status: 'OPEN',
+      expiresAt,
+      createdAt: now.toISOString(),
+      updatedAt: now.toISOString(),
+    })
+    .select('id')
+    .single();
+
+  if (error || !job) {
+    console.error('[jobs/actions] postJobAction error:', error?.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
 
   revalidatePath(`/${locale}/jobs`);
   revalidatePath(`/${locale}/me/jobs`);
-  redirect(`/${locale}/jobs/${job.id}`);
+  redirect(`/${locale}/jobs/${job.id as string}`);
 }
 
 export async function markJobFilledAction(locale: Locale, jobId: string): Promise<JobResult> {
   const session = await getSession();
   if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
 
-  const job = getJobById(jobId);
-  if (!job) return { ok: false, error: 'JOB_NOT_FOUND' };
-  if (job.postedByUserId !== session.user.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
 
-  updateJobStatus(jobId, 'FILLED');
+  const { data: job, error: fetchErr } = await supabase
+    .from('Job')
+    .select('id, postedById')
+    .eq('id', jobId)
+    .maybeSingle();
+
+  if (fetchErr || !job) return { ok: false, error: 'JOB_NOT_FOUND' };
+  if ((job.postedById as string) !== session.user.id) return { ok: false, error: 'NOT_OWNER' };
+
+  const { error: updateErr } = await supabase
+    .from('Job')
+    .update({ status: 'FILLED', updatedAt: new Date().toISOString() })
+    .eq('id', jobId);
+
+  if (updateErr) {
+    console.error('[jobs/actions] markJobFilledAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
   revalidatePath(`/${locale}/jobs`);
   revalidatePath(`/${locale}/jobs/${jobId}`);
   revalidatePath(`/${locale}/me/jobs`);
@@ -124,11 +146,27 @@ export async function closeJobAction(locale: Locale, jobId: string): Promise<Job
   const session = await getSession();
   if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
 
-  const job = getJobById(jobId);
-  if (!job) return { ok: false, error: 'JOB_NOT_FOUND' };
-  if (job.postedByUserId !== session.user.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
 
-  updateJobStatus(jobId, 'CLOSED');
+  const { data: job, error: fetchErr } = await supabase
+    .from('Job')
+    .select('id, postedById')
+    .eq('id', jobId)
+    .maybeSingle();
+
+  if (fetchErr || !job) return { ok: false, error: 'JOB_NOT_FOUND' };
+  if ((job.postedById as string) !== session.user.id) return { ok: false, error: 'NOT_OWNER' };
+
+  const { error: updateErr } = await supabase
+    .from('Job')
+    .update({ status: 'CLOSED', updatedAt: new Date().toISOString() })
+    .eq('id', jobId);
+
+  if (updateErr) {
+    console.error('[jobs/actions] closeJobAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
   revalidatePath(`/${locale}/jobs`);
   revalidatePath(`/${locale}/jobs/${jobId}`);
   revalidatePath(`/${locale}/me/jobs`);
@@ -143,17 +181,38 @@ export async function setApplicationStatusAction(
   const session = await getSession();
   if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
 
-  // Ownership check happens by reading the job via the application's jobId.
-  const updated = updateApplicationStatus(applicationId, status);
-  const job = getJobById(updated.jobId);
-  if (!job) return { ok: false, error: 'JOB_NOT_FOUND' };
-  if (job.postedByUserId !== session.user.id) {
-    // Roll back if not owner — shouldn't happen via our UI, but guard anyway.
-    updateApplicationStatus(applicationId, 'SUBMITTED');
-    return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
+
+  // Fetch the application to get the jobId for ownership check
+  const { data: application, error: appErr } = await supabase
+    .from('JobApplication')
+    .select('id, jobId')
+    .eq('id', applicationId)
+    .maybeSingle();
+
+  if (appErr || !application) return { ok: false, error: 'APPLICATION_NOT_FOUND' };
+
+  // Verify the caller owns the job
+  const { data: job, error: jobErr } = await supabase
+    .from('Job')
+    .select('id, postedById')
+    .eq('id', application.jobId as string)
+    .maybeSingle();
+
+  if (jobErr || !job) return { ok: false, error: 'JOB_NOT_FOUND' };
+  if ((job.postedById as string) !== session.user.id) return { ok: false, error: 'NOT_OWNER' };
+
+  const { error: updateErr } = await supabase
+    .from('JobApplication')
+    .update({ status, updatedAt: new Date().toISOString() })
+    .eq('id', applicationId);
+
+  if (updateErr) {
+    console.error('[jobs/actions] setApplicationStatusAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
   }
 
-  revalidatePath(`/${locale}/jobs/${job.id}`);
+  revalidatePath(`/${locale}/jobs/${application.jobId as string}`);
   revalidatePath(`/${locale}/me/jobs`);
   return { ok: true };
 }
@@ -172,14 +231,34 @@ export async function applyToJobAction(
   const creator = await getMyCreatorProfile(session.user.email);
   if (!creator) return { ok: false, error: 'NOT_CREATOR' };
 
-  const job = getJobById(jobId);
-  if (!job) return { ok: false, error: 'JOB_NOT_FOUND' };
-  if (job.status !== 'OPEN') return { ok: false, error: 'JOB_NOT_OPEN' };
-  if (job.postedByUserId === session.user.id) return { ok: false, error: 'NOT_OWNER' };
+  const supabase = await createClient();
 
-  if (findApplication(jobId, session.user.id)) {
-    return { ok: false, error: 'ALREADY_APPLIED' };
-  }
+  // Fetch the job to verify it's OPEN and the caller isn't the poster
+  const { data: job, error: jobErr } = await supabase
+    .from('Job')
+    .select('id, postedById, status, expiresAt')
+    .eq('id', jobId)
+    .maybeSingle();
+
+  if (jobErr || !job) return { ok: false, error: 'JOB_NOT_FOUND' };
+
+  // Check effective status (including expiry)
+  const effectiveStatus =
+    (job.status as string) === 'OPEN' && new Date(job.expiresAt as string) < new Date()
+      ? 'EXPIRED'
+      : (job.status as string);
+  if (effectiveStatus !== 'OPEN') return { ok: false, error: 'JOB_NOT_OPEN' };
+  if ((job.postedById as string) === session.user.id) return { ok: false, error: 'NOT_OWNER' };
+
+  // Check for duplicate application
+  const { data: existingApp } = await supabase
+    .from('JobApplication')
+    .select('id')
+    .eq('jobId', jobId)
+    .eq('applicantUserId', session.user.id)
+    .maybeSingle();
+
+  if (existingApp) return { ok: false, error: 'ALREADY_APPLIED' };
 
   const parsed = applyToJobSchema.safeParse({
     coverNote: formData.get('coverNote'),
@@ -193,14 +272,24 @@ export async function applyToJobAction(
     };
   }
 
-  createApplication({
+  const now = new Date().toISOString();
+  const { error: insertErr } = await supabase.from('JobApplication').insert({
     jobId,
     applicantUserId: session.user.id,
-    applicantUsername: creator.username,
-    applicantName: locale === 'ar' ? creator.displayNameAr : creator.displayNameEn,
+    creatorProfileId: creator.id,
     coverNote: parsed.data.coverNote,
     proposedRateHalalas: parsed.data.proposedRateSar * SAR_TO_HALALAS,
+    status: 'SUBMITTED',
+    createdAt: now,
+    updatedAt: now,
   });
+
+  if (insertErr) {
+    console.error('[jobs/actions] applyToJobAction error:', insertErr.message);
+    // Could be a unique constraint violation (duplicate application)
+    if (insertErr.code === '23505') return { ok: false, error: 'ALREADY_APPLIED' };
+    return { ok: false, error: 'UNKNOWN' };
+  }
 
   revalidatePath(`/${locale}/jobs/${jobId}`);
   revalidatePath(`/${locale}/me/jobs`);
@@ -214,12 +303,29 @@ export async function withdrawApplicationAction(
   const session = await getSession();
   if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
 
-  // Ownership check: confirm the caller authored the application.
-  const target = listApplicationsByApplicant(session.user.id).find((a) => a.id === applicationId);
-  if (!target) return { ok: false, error: 'APPLICATION_NOT_FOUND' };
+  const supabase = await createClient();
 
-  storeWithdraw(applicationId);
-  revalidatePath(`/${locale}/jobs/${target.jobId}`);
+  // Verify the caller owns this application
+  const { data: application, error: fetchErr } = await supabase
+    .from('JobApplication')
+    .select('id, jobId, applicantUserId')
+    .eq('id', applicationId)
+    .eq('applicantUserId', session.user.id)
+    .maybeSingle();
+
+  if (fetchErr || !application) return { ok: false, error: 'APPLICATION_NOT_FOUND' };
+
+  const { error: deleteErr } = await supabase
+    .from('JobApplication')
+    .delete()
+    .eq('id', applicationId);
+
+  if (deleteErr) {
+    console.error('[jobs/actions] withdrawApplicationAction error:', deleteErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/jobs/${application.jobId as string}`);
   revalidatePath(`/${locale}/me/jobs`);
   return { ok: true };
 }
