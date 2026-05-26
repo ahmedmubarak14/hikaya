@@ -1,17 +1,13 @@
 'use server';
 
+import { randomUUID } from 'node:crypto';
+
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
 import { defaultLocale, type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
-
-import {
-  createStudioProfile,
-  getStudioByOwnerId,
-  updateStudioProfile,
-  type StudioProfile,
-} from './profile';
+import { createClient } from '@/lib/supabase/server';
 
 /**
  * Server actions for the public studio profile. Mirror the
@@ -125,6 +121,19 @@ function parseFormData(
   });
 }
 
+/** Slugify a studio name with a random suffix for uniqueness. */
+function slugify(name: string): string {
+  const base =
+    name
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .slice(0, 60) || 'studio';
+  const suffix = Math.random().toString(36).slice(2, 6);
+  return `${base}-${suffix}`;
+}
+
 export async function createStudioProfileAction(
   locale: Locale,
   _prev: StudioProfileFailure | null,
@@ -145,20 +154,51 @@ export async function createStudioProfileAction(
     };
   }
 
-  let studio: StudioProfile;
-  try {
-    studio = createStudioProfile({
+  const supabase = await createClient();
+
+  // Check if studio already exists for this owner
+  const { data: existing } = await supabase
+    .from('StudioProfile')
+    .select('id')
+    .eq('ownerId', session.user.id)
+    .maybeSingle();
+
+  if (existing) {
+    return { ok: false, error: 'STUDIO_ALREADY_EXISTS' };
+  }
+
+  const studioId = randomUUID();
+  const slug = slugify(parsed.data.nameEn);
+  const now = new Date().toISOString();
+
+  const { error } = await supabase
+    .from('StudioProfile')
+    .insert({
+      id: studioId,
       ownerId: session.user.id,
-      ...parsed.data,
+      slug,
+      nameEn: parsed.data.nameEn,
+      nameAr: parsed.data.nameAr || null,
+      logoUrl: parsed.data.logoUrl || null,
+      coverUrl: parsed.data.coverUrl || null,
+      city: parsed.data.city,
+      address: parsed.data.address || null,
+      specializations: parsed.data.specializations,
+      capacity: parsed.data.capacity,
+      descriptionEn: parsed.data.descriptionEn,
+      descriptionAr: parsed.data.descriptionAr || null,
+      contactEmail: parsed.data.contactEmail || null,
+      contactPhone: parsed.data.contactPhone || null,
+      teamMemberIds: [],
+      createdAt: now,
     });
-  } catch (err) {
-    if (err instanceof Error && err.message === 'STUDIO_ALREADY_EXISTS') {
-      return { ok: false, error: 'STUDIO_ALREADY_EXISTS' };
-    }
+
+  if (error) {
+    console.error('[studio/profile-actions] createStudioProfileAction error:', error.message);
     return { ok: false, error: 'UNKNOWN' };
   }
 
-  redirect(`/${locale ?? defaultLocale}/studios/${studio.slug}`);
+  redirect(`/${locale ?? defaultLocale}/studios/${slug}`);
 }
 
 export async function updateStudioProfileAction(
@@ -169,8 +209,15 @@ export async function updateStudioProfileAction(
   const session = await getSession();
   if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
 
-  const existing = getStudioByOwnerId(session.user.id);
-  if (!existing) return { ok: false, error: 'STUDIO_NOT_FOUND' };
+  const supabase = await createClient();
+
+  const { data: existing, error: fetchErr } = await supabase
+    .from('StudioProfile')
+    .select('id, slug')
+    .eq('ownerId', session.user.id)
+    .maybeSingle();
+
+  if (fetchErr || !existing) return { ok: false, error: 'STUDIO_NOT_FOUND' };
 
   const parsed = parseFormData(formData);
   if (!parsed.success) {
@@ -181,11 +228,28 @@ export async function updateStudioProfileAction(
     };
   }
 
-  try {
-    updateStudioProfile(existing.id, parsed.data);
-  } catch {
+  const { error: updateErr } = await supabase
+    .from('StudioProfile')
+    .update({
+      nameEn: parsed.data.nameEn,
+      nameAr: parsed.data.nameAr || null,
+      logoUrl: parsed.data.logoUrl || null,
+      coverUrl: parsed.data.coverUrl || null,
+      city: parsed.data.city,
+      address: parsed.data.address || null,
+      specializations: parsed.data.specializations,
+      capacity: parsed.data.capacity,
+      descriptionEn: parsed.data.descriptionEn,
+      descriptionAr: parsed.data.descriptionAr || null,
+      contactEmail: parsed.data.contactEmail || null,
+      contactPhone: parsed.data.contactPhone || null,
+    })
+    .eq('id', existing.id as string);
+
+  if (updateErr) {
+    console.error('[studio/profile-actions] updateStudioProfileAction error:', updateErr.message);
     return { ok: false, error: 'UNKNOWN' };
   }
 
-  redirect(`/${locale ?? defaultLocale}/studios/${existing.slug}`);
+  redirect(`/${locale ?? defaultLocale}/studios/${existing.slug as string}`);
 }

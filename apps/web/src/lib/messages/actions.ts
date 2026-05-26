@@ -1,21 +1,15 @@
 'use server';
 
+import { randomUUID } from 'node:crypto';
+
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 import { type Locale } from '@/i18n/config';
-import { findUserByEmail } from '@/lib/auth/mock-store';
 import { getSession } from '@/lib/auth/session';
 import { getCreatorByUsername } from '@/lib/creators/queries';
+import { createClient } from '@/lib/supabase/server';
 
-import {
-  appendMessage,
-  findThreadBetween,
-  getThreadById,
-  isParticipant,
-  markThreadRead,
-  startThread,
-} from './mock-store';
 import { sendMessageSchema, startThreadSchema } from './schemas';
 
 export type MessageErrorKey =
@@ -89,26 +83,81 @@ export async function startThreadAction(
   if (!creator) return { ok: false, error: 'CREATOR_NOT_FOUND' };
   if (!creator.ownerEmail) return { ok: false, error: 'CREATOR_HAS_NO_USER' };
 
-  const creatorUser = findUserByEmail(creator.ownerEmail);
-  if (!creatorUser) return { ok: false, error: 'CREATOR_HAS_NO_USER' };
-  if (creatorUser.id === session.user.id) return { ok: false, error: 'CANNOT_MESSAGE_SELF' };
+  // Look up the creator's user row from Supabase User table (falling back to mock)
+  const supabase = await createClient();
 
-  // Per the data model, creators sit on the creator side of the thread,
-  // everyone else on the client side. Doesn't matter what role the visitor
-  // signed in as — they're addressing this creator.
-  const thread = startThread({
-    creatorUserId: creatorUser.id,
-    clientUserId: session.user.id,
-    creatorName: creatorUser.displayName,
-    clientName: session.user.displayName,
-    creatorAvatarUrl: creator.avatarUrl,
-    initialMessage: parsed.data.body
-      ? { senderId: session.user.id, body: parsed.data.body }
-      : undefined,
-  });
+  const { data: creatorUser } = await supabase
+    .from('User')
+    .select('id, displayName')
+    .eq('email', creator.ownerEmail)
+    .maybeSingle();
+
+  if (!creatorUser) return { ok: false, error: 'CREATOR_HAS_NO_USER' };
+  if ((creatorUser.id as string) === session.user.id) {
+    return { ok: false, error: 'CANNOT_MESSAGE_SELF' };
+  }
+
+  // Check for existing thread between these two users
+  const { data: existingThread } = await supabase
+    .from('Thread')
+    .select('id')
+    .eq('creatorUserId', creatorUser.id as string)
+    .eq('clientUserId', session.user.id)
+    .maybeSingle();
+
+  let threadId: string;
+
+  if (existingThread) {
+    threadId = existingThread.id as string;
+  } else {
+    threadId = randomUUID();
+    const now = new Date().toISOString();
+
+    const { error: threadErr } = await supabase
+      .from('Thread')
+      .insert({
+        id: threadId,
+        type: 'GENERAL',
+        creatorUserId: creatorUser.id as string,
+        clientUserId: session.user.id,
+        creatorName: creatorUser.displayName as string,
+        clientName: session.user.displayName,
+        creatorAvatarUrl: creator.avatarUrl || null,
+        clientAvatarUrl: null,
+        createdAt: now,
+      });
+
+    if (threadErr) {
+      console.error('[messages/actions] startThreadAction create thread error:', threadErr.message);
+      return { ok: false, error: 'UNKNOWN' };
+    }
+  }
+
+  // If an initial message was provided, insert it
+  if (parsed.data.body) {
+    const msgNow = new Date().toISOString();
+    const { error: msgErr } = await supabase
+      .from('Message')
+      .insert({
+        id: randomUUID(),
+        threadId,
+        senderId: session.user.id,
+        body: parsed.data.body,
+        status: 'DELIVERED',
+        createdAt: msgNow,
+      });
+
+    if (!msgErr) {
+      // Update thread's lastMessageAt
+      await supabase
+        .from('Thread')
+        .update({ lastMessageAt: msgNow })
+        .eq('id', threadId);
+    }
+  }
 
   revalidatePath(`/${locale}/me/messages`);
-  redirect(`/${locale}/me/messages/${thread.id}`);
+  redirect(`/${locale}/me/messages/${threadId}`);
 }
 
 export async function sendMessageAction(
@@ -120,9 +169,20 @@ export async function sendMessageAction(
   const session = await getSession();
   if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
 
-  const thread = getThreadById(threadId);
-  if (!thread) return { ok: false, error: 'THREAD_NOT_FOUND' };
-  if (!isParticipant(thread, session.user.id)) return { ok: false, error: 'NOT_PARTICIPANT' };
+  const supabase = await createClient();
+
+  const { data: thread, error: fetchErr } = await supabase
+    .from('Thread')
+    .select('id, creatorUserId, clientUserId')
+    .eq('id', threadId)
+    .maybeSingle();
+
+  if (fetchErr || !thread) return { ok: false, error: 'THREAD_NOT_FOUND' };
+
+  const isParticipant =
+    (thread.creatorUserId as string) === session.user.id ||
+    (thread.clientUserId as string) === session.user.id;
+  if (!isParticipant) return { ok: false, error: 'NOT_PARTICIPANT' };
 
   const parsed = sendMessageSchema.safeParse({ body: formData.get('body') });
   if (!parsed.success) {
@@ -133,7 +193,29 @@ export async function sendMessageAction(
     };
   }
 
-  appendMessage(threadId, { senderId: session.user.id, body: parsed.data.body });
+  const now = new Date().toISOString();
+
+  const { error: insertErr } = await supabase
+    .from('Message')
+    .insert({
+      id: randomUUID(),
+      threadId,
+      senderId: session.user.id,
+      body: parsed.data.body,
+      status: 'DELIVERED',
+      createdAt: now,
+    });
+
+  if (insertErr) {
+    console.error('[messages/actions] sendMessageAction error:', insertErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  // Update thread's lastMessageAt
+  await supabase
+    .from('Thread')
+    .update({ lastMessageAt: now })
+    .eq('id', threadId);
 
   revalidatePath(`/${locale}/me/messages`);
   revalidatePath(`/${locale}/me/messages/${threadId}`);
@@ -145,11 +227,32 @@ export async function markThreadReadAction(locale: Locale, threadId: string): Pr
   const session = await getSession();
   if (!session) return;
 
-  const thread = getThreadById(threadId);
-  if (!thread || !isParticipant(thread, session.user.id)) return;
+  const supabase = await createClient();
 
-  const touched = markThreadRead(threadId, session.user.id);
-  if (touched > 0) {
+  const { data: thread } = await supabase
+    .from('Thread')
+    .select('id, creatorUserId, clientUserId')
+    .eq('id', threadId)
+    .maybeSingle();
+
+  if (!thread) return;
+
+  const isParticipant =
+    (thread.creatorUserId as string) === session.user.id ||
+    (thread.clientUserId as string) === session.user.id;
+  if (!isParticipant) return;
+
+  // Mark all messages in this thread not sent by the current user as READ
+  const now = new Date().toISOString();
+  const { data: updated } = await supabase
+    .from('Message')
+    .update({ status: 'READ', readAt: now })
+    .eq('threadId', threadId)
+    .neq('senderId', session.user.id)
+    .neq('status', 'READ')
+    .select('id');
+
+  if (updated && updated.length > 0) {
     revalidatePath(`/${locale}/me/messages`);
     revalidatePath(`/${locale}/me/messages/${threadId}`);
   }
@@ -159,5 +262,14 @@ export async function markThreadReadAction(locale: Locale, threadId: string): Pr
 
 /** Used by the public profile button to know whether we already have a thread. */
 export async function findExistingThread(creatorUserId: string, viewerUserId: string) {
-  return findThreadBetween(creatorUserId, viewerUserId);
+  const supabase = await createClient();
+
+  const { data: thread } = await supabase
+    .from('Thread')
+    .select('id, creatorUserId, clientUserId, creatorName, clientName, createdAt')
+    .eq('creatorUserId', creatorUserId)
+    .eq('clientUserId', viewerUserId)
+    .maybeSingle();
+
+  return thread ?? null;
 }
