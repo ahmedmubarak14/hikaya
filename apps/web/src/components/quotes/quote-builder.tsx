@@ -8,6 +8,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 
 import { Button, Input, cn } from '@hikaya/ui';
 
+import { TemplatePicker } from '@/components/templates/template-picker';
 import { type Locale } from '@/i18n/config';
 import { formatSarFromHalalas } from '@/lib/format';
 import { createQuoteAction, type QuoteResult } from '@/lib/quotes/actions';
@@ -186,6 +187,18 @@ export function QuoteBuilder({ locale }: Props) {
           + {t('items.addRow')}
         </button>
       </section>
+
+      {/* Load from template */}
+      <TemplatePicker
+        kind="QUOTE"
+        onSelect={(tpl) => {
+          const notesField = document.querySelector<HTMLTextAreaElement>('textarea[name="notes"]');
+          if (notesField) {
+            notesField.value = tpl.bodyHtml;
+            notesField.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+        }}
+      />
 
       {/* Notes + extras + totals */}
       <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
