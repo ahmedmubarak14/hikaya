@@ -1,60 +1,83 @@
-import { NextResponse } from 'next/server';
-
-import { createClient } from '@/lib/supabase/server';
+import { createServerClient } from '@supabase/ssr';
+import { type NextRequest, NextResponse } from 'next/server';
 
 /**
  * OAuth callback handler. After the user signs in with Google (or any
  * OAuth provider), Supabase redirects here with a `code` query param.
  * We exchange it for a session, then redirect to /me.
+ *
+ * We build the Supabase client manually here (not via the shared
+ * helper) so we can attach session cookies to the redirect response.
  */
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
   const locale = searchParams.get('locale') ?? 'en';
-  const next = searchParams.get('next') ?? `/${locale}/me`;
+  const next = `/${locale}/me`;
 
-  if (code) {
-    const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+  if (!code) {
+    return NextResponse.redirect(new URL(`/${locale}/sign-in?error=no_code`, origin));
+  }
 
-    if (!error) {
-      // Session established — check if we need to create a User row
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+  // Build redirect response FIRST so we can set cookies on it.
+  const redirectUrl = new URL(next, origin);
+  const response = NextResponse.redirect(redirectUrl);
 
-      if (user) {
-        // Ensure a public.User row exists for this auth user
-        const { data: existing } = await supabase
-          .from('User')
-          .select('id')
-          .eq('id', user.id)
-          .maybeSingle();
-
-        if (!existing) {
-          const displayName =
-            user.user_metadata?.full_name ??
-            user.user_metadata?.display_name ??
-            user.email?.split('@')[0] ??
-            'User';
-
-          await supabase.from('User').insert({
-            id: user.id,
-            email: user.email?.toLowerCase() ?? '',
-            displayName,
-            locale: locale === 'ar' ? 'AR' : 'EN',
-            roles: ['CREATOR'],
-            activeRole: 'CREATOR',
-            avatarUrl: user.user_metadata?.avatar_url ?? null,
-            updatedAt: new Date().toISOString(),
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
           });
-        }
-      }
+        },
+      },
+    },
+  );
 
-      return NextResponse.redirect(new URL(next, origin));
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+  if (error) {
+    console.error('[auth/callback] exchangeCodeForSession error:', error.message);
+    return NextResponse.redirect(new URL(`/${locale}/sign-in?error=oauth_failed`, origin));
+  }
+
+  // Ensure a public.User row exists for this auth user.
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    const { data: existing } = await supabase
+      .from('User')
+      .select('id')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (!existing) {
+      const displayName =
+        user.user_metadata?.full_name ??
+        user.user_metadata?.display_name ??
+        user.email?.split('@')[0] ??
+        'User';
+
+      await supabase.from('User').insert({
+        id: user.id,
+        email: user.email?.toLowerCase() ?? '',
+        displayName,
+        locale: locale === 'ar' ? 'AR' : 'EN',
+        roles: ['CREATOR'],
+        activeRole: 'CREATOR',
+        avatarUrl: user.user_metadata?.avatar_url ?? null,
+        updatedAt: new Date().toISOString(),
+      });
     }
   }
 
-  // OAuth failed — send back to sign-in with error
-  return NextResponse.redirect(new URL(`/${locale}/sign-in?error=oauth_failed`, origin));
+  return response;
 }
