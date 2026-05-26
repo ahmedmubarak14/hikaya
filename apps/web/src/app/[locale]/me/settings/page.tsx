@@ -108,6 +108,7 @@ export default async function SettingsPage({ params }: Props) {
         {/* Danger zone */}
         <section>
           <SectionHeader title={t('dangerZone')} subtitle={t('dangerZoneSubtitle')} />
+          <SettingsDataExport />
           <SettingsDeleteAccount locale={locale} />
         </section>
       </main>
