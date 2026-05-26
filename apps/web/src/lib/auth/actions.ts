@@ -105,6 +105,20 @@ export async function signUpAction(
     return { ok: false, error: 'UNKNOWN' };
   }
 
+  // Audit log
+  try {
+    const { logAuditEvent } = await import('@/lib/audit/log');
+    await logAuditEvent({
+      userId: result.user.id,
+      action: 'SIGN_UP',
+      entityType: 'User',
+      entityId: result.user.id,
+      metadata: { email: parsed.data.email, role: parsed.data.role },
+    });
+  } catch {
+    // audit logging is best-effort
+  }
+
   const next = parsed.data.role === 'STUDIO_OWNER' ? '/me/studio/setup' : '/me';
   redirect(`/${locale ?? defaultLocale}${next}`);
 }

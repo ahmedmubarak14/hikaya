@@ -9,6 +9,7 @@ import { StatTile } from '@/components/studio/stat-tile';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getAdminStatsAction, listUsersAction } from '@/lib/admin/actions';
+import { getRecentAuditLogs } from '@/lib/audit/log';
 import { createClient } from '@/lib/supabase/server';
 
 import type { Metadata } from 'next';
@@ -61,6 +62,7 @@ export default async function AdminPage({ params, searchParams }: Props) {
 
   const stats = await getAdminStatsAction();
   const users = await listUsersAction(q);
+  const auditLogs = await getRecentAuditLogs(50);
 
   const formatSar = (halalas: number) => `SAR ${(halalas / 100).toLocaleString()}`;
 
@@ -167,6 +169,53 @@ export default async function AdminPage({ params, searchParams }: Props) {
 
           {users.length === 0 && (
             <p className="text-surface/40 mt-4 text-center text-sm">{t('noUsers')}</p>
+          )}
+        </section>
+
+        {/* Audit log */}
+        <section className="mt-10">
+          <h2 className="text-surface mb-4 text-2xl font-semibold">{t('auditLog.title')}</h2>
+          <p className="text-surface/50 mb-4 text-sm">{t('auditLog.subtitle')}</p>
+
+          {auditLogs.length === 0 ? (
+            <p className="text-surface/40 text-center text-sm">{t('auditLog.empty')}</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-surface/50 border-surface/10 border-b text-left">
+                    <th className="px-3 py-2 font-medium">{t('auditLog.colAction')}</th>
+                    <th className="px-3 py-2 font-medium">{t('auditLog.colUser')}</th>
+                    <th className="px-3 py-2 font-medium">{t('auditLog.colEntity')}</th>
+                    <th className="px-3 py-2 font-medium">{t('auditLog.colIp')}</th>
+                    <th className="px-3 py-2 font-medium">{t('auditLog.colTime')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {auditLogs.map((log) => (
+                    <tr key={log.id} className="border-surface/5 border-b">
+                      <td className="px-3 py-3">
+                        <Badge tone="neutral" className="text-2xs">
+                          {log.action}
+                        </Badge>
+                      </td>
+                      <td className="text-surface/70 px-3 py-3 text-xs">
+                        {log.userId ?? '-'}
+                      </td>
+                      <td className="text-surface/70 px-3 py-3 text-xs">
+                        {log.entityType ? `${log.entityType}:${log.entityId ?? ''}` : '-'}
+                      </td>
+                      <td className="text-surface/50 px-3 py-3 text-xs">
+                        {log.ipAddress ?? '-'}
+                      </td>
+                      <td className="text-surface/50 px-3 py-3 text-xs">
+                        {new Date(log.createdAt).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </section>
       </main>

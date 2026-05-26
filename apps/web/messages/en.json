@@ -30,6 +30,7 @@
     "ctaSecondary": "Explore creators",
     "featured": {
       "title": "Featured creators",
+      "recommendedTitle": "Recommended for you",
       "viewAll": "Explore all →",
       "emptyTitle": "The stage is set",
       "emptyBody": "Hikaya's creator directory is just getting started. Be among the first to join and get discovered by Gulf clients.",
@@ -496,7 +497,9 @@
       "send": "Start conversation",
       "cancel": "Cancel",
       "errorSelf": "You can't message yourself.",
-      "errorNoUser": "This creator's account isn't messageable yet."
+      "errorNoUser": "This creator's account isn't messageable yet.",
+      "errorBlocked": "You can't message this user.",
+      "errorRateLimited": "You're sending messages too fast. Please wait a moment."
     }
   },
   "quotes": {
@@ -867,7 +870,9 @@
       "urlHint": "Leave empty to insert a placeholder while you find the real image.",
       "titleEn": "Title (optional)",
       "add": "Add",
-      "added": "Added"
+      "added": "Added",
+      "freeTierLimitTitle": "Free tier limit reached",
+      "freeTierLimitBody": "Free accounts can add up to 10 portfolio items. Upgrade to Pro to add unlimited work."
     },
     "noProfile": {
       "label": "Client account",
@@ -1461,7 +1466,22 @@
     "moderationEyebrow": "Moderation",
     "moderationSubtitle": "Review reported content. Reports from users will appear here once the reporting feature is live.",
     "moderationEmpty": "No reports yet.",
-    "moderationEmptyHint": "When users report content, those reports will appear here for review."
+    "moderationEmptyHint": "When users report content, those reports will appear here for review.",
+    "moderationDismiss": "Dismiss",
+    "moderationTakeAction": "Take action",
+    "moderationSuspendUser": "Suspend user",
+    "moderationSuspendHint": "Suspend the reported user's account",
+    "moderationCount": "{count, plural, =0 {No pending reports} =1 {1 pending report} other {# pending reports}}",
+    "auditLog": {
+      "title": "System audit log",
+      "subtitle": "Last 50 system events: sign-ins, sign-ups, contract signings, suspensions, and account deletions.",
+      "empty": "No audit events recorded yet.",
+      "colAction": "Action",
+      "colUser": "User ID",
+      "colEntity": "Entity",
+      "colIp": "IP",
+      "colTime": "Time"
+    }
   },
   "analytics": {
     "title": "Analytics",
@@ -1479,7 +1499,16 @@
     "conversionRateHint": "{approved} approved of {total} total",
     "quotesOverview": "Quotes overview",
     "quotesTotal": "Total quotes",
-    "quotesApproved": "Approved"
+    "quotesApproved": "Approved",
+    "funnel": {
+      "title": "Hiring funnel",
+      "hint": "Conversion rate is relative to the previous stage.",
+      "profileViews": "Profile views",
+      "inquiries": "Inquiries",
+      "quotes": "Quotes sent",
+      "contractsSigned": "Contracts signed",
+      "completed": "Completed"
+    }
   },
   "legal": {
     "draftNotice": "DRAFT -- subject to legal review. This document is provided for informational purposes and does not constitute legal advice.",
@@ -1836,6 +1865,47 @@
     "loadFromTemplate": "Load from template",
     "selectTemplate": "Select a template...",
     "loading": "Loading templates..."
+  },
+  "moderation": {
+    "reportCta": "Report",
+    "reportTitle": "Report this content",
+    "reportSubtitle": "Tell us why you think this content violates our guidelines.",
+    "reportReasonLabel": "Reason",
+    "reportReasonPlaceholder": "Select a reason…",
+    "reportDescriptionLabel": "Additional details (optional)",
+    "reportDescriptionPlaceholder": "Provide any additional context that might help us review this report…",
+    "reportSubmit": "Submit report",
+    "reportSubmitting": "Submitting…",
+    "reportCancel": "Cancel",
+    "reportSentTitle": "Report submitted",
+    "reportSentBody": "Thank you for helping keep Hikaya safe. Our team will review this report.",
+    "reportClose": "Done",
+    "reasons": {
+      "SPAM": "Spam",
+      "HARASSMENT": "Harassment",
+      "INAPPROPRIATE_CONTENT": "Inappropriate content",
+      "FRAUD": "Fraud or scam",
+      "IMPERSONATION": "Impersonation",
+      "OTHER": "Other"
+    },
+    "errors": {
+      "NOT_AUTHENTICATED": "Please sign in to report content.",
+      "INVALID_INPUT": "Please select a reason.",
+      "CANNOT_REPORT_SELF": "You can't report your own content.",
+      "CANNOT_BLOCK_SELF": "You can't block yourself.",
+      "ALREADY_BLOCKED": "User is already blocked.",
+      "NOT_BLOCKED": "User is not blocked.",
+      "RATE_LIMITED": "You're doing that too often. Please wait a moment.",
+      "UNKNOWN": "Something went wrong. Please try again."
+    },
+    "blockCta": "Block user",
+    "unblockCta": "Unblock",
+    "blockedTitle": "Blocked users",
+    "blockedSubtitle": "Users you've blocked won't appear in Discover and can't message you.",
+    "blockedEmpty": "You haven't blocked anyone.",
+    "resourceLabel": "{type} · {id}",
+    "reportedBy": "Reported by {name}",
+    "rateLimited": "Slow down — you're sending too fast. Try again shortly."
   },
   "availability": {
     "title": "Availability settings",

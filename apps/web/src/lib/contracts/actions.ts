@@ -192,6 +192,20 @@ export async function signAsCreatorAction(
     return { ok: false, error: 'UNKNOWN' };
   }
 
+  // Audit log
+  try {
+    const { logAuditEvent } = await import('@/lib/audit/log');
+    await logAuditEvent({
+      userId: auth.session.user.id,
+      action: 'CONTRACT_SIGNED',
+      entityType: 'Contract',
+      entityId: contractId,
+      metadata: { side: 'creator', typedName: parsed.data.typedName },
+    });
+  } catch {
+    // audit logging is best-effort
+  }
+
   revalidatePath(`/${locale}/me/contracts/${contractId}`);
   if (contract.shareSlug) revalidatePath(`/${locale}/c/${contract.shareSlug as string}`);
   return { ok: true, message: 'SIGNED' };
@@ -295,6 +309,20 @@ export async function signAsClientAction(
   if (updateErr) {
     console.error('[contracts/actions] signAsClientAction error:', updateErr.message);
     return { ok: false, error: 'UNKNOWN' };
+  }
+
+  // Audit log
+  try {
+    const { logAuditEvent } = await import('@/lib/audit/log');
+    await logAuditEvent({
+      userId: null,
+      action: 'CONTRACT_SIGNED',
+      entityType: 'Contract',
+      entityId: contract.id as string,
+      metadata: { side: 'client', typedName: parsed.data.typedName, shareSlug },
+    });
+  } catch {
+    // audit logging is best-effort
   }
 
   revalidatePath(`/${locale}/c/${shareSlug}`);

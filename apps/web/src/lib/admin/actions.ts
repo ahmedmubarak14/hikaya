@@ -136,6 +136,21 @@ export async function suspendUserAction(
     return { ok: false, error: 'DB_ERROR' };
   }
 
+  // Audit log
+  try {
+    const { logAuditEvent } = await import('@/lib/audit/log');
+    const session = await getSession();
+    await logAuditEvent({
+      userId: session?.user.id,
+      action: 'USER_SUSPENDED',
+      entityType: 'User',
+      entityId: userId,
+      metadata: { targetUserId: userId },
+    });
+  } catch {
+    // audit logging is best-effort
+  }
+
   return { ok: true };
 }
 
@@ -154,6 +169,21 @@ export async function unsuspendUserAction(
   if (error) {
     console.error('[admin/actions] unsuspendUser error:', error.message);
     return { ok: false, error: 'DB_ERROR' };
+  }
+
+  // Audit log
+  try {
+    const { logAuditEvent } = await import('@/lib/audit/log');
+    const session = await getSession();
+    await logAuditEvent({
+      userId: session?.user.id,
+      action: 'USER_UNSUSPENDED',
+      entityType: 'User',
+      entityId: userId,
+      metadata: { targetUserId: userId },
+    });
+  } catch {
+    // audit logging is best-effort
   }
 
   return { ok: true };

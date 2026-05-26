@@ -193,6 +193,20 @@ export async function deleteAccountAction(
 
   const supabase = await createClient();
 
+  // Audit log (before deletion, since the user row will be gone after)
+  try {
+    const { logAuditEvent } = await import('@/lib/audit/log');
+    await logAuditEvent({
+      userId: session.user.id,
+      action: 'ACCOUNT_DELETED',
+      entityType: 'User',
+      entityId: session.user.id,
+      metadata: { email: session.user.email },
+    });
+  } catch {
+    // audit logging is best-effort
+  }
+
   // 1. Delete the public.User row (cascading to CreatorProfile, etc.)
   const { error: deleteRowError } = await supabase
     .from('User')

@@ -9,6 +9,8 @@ import { StatTile } from '@/components/studio/stat-tile';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getCreatorAnalyticsAction } from '@/lib/analytics/actions';
+import { getHiringFunnelStats } from '@/lib/analytics/funnel';
+import { getMyCreatorProfile } from '@/lib/creators/queries';
 
 import type { Metadata } from 'next';
 
@@ -32,7 +34,19 @@ export default async function AnalyticsPage({ params }: Props) {
   const t = await getTranslations('analytics');
   const analytics = await getCreatorAnalyticsAction();
 
+  // Fetch hiring funnel stats
+  const creator = await getMyCreatorProfile(session.user.email);
+  const funnel = creator ? await getHiringFunnelStats(creator.id) : null;
+
   const formatSar = (halalas: number) => `SAR ${(halalas / 100).toLocaleString()}`;
+
+  const funnelLabels: Record<string, string> = {
+    profileViews: t('funnel.profileViews'),
+    inquiries: t('funnel.inquiries'),
+    quotes: t('funnel.quotes'),
+    contractsSigned: t('funnel.contractsSigned'),
+    completed: t('funnel.completed'),
+  };
 
   return (
     <>
@@ -123,6 +137,39 @@ export default async function AnalyticsPage({ params }: Props) {
                 </div>
               </div>
             </section>
+
+            {/* Hiring funnel */}
+            {funnel && funnel.stages.length > 0 && (
+              <section className="mb-8">
+                <h2 className="text-surface mb-4 text-xl font-semibold">{t('funnel.title')}</h2>
+                <div className="flex flex-col gap-3">
+                  {funnel.stages.map((stage) => {
+                    const maxCount = Math.max(...funnel.stages.map((s) => s.count), 1);
+                    const barWidth = Math.max((stage.count / maxCount) * 100, 4);
+                    return (
+                      <div key={stage.key} className="flex items-center gap-3">
+                        <span className="text-surface/60 w-32 text-sm">
+                          {funnelLabels[stage.key] ?? stage.key}
+                        </span>
+                        <div className="flex-1">
+                          <div
+                            className="bg-accent/30 h-6 rounded"
+                            style={{ width: `${barWidth}%`, maxWidth: '100%' }}
+                          />
+                        </div>
+                        <span className="text-surface w-12 text-right text-sm font-medium">
+                          {stage.count}
+                        </span>
+                        <span className="text-surface/40 w-14 text-right text-xs">
+                          {stage.conversionRate}%
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-surface/40 mt-2 text-xs">{t('funnel.hint')}</p>
+              </section>
+            )}
           </>
         )}
       </main>

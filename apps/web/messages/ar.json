@@ -30,6 +30,7 @@
     "ctaSecondary": "شوف المبدعين",
     "featured": {
       "title": "مبدعين اخترناهم لك",
+      "recommendedTitle": "مُوصى بهم لك",
       "viewAll": "شوف الكل ←",
       "emptyTitle": "المسرح جاهز",
       "emptyBody": "دليل مبدعي حكاية بدأ لتوّه. كن من الأوائل وظهر لعملاء الخليج.",
@@ -496,7 +497,9 @@
       "send": "ابدأ محادثة",
       "cancel": "إلغاء",
       "errorSelf": "لا يمكنك مراسلة نفسك.",
-      "errorNoUser": "حساب هذا المبدع غير قابل للمراسلة بعد."
+      "errorNoUser": "حساب هذا المبدع غير قابل للمراسلة بعد.",
+      "errorBlocked": "لا يمكنك مراسلة هذا المستخدم.",
+      "errorRateLimited": "أنت ترسل رسائل بسرعة كبيرة. انتظر لحظة."
     }
   },
   "quotes": {
@@ -867,7 +870,9 @@
       "urlHint": "اتركه فارغاً لإدراج صورة مؤقّتة لحين إيجاد الصورة الحقيقيّة.",
       "titleEn": "عنوان (اختياري)",
       "add": "أضف",
-      "added": "تمّت الإضافة"
+      "added": "تمّت الإضافة",
+      "freeTierLimitTitle": "وصلت حدّ الباقة المجانية",
+      "freeTierLimitBody": "الحسابات المجانية تضيف حتى ١٠ أعمال. ترقَّ إلى Pro لإضافة أعمال بلا حدود."
     },
     "noProfile": {
       "label": "حساب عميل",
@@ -1421,7 +1426,22 @@
     "moderationEyebrow": "الإشراف",
     "moderationSubtitle": "مراجعة المحتوى المبلّغ عنه.",
     "moderationEmpty": "لا بلاغات بعد.",
-    "moderationEmptyHint": "ستظهر البلاغات هنا عند تفعيل ميزة الإبلاغ."
+    "moderationEmptyHint": "ستظهر البلاغات هنا عند تفعيل ميزة الإبلاغ.",
+    "moderationDismiss": "رفض",
+    "moderationTakeAction": "اتّخاذ إجراء",
+    "moderationSuspendUser": "تعليق المستخدم",
+    "moderationSuspendHint": "تعليق حساب المستخدم المبلّغ عنه",
+    "moderationCount": "{count, plural, zero {لا بلاغات معلّقة} one {بلاغ معلّق واحد} two {بلاغان معلّقان} few {# بلاغات معلّقة} many {# بلاغاً معلّقاً} other {# بلاغ معلّق}}",
+    "auditLog": {
+      "title": "سجلّ التدقيق",
+      "subtitle": "آخر ٥٠ حدثاً: تسجيل دخول، تسجيل حساب، توقيع عقود، تعليق حسابات، وحذف حسابات.",
+      "empty": "لا أحداث مسجّلة بعد.",
+      "colAction": "الإجراء",
+      "colUser": "معرّف المستخدم",
+      "colEntity": "الكيان",
+      "colIp": "IP",
+      "colTime": "الوقت"
+    }
   },
   "analytics": {
     "title": "التحليلات",
@@ -1439,7 +1459,16 @@
     "conversionRateHint": "{approved} موافقة من أصل {total}",
     "quotesOverview": "نظرة على العروض",
     "quotesTotal": "إجمالي العروض",
-    "quotesApproved": "الموافَق عليها"
+    "quotesApproved": "الموافَق عليها",
+    "funnel": {
+      "title": "قمع التوظيف",
+      "hint": "نسبة التحويل نسبيّة للمرحلة السابقة.",
+      "profileViews": "مشاهدات الملف",
+      "inquiries": "الاستفسارات",
+      "quotes": "عروض الأسعار",
+      "contractsSigned": "عقود موقّعة",
+      "completed": "مكتملة"
+    }
   },
   "legal": {
     "draftNotice": "مسوّدة — قيد المراجعة القانونيّة. لا يشكّل هذا المستند استشارة قانونيّة.",
@@ -1753,6 +1782,47 @@
     "loadFromTemplate": "تحميل من قالب",
     "selectTemplate": "اختر قالباً...",
     "loading": "جارٍ تحميل القوالب..."
+  },
+  "moderation": {
+    "reportCta": "إبلاغ",
+    "reportTitle": "الإبلاغ عن هذا المحتوى",
+    "reportSubtitle": "أخبرنا لماذا تعتقد أنّ هذا المحتوى يخالف إرشاداتنا.",
+    "reportReasonLabel": "السبب",
+    "reportReasonPlaceholder": "اختر سبباً…",
+    "reportDescriptionLabel": "تفاصيل إضافيّة (اختياري)",
+    "reportDescriptionPlaceholder": "قدّم أيّ سياق إضافي قد يساعدنا في مراجعة هذا البلاغ…",
+    "reportSubmit": "إرسال البلاغ",
+    "reportSubmitting": "جارٍ الإرسال…",
+    "reportCancel": "إلغاء",
+    "reportSentTitle": "تمّ إرسال البلاغ",
+    "reportSentBody": "شكراً لمساعدتك في الحفاظ على سلامة حكاية. سيراجع فريقنا هذا البلاغ.",
+    "reportClose": "تمّ",
+    "reasons": {
+      "SPAM": "محتوى مزعج",
+      "HARASSMENT": "تحرّش",
+      "INAPPROPRIATE_CONTENT": "محتوى غير لائق",
+      "FRAUD": "احتيال",
+      "IMPERSONATION": "انتحال شخصيّة",
+      "OTHER": "أخرى"
+    },
+    "errors": {
+      "NOT_AUTHENTICATED": "يرجى تسجيل الدخول للإبلاغ.",
+      "INVALID_INPUT": "يرجى اختيار سبب.",
+      "CANNOT_REPORT_SELF": "لا يمكنك الإبلاغ عن محتواك.",
+      "CANNOT_BLOCK_SELF": "لا يمكنك حظر نفسك.",
+      "ALREADY_BLOCKED": "المستخدم محظور بالفعل.",
+      "NOT_BLOCKED": "المستخدم غير محظور.",
+      "RATE_LIMITED": "أنت تفعل ذلك بسرعة كبيرة. انتظر لحظة.",
+      "UNKNOWN": "حدث خطأ ما. حاول مرّة أخرى."
+    },
+    "blockCta": "حظر المستخدم",
+    "unblockCta": "إلغاء الحظر",
+    "blockedTitle": "المستخدمون المحظورون",
+    "blockedSubtitle": "المستخدمون المحظورون لن يظهروا في اكتشف ولن يتمكّنوا من مراسلتك.",
+    "blockedEmpty": "لم تحظر أيّ شخص.",
+    "resourceLabel": "{type} · {id}",
+    "reportedBy": "أبلغ بواسطة {name}",
+    "rateLimited": "ببطء — أنت ترسل بسرعة كبيرة. حاول مرة أخرى قريباً."
   },
   "availability": {
     "title": "إعدادات التوفّر",
