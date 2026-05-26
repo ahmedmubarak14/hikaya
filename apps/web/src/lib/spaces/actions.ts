@@ -38,6 +38,24 @@ export type SpacesResult = SpacesSuccess | SpacesFailure;
 
 const SAR_TO_HALALAS = 100;
 
+/**
+ * Parse add-ons from a textarea text input. Each line is "Name, PriceSAR".
+ * Returns an array of { name, priceHalalas }.
+ */
+function parseAddOnsText(raw: string): { name: string; priceHalalas: number }[] {
+  return raw
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .map((line) => {
+      const lastComma = line.lastIndexOf(',');
+      if (lastComma === -1) return { name: line, priceHalalas: 0 };
+      const name = line.slice(0, lastComma).trim();
+      const price = parseInt(line.slice(lastComma + 1).trim(), 10);
+      return { name, priceHalalas: (Number.isFinite(price) ? price : 0) * SAR_TO_HALALAS };
+    });
+}
+
 function fieldErrorsFromZod(
   issues: { path: (string | number)[]; message: string }[],
 ): Record<string, string> {
@@ -93,6 +111,10 @@ export async function createSpaceAction(
   const spaceId = `sp_${randomBytes(6).toString('hex')}`;
   const now = new Date().toISOString();
 
+  const houseRules = formData.get('houseRules')?.toString() ?? '';
+  const addOnsRaw = formData.get('addOnsRaw')?.toString() ?? '';
+  const addOns = parseAddOnsText(addOnsRaw);
+
   const { error } = await supabase
     .from('Space')
     .insert({
@@ -108,6 +130,8 @@ export async function createSpaceAction(
       equipmentIncluded: parsed.data.equipmentRaw,
       photos: parsed.data.photosRaw,
       status: parsed.data.status,
+      houseRules,
+      addOns,
       createdAt: now,
     });
 
@@ -150,6 +174,10 @@ export async function updateSpaceAction(
     };
   }
 
+  const houseRulesUpdate = formData.get('houseRules')?.toString() ?? '';
+  const addOnsRawUpdate = formData.get('addOnsRaw')?.toString() ?? '';
+  const addOnsUpdate = parseAddOnsText(addOnsRawUpdate);
+
   const { error: updateErr } = await supabase
     .from('Space')
     .update({
@@ -163,6 +191,8 @@ export async function updateSpaceAction(
       equipmentIncluded: parsed.data.equipmentRaw,
       photos: parsed.data.photosRaw,
       status: parsed.data.status,
+      houseRules: houseRulesUpdate,
+      addOns: addOnsUpdate,
     })
     .eq('id', spaceId);
 
@@ -292,13 +322,23 @@ export async function bookSpaceAction(
     return { ok: false, error: 'UNAVAILABLE' };
   }
 
+  // Parse selected add-ons from form data
+  const selectedAddOnsRaw = formData.get('selectedAddOns')?.toString() ?? '[]';
+  let selectedAddOns: { name: string; priceHalalas: number }[] = [];
+  try {
+    selectedAddOns = JSON.parse(selectedAddOnsRaw);
+  } catch {
+    // ignore parse errors
+  }
+  const addOnsTotal = selectedAddOns.reduce((sum, a) => sum + a.priceHalalas, 0);
+
   const total = computeTotalHalalas(
     Date.parse(startISO),
     Date.parse(endISO),
     parsed.data.durationKind,
     space.hourlyHalalas as number,
     space.dailyHalalas as number,
-  );
+  ) + addOnsTotal;
 
   const bookingId = `sb_${randomBytes(6).toString('hex')}`;
   const now = new Date().toISOString();
@@ -314,6 +354,7 @@ export async function bookSpaceAction(
       durationKind: parsed.data.durationKind,
       totalHalalas: total,
       status: 'PENDING',
+      selectedAddOns,
       createdAt: now,
     });
 
@@ -327,6 +368,122 @@ export async function bookSpaceAction(
   revalidatePath(`/${locale}/me/space-bookings`);
   redirect(`/${locale}/me/space-rentals/${bookingId}`);
 }
+
+/* ----------------------------- check-in/out ----------------------------- */
+
+export async function checkInAction(
+  locale: Locale,
+  bookingId: string,
+): Promise<SpacesResult> {
+  const auth = await requireSession();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+
+  const { data: booking, error: fetchErr } = await supabase
+    .from('SpaceBooking')
+    .select('id, renterId, status, checkInAt')
+    .eq('id', bookingId)
+    .maybeSingle();
+
+  if (fetchErr || !booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+  if ((booking.renterId as string) !== auth.session.user.id) return { ok: false, error: 'NOT_RENTER' };
+  if ((booking.status as string) !== 'CONFIRMED') return { ok: false, error: 'BOOKING_NOT_FOUND' };
+  if (booking.checkInAt) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+
+  const now = new Date().toISOString();
+
+  const { error: updateErr } = await supabase
+    .from('SpaceBooking')
+    .update({ checkInAt: now })
+    .eq('id', bookingId);
+
+  if (updateErr) {
+    console.error('[spaces/actions] checkInAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/space-rentals/${bookingId}`);
+  return { ok: true };
+}
+
+export async function checkOutAction(
+  locale: Locale,
+  bookingId: string,
+): Promise<SpacesResult> {
+  const auth = await requireSession();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+
+  const { data: booking, error: fetchErr } = await supabase
+    .from('SpaceBooking')
+    .select('id, renterId, status, checkInAt, checkOutAt')
+    .eq('id', bookingId)
+    .maybeSingle();
+
+  if (fetchErr || !booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+  if ((booking.renterId as string) !== auth.session.user.id) return { ok: false, error: 'NOT_RENTER' };
+  if ((booking.status as string) !== 'CONFIRMED') return { ok: false, error: 'BOOKING_NOT_FOUND' };
+  if (!booking.checkInAt || booking.checkOutAt) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+
+  const now = new Date().toISOString();
+
+  const { error: updateErr } = await supabase
+    .from('SpaceBooking')
+    .update({ checkOutAt: now, status: 'COMPLETED' })
+    .eq('id', bookingId);
+
+  if (updateErr) {
+    console.error('[spaces/actions] checkOutAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/space-rentals/${bookingId}`);
+  revalidatePath(`/${locale}/me/space-rentals`);
+  return { ok: true };
+}
+
+export async function addConditionPhotoAction(
+  locale: Locale,
+  bookingId: string,
+  phase: 'checkIn' | 'checkOut',
+  photoUrl: string,
+): Promise<SpacesResult> {
+  const auth = await requireSession();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+
+  const col = phase === 'checkIn' ? 'checkInPhotos' : 'checkOutPhotos';
+
+  const { data: booking, error: fetchErr } = await supabase
+    .from('SpaceBooking')
+    .select(`id, renterId, ${col}`)
+    .eq('id', bookingId)
+    .maybeSingle();
+
+  if (fetchErr || !booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+  if ((booking.renterId as string) !== auth.session.user.id) return { ok: false, error: 'NOT_RENTER' };
+
+  const existing = (booking[col] as string[] | null) ?? [];
+  const updated = [...existing, photoUrl];
+
+  const { error: updateErr } = await supabase
+    .from('SpaceBooking')
+    .update({ [col]: updated })
+    .eq('id', bookingId);
+
+  if (updateErr) {
+    console.error('[spaces/actions] addConditionPhotoAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/space-rentals/${bookingId}`);
+  return { ok: true };
+}
+
+/* ----------------------------- cancel booking ----------------------------- */
 
 export async function cancelBookingAction(
   locale: Locale,

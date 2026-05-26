@@ -6,6 +6,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge } from '@hikaya/ui';
 
 import { BookForm } from '@/components/spaces/book-form';
+import { SpaceAvailabilityCalendar } from '@/components/spaces/space-availability-calendar';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
@@ -146,12 +147,45 @@ export default async function SpaceDetailPage({ params }: Props) {
               </div>
             ) : null}
 
+            {/* House rules */}
+            {space.houseRules ? (
+              <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
+                <h3 className="text-surface mb-2 text-base font-semibold">
+                  {t('houseRulesTitle')}
+                </h3>
+                <p className="text-surface/80 whitespace-pre-wrap text-sm">{space.houseRules}</p>
+              </div>
+            ) : null}
+
+            {/* Add-ons */}
+            {space.addOns.length > 0 ? (
+              <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
+                <h3 className="text-surface mb-2 text-base font-semibold">
+                  {t('addOnsTitle')}
+                </h3>
+                <ul className="flex flex-col gap-1.5">
+                  {space.addOns.map((addon, idx) => (
+                    <li key={idx} className="text-surface/70 flex justify-between text-sm">
+                      <span>{addon.name}</span>
+                      <span className="font-mono tabular-nums">
+                        {addon.priceHalalas > 0
+                          ? formatSarFromHalalas(addon.priceHalalas, locale)
+                          : t('addOnFree')}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
             <BookForm
               locale={locale}
               spaceId={space.id}
               hourlyHalalas={space.hourlyHalalas}
               dailyHalalas={space.dailyHalalas}
               disabledReason={isOwn ? 'OWN' : null}
+              houseRules={space.houseRules}
+              addOns={space.addOns}
             />
 
             <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
@@ -160,23 +194,10 @@ export default async function SpaceDetailPage({ params }: Props) {
           </section>
         </div>
 
-        {/* Availability placeholder — text-only, no calendar widget per spec. */}
-        <section className="border-surface/10 bg-surface/[0.03] mt-12 rounded-xl border p-5">
-          <h2 className="text-surface mb-3 text-base font-semibold">{t('availabilityTitle')}</h2>
-          {upcoming.length === 0 ? (
-            <p className="text-surface/60 text-sm">{t('availabilityEmpty')}</p>
-          ) : (
-            <ul className="flex flex-col gap-1.5">
-              {upcoming.map((b) => (
-                <li key={b.id} className="text-surface/70 font-mono text-sm tabular-nums">
-                  {t('availabilityRow', {
-                    start: formatDate(b.startISO, locale),
-                    end: formatDate(b.endISO, locale),
-                  })}
-                </li>
-              ))}
-            </ul>
-          )}
+        {/* Availability calendar */}
+        <section className="mt-12">
+          <h2 className="text-surface mb-4 text-base font-semibold">{t('availabilityTitle')}</h2>
+          <SpaceAvailabilityCalendar bookings={bookings} />
         </section>
       </main>
       <SiteFooter />

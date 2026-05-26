@@ -620,6 +620,13 @@
         "description": "أيّ شيء آخر — تعديلات، تسوية النزاعات. اختياري."
       }
     },
+    "audit": {
+      "title": "سجلّ التوقيعات",
+      "creatorSigned": "وقّع المبدع",
+      "clientSigned": "وقّع العميل",
+      "signedAt": "وقّع في",
+      "ipAddress": "IP"
+    },
     "status": {
       "DRAFT": "مسودّة",
       "SENT": "بانتظار الطرفين",
