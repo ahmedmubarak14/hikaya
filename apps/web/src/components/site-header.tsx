@@ -3,11 +3,13 @@ import { getLocale, getTranslations } from 'next-intl/server';
 
 import { Button, Logo } from '@hikaya/ui';
 
+import { UnreadBadge } from '@/components/messages/unread-badge';
 import { RoleSwitcher } from '@/components/role-switcher';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { type Locale } from '@/i18n/config';
 import type { MockUserRole } from '@/lib/auth/mock-store';
 import { getSession } from '@/lib/auth/session';
+import { getUnreadMessageCount } from '@/lib/messages/queries';
 import { getTheme } from '@/lib/theme/get-theme';
 
 /**
@@ -21,6 +23,16 @@ export async function SiteHeader() {
   const otherLocale: Locale = locale === 'en' ? 'ar' : 'en';
   const session = await getSession();
   const theme = (await getTheme()) ?? 'light';
+
+  // Fetch unread message count for the badge
+  let unreadCount = 0;
+  if (session) {
+    try {
+      unreadCount = await getUnreadMessageCount(session.user.id);
+    } catch {
+      // Non-critical — badge just won't show
+    }
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-surface/10 bg-bg/75 backdrop-blur-xl">
@@ -61,14 +73,15 @@ export async function SiteHeader() {
           {session ? (
             <Link
               href={`/${locale}/me`}
-              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface relative flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm transition-colors"
               aria-label={session.user.displayName}
             >
               <span
                 aria-hidden
-                className="text-2xs grid h-6 w-6 place-items-center rounded-full bg-[var(--accent)] font-semibold uppercase text-[var(--ink)]"
+                className="text-2xs relative grid h-6 w-6 place-items-center rounded-full bg-[var(--accent)] font-semibold uppercase text-[var(--ink)]"
               >
                 {session.user.displayName.charAt(0)}
+                <UnreadBadge initialCount={unreadCount} userId={session.user.id} />
               </span>
               <span className="hidden md:inline">{session.user.displayName.split(' ')[0]}</span>
             </Link>

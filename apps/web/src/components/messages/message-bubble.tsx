@@ -11,8 +11,39 @@ interface Props {
   mine: boolean;
 }
 
-export function MessageBubble({ message, mine }: Props) {
+/**
+ * Returns the status icon(s) for a sent message.
+ * - SENT: single check
+ * - DELIVERED: double check (grey)
+ * - READ: double check (accent-tinted)
+ */
+function StatusIndicator({ status }: { status: Message['status'] }) {
   const t = useTranslations('messages.bubble');
+
+  if (status === 'READ') {
+    return (
+      <span aria-label={t('status.READ')} className="text-accent/80">
+        {'✓✓'}
+      </span>
+    );
+  }
+
+  if (status === 'DELIVERED') {
+    return (
+      <span aria-label={t('status.DELIVERED')}>
+        {'✓✓'}
+      </span>
+    );
+  }
+
+  return (
+    <span aria-label={t('status.SENT')}>
+      {'✓'}
+    </span>
+  );
+}
+
+export function MessageBubble({ message, mine }: Props) {
   const locale = useLocale() as Locale;
 
   return (
@@ -38,11 +69,7 @@ export function MessageBubble({ message, mine }: Props) {
               minute: '2-digit',
             }).format(new Date(message.createdAt))}
           </time>
-          {mine ? (
-            <span aria-label={t(`status.${message.status}` as 'status.SENT')}>
-              {message.status === 'READ' ? '✓✓' : '✓'}
-            </span>
-          ) : null}
+          {mine ? <StatusIndicator status={message.status} /> : null}
         </div>
       </div>
     </div>

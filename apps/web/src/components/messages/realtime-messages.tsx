@@ -1,9 +1,8 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { type Locale } from '@/i18n/config';
 import { markMessagesAsReadAction } from '@/lib/messages/actions';
 import type { Message } from '@/lib/messages/mock-data';
 import { createClient } from '@/lib/supabase/client';
@@ -31,7 +30,6 @@ export function RealtimeMessages({
   otherUserName,
 }: Props) {
   const t = useTranslations('messages.thread');
-  const locale = useLocale() as Locale;
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const bottomRef = useRef<HTMLDivElement>(null);
 

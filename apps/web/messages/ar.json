@@ -108,30 +108,77 @@
     }
   },
   "me": {
-    "title": "حسابك",
-    "greeting": "مرحباً، {name}.",
-    "subtitle": "هذه صفحتك الرئيسيّة. لوحة التحكّم ومحرّر الأعمال والحجوزات والرسائل كلّها تتفرّع من هنا.",
-    "emailLabel": "البريد الإلكتروني",
-    "roleLabel": "الدور النشط",
-    "inquiriesLink": "عرض طلباتي",
-    "studioLink": "لوحة الاستوديو",
-    "portfolioLink": "تحرير معرض الأعمال",
-    "galleriesLink": "معارض العملاء",
-    "quotesLink": "عروض الأسعار",
-    "contractsLink": "العقود",
-    "messagesLink": "الرسائل",
-    "jobsLink": "لوحة الوظائف",
-    "storeLink": "متجري",
-    "purchasesLink": "مشترياتي",
+    "title": "لوحة التحكّم",
+    "greeting": "مرحباً بعودتك، {name}.",
+    "subtitle": "ممارستك الإبداعية في لمحة.",
+    "editProfile": "تعديل الملف الشخصي",
+    "viewPublicProfile": "عرض الملف العام",
     "settingsLink": "الإعدادات",
-    "servicesLink": "خدماتي",
-    "templatesLink": "قوالب المستندات",
-    "availabilityLink": "التوفّر",
-    "discountsLink": "أكواد الخصم",
-    "favoritesLink": "المفضّلة",
-    "analyticsLink": "التحليلات",
-    "disputesLink": "النزاعات",
-    "adminLink": "لوحة الإدارة"
+    "stats": {
+      "profileViews": "مشاهدات الملف",
+      "activeBookings": "الحجوزات النشطة",
+      "unreadMessages": "رسائل غير مقروءة",
+      "revenueThisMonth": "إيرادات هذا الشهر"
+    },
+    "activity": {
+      "recentMessages": "أحدث الرسائل",
+      "upcomingSessions": "الجلسات القادمة",
+      "noMessages": "لا توجد محادثات حديثة.",
+      "noMessagesHint": "ابدأ محادثة من صفحة أحد المبدعين.",
+      "noSessions": "لا توجد جلسات قادمة.",
+      "noSessionsHint": "ستظهر هنا الحجوزات التي تؤكّدها.",
+      "viewAll": "عرض الكل"
+    },
+    "nav": {
+      "create": "إنشاء",
+      "business": "الأعمال",
+      "account": "الحساب"
+    },
+    "links": {
+      "portfolio": "معرض الأعمال",
+      "portfolioHint": "حرّر أعمالك العامّة",
+      "blog": "المدوّنة",
+      "blogHint": "اكتب وانشر مقالات",
+      "store": "المتجر",
+      "storeHint": "بع فلاتر وقوالب وأدلّة",
+      "galleries": "المعارض",
+      "galleriesHint": "سلّم الأعمال للعملاء",
+      "quotes": "عروض الأسعار",
+      "quotesHint": "أنشئ وأرسل عروض أسعار",
+      "contracts": "العقود",
+      "contractsHint": "راجع ووقّع العقود",
+      "bookings": "الحجوزات",
+      "bookingsHint": "أدِر جلساتك",
+      "studio": "الاستوديو",
+      "studioHint": "مركز قيادة الاستوديو",
+      "settings": "الإعدادات",
+      "settingsHint": "تفضيلات الحساب",
+      "analytics": "التحليلات",
+      "analyticsHint": "تابع أداءك",
+      "favorites": "المفضّلة",
+      "favoritesHint": "المبدعون والبحوث المحفوظة",
+      "disputes": "النزاعات",
+      "disputesHint": "حلّ المشكلات",
+      "jobs": "لوحة الوظائف",
+      "jobsHint": "تصفّح وانشر عروضاً",
+      "inquiries": "الطلبات",
+      "inquiriesHint": "طلبات المشاريع التي أرسلتها",
+      "services": "الخدمات",
+      "servicesHint": "أدِر قوائم خدماتك",
+      "templates": "القوالب",
+      "templatesHint": "قوالب مستندات قابلة لإعادة الاستخدام",
+      "availability": "التوفّر",
+      "availabilityHint": "حدّد جدولك",
+      "discounts": "الخصومات",
+      "discountsHint": "أدِر أكواد العروض",
+      "purchases": "المشتريات",
+      "purchasesHint": "المنتجات التي اشتريتها",
+      "spaces": "المساحات",
+      "spacesHint": "أدِر مساحات الاستوديو",
+      "admin": "الإدارة",
+      "adminHint": "إدارة المنصة"
+    },
+    "signOut": "تسجيل الخروج"
   },
   "jobs": {
     "list": {
@@ -410,7 +457,25 @@
     },
     "composer": {
       "placeholder": "اكتب رسالة…",
-      "send": "إرسال"
+      "send": "إرسال",
+      "attach": "إرفاق ملف",
+      "attachUrlPlaceholder": "الصق رابط الملف…",
+      "addAttachment": "إضافة",
+      "cancelAttachment": "إلغاء",
+      "removeAttachment": "إزالة المرفق",
+      "attachmentMessage": "شارك ملفاً"
+    },
+    "typing": {
+      "indicator": "{name} يكتب…"
+    },
+    "attachments": {
+      "imageAlt": "صورة مرفقة"
+    },
+    "quickActions": {
+      "label": "سريع:",
+      "sendQuote": "إرسال عرض سعر",
+      "sendContract": "إرسال عقد",
+      "createBooking": "إنشاء حجز"
     },
     "start": {
       "cta": "راسلني",
@@ -801,9 +866,8 @@
     "eyebrow": "الاستوديو",
     "headline": "الجانب التجاري،",
     "headlineItalic": "في عرض واحد.",
-    "subtitle": "الحجوزات والعملاء والإيرادات في مركز قيادة واحد. كلّ ما تراه أدناه محاكاة — سيُربط بـ @hikaya/api لاحقاً.",
+    "subtitle": "الحجوزات والعملاء والإيرادات في مركز قيادة واحد.",
     "backToAccount": "العودة إلى الحساب",
-    "mockNote": "بيانات محاكاة — الحجوزات والعملاء يعيشون في الذاكرة وتُستعاد عند إعادة تشغيل الخادم.",
     "stats": {
       "monthRevenue": "إيرادات الشهر",
       "monthRevenueHint": "محصّلة في المحفظة",
