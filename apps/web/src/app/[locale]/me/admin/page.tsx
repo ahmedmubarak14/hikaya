@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { Badge, Card, CardBody } from '@hikaya/ui';
+import { Badge } from '@hikaya/ui';
 
 import { SiteHeader } from '@/components/site-header';
 import { StatTile } from '@/components/studio/stat-tile';
