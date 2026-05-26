@@ -184,7 +184,21 @@ export async function sendMessageAction(
     (thread.clientUserId as string) === session.user.id;
   if (!isParticipant) return { ok: false, error: 'NOT_PARTICIPANT' };
 
-  const parsed = sendMessageSchema.safeParse({ body: formData.get('body') });
+  // Parse attachment URLs from the form data
+  const rawAttachmentUrls = formData.get('attachmentUrls');
+  let attachmentUrls: string[] | undefined;
+  if (rawAttachmentUrls && typeof rawAttachmentUrls === 'string') {
+    try {
+      attachmentUrls = JSON.parse(rawAttachmentUrls) as string[];
+    } catch {
+      attachmentUrls = undefined;
+    }
+  }
+
+  const parsed = sendMessageSchema.safeParse({
+    body: formData.get('body'),
+    attachmentUrls: attachmentUrls?.length ? attachmentUrls : undefined,
+  });
   if (!parsed.success) {
     return {
       ok: false,
@@ -202,6 +216,7 @@ export async function sendMessageAction(
       threadId,
       senderId: session.user.id,
       body: parsed.data.body,
+      attachmentUrls: parsed.data.attachmentUrls ?? [],
       status: 'DELIVERED',
       createdAt: now,
     });
@@ -256,6 +271,38 @@ export async function markThreadReadAction(locale: Locale, threadId: string): Pr
     revalidatePath(`/${locale}/me/messages`);
     revalidatePath(`/${locale}/me/messages/${threadId}`);
   }
+}
+
+/**
+ * Mark all unread messages in a thread as READ for the current user.
+ * Alias for markThreadReadAction with a simpler signature for client components.
+ */
+export async function markMessagesAsReadAction(threadId: string): Promise<void> {
+  const session = await getSession();
+  if (!session) return;
+
+  const supabase = await createClient();
+
+  const { data: thread } = await supabase
+    .from('Thread')
+    .select('id, creatorUserId, clientUserId')
+    .eq('id', threadId)
+    .maybeSingle();
+
+  if (!thread) return;
+
+  const participant =
+    (thread.creatorUserId as string) === session.user.id ||
+    (thread.clientUserId as string) === session.user.id;
+  if (!participant) return;
+
+  const now = new Date().toISOString();
+  await supabase
+    .from('Message')
+    .update({ status: 'READ', readAt: now })
+    .eq('threadId', threadId)
+    .neq('senderId', session.user.id)
+    .neq('status', 'READ');
 }
 
 /* ------------------------------ helper export ----------------------------- */

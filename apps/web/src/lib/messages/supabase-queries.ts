@@ -24,6 +24,7 @@ interface DbMessageRow {
   threadId: string;
   senderId: string;
   body: string;
+  attachmentUrls: string[] | null;
   status: string;
   readAt: string | null;
   createdAt: string;
@@ -63,6 +64,7 @@ function mapMessage(row: DbMessageRow): Message {
     threadId: row.threadId,
     senderId: row.senderId,
     body: row.body,
+    attachmentUrls: row.attachmentUrls ?? undefined,
     status: row.status as MessageStatus,
     readAt: row.readAt ?? undefined,
     createdAt: row.createdAt,
@@ -78,7 +80,7 @@ const THREAD_SELECT = `
 `;
 
 const MESSAGE_SELECT = `
-  id, threadId, senderId, body, status, readAt, createdAt
+  id, threadId, senderId, body, attachmentUrls, status, readAt, createdAt
 `;
 
 // ---------------------------------------------------------------------------
@@ -118,6 +120,35 @@ export async function getThreadByIdFromDB(id: string): Promise<Thread | null> {
 
   if (!data) return null;
   return mapThread(data as unknown as DbThreadRow);
+}
+
+export async function getUnreadMessageCountFromDB(userId: string): Promise<number> {
+  const supabase = await getClient();
+
+  // First get all thread IDs the user participates in
+  const { data: threads, error: threadErr } = await supabase
+    .from('Thread')
+    .select('id')
+    .or(`creatorUserId.eq.${userId},clientUserId.eq.${userId}`);
+
+  if (threadErr || !threads || threads.length === 0) return 0;
+
+  const threadIds = threads.map((t: { id: string }) => t.id);
+
+  // Count messages in those threads that are not from the user and not READ
+  const { count, error: countErr } = await supabase
+    .from('Message')
+    .select('id', { count: 'exact', head: true })
+    .in('threadId', threadIds)
+    .neq('senderId', userId)
+    .neq('status', 'READ');
+
+  if (countErr) {
+    console.error('[supabase-queries] getUnreadMessageCountFromDB error:', countErr.message);
+    return 0;
+  }
+
+  return count ?? 0;
 }
 
 export async function getMessagesByThreadFromDB(threadId: string): Promise<Message[]> {

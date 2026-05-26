@@ -34,6 +34,8 @@ export interface Message {
   senderId: string;
   /** Plaintext body. Markdown renders as plain text in the mock. */
   body: string;
+  /** Optional attachment URLs (images, PDFs, files). */
+  attachmentUrls?: string[];
   status: MessageStatus;
   readAt?: string; // ISO — set when the other side opens the thread
   createdAt: string; // ISO
