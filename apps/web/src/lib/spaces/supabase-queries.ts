@@ -1,6 +1,6 @@
 import 'server-only';
 
-import type { Space, SpaceAddOn, SpaceBooking, BookingDurationKind, BookingStatus, SpaceStatus } from './mock-data';
+import type { Space, SpaceAddOn, SpaceBooking, BookingDurationKind, BookingStatus, DepositStatus, SmartLockConfig, SpaceStatus } from './mock-data';
 
 /**
  * Real Supabase queries for spaces (Space + SpaceBooking).
@@ -34,6 +34,8 @@ interface DbSpaceRow {
   status: string;
   houseRules: string | null;
   addOns: SpaceAddOn[] | null;
+  depositHalalas: number | null;
+  smartLockConfig: SmartLockConfig | null;
   createdAt: string;
 }
 
@@ -51,6 +53,8 @@ interface DbSpaceBookingRow {
   checkInPhotos: string[] | null;
   checkOutPhotos: string[] | null;
   selectedAddOns: SpaceAddOn[] | null;
+  accessCode: string | null;
+  depositStatus: string | null;
   createdAt: string;
 }
 
@@ -70,6 +74,8 @@ function mapSpace(row: DbSpaceRow): Space {
     status: row.status as SpaceStatus,
     houseRules: row.houseRules ?? '',
     addOns: (row.addOns as SpaceAddOn[] | null) ?? [],
+    depositHalalas: row.depositHalalas ?? 0,
+    smartLockConfig: row.smartLockConfig ?? null,
     createdAt: row.createdAt,
   };
 }
@@ -89,6 +95,8 @@ function mapSpaceBooking(row: DbSpaceBookingRow): SpaceBooking {
     checkInPhotos: row.checkInPhotos ?? [],
     checkOutPhotos: row.checkOutPhotos ?? [],
     selectedAddOns: (row.selectedAddOns as SpaceAddOn[] | null) ?? [],
+    accessCode: row.accessCode ?? null,
+    depositStatus: (row.depositStatus as DepositStatus | null) ?? null,
     createdAt: row.createdAt,
   };
 }
@@ -97,14 +105,15 @@ const SPACE_SELECT = `
   id, ownerId, name, description, address, city,
   capacity, hourlyHalalas, dailyHalalas,
   equipmentIncluded, photos, status,
-  houseRules, addOns, createdAt
+  houseRules, addOns, depositHalalas,
+  smartLockConfig, createdAt
 `;
 
 const BOOKING_SELECT = `
   id, spaceId, renterId, startISO, endISO,
   durationKind, totalHalalas, status,
   checkInAt, checkOutAt, checkInPhotos, checkOutPhotos,
-  selectedAddOns, createdAt
+  selectedAddOns, accessCode, depositStatus, createdAt
 `;
 
 // ---------------------------------------------------------------------------

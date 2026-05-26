@@ -9,6 +9,7 @@ import { ApplicationsList } from '@/components/jobs/applications-list';
 import { ApplyForm } from '@/components/jobs/apply-form';
 import { JobActions } from '@/components/jobs/job-actions';
 import { JobStatusBadge } from '@/components/jobs/job-status-badge';
+import { ReportButton } from '@/components/moderation/report-button';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
@@ -105,6 +106,11 @@ export default async function JobDetailPage({ params }: Props) {
         <section className="border-surface/10 bg-surface/[0.03] mb-10 rounded-xl border p-6">
           <h2 className="text-surface mb-3 text-xl">{t('briefTitle')}</h2>
           <p className="text-surface/80 whitespace-pre-wrap text-base">{job.description}</p>
+          {!isOwner ? (
+            <div className="mt-4 flex justify-end">
+              <ReportButton resourceType="JOB" resourceId={job.id} />
+            </div>
+          ) : null}
         </section>
 
         {/* Apply / state-aware CTA */}

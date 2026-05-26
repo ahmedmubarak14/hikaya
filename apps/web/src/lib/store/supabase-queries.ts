@@ -34,6 +34,7 @@ interface DbProductRow {
   fileUrls: string[];
   previewImageUrls: string[];
   compatibleSoftware: string[];
+  bundleItems: string[] | null;
   salesCount: number;
   createdAt: string;
   updatedAt: string;
@@ -55,6 +56,7 @@ function mapProduct(row: DbProductRow): Product {
     fileUrl: row.fileUrls?.[0] ?? '',
     freeSampleUrl: row.freeSampleUrl ?? undefined,
     compatibleSoftware: row.compatibleSoftware ?? [],
+    bundleItems: row.bundleItems ?? [],
     salesCount: row.salesCount,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
@@ -68,8 +70,8 @@ const PRODUCT_SELECT = `
   category, status,
   priceHalalas, freeSampleUrl,
   fileUrls, previewImageUrls,
-  compatibleSoftware, salesCount,
-  createdAt, updatedAt
+  compatibleSoftware, bundleItems,
+  salesCount, createdAt, updatedAt
 `;
 
 // ---------------------------------------------------------------------------

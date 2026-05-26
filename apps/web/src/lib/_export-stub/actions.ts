@@ -91,3 +91,13 @@ export const setActiveRole: any = noop;
 // Studio public profile
 export const createStudioProfileAction: any = noop;
 export const updateStudioProfileAction: any = noop;
+
+// Moderation
+export const reportContentAction: any = noop;
+export const blockUserAction: any = noop;
+export const unblockUserAction: any = noop;
+export const getBlockedUsersAction: any = async () => [];
+export const getBlockedUserIdsAction: any = async () => [];
+export const isBlockedAction: any = async () => false;
+export const listPendingReportsAction: any = async () => [];
+export const reviewReportAction: any = noop;

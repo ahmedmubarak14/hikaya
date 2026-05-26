@@ -16,6 +16,7 @@ import { type Locale } from '@/i18n/config';
 import type { City, Discipline } from '@/lib/creators/mock-data';
 import { listCreators } from '@/lib/creators/queries';
 import { getFavoriteStatus } from '@/lib/creators/actions';
+import { getBlockedUserIdsAction } from '@/lib/moderation/actions';
 import { IS_STATIC_EXPORT } from '@/lib/static-export';
 
 import type { Metadata } from 'next';
@@ -85,11 +86,18 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
   const view: DiscoverView = rawView === 'projects' ? 'projects' : 'people';
 
   const t = await getTranslations('discover');
-  const creators = await listCreators({
+  const allCreators = await listCreators({
     city: city ?? undefined,
     discipline: discipline ?? undefined,
     available: availableOnly || undefined,
   });
+
+  // Filter out blocked users from discover results
+  const blockedIds = await getBlockedUserIdsAction();
+  const blockedSet = new Set(blockedIds);
+  const creators = blockedSet.size > 0
+    ? allCreators.filter((c) => !blockedSet.has(c.id))
+    : allCreators;
 
   // Get favorite status for all creators (no-op if not signed in)
   const creatorIds = creators.map((c) => c.id);

@@ -13,14 +13,18 @@ import { type ProfileTab } from '@/components/creators/profile-tabs';
 import { ProfileTabsSwitcher } from '@/components/creators/profile-tabs-switcher';
 import { ReviewsSection, type ReviewDisplay } from '@/components/creators/reviews-section';
 import { StartThreadButton } from '@/components/messages/start-thread-button';
+import { BlockButton } from '@/components/moderation/block-button';
+import { ReportButton } from '@/components/moderation/report-button';
 import { ServicesList } from '@/components/services/services-list';
 import { ProductCard } from '@/components/store/product-card';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
+import { getSession } from '@/lib/auth/session';
 import { getPublishedPostsByCreator } from '@/lib/blog/mock-store';
 import { CREATORS } from '@/lib/creators/mock-data';
 import { getCreatorByUsername } from '@/lib/creators/queries';
+import { isBlockedAction } from '@/lib/moderation/actions';
 import { getReviewsByCreatorProfileId } from '@/lib/reviews/mock-data';
 import type { CreatorService } from '@/lib/services/types';
 import { listActiveProductsByCreator } from '@/lib/store/mock-store';
@@ -128,6 +132,27 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
     // Supabase unavailable or column doesn't exist yet — silent fallback
   }
 
+  // Session + block check for moderation buttons
+  const session = await getSession();
+  const isOwnProfile = session?.user.email === creator.ownerEmail;
+  let isBlockedByViewer = false;
+  if (session && !isOwnProfile && creator.ownerEmail) {
+    try {
+      const { createClient: createSC } = await import('@/lib/supabase/server');
+      const sb = await createSC();
+      const { data: ownerRow } = await sb
+        .from('User')
+        .select('id')
+        .eq('email', creator.ownerEmail)
+        .maybeSingle();
+      if (ownerRow) {
+        isBlockedByViewer = await isBlockedAction(session.user.id, ownerRow.id as string);
+      }
+    } catch {
+      // silent
+    }
+  }
+
   // Force tab back to "work" if user asks for store but there's no store.
   const effectiveTab: ProfileTab = tab === 'store' && !hasStore ? 'work' : tab;
 
@@ -217,6 +242,13 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
               >
                 {t('viewStore')}
               </Link>
+            ) : null}
+            {/* Moderation: report + block (only for other users) */}
+            {session && !isOwnProfile ? (
+              <div className="flex items-center gap-2">
+                <ReportButton resourceType="PROFILE" resourceId={creator.id} />
+                <BlockButton userId={creator.id} initialBlocked={isBlockedByViewer} />
+              </div>
             ) : null}
           </div>
         </section>

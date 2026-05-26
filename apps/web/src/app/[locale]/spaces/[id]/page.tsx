@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge } from '@hikaya/ui';
 
+import { ReportButton } from '@/components/moderation/report-button';
 import { BookForm } from '@/components/spaces/book-form';
 import { SpaceAvailabilityCalendar } from '@/components/spaces/space-availability-calendar';
 import { SiteFooter } from '@/components/site-footer';
@@ -178,6 +179,23 @@ export default async function SpaceDetailPage({ params }: Props) {
               </div>
             ) : null}
 
+            {/* Damage deposit */}
+            {space.depositHalalas > 0 ? (
+              <div className="border-surface/10 bg-surface/[0.03] flex items-baseline justify-between gap-3 rounded-xl border p-4">
+                <span className="text-2xs text-surface/40">{t('deposit')}</span>
+                <span className="text-surface font-mono text-base tabular-nums">
+                  {formatSarFromHalalas(space.depositHalalas, locale)}
+                </span>
+              </div>
+            ) : null}
+
+            {/* Smart lock notice */}
+            {space.smartLockConfig ? (
+              <div className="border-sage/30 bg-sage/10 rounded-xl border p-4">
+                <p className="text-surface/70 text-sm">{t('smartLockNotice')}</p>
+              </div>
+            ) : null}
+
             <BookForm
               locale={locale}
               spaceId={space.id}
@@ -199,6 +217,11 @@ export default async function SpaceDetailPage({ params }: Props) {
           <h2 className="text-surface mb-4 text-base font-semibold">{t('availabilityTitle')}</h2>
           <SpaceAvailabilityCalendar bookings={bookings} />
         </section>
+
+        {/* Report button */}
+        <div className="mt-8 flex justify-end">
+          <ReportButton resourceType="SPACE" resourceId={space.id} />
+        </div>
       </main>
       <SiteFooter />
     </>

@@ -16,6 +16,16 @@ export type SpaceStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED';
 
 export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
 
+export type DepositStatus = 'HELD' | 'RELEASED' | 'CLAIMED';
+
+export type SmartLockProvider = 'NONE' | 'TTLOCK' | 'NUKI' | 'AUGUST';
+
+export interface SmartLockConfig {
+  provider: SmartLockProvider;
+  lockId: string;
+  apiKey: string;
+}
+
 export type BookingDurationKind = 'HOURLY' | 'DAILY';
 
 export interface SpaceAddOn {
@@ -46,6 +56,10 @@ export interface Space {
   houseRules: string;
   /** Optional add-ons the renter can select during booking. */
   addOns: SpaceAddOn[];
+  /** Refundable damage deposit in halalas. 0 means no deposit. */
+  depositHalalas: number;
+  /** Smart lock configuration. Null means no smart lock. */
+  smartLockConfig: SmartLockConfig | null;
   createdAt: string;
 }
 
@@ -72,6 +86,10 @@ export interface SpaceBooking {
   checkOutPhotos: string[];
   /** Add-ons selected at booking time. */
   selectedAddOns: SpaceAddOn[];
+  /** 6-digit access code generated when owner confirms booking. */
+  accessCode: string | null;
+  /** Damage deposit status. Null if no deposit required. */
+  depositStatus: DepositStatus | null;
   createdAt: string;
 }
 
@@ -110,6 +128,8 @@ export const SEED_SPACES: Space[] = [
       { name: 'Fog machine', priceHalalas: 30 * SAR },
       { name: 'On-set assistant (4h)', priceHalalas: 200 * SAR },
     ],
+    depositHalalas: 500 * SAR,
+    smartLockConfig: null,
     createdAt: now,
   },
   {
@@ -134,6 +154,8 @@ export const SEED_SPACES: Space[] = [
     addOns: [
       { name: 'Wardrobe steamer', priceHalalas: 20 * SAR },
     ],
+    depositHalalas: 300 * SAR,
+    smartLockConfig: null,
     createdAt: now,
   },
   {
@@ -155,6 +177,8 @@ export const SEED_SPACES: Space[] = [
       { name: 'Extra mic channel', priceHalalas: 40 * SAR },
       { name: 'Teleprompter', priceHalalas: 60 * SAR },
     ],
+    depositHalalas: 0,
+    smartLockConfig: null,
     createdAt: now,
   },
   {
@@ -173,6 +197,8 @@ export const SEED_SPACES: Space[] = [
     status: 'ACTIVE',
     houseRules: 'Wind advisory: do not set up tall stands without sandbags. All trash must be removed.',
     addOns: [],
+    depositHalalas: 0,
+    smartLockConfig: null,
     createdAt: now,
   },
   {
@@ -197,6 +223,8 @@ export const SEED_SPACES: Space[] = [
     addOns: [
       { name: 'Aputure 600d Pro', priceHalalas: 80 * SAR },
     ],
+    depositHalalas: 400 * SAR,
+    smartLockConfig: null,
     createdAt: now,
   },
   {
@@ -218,6 +246,8 @@ export const SEED_SPACES: Space[] = [
       { name: 'Props library access', priceHalalas: 0 },
       { name: 'Hair & makeup station', priceHalalas: 100 * SAR },
     ],
+    depositHalalas: 200 * SAR,
+    smartLockConfig: null,
     createdAt: now,
   },
 ];
@@ -249,6 +279,8 @@ export const SEED_BOOKINGS: SpaceBooking[] = [
     checkInPhotos: [],
     checkOutPhotos: [],
     selectedAddOns: [],
+    accessCode: '482917',
+    depositStatus: 'HELD',
     createdAt: now,
   },
   {
@@ -265,6 +297,8 @@ export const SEED_BOOKINGS: SpaceBooking[] = [
     checkInPhotos: [],
     checkOutPhotos: [],
     selectedAddOns: [],
+    accessCode: null,
+    depositStatus: null,
     createdAt: now,
   },
 ];

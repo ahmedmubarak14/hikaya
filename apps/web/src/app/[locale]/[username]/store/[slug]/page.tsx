@@ -13,7 +13,7 @@ import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getCreatorByUsername } from '@/lib/creators/queries';
 import { formatSarFromHalalas } from '@/lib/format';
-import { findOrderItemForBuyer, getProductBySlug } from '@/lib/store/mock-store';
+import { findOrderItemForBuyer, getProductById, getProductBySlug } from '@/lib/store/mock-store';
 
 import type { Metadata } from 'next';
 
@@ -60,6 +60,7 @@ export default async function PublicProductPage({ params }: Props) {
   if (!product || product.status !== 'ACTIVE') notFound();
 
   const t = await getTranslations('store.product');
+  const tBundle = await getTranslations('store.bundle');
 
   const session = await getSession();
   const alreadyOwned = session
@@ -71,6 +72,11 @@ export default async function PublicProductPage({ params }: Props) {
   const description =
     locale === 'ar' && product.descriptionAr ? product.descriptionAr : product.descriptionEn;
   const creatorName = locale === 'ar' ? creator.displayNameAr : creator.displayNameEn;
+
+  // Resolve bundle items if this is a bundle product
+  const bundledProducts = (product.bundleItems ?? [])
+    .map((id) => getProductById(id))
+    .filter((p): p is NonNullable<typeof p> => p !== null);
 
   const cover = product.previewImageUrls[0];
   const rest = product.previewImageUrls.slice(1);
@@ -171,6 +177,30 @@ export default async function PublicProductPage({ params }: Props) {
               >
                 {t('downloadSample')} ↗
               </a>
+            ) : null}
+
+            {bundledProducts.length > 0 ? (
+              <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
+                <h3 className="text-surface mb-3 text-base font-semibold">
+                  {tBundle('includesTitle')}
+                </h3>
+                <ul className="flex flex-col gap-2">
+                  {bundledProducts.map((bp) => (
+                    <li key={bp.id} className="text-surface/70 flex items-center gap-2 text-sm">
+                      <span className="text-accent">-</span>
+                      <Link
+                        href={`/${locale}/${creator.username}/store/${bp.slug}`}
+                        className="hover:text-surface underline-offset-4 hover:underline"
+                      >
+                        {locale === 'ar' && bp.titleAr ? bp.titleAr : bp.titleEn}
+                      </Link>
+                      <span className="text-2xs text-surface/40 font-mono">
+                        {formatSarFromHalalas(bp.priceHalalas, locale)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ) : null}
 
             <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">

@@ -73,6 +73,7 @@ function parseProductForm(formData: FormData) {
     freeSampleUrl: formData.get('freeSampleUrl') || undefined,
     previewImagesRaw: formData.get('previewImagesRaw') ?? '',
     compatibleSoftwareRaw: formData.get('compatibleSoftwareRaw') ?? '',
+    bundleItemIdsRaw: formData.get('bundleItemIdsRaw') ?? '',
   });
 }
 
@@ -126,6 +127,7 @@ export async function createProductAction(
       fileUrl: parsed.data.fileUrl,
       freeSampleUrl: parsed.data.freeSampleUrl || null,
       compatibleSoftware: parsed.data.compatibleSoftwareRaw,
+      bundleItems: parsed.data.bundleItemIdsRaw,
       salesCount: 0,
       createdAt: now,
       updatedAt: now,
@@ -184,6 +186,7 @@ export async function updateProductAction(
       fileUrl: parsed.data.fileUrl,
       freeSampleUrl: parsed.data.freeSampleUrl || null,
       compatibleSoftware: parsed.data.compatibleSoftwareRaw,
+      bundleItems: parsed.data.bundleItemIdsRaw,
       updatedAt: new Date().toISOString(),
     })
     .eq('id', productId);

@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
+import { checkRateLimit } from '@/lib/moderation/rate-limit';
 import { createClient } from '@/lib/supabase/server';
 
 import { applyToJobSchema, postJobSchema } from './schemas';
@@ -20,6 +21,7 @@ export type JobErrorKey =
   | 'JOB_NOT_OPEN'
   | 'WRONG_STATE'
   | 'APPLICATION_NOT_FOUND'
+  | 'RATE_LIMITED'
   | 'UNKNOWN';
 
 export interface JobFailure {
@@ -57,6 +59,12 @@ export async function postJobAction(
 ): Promise<JobResult> {
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/jobs/new`);
+
+  // Rate-limit: 3 jobs per day
+  const rl = checkRateLimit('postJob', session.user.id);
+  if (!rl.allowed) {
+    return { ok: false, error: 'RATE_LIMITED' };
+  }
 
   const parsed = postJobSchema.safeParse({
     title: formData.get('title'),

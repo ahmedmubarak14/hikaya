@@ -148,6 +148,8 @@ export interface CreateSpaceInput {
   status: SpaceStatus;
   houseRules?: string;
   addOns?: { name: string; priceHalalas: number }[];
+  depositHalalas?: number;
+  smartLockConfig?: { provider: string; lockId: string; apiKey: string } | null;
 }
 
 export function createSpace(input: CreateSpaceInput): Space {
@@ -167,6 +169,8 @@ export function createSpace(input: CreateSpaceInput): Space {
     status: input.status,
     houseRules: input.houseRules ?? '',
     addOns: input.addOns ? [...input.addOns] : [],
+    depositHalalas: input.depositHalalas ?? 0,
+    smartLockConfig: input.smartLockConfig ?? null,
     createdAt: new Date().toISOString(),
   };
   store.spaces.set(id, space);
@@ -220,6 +224,8 @@ export function createBooking(input: CreateBookingInput): SpaceBooking {
     checkInPhotos: [],
     checkOutPhotos: [],
     selectedAddOns: input.selectedAddOns ?? [],
+    accessCode: null,
+    depositStatus: null,
     createdAt: new Date().toISOString(),
   };
   store.bookings.set(id, booking);

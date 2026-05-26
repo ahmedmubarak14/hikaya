@@ -8,6 +8,8 @@ import { redirect } from 'next/navigation';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getCreatorByUsername } from '@/lib/creators/queries';
+import { isBlockedAction } from '@/lib/moderation/actions';
+import { checkRateLimit } from '@/lib/moderation/rate-limit';
 import { createClient } from '@/lib/supabase/server';
 
 import { sendMessageSchema, startThreadSchema } from './schemas';
@@ -20,6 +22,8 @@ export type MessageErrorKey =
   | 'CANNOT_MESSAGE_SELF'
   | 'THREAD_NOT_FOUND'
   | 'NOT_PARTICIPANT'
+  | 'BLOCKED'
+  | 'RATE_LIMITED'
   | 'UNKNOWN';
 
 export interface MessageFailure {
@@ -67,6 +71,12 @@ export async function startThreadAction(
     redirect(`/${locale}/sign-in?next=/${locale}/${username}`);
   }
 
+  // Rate-limit: 10 threads per hour
+  const rl = checkRateLimit('startThread', session.user.id);
+  if (!rl.allowed) {
+    return { ok: false, error: 'RATE_LIMITED' };
+  }
+
   const parsed = startThreadSchema.safeParse({
     creatorUsername: formData.get('creatorUsername'),
     body: formData.get('body') || undefined,
@@ -95,6 +105,12 @@ export async function startThreadAction(
   if (!creatorUser) return { ok: false, error: 'CREATOR_HAS_NO_USER' };
   if ((creatorUser.id as string) === session.user.id) {
     return { ok: false, error: 'CANNOT_MESSAGE_SELF' };
+  }
+
+  // Block check: if either user has blocked the other, deny messaging
+  const blocked = await isBlockedAction(session.user.id, creatorUser.id as string);
+  if (blocked) {
+    return { ok: false, error: 'BLOCKED' };
   }
 
   // Check for existing thread between these two users
@@ -169,6 +185,12 @@ export async function sendMessageAction(
   const session = await getSession();
   if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
 
+  // Rate-limit: 30 messages per minute
+  const rl = checkRateLimit('sendMessage', session.user.id);
+  if (!rl.allowed) {
+    return { ok: false, error: 'RATE_LIMITED' };
+  }
+
   const supabase = await createClient();
 
   const { data: thread, error: fetchErr } = await supabase
@@ -183,6 +205,16 @@ export async function sendMessageAction(
     (thread.creatorUserId as string) === session.user.id ||
     (thread.clientUserId as string) === session.user.id;
   if (!isParticipant) return { ok: false, error: 'NOT_PARTICIPANT' };
+
+  // Block check: if either user has blocked the other, deny messaging
+  const otherUserId =
+    (thread.creatorUserId as string) === session.user.id
+      ? (thread.clientUserId as string)
+      : (thread.creatorUserId as string);
+  const blocked = await isBlockedAction(session.user.id, otherUserId);
+  if (blocked) {
+    return { ok: false, error: 'BLOCKED' };
+  }
 
   // Parse attachment URLs from the form data
   const rawAttachmentUrls = formData.get('attachmentUrls');

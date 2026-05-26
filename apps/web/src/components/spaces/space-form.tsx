@@ -9,7 +9,7 @@ import { Button, Input, cn } from '@hikaya/ui';
 
 import { type Locale } from '@/i18n/config';
 import { createSpaceAction, updateSpaceAction, type SpacesResult } from '@/lib/spaces/actions';
-import type { Space, SpaceCity, SpaceStatus } from '@/lib/spaces/mock-data';
+import type { Space, SpaceCity, SpaceStatus, SmartLockProvider } from '@/lib/spaces/mock-data';
 
 const CITIES: SpaceCity[] = [
   'RIYADH',
@@ -22,6 +22,7 @@ const CITIES: SpaceCity[] = [
   'ABHA',
 ];
 const STATUSES: SpaceStatus[] = ['DRAFT', 'ACTIVE', 'PAUSED'];
+const SMART_LOCK_PROVIDERS: SmartLockProvider[] = ['NONE', 'TTLOCK', 'NUKI', 'AUGUST'];
 
 interface Props {
   locale: Locale;
@@ -42,6 +43,10 @@ interface FormShape {
   equipmentRaw: string;
   houseRules: string;
   addOnsRaw: string;
+  depositSar: number;
+  smartLockProvider: SmartLockProvider;
+  smartLockLockId: string;
+  smartLockApiKey: string;
 }
 
 /**
@@ -68,6 +73,7 @@ export function SpaceForm({ locale, space }: Props) {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<FormShape>({
     defaultValues: space
       ? {
@@ -85,6 +91,10 @@ export function SpaceForm({ locale, space }: Props) {
           addOnsRaw: space.addOns
             .map((a) => `${a.name}, ${Math.round(a.priceHalalas / 100)}`)
             .join('\n'),
+          depositSar: Math.round((space.depositHalalas ?? 0) / 100),
+          smartLockProvider: space.smartLockConfig?.provider as SmartLockProvider ?? 'NONE',
+          smartLockLockId: space.smartLockConfig?.lockId ?? '',
+          smartLockApiKey: space.smartLockConfig?.apiKey ?? '',
         }
       : {
           name: '',
@@ -99,6 +109,10 @@ export function SpaceForm({ locale, space }: Props) {
           equipmentRaw: '',
           houseRules: '',
           addOnsRaw: '',
+          depositSar: 0,
+          smartLockProvider: 'NONE',
+          smartLockLockId: '',
+          smartLockApiKey: '',
         },
   });
 
@@ -118,6 +132,10 @@ export function SpaceForm({ locale, space }: Props) {
         fd.set('equipmentRaw', values.equipmentRaw);
         fd.set('houseRules', values.houseRules);
         fd.set('addOnsRaw', values.addOnsRaw);
+        fd.set('depositSar', String(values.depositSar));
+        fd.set('smartLockProvider', values.smartLockProvider);
+        fd.set('smartLockLockId', values.smartLockLockId);
+        fd.set('smartLockApiKey', values.smartLockApiKey);
         startTransition(() => formAction(fd));
       })}
       className="flex flex-col gap-6"
@@ -246,6 +264,47 @@ export function SpaceForm({ locale, space }: Props) {
           placeholder={'Fog machine, 30\nOn-set assistant (4h), 200'}
         />
       </Field>
+
+      {/* Damage deposit */}
+      <Input
+        type="number"
+        inputMode="numeric"
+        label={t('depositLabel')}
+        hint={t('depositHint')}
+        {...register('depositSar')}
+      />
+
+      {/* Smart lock configuration (collapsed) */}
+      <details className="border-surface/10 rounded-xl border">
+        <summary className="text-surface/70 cursor-pointer px-5 py-4 text-sm font-medium">
+          {t('smartLockTitle')}
+        </summary>
+        <div className="flex flex-col gap-4 px-5 pb-5">
+          <Field label={t('smartLockProvider')}>
+            <select
+              {...register('smartLockProvider')}
+              className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 rounded-md border px-3 text-base outline-none"
+            >
+              {SMART_LOCK_PROVIDERS.map((p) => (
+                <option key={p} value={p}>
+                  {t(`smartLockProviders.${p}` as 'smartLockProviders.NONE')}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Input
+            label={t('smartLockLockId')}
+            hint={t('smartLockLockIdHint')}
+            {...register('smartLockLockId')}
+          />
+          <Input
+            label={t('smartLockApiKey')}
+            hint={t('smartLockApiKeyHint')}
+            type="password"
+            {...register('smartLockApiKey')}
+          />
+        </div>
+      </details>
 
       {serverState?.error && serverState.error !== 'INVALID_INPUT' ? (
         <p className="text-accent-secondary text-sm" role="alert">

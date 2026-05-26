@@ -13,13 +13,15 @@ import type { Product, ProductCategory, ProductStatus } from '@/lib/store/mock-d
 import { PLATFORM_COMMISSION_RATE, commissionFor, creatorTakeFor } from '@/lib/store/mock-data';
 import { formatSarFromHalalas } from '@/lib/format';
 
-const CATEGORIES: ProductCategory[] = ['PRESET', 'LUT', 'TEMPLATE', 'OVERLAY', 'GUIDE', 'OTHER'];
+const CATEGORIES: ProductCategory[] = ['PRESET', 'LUT', 'TEMPLATE', 'OVERLAY', 'GUIDE', 'BUNDLE', 'OTHER'];
 const STATUSES: ProductStatus[] = ['DRAFT', 'ACTIVE', 'ARCHIVED'];
 
 interface Props {
   locale: Locale;
   /** Existing product when editing; undefined when creating. */
   product?: Product;
+  /** Other products by the same creator (for bundle multi-select). */
+  otherProducts?: Product[];
 }
 
 interface FormShape {
@@ -34,9 +36,10 @@ interface FormShape {
   freeSampleUrl?: string;
   previewImagesRaw: string;
   compatibleSoftwareRaw: string;
+  bundleItemIdsRaw: string;
 }
 
-export function ProductForm({ locale, product }: Props) {
+export function ProductForm({ locale, product, otherProducts = [] }: Props) {
   const t = useTranslations('store.form');
   const tCategory = useTranslations('store.category');
   const tStatus = useTranslations('store.status');
@@ -72,6 +75,7 @@ export function ProductForm({ locale, product }: Props) {
           freeSampleUrl: product.freeSampleUrl ?? '',
           previewImagesRaw: product.previewImageUrls.join('\n'),
           compatibleSoftwareRaw: product.compatibleSoftware.join(', '),
+          bundleItemIdsRaw: (product.bundleItems ?? []).join(', '),
         }
       : {
           titleEn: '',
@@ -85,10 +89,12 @@ export function ProductForm({ locale, product }: Props) {
           freeSampleUrl: '',
           previewImagesRaw: '',
           compatibleSoftwareRaw: '',
+          bundleItemIdsRaw: '',
         },
   });
 
   const watchedPrice = watch('priceSar');
+  const watchedCategory = watch('category');
   const halalas = Math.max(0, Number(watchedPrice ?? 0)) * 100;
 
   return (
@@ -106,6 +112,7 @@ export function ProductForm({ locale, product }: Props) {
         if (values.freeSampleUrl) fd.set('freeSampleUrl', values.freeSampleUrl);
         fd.set('previewImagesRaw', values.previewImagesRaw);
         fd.set('compatibleSoftwareRaw', values.compatibleSoftwareRaw);
+        fd.set('bundleItemIdsRaw', values.bundleItemIdsRaw);
         startTransition(() => formAction(fd));
       })}
       className="flex flex-col gap-6"
@@ -200,6 +207,29 @@ export function ProductForm({ locale, product }: Props) {
           </div>
         </div>
       </aside>
+
+      {/* Bundle items (only shown when category is BUNDLE) */}
+      {watchedCategory === 'BUNDLE' && otherProducts.length > 0 ? (
+        <section className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
+          <Field
+            label={t('bundleItems')}
+            hint={t('bundleItemsHint')}
+          >
+            <select
+              multiple
+              size={Math.min(6, otherProducts.length)}
+              {...register('bundleItemIdsRaw')}
+              className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-sm outline-none"
+            >
+              {otherProducts.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.titleEn} ({tCategory(p.category as 'PRESET')})
+                </option>
+              ))}
+            </select>
+          </Field>
+        </section>
+      ) : null}
 
       {/* Files & previews */}
       <section className="flex flex-col gap-4">

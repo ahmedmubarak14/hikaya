@@ -2,11 +2,13 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { Badge, Card, CardBody } from '@hikaya/ui';
+import { Badge } from '@hikaya/ui';
 
+import { ModerationQueue } from '@/components/moderation/moderation-queue';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
+import { listPendingReportsAction } from '@/lib/moderation/actions';
 import { createClient } from '@/lib/supabase/server';
 
 import type { Metadata } from 'next';
@@ -55,6 +57,8 @@ export default async function ModerationPage({ params }: Props) {
     );
   }
 
+  const reports = await listPendingReportsAction();
+
   return (
     <>
       <SiteHeader />
@@ -68,15 +72,16 @@ export default async function ModerationPage({ params }: Props) {
           </Link>
           <Badge tone="accent" className="self-start">{t('moderationEyebrow')}</Badge>
           <h1 className="text-balance text-5xl">{t('moderationTitle')}</h1>
-          <p className="text-surface/60 max-w-prose">{t('moderationSubtitle')}</p>
+          <p className="text-surface/60 max-w-prose">
+            {t('moderationSubtitle')}
+            {' '}
+            <span className="text-surface/40 text-sm">
+              {t('moderationCount', { count: reports.length })}
+            </span>
+          </p>
         </header>
 
-        <Card>
-          <CardBody className="p-8 text-center">
-            <p className="text-surface/60 text-lg">{t('moderationEmpty')}</p>
-            <p className="text-surface/40 mt-2 text-sm">{t('moderationEmptyHint')}</p>
-          </CardBody>
-        </Card>
+        <ModerationQueue initialReports={reports} />
       </main>
     </>
   );

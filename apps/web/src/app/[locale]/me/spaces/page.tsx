@@ -66,11 +66,13 @@ export default async function MySpacesPage({ params }: Props) {
 
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
           <span className="text-2xs text-surface/40">{t('count', { count: spaces.length })}</span>
-          <Link href={`/${locale}/me/spaces/new`}>
-            <Button size="md" variant="primary">
-              + {t('new')}
-            </Button>
-          </Link>
+          <div className="flex gap-3">
+            <Link href={`/${locale}/me/spaces/new`}>
+              <Button size="md" variant="primary">
+                + {t('new')}
+              </Button>
+            </Link>
+          </div>
         </div>
 
         {spaces.length === 0 ? (
@@ -126,6 +128,12 @@ export default async function MySpacesPage({ params }: Props) {
                           className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-3 py-1 text-xs transition-colors"
                         >
                           {t('edit')}
+                        </Link>
+                        <Link
+                          href={`/${locale}/me/spaces/${s.id}/team`}
+                          className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-3 py-1 text-xs transition-colors"
+                        >
+                          {t('teamLink')}
                         </Link>
                         {s.status === 'ACTIVE' ? (
                           <SpaceStatusButton locale={locale} spaceId={s.id} to="PAUSED" />

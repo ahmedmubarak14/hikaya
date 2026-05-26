@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge } from '@hikaya/ui';
 
 import { SiteHeader } from '@/components/site-header';
+import { BlockedUsersList } from '@/components/moderation/blocked-users-list';
 import { SettingsProfileForm } from '@/components/settings/settings-profile-form';
 import { SettingsPasswordForm } from '@/components/settings/settings-password-form';
 import { SettingsDataExport } from '@/components/settings/settings-data-export';
@@ -12,6 +13,7 @@ import { SettingsDeleteAccount } from '@/components/settings/settings-delete-acc
 import { NotificationPreferencesForm } from '@/components/settings/notification-preferences-form';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
+import { getBlockedUsersAction } from '@/lib/moderation/actions';
 import { createClient } from '@/lib/supabase/server';
 import { getNotificationPreferencesAction } from '@/lib/notifications/actions';
 
@@ -44,7 +46,12 @@ export default async function SettingsPage({ params }: Props) {
     .eq('id', session.user.id)
     .single();
 
-  const notificationPrefs = await getNotificationPreferencesAction();
+  const [notificationPrefs, blockedUsers] = await Promise.all([
+    getNotificationPreferencesAction(),
+    getBlockedUsersAction(),
+  ]);
+
+  const tMod = await getTranslations('moderation');
 
   const user = userRow ?? {
     id: session.user.id,
@@ -103,6 +110,12 @@ export default async function SettingsPage({ params }: Props) {
             subtitle={t('notificationsSectionSubtitle')}
           />
           <NotificationPreferencesForm initialPrefs={notificationPrefs} />
+        </section>
+
+        {/* Blocked users */}
+        <section className="mb-12">
+          <SectionHeader title={tMod('blockedTitle')} subtitle={tMod('blockedSubtitle')} />
+          <BlockedUsersList initialList={blockedUsers} />
         </section>
 
         {/* Danger zone */}

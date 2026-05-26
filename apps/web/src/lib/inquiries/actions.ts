@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getCreatorByUsername } from '@/lib/creators/queries';
+import { checkRateLimit } from '@/lib/moderation/rate-limit';
 
 import { createInquiry } from './mock-store';
 import { inquiryFormSchema } from './schemas';
@@ -13,6 +14,7 @@ export type SubmitInquiryError =
   | 'INVALID_INPUT'
   | 'NOT_AUTHENTICATED'
   | 'CREATOR_NOT_FOUND'
+  | 'RATE_LIMITED'
   | 'UNKNOWN';
 
 export interface SubmitInquiryFailure {
@@ -41,6 +43,12 @@ export async function submitInquiryAction(
   const session = await getSession();
   if (!session) {
     redirect(`/${locale}/sign-in?next=/${locale}/${username}/hire`);
+  }
+
+  // Rate-limit: 5 inquiries per hour
+  const rl = checkRateLimit('submitInquiry', session.user.id);
+  if (!rl.allowed) {
+    return { ok: false, error: 'RATE_LIMITED' };
   }
 
   const creator = await getCreatorByUsername(username);

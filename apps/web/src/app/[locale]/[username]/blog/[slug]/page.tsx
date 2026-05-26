@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
+import { ReportButton } from '@/components/moderation/report-button';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
@@ -147,6 +148,11 @@ export default async function CreatorBlogPostPage({ params }: Props) {
             </div>
           </footer>
         ) : null}
+
+        {/* Report button */}
+        <div className="border-surface/10 mt-8 flex justify-end border-t pt-4">
+          <ReportButton resourceType="BLOG_POST" resourceId={post.id} />
+        </div>
       </main>
       <SiteFooter />
     </>

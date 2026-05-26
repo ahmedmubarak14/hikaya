@@ -1,6 +1,6 @@
 'use server';
 
-import { randomBytes } from 'node:crypto';
+import { randomBytes, randomInt } from 'node:crypto';
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -21,6 +21,12 @@ export type SpacesErrorKey =
   | 'CANNOT_BOOK_OWN'
   | 'BOOKING_NOT_FOUND'
   | 'NOT_RENTER'
+  | 'ALREADY_CONFIRMED'
+  | 'INVALID_EMAIL'
+  | 'USER_NOT_FOUND'
+  | 'ALREADY_MEMBER'
+  | 'MEMBER_NOT_FOUND'
+  | 'CANNOT_REMOVE_SELF'
   | 'UNKNOWN';
 
 export interface SpacesFailure {
@@ -37,6 +43,11 @@ export interface SpacesSuccess {
 export type SpacesResult = SpacesSuccess | SpacesFailure;
 
 const SAR_TO_HALALAS = 100;
+
+/** Generate a random 6-digit access code. */
+function generateAccessCode(): string {
+  return String(randomInt(100000, 999999));
+}
 
 /**
  * Parse add-ons from a textarea text input. Each line is "Name, PriceSAR".
@@ -115,6 +126,16 @@ export async function createSpaceAction(
   const addOnsRaw = formData.get('addOnsRaw')?.toString() ?? '';
   const addOns = parseAddOnsText(addOnsRaw);
 
+  const depositSar = parseInt(formData.get('depositSar')?.toString() ?? '0', 10);
+
+  // Parse smart lock config
+  const slProvider = formData.get('smartLockProvider')?.toString() ?? 'NONE';
+  const slLockId = formData.get('smartLockLockId')?.toString() ?? '';
+  const slApiKey = formData.get('smartLockApiKey')?.toString() ?? '';
+  const smartLockConfig = slProvider !== 'NONE' && slLockId
+    ? { provider: slProvider, lockId: slLockId, apiKey: slApiKey }
+    : null;
+
   const { error } = await supabase
     .from('Space')
     .insert({
@@ -132,6 +153,8 @@ export async function createSpaceAction(
       status: parsed.data.status,
       houseRules,
       addOns,
+      depositHalalas: (Number.isFinite(depositSar) ? depositSar : 0) * SAR_TO_HALALAS,
+      smartLockConfig,
       createdAt: now,
     });
 
@@ -178,6 +201,15 @@ export async function updateSpaceAction(
   const addOnsRawUpdate = formData.get('addOnsRaw')?.toString() ?? '';
   const addOnsUpdate = parseAddOnsText(addOnsRawUpdate);
 
+  const depositSarUpdate = parseInt(formData.get('depositSar')?.toString() ?? '0', 10);
+
+  const slProviderUpdate = formData.get('smartLockProvider')?.toString() ?? 'NONE';
+  const slLockIdUpdate = formData.get('smartLockLockId')?.toString() ?? '';
+  const slApiKeyUpdate = formData.get('smartLockApiKey')?.toString() ?? '';
+  const smartLockConfigUpdate = slProviderUpdate !== 'NONE' && slLockIdUpdate
+    ? { provider: slProviderUpdate, lockId: slLockIdUpdate, apiKey: slApiKeyUpdate }
+    : null;
+
   const { error: updateErr } = await supabase
     .from('Space')
     .update({
@@ -193,6 +225,8 @@ export async function updateSpaceAction(
       status: parsed.data.status,
       houseRules: houseRulesUpdate,
       addOns: addOnsUpdate,
+      depositHalalas: (Number.isFinite(depositSarUpdate) ? depositSarUpdate : 0) * SAR_TO_HALALAS,
+      smartLockConfig: smartLockConfigUpdate,
     })
     .eq('id', spaceId);
 
@@ -282,7 +316,7 @@ export async function bookSpaceAction(
 
   const { data: space, error: spaceFetchErr } = await supabase
     .from('Space')
-    .select('id, ownerId, status, hourlyHalalas, dailyHalalas')
+    .select('id, ownerId, status, hourlyHalalas, dailyHalalas, depositHalalas')
     .eq('id', spaceId)
     .maybeSingle();
 
@@ -343,6 +377,8 @@ export async function bookSpaceAction(
   const bookingId = `sb_${randomBytes(6).toString('hex')}`;
   const now = new Date().toISOString();
 
+  const depositHalalas = (space.depositHalalas as number) ?? 0;
+
   const { error: bookingErr } = await supabase
     .from('SpaceBooking')
     .insert({
@@ -355,6 +391,7 @@ export async function bookSpaceAction(
       totalHalalas: total,
       status: 'PENDING',
       selectedAddOns,
+      depositStatus: depositHalalas > 0 ? 'HELD' : null,
       createdAt: now,
     });
 
@@ -418,7 +455,7 @@ export async function checkOutAction(
 
   const { data: booking, error: fetchErr } = await supabase
     .from('SpaceBooking')
-    .select('id, renterId, status, checkInAt, checkOutAt')
+    .select('id, renterId, status, checkInAt, checkOutAt, depositStatus')
     .eq('id', bookingId)
     .maybeSingle();
 
@@ -429,9 +466,14 @@ export async function checkOutAction(
 
   const now = new Date().toISOString();
 
+  // Release deposit on clean checkout
+  const depositUpdate = (booking as Record<string, unknown>).depositStatus === 'HELD'
+    ? { depositStatus: 'RELEASED' }
+    : {};
+
   const { error: updateErr } = await supabase
     .from('SpaceBooking')
-    .update({ checkOutAt: now, status: 'COMPLETED' })
+    .update({ checkOutAt: now, status: 'COMPLETED', ...depositUpdate })
     .eq('id', bookingId);
 
   if (updateErr) {
@@ -532,5 +574,266 @@ export async function cancelBookingAction(
   if (booking.spaceId) {
     revalidatePath(`/${locale}/spaces/${booking.spaceId as string}`);
   }
+  return { ok: true };
+}
+
+/* ----------------------------- confirm booking (owner) ----------------------------- */
+
+/**
+ * Owner confirms a PENDING booking. Auto-generates a 6-digit access code.
+ */
+export async function confirmBookingAction(
+  locale: Locale,
+  bookingId: string,
+): Promise<SpacesResult> {
+  const auth = await requireSession();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+
+  const { data: booking, error: fetchErr } = await supabase
+    .from('SpaceBooking')
+    .select('id, spaceId, status')
+    .eq('id', bookingId)
+    .maybeSingle();
+
+  if (fetchErr || !booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+  if ((booking.status as string) !== 'PENDING') return { ok: false, error: 'ALREADY_CONFIRMED' };
+
+  // Verify caller owns the space
+  const { data: space } = await supabase
+    .from('Space')
+    .select('ownerId')
+    .eq('id', booking.spaceId as string)
+    .maybeSingle();
+
+  if (!space || (space.ownerId as string) !== auth.session.user.id) {
+    return { ok: false, error: 'NOT_OWNER' };
+  }
+
+  const accessCode = generateAccessCode();
+
+  const { error: updateErr } = await supabase
+    .from('SpaceBooking')
+    .update({ status: 'CONFIRMED', accessCode })
+    .eq('id', bookingId);
+
+  if (updateErr) {
+    console.error('[spaces/actions] confirmBookingAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/space-bookings`);
+  revalidatePath(`/${locale}/me/space-rentals/${bookingId}`);
+  return { ok: true };
+}
+
+/**
+ * Owner regenerates the access code for a confirmed booking.
+ */
+export async function regenerateAccessCodeAction(
+  locale: Locale,
+  bookingId: string,
+): Promise<SpacesResult> {
+  const auth = await requireSession();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+
+  const { data: booking, error: fetchErr } = await supabase
+    .from('SpaceBooking')
+    .select('id, spaceId, status')
+    .eq('id', bookingId)
+    .maybeSingle();
+
+  if (fetchErr || !booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+  if ((booking.status as string) !== 'CONFIRMED') return { ok: false, error: 'BOOKING_NOT_FOUND' };
+
+  const { data: space } = await supabase
+    .from('Space')
+    .select('ownerId')
+    .eq('id', booking.spaceId as string)
+    .maybeSingle();
+
+  if (!space || (space.ownerId as string) !== auth.session.user.id) {
+    return { ok: false, error: 'NOT_OWNER' };
+  }
+
+  const newCode = generateAccessCode();
+
+  const { error: updateErr } = await supabase
+    .from('SpaceBooking')
+    .update({ accessCode: newCode })
+    .eq('id', bookingId);
+
+  if (updateErr) {
+    console.error('[spaces/actions] regenerateAccessCodeAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/space-bookings`);
+  revalidatePath(`/${locale}/me/space-rentals/${bookingId}`);
+  return { ok: true };
+}
+
+/* ----------------------------- damage deposit ----------------------------- */
+
+/**
+ * Owner reports damage — claims the deposit.
+ */
+export async function claimDepositAction(
+  locale: Locale,
+  bookingId: string,
+): Promise<SpacesResult> {
+  const auth = await requireSession();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+
+  const { data: booking, error: fetchErr } = await supabase
+    .from('SpaceBooking')
+    .select('id, spaceId, depositStatus')
+    .eq('id', bookingId)
+    .maybeSingle();
+
+  if (fetchErr || !booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+  if ((booking.depositStatus as string) !== 'HELD') return { ok: false, error: 'BOOKING_NOT_FOUND' };
+
+  const { data: space } = await supabase
+    .from('Space')
+    .select('ownerId')
+    .eq('id', booking.spaceId as string)
+    .maybeSingle();
+
+  if (!space || (space.ownerId as string) !== auth.session.user.id) {
+    return { ok: false, error: 'NOT_OWNER' };
+  }
+
+  const { error: updateErr } = await supabase
+    .from('SpaceBooking')
+    .update({ depositStatus: 'CLAIMED' })
+    .eq('id', bookingId);
+
+  if (updateErr) {
+    console.error('[spaces/actions] claimDepositAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/space-bookings`);
+  revalidatePath(`/${locale}/me/space-rentals/${bookingId}`);
+  return { ok: true };
+}
+
+/* ----------------------------- space team ----------------------------- */
+
+/**
+ * Space owner invites a team member by email.
+ */
+export async function inviteSpaceTeamMemberAction(
+  locale: Locale,
+  spaceId: string,
+  email: string,
+  isAdmin: boolean,
+): Promise<SpacesResult> {
+  const auth = await requireSession();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  if (!email || !email.includes('@')) return { ok: false, error: 'INVALID_EMAIL' };
+
+  const supabase = await createClient();
+
+  // Verify caller owns the space
+  const { data: space } = await supabase
+    .from('Space')
+    .select('ownerId')
+    .eq('id', spaceId)
+    .maybeSingle();
+
+  if (!space || (space.ownerId as string) !== auth.session.user.id) {
+    return { ok: false, error: 'NOT_OWNER' };
+  }
+
+  // Find the user by email
+  const { data: user } = await supabase
+    .from('User')
+    .select('id')
+    .eq('email', email.toLowerCase().trim())
+    .maybeSingle();
+
+  if (!user) return { ok: false, error: 'USER_NOT_FOUND' };
+
+  const userId = user.id as string;
+
+  // Check not already a member
+  const { data: existing } = await supabase
+    .from('SpaceMember')
+    .select('id')
+    .eq('spaceId', spaceId)
+    .eq('userId', userId)
+    .maybeSingle();
+
+  if (existing) return { ok: false, error: 'ALREADY_MEMBER' };
+
+  const { error: insertErr } = await supabase.from('SpaceMember').insert({
+    spaceId,
+    userId,
+    isAdmin,
+    joinedAt: new Date().toISOString(),
+  });
+
+  if (insertErr) {
+    console.error('[spaces/actions] inviteSpaceTeamMemberAction error:', insertErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/spaces`);
+  revalidatePath(`/${locale}/me/spaces/${spaceId}`);
+  return { ok: true };
+}
+
+/**
+ * Space owner removes a team member.
+ */
+export async function removeSpaceTeamMemberAction(
+  locale: Locale,
+  spaceId: string,
+  memberId: string,
+): Promise<SpacesResult> {
+  const auth = await requireSession();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+
+  // Verify caller owns the space
+  const { data: space } = await supabase
+    .from('Space')
+    .select('ownerId')
+    .eq('id', spaceId)
+    .maybeSingle();
+
+  if (!space || (space.ownerId as string) !== auth.session.user.id) {
+    return { ok: false, error: 'NOT_OWNER' };
+  }
+
+  // Verify member belongs to this space
+  const { data: member } = await supabase
+    .from('SpaceMember')
+    .select('id, userId, spaceId')
+    .eq('id', memberId)
+    .maybeSingle();
+
+  if (!member) return { ok: false, error: 'MEMBER_NOT_FOUND' };
+  if ((member.spaceId as string) !== spaceId) return { ok: false, error: 'NOT_OWNER' };
+  if ((member.userId as string) === auth.session.user.id) return { ok: false, error: 'CANNOT_REMOVE_SELF' };
+
+  const { error: deleteErr } = await supabase.from('SpaceMember').delete().eq('id', memberId);
+
+  if (deleteErr) {
+    console.error('[spaces/actions] removeSpaceTeamMemberAction error:', deleteErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/spaces`);
+  revalidatePath(`/${locale}/me/spaces/${spaceId}`);
   return { ok: true };
 }
