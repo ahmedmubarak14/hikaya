@@ -789,7 +789,38 @@
       "activeClientsHint": "All-time on file"
     },
     "calendar": {
-      "weekStart": "Week starts Saturday"
+      "weekStart": "Week starts Saturday",
+      "prev": "Previous",
+      "next": "Next",
+      "today": "Today",
+      "monthView": "Month",
+      "weekView": "Week",
+      "newBooking": "New booking",
+      "bookingCreated": "Booking created",
+      "bookingCreatedHint": "The booking has been added to your calendar.",
+      "formClientName": "Client name",
+      "formClientNamePlaceholder": "e.g. Sara Al-Harbi",
+      "formDiscipline": "Discipline",
+      "formTime": "Time",
+      "formNotes": "Notes",
+      "formNotesPlaceholder": "Location, special requests...",
+      "formSubmit": "Create booking",
+      "detailStatus": "Status",
+      "detailDiscipline": "Discipline",
+      "detailCity": "City",
+      "detailDuration": "Duration",
+      "detailTotal": "Total",
+      "detailPaid": "Paid",
+      "detailNotes": "Notes",
+      "disciplines": {
+        "wedding": "Wedding photography",
+        "portrait": "Portrait",
+        "commercial": "Commercial photography",
+        "product": "Product photography",
+        "event": "Event photography",
+        "fashion": "Fashion photography",
+        "video": "Commercial video"
+      }
     },
     "upcoming": {
       "title": "Upcoming",

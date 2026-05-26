@@ -32,6 +32,8 @@ interface Props {
 const RESERVED = new Set([
   'sign-in',
   'sign-up',
+  'forgot-password',
+  'reset-password',
   'me',
   'discover',
   'jobs',

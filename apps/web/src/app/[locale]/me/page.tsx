@@ -130,6 +130,12 @@ export default async function MePage({ params }: Props) {
             >
               {t('studioLink')} →
             </Link>
+            <Link
+              href={`/${locale}/me/settings`}
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
+            >
+              {t('settingsLink')} →
+            </Link>
           </div>
           <SignOutButton locale={locale} />
         </div>

@@ -789,7 +789,38 @@
       "activeClientsHint": "إجماليّ منذ البداية"
     },
     "calendar": {
-      "weekStart": "الأسبوع يبدأ السبت"
+      "weekStart": "الأسبوع يبدأ السبت",
+      "prev": "السابق",
+      "next": "التالي",
+      "today": "اليوم",
+      "monthView": "شهر",
+      "weekView": "أسبوع",
+      "newBooking": "حجز جديد",
+      "bookingCreated": "تمّ إنشاء الحجز",
+      "bookingCreatedHint": "أُضيف الحجز إلى تقويمك.",
+      "formClientName": "اسم العميل",
+      "formClientNamePlaceholder": "مثلاً: سارة الحربي",
+      "formDiscipline": "التخصّص",
+      "formTime": "الوقت",
+      "formNotes": "ملاحظات",
+      "formNotesPlaceholder": "الموقع، طلبات خاصّة...",
+      "formSubmit": "أنشئ الحجز",
+      "detailStatus": "الحالة",
+      "detailDiscipline": "التخصّص",
+      "detailCity": "المدينة",
+      "detailDuration": "المدّة",
+      "detailTotal": "الإجمالي",
+      "detailPaid": "المدفوع",
+      "detailNotes": "ملاحظات",
+      "disciplines": {
+        "wedding": "تصوير أعراس",
+        "portrait": "بورتريه",
+        "commercial": "تصوير تجاري",
+        "product": "تصوير منتجات",
+        "event": "تصوير فعاليّات",
+        "fashion": "تصوير موضة",
+        "video": "فيديو تجاري"
+      }
     },
     "upcoming": {
       "title": "قادم",
