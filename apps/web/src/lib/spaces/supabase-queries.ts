@@ -192,6 +192,24 @@ export async function listBookingsForSpaceFromDB(spaceId: string): Promise<Space
   return (data ?? []).map((row: unknown) => mapSpaceBooking(row as DbSpaceBookingRow));
 }
 
+export async function getBookingByIdFromDB(id: string): Promise<SpaceBooking | null> {
+  const supabase = await getClient();
+
+  const { data, error } = await supabase
+    .from('SpaceBooking')
+    .select(BOOKING_SELECT)
+    .eq('id', id)
+    .maybeSingle();
+
+  if (error) {
+    console.error('[supabase-queries] getBookingByIdFromDB error:', error.message);
+    return null;
+  }
+
+  if (!data) return null;
+  return mapSpaceBooking(data as unknown as DbSpaceBookingRow);
+}
+
 export async function listBookingsByRenterFromDB(renterId: string): Promise<SpaceBooking[]> {
   const supabase = await getClient();
 

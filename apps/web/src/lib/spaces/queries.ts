@@ -118,6 +118,16 @@ export async function listBookingsForOwner(ownerId: string): Promise<SpaceBookin
 }
 
 export async function getBooking(id: string): Promise<SpaceBooking | null> {
+  if (!isStaticExport) {
+    try {
+      const { getBookingByIdFromDB } = await import('./supabase-queries');
+      const result = await getBookingByIdFromDB(id);
+      if (result) return result;
+    } catch {
+      // Supabase unavailable — fall through to mock
+    }
+  }
+
   return rawGetBookingById(id);
 }
 

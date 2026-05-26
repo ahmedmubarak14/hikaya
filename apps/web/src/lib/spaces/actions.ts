@@ -459,14 +459,14 @@ export async function addConditionPhotoAction(
 
   const { data: booking, error: fetchErr } = await supabase
     .from('SpaceBooking')
-    .select(`id, renterId, ${col}`)
+    .select('id, renterId, checkInPhotos, checkOutPhotos')
     .eq('id', bookingId)
     .maybeSingle();
 
   if (fetchErr || !booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
   if ((booking.renterId as string) !== auth.session.user.id) return { ok: false, error: 'NOT_RENTER' };
 
-  const existing = (booking[col] as string[] | null) ?? [];
+  const existing = ((booking as Record<string, unknown>)[col] as string[] | null) ?? [];
   const updated = [...existing, photoUrl];
 
   const { error: updateErr } = await supabase
