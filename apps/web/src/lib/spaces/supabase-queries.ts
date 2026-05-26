@@ -1,6 +1,6 @@
 import 'server-only';
 
-import type { Space, SpaceBooking, BookingDurationKind, BookingStatus, SpaceStatus } from './mock-data';
+import type { Space, SpaceAddOn, SpaceBooking, BookingDurationKind, BookingStatus, SpaceStatus } from './mock-data';
 
 /**
  * Real Supabase queries for spaces (Space + SpaceBooking).
@@ -32,6 +32,8 @@ interface DbSpaceRow {
   equipmentIncluded: string[];
   photos: string[];
   status: string;
+  houseRules: string | null;
+  addOns: SpaceAddOn[] | null;
   createdAt: string;
 }
 
@@ -44,6 +46,11 @@ interface DbSpaceBookingRow {
   durationKind: string;
   totalHalalas: number;
   status: string;
+  checkInAt: string | null;
+  checkOutAt: string | null;
+  checkInPhotos: string[] | null;
+  checkOutPhotos: string[] | null;
+  selectedAddOns: SpaceAddOn[] | null;
   createdAt: string;
 }
 
@@ -61,6 +68,8 @@ function mapSpace(row: DbSpaceRow): Space {
     equipmentIncluded: row.equipmentIncluded ?? [],
     photos: row.photos ?? [],
     status: row.status as SpaceStatus,
+    houseRules: row.houseRules ?? '',
+    addOns: (row.addOns as SpaceAddOn[] | null) ?? [],
     createdAt: row.createdAt,
   };
 }
@@ -75,6 +84,11 @@ function mapSpaceBooking(row: DbSpaceBookingRow): SpaceBooking {
     durationKind: row.durationKind as BookingDurationKind,
     totalHalalas: row.totalHalalas,
     status: row.status as BookingStatus,
+    checkInAt: row.checkInAt ?? null,
+    checkOutAt: row.checkOutAt ?? null,
+    checkInPhotos: row.checkInPhotos ?? [],
+    checkOutPhotos: row.checkOutPhotos ?? [],
+    selectedAddOns: (row.selectedAddOns as SpaceAddOn[] | null) ?? [],
     createdAt: row.createdAt,
   };
 }
@@ -82,12 +96,15 @@ function mapSpaceBooking(row: DbSpaceBookingRow): SpaceBooking {
 const SPACE_SELECT = `
   id, ownerId, name, description, address, city,
   capacity, hourlyHalalas, dailyHalalas,
-  equipmentIncluded, photos, status, createdAt
+  equipmentIncluded, photos, status,
+  houseRules, addOns, createdAt
 `;
 
 const BOOKING_SELECT = `
   id, spaceId, renterId, startISO, endISO,
-  durationKind, totalHalalas, status, createdAt
+  durationKind, totalHalalas, status,
+  checkInAt, checkOutAt, checkInPhotos, checkOutPhotos,
+  selectedAddOns, createdAt
 `;
 
 // ---------------------------------------------------------------------------

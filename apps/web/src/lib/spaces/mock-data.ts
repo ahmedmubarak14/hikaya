@@ -18,6 +18,11 @@ export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
 
 export type BookingDurationKind = 'HOURLY' | 'DAILY';
 
+export interface SpaceAddOn {
+  name: string;
+  priceHalalas: number;
+}
+
 export interface Space {
   id: string;
   /** mock-auth user id of the owner. */
@@ -37,6 +42,10 @@ export interface Space {
   /** 1–10 photo URLs. First is the hero. */
   photos: string[];
   status: SpaceStatus;
+  /** Free-text house rules displayed on the detail page. */
+  houseRules: string;
+  /** Optional add-ons the renter can select during booking. */
+  addOns: SpaceAddOn[];
   createdAt: string;
 }
 
@@ -53,6 +62,16 @@ export interface SpaceBooking {
   /** Total cost in halalas at booking time. */
   totalHalalas: number;
   status: BookingStatus;
+  /** Check-in timestamp (set when renter checks in). */
+  checkInAt: string | null;
+  /** Check-out timestamp (set when renter checks out). */
+  checkOutAt: string | null;
+  /** Photo URLs documenting condition at check-in. */
+  checkInPhotos: string[];
+  /** Photo URLs documenting condition at check-out. */
+  checkOutPhotos: string[];
+  /** Add-ons selected at booking time. */
+  selectedAddOns: SpaceAddOn[];
   createdAt: string;
 }
 
@@ -85,6 +104,12 @@ export const SEED_SPACES: Space[] = [
     equipmentIncluded: ['Cyclorama', 'Profoto B10X x3', 'Backdrops', 'C-stands'],
     photos: [pic('cyc-1', 1600, 1067), pic('cyc-2', 1600, 1067), pic('cyc-3', 1600, 1067)],
     status: 'ACTIVE',
+    houseRules: 'No food or drinks near the cyclorama. Shoes off on the seamless. Strike all gear before leaving.',
+    addOns: [
+      { name: 'Extra Profoto head', priceHalalas: 50 * SAR },
+      { name: 'Fog machine', priceHalalas: 30 * SAR },
+      { name: 'On-set assistant (4h)', priceHalalas: 200 * SAR },
+    ],
     createdAt: now,
   },
   {
@@ -105,6 +130,10 @@ export const SEED_SPACES: Space[] = [
       pic('daylight-3', 1600, 1067),
     ],
     status: 'ACTIVE',
+    houseRules: 'Keep windows closed during shoots to maintain temperature. Clean kitchenette after use.',
+    addOns: [
+      { name: 'Wardrobe steamer', priceHalalas: 20 * SAR },
+    ],
     createdAt: now,
   },
   {
@@ -121,6 +150,11 @@ export const SEED_SPACES: Space[] = [
     equipmentIncluded: ['Sony FX3 x3', 'Shure SM7B x4', 'Rodecaster Pro II', 'Engineer included'],
     photos: [pic('podcast-1', 1600, 1067), pic('podcast-2', 1600, 1067)],
     status: 'ACTIVE',
+    houseRules: 'No touching camera rigs. Engineer handles all technical setup. Quiet in the hallway during recording.',
+    addOns: [
+      { name: 'Extra mic channel', priceHalalas: 40 * SAR },
+      { name: 'Teleprompter', priceHalalas: 60 * SAR },
+    ],
     createdAt: now,
   },
   {
@@ -137,6 +171,8 @@ export const SEED_SPACES: Space[] = [
     equipmentIncluded: ['Power drops', 'Shade canopy', 'Loading lift'],
     photos: [pic('rooftop-1', 1600, 1067), pic('rooftop-2', 1600, 1067)],
     status: 'ACTIVE',
+    houseRules: 'Wind advisory: do not set up tall stands without sandbags. All trash must be removed.',
+    addOns: [],
     createdAt: now,
   },
   {
@@ -157,6 +193,10 @@ export const SEED_SPACES: Space[] = [
       pic('blackbox-3', 1600, 1067),
     ],
     status: 'ACTIVE',
+    houseRules: 'Blackout curtains must stay sealed during shoots. No smoking inside.',
+    addOns: [
+      { name: 'Aputure 600d Pro', priceHalalas: 80 * SAR },
+    ],
     createdAt: now,
   },
   {
@@ -173,6 +213,11 @@ export const SEED_SPACES: Space[] = [
     equipmentIncluded: ['Practical lights', 'Props library', 'Wardrobe room'],
     photos: [pic('lounge-1', 1600, 1067), pic('lounge-2', 1600, 1067)],
     status: 'ACTIVE',
+    houseRules: 'Props are free to use but must be returned to their shelf. No rearranging furniture without permission.',
+    addOns: [
+      { name: 'Props library access', priceHalalas: 0 },
+      { name: 'Hair & makeup station', priceHalalas: 100 * SAR },
+    ],
     createdAt: now,
   },
 ];
@@ -199,6 +244,11 @@ export const SEED_BOOKINGS: SpaceBooking[] = [
     durationKind: 'DAILY',
     totalHalalas: 1800 * SAR,
     status: 'CONFIRMED',
+    checkInAt: null,
+    checkOutAt: null,
+    checkInPhotos: [],
+    checkOutPhotos: [],
+    selectedAddOns: [],
     createdAt: now,
   },
   {
@@ -210,6 +260,11 @@ export const SEED_BOOKINGS: SpaceBooking[] = [
     durationKind: 'HOURLY',
     totalHalalas: 4 * 350 * SAR,
     status: 'PENDING',
+    checkInAt: null,
+    checkOutAt: null,
+    checkInPhotos: [],
+    checkOutPhotos: [],
+    selectedAddOns: [],
     createdAt: now,
   },
 ];

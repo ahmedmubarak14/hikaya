@@ -7,15 +7,15 @@ import { Button, Input } from '@hikaya/ui';
 
 import { type Locale } from '@/i18n/config';
 import { saveServicesAction } from '@/lib/services/actions';
-import type { CreatorService } from '@/lib/services/types';
+import type { CreatorService, ServiceTier } from '@/lib/services/types';
 
 interface Props {
   locale: Locale;
   initialServices: CreatorService[];
 }
 
-function generateId() {
-  return `svc_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+function generateId(prefix = 'svc') {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
 export function ServicesEditor({ locale, initialServices }: Props) {
@@ -36,9 +36,56 @@ export function ServicesEditor({ locale, initialServices }: Props) {
     setServices((prev) => prev.filter((s) => s.id !== id));
   };
 
-  const updateService = (id: string, field: keyof CreatorService, value: string | number) => {
+  const updateService = (id: string, field: keyof CreatorService, value: unknown) => {
     setServices((prev) =>
       prev.map((s) => (s.id === id ? { ...s, [field]: value } : s)),
+    );
+  };
+
+  const addTier = (serviceId: string) => {
+    setServices((prev) =>
+      prev.map((s) => {
+        if (s.id !== serviceId) return s;
+        const tiers = s.tiers ?? [];
+        return {
+          ...s,
+          tiers: [
+            ...tiers,
+            { id: generateId('tier'), nameEn: '', priceHalalas: 0 },
+          ],
+        };
+      }),
+    );
+  };
+
+  const removeTier = (serviceId: string, tierId: string) => {
+    setServices((prev) =>
+      prev.map((s) => {
+        if (s.id !== serviceId) return s;
+        const tiers = (s.tiers ?? []).filter((t) => t.id !== tierId);
+        return { ...s, tiers: tiers.length > 0 ? tiers : undefined };
+      }),
+    );
+  };
+
+  const updateTier = (serviceId: string, tierId: string, field: keyof ServiceTier, value: unknown) => {
+    setServices((prev) =>
+      prev.map((s) => {
+        if (s.id !== serviceId) return s;
+        const tiers = (s.tiers ?? []).map((t) =>
+          t.id === tierId ? { ...t, [field]: value } : t,
+        );
+        // Sync base priceHalalas to lowest tier price
+        const lowestPrice = tiers.reduce(
+          (min, t) => (t.priceHalalas > 0 && t.priceHalalas < min ? t.priceHalalas : min),
+          Infinity,
+        );
+        return {
+          ...s,
+          tiers,
+          priceHalalas: lowestPrice === Infinity ? s.priceHalalas : lowestPrice,
+        };
+      }),
     );
   };
 
@@ -97,27 +144,98 @@ export function ServicesEditor({ locale, initialServices }: Props) {
               </div>
 
               <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Input
-                  label={t('servicePriceSar')}
-                  type="number"
-                  inputMode="numeric"
-                  value={String(Math.round(service.priceHalalas / 100) || '')}
-                  onChange={(e) =>
-                    updateService(
-                      service.id,
-                      'priceHalalas',
-                      Math.round(Number(e.target.value) * 100),
-                    )
-                  }
-                  hint={t('servicePriceHint')}
-                  required
-                />
+                {/* Only show base price if there are no tiers */}
+                {!service.tiers || service.tiers.length === 0 ? (
+                  <Input
+                    label={t('servicePriceSar')}
+                    type="number"
+                    inputMode="numeric"
+                    value={String(Math.round(service.priceHalalas / 100) || '')}
+                    onChange={(e) =>
+                      updateService(
+                        service.id,
+                        'priceHalalas',
+                        Math.round(Number(e.target.value) * 100),
+                      )
+                    }
+                    hint={t('servicePriceHint')}
+                    required
+                  />
+                ) : null}
                 <Input
                   label={t('serviceDescription')}
                   value={service.description ?? ''}
                   onChange={(e) => updateService(service.id, 'description', e.target.value)}
                   hint={t('serviceDescriptionHint')}
                 />
+              </div>
+
+              {/* Package tiers */}
+              {service.tiers && service.tiers.length > 0 ? (
+                <div className="mt-5">
+                  <span className="text-surface/50 text-xs font-medium">{t('tiersLabel')}</span>
+                  <ul className="mt-2 flex flex-col gap-3">
+                    {service.tiers.map((tier) => (
+                      <li
+                        key={tier.id}
+                        className="border-surface/10 bg-surface/[0.03] rounded-lg border p-4"
+                      >
+                        <div className="mb-2 flex items-center justify-between">
+                          <span className="text-surface/40 text-2xs">{tier.nameEn || t('tierUntitled')}</span>
+                          <button
+                            type="button"
+                            onClick={() => removeTier(service.id, tier.id)}
+                            className="text-accent-secondary hover:text-accent-secondary/80 text-2xs"
+                          >
+                            {t('removeTier')}
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                          <Input
+                            label={t('tierName')}
+                            value={tier.nameEn}
+                            onChange={(e) =>
+                              updateTier(service.id, tier.id, 'nameEn', e.target.value)
+                            }
+                            required
+                          />
+                          <Input
+                            label={t('tierPrice')}
+                            type="number"
+                            inputMode="numeric"
+                            value={String(Math.round(tier.priceHalalas / 100) || '')}
+                            onChange={(e) =>
+                              updateTier(
+                                service.id,
+                                tier.id,
+                                'priceHalalas',
+                                Math.round(Number(e.target.value) * 100),
+                              )
+                            }
+                            required
+                          />
+                          <Input
+                            label={t('tierDescription')}
+                            value={tier.description ?? ''}
+                            onChange={(e) =>
+                              updateTier(service.id, tier.id, 'description', e.target.value)
+                            }
+                          />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              <div className="mt-4">
+                <button
+                  type="button"
+                  onClick={() => addTier(service.id)}
+                  className="text-accent-secondary hover:text-accent-secondary/80 text-xs"
+                >
+                  {t('addTier')}
+                </button>
               </div>
             </li>
           ))}

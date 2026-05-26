@@ -1,9 +1,11 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
+import { BookingDetailPanel } from '@/components/studio/booking-detail-panel';
 import { type Locale } from '@/i18n/config';
 import type { UpcomingBooking } from '@/lib/bookings/actions';
 
@@ -14,6 +16,7 @@ interface Props {
 export function UpcomingBookingsWidget({ bookings }: Props) {
   const locale = useLocale() as Locale;
   const t = useTranslations('studio.upcomingWidget');
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   if (bookings.length === 0) {
     return (
@@ -25,6 +28,8 @@ export function UpcomingBookingsWidget({ bookings }: Props) {
       </Card>
     );
   }
+
+  const selected = bookings.find((b) => b.id === selectedId);
 
   return (
     <Card>
@@ -41,29 +46,44 @@ export function UpcomingBookingsWidget({ bookings }: Props) {
             }).format(d);
 
             return (
-              <li
-                key={b.id}
-                className="border-surface/10 flex items-center justify-between rounded-lg border p-3"
-              >
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-surface text-sm">{b.clientName}</span>
-                  <span className="text-2xs text-surface/40">
-                    {dateStr} &middot; {b.discipline.replace(/_/g, ' ')}
-                  </span>
-                </div>
-                <Badge
-                  tone={b.daysUntil <= 1 ? 'accent' : b.daysUntil <= 7 ? 'warning' : 'neutral'}
+              <li key={b.id}>
+                <button
+                  type="button"
+                  onClick={() => setSelectedId(selectedId === b.id ? null : b.id)}
+                  className="border-surface/10 hover:border-surface/20 flex w-full items-center justify-between rounded-lg border p-3 text-start transition-colors"
                 >
-                  {b.daysUntil === 0
-                    ? t('today')
-                    : b.daysUntil === 1
-                      ? t('tomorrow')
-                      : t('daysUntil', { count: b.daysUntil })}
-                </Badge>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-surface text-sm">{b.clientName}</span>
+                    <span className="text-2xs text-surface/40">
+                      {dateStr} &middot; {b.discipline.replace(/_/g, ' ')}
+                    </span>
+                  </div>
+                  <Badge
+                    tone={b.daysUntil <= 1 ? 'accent' : b.daysUntil <= 7 ? 'warning' : 'neutral'}
+                  >
+                    {b.daysUntil === 0
+                      ? t('today')
+                      : b.daysUntil === 1
+                        ? t('tomorrow')
+                        : t('daysUntil', { count: b.daysUntil })}
+                  </Badge>
+                </button>
               </li>
             );
           })}
         </ul>
+
+        {/* Booking detail panel */}
+        {selected ? (
+          <BookingDetailPanel
+            bookingId={selected.id}
+            clientName={selected.clientName}
+            discipline={selected.discipline}
+            status={selected.status}
+            sessionStart={selected.sessionStart}
+            city={selected.city}
+          />
+        ) : null}
       </CardBody>
     </Card>
   );

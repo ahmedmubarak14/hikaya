@@ -60,10 +60,6 @@
     "signInCta": "تسجيل الدخول",
     "continueWithGoogle": "المتابعة عبر Google",
     "orEmail": "أو سجّل الدخول بالبريد",
-    "demoSignedInLabel": "وضع العرض التوضيحي",
-    "demoSignedInBody": "أنت مسجّل الدخول باسم {name}.",
-    "demoSignedInHint": "هذا العرض الثابت يُسجّل دخولك تلقائيّاً حتى تتمكّن من تصفّح كلّ الصفحات. عمليّات الكتابة (إرسال عرض سعر، نشر تدوينة، قبول حجز) معطّلة في العرض — شغّل التطبيق محلّيّاً لتجربة كاملة.",
-    "demoSignedInGoToDashboard": "اذهب إلى لوحتك ←",
     "signUpEyebrow": "اجعلها لك",
     "signUpTitle": "أنشئ حسابك في حكاية",
     "signUpSubtitle": "تستغرق دقيقة واحدة. ابنِ معرض أعمال أو وظّف أوّل مبدع — تبدأ كلتاهما هنا.",
@@ -89,9 +85,6 @@
     "panelLine": "قصّتك.",
     "panelBody": "حكاية منصّة موحّدة يستخدمها المبدعون في الخليج لعرض أعمالهم، قبول التكليفات، إدارة استوديوهاتهم، التسليم للعملاء، وبيع ما يصنعون.",
     "panelFooter": "Hikaya — \"حكاية\" بالإنجليزيّة.",
-    "demoLabel": "حسابات تجريبيّة",
-    "demoCredentials": "جرّب <email>noor@hikaya.sa</email> / <password>password123</password> لعرض حساب المبدع، أو <email>client@hikaya.sa</email> لعرض حساب العميل.",
-    "demoNote": "الواجهة الخلفيّة محاكاة في الذاكرة؛ تُستعاد البيانات عند إعادة تشغيل الخادم.",
     "forgotPasswordLink": "نسيت كلمة المرور؟",
     "forgotPasswordTitle": "استعادة كلمة المرور",
     "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.",
@@ -105,6 +98,7 @@
     "resetPasswordError": "حدث خطأ ما. حاول مرّة أخرى.",
     "newPassword": "كلمة المرور الجديدة",
     "confirmPassword": "تأكيد كلمة المرور",
+    "continueWithApple": "المتابعة عبر Apple",
     "errors": {
       "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
       "emailTaken": "يوجد حساب مرتبط بهذا البريد الإلكتروني بالفعل."
@@ -785,7 +779,6 @@
       "label": "حساب عميل",
       "title": "أنت مسجّل دخول كعميل.",
       "body": "حسابات المبدعين فقط لها معرض أعمال. لتحرير معرض، سجّل الدخول كمبدع — أو أنشئ حساباً جديداً واختر \"عرض أعمالي\".",
-      "demoHint": "تجربة: سجّل بـ noor@hikaya.sa / password123 لتشاهد المحرّر.",
       "discover": "تصفّح المبدعين"
     }
   },
@@ -1329,9 +1322,17 @@
       "daily": "باليوم",
       "capacity": "السعة",
       "address": "العنوان",
-      "availabilityTitle": "تحقّق من التوفّر قبل الحجز",
+      "houseRulesTitle": "شروط الاستخدام",
+      "houseRulesEmpty": "لم يتم تحديد شروط استخدام.",
+      "addOnsTitle": "إضافات اختياريّة",
+      "addOnFree": "مجّاني",
+      "availabilityTitle": "تقويم التوفّر",
       "availabilityEmpty": "لا توجد حجوزات قادمة — الجدول مفتوح بالكامل.",
-      "availabilityRow": "{start} ← {end}"
+      "availabilityRow": "{start} ← {end}",
+      "calendarPrev": "الشهر السابق",
+      "calendarNext": "الشهر التالي",
+      "calendarBooked": "محجوز",
+      "calendarAvailable": "متاح"
     },
     "book": {
       "title": "احجز هذا الاستوديو",
@@ -1344,7 +1345,10 @@
       "unavailable": "هذه الفترة محجوزة بالفعل. جرّب تواريخ أخرى.",
       "needsSignIn": "سجّل الدخول لحجز استوديو.",
       "cannotBookOwn": "لا يمكنك حجز استوديو تملكه.",
-      "error": "تعذّر تأكيد الحجز. راجع البيانات وحاول مجدّداً."
+      "error": "تعذّر تأكيد الحجز. راجع البيانات وحاول مجدّداً.",
+      "agreeRules": "أوافق على شروط الاستخدام",
+      "addOnsLabel": "إضافات",
+      "addOnsTotal": "إجمالي الإضافات {price}"
     },
     "owner": {
       "eyebrow": "استوديوهات",
@@ -1435,7 +1439,19 @@
         "back": "عودة إلى الإيجارات",
         "title": "إيجار — {name}",
         "dates": "{start} ← {end}",
-        "totalLabel": "الإجمالي المدفوع"
+        "totalLabel": "الإجمالي المدفوع",
+        "checkIn": "تسجيل الدخول",
+        "checkOut": "تسجيل الخروج",
+        "checkedInAt": "تمّ تسجيل الدخول في {time}",
+        "checkedOutAt": "تمّ تسجيل الخروج في {time}",
+        "conditionPhotosTitle": "صور حالة الاستوديو",
+        "checkInPhotosLabel": "صور تسجيل الدخول",
+        "checkOutPhotosLabel": "صور تسجيل الخروج",
+        "addPhotoUrl": "أضف رابط صورة",
+        "addPhotoPlaceholder": "https://images.example.com/photo.jpg",
+        "addPhoto": "إضافة",
+        "noPhotos": "لا توجد صور بعد.",
+        "selectedAddOns": "الإضافات المختارة"
       },
       "cancel": "إلغاء الحجز",
       "cancelConfirm": "هل تريد إلغاء هذا الحجز؟ لا يمكن التراجع."

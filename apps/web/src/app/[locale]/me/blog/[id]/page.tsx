@@ -17,7 +17,6 @@ interface Props {
 }
 
 // Auth-gated route — one placeholder per locale so Next has something to
-// pre-render. The page short-circuits to DemoModeNotice on EXPORT=1, so the
 // placeholder id is never actually used.
 export async function generateStaticParams() {
   const { locales } = await import('@/i18n/config');

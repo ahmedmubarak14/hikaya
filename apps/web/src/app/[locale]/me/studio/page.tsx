@@ -170,6 +170,20 @@ export default async function StudioDashboardPage({ params }: Props) {
           </section>
         )}
 
+        {/* Team link */}
+        <section className="mb-10">
+          <Link
+            href={`/${locale}/me/studio/team`}
+            className="border-surface/10 bg-surface/[0.03] hover:border-surface/20 flex items-center justify-between rounded-xl border p-5 transition-colors"
+          >
+            <div className="flex flex-col gap-1">
+              <span className="text-surface text-base font-medium">{t('teamLink')}</span>
+              <span className="text-surface/50 text-xs">{t('teamLinkHint')}</span>
+            </div>
+            <span className="text-surface/40 text-sm">→</span>
+          </Link>
+        </section>
+
         {/* Interactive Clients CRM */}
         <ClientTable clients={STUDIO_CLIENTS} />
 

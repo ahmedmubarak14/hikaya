@@ -26,6 +26,13 @@ export interface ContractSection {
   body: string;
 }
 
+export interface SignatureAuditEntry {
+  side: 'creator' | 'client';
+  name: string;
+  signedAt: string;
+  ip: string;
+}
+
 export interface Contract {
   id: string;
   /** Sequential, e.g. C-2026-0007. */
@@ -46,6 +53,9 @@ export interface Contract {
   creatorSignedAt?: string;
   clientSignedName?: string;
   clientSignedAt?: string;
+
+  /** IP + timestamp audit trail for each signature event. */
+  signatureAuditLog?: SignatureAuditEntry[];
 
   createdAt: string;
   updatedAt: string;
