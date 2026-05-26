@@ -5,9 +5,11 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { SignOutButton } from '@/components/auth/sign-out-button';
+import { UpcomingBookingsWidget } from '@/components/studio/upcoming-bookings-widget';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
+import { getUpcomingBookings } from '@/lib/bookings/actions';
 
 import type { Metadata } from 'next';
 
@@ -30,6 +32,7 @@ export default async function MePage({ params }: Props) {
 
   const t = await getTranslations('me');
   const tAuth = await getTranslations('auth');
+  const upcomingBookings = await getUpcomingBookings(session.user.id, 3);
 
   const roleKey: 'roleClient' | 'roleCreator' | 'roleStudioOwner' =
     session.user.currentRole === 'CREATOR'
@@ -67,6 +70,13 @@ export default async function MePage({ params }: Props) {
             </CardBody>
           </Card>
         </div>
+
+        {/* Upcoming bookings */}
+        {upcomingBookings.length > 0 && (
+          <div className="mt-8">
+            <UpcomingBookingsWidget bookings={upcomingBookings} />
+          </div>
+        )}
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap gap-2">
@@ -135,6 +145,30 @@ export default async function MePage({ params }: Props) {
               className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('servicesLink')} →
+            </Link>
+            <Link
+              href={`/${locale}/me/templates`}
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
+            >
+              {t('templatesLink')} →
+            </Link>
+            <Link
+              href={`/${locale}/me/availability`}
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
+            >
+              {t('availabilityLink')} →
+            </Link>
+            <Link
+              href={`/${locale}/me/discounts`}
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
+            >
+              {t('discountsLink')} →
+            </Link>
+            <Link
+              href={`/${locale}/me/favorites`}
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
+            >
+              {t('favoritesLink')} →
             </Link>
             <Link
               href={`/${locale}/me/settings`}
