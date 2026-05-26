@@ -9,6 +9,7 @@ import { GoogleSignInButton } from '@/components/auth/google-sign-in-button';
 import { SignInForm } from '@/components/auth/sign-in-form';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
+import { IS_STATIC_EXPORT } from '@/lib/static-export';
 
 import type { Metadata } from 'next';
 
@@ -68,7 +69,7 @@ export default async function SignInPage({ params }: Props) {
             href={`/${locale}/forgot-password`}
             className="text-surface/50 hover:text-surface text-center text-sm transition-colors"
           >
-            {t('forgotPassword')}
+            {t('forgotPasswordLink')}
           </Link>
         </div>
       </div>
