@@ -30,7 +30,10 @@
     "ctaSecondary": "Explore creators",
     "featured": {
       "title": "Featured creators",
-      "viewAll": "Explore all →"
+      "viewAll": "Explore all →",
+      "emptyTitle": "The stage is set",
+      "emptyBody": "Hikaya's creator directory is just getting started. Be among the first to join and get discovered by Gulf clients.",
+      "emptyCta": "Create your profile"
     },
     "valuePropsTitle": "Everything you need to run a creative practice.",
     "valueProps": {
@@ -178,6 +181,11 @@
       "admin": "Admin",
       "adminHint": "Platform administration"
     },
+    "onboarding": {
+      "title": "Complete your profile",
+      "body": "Set up your creator profile to start showcasing your work, getting hired, and managing your studio.",
+      "cta": "Create creator profile"
+    },
     "signOut": "Sign out"
   },
   "jobs": {
@@ -189,7 +197,9 @@
       "subtitle": "Real briefs from real businesses. Filter by discipline and city; apply with a cover note and a proposed rate. Posts auto-expire after 30 days.",
       "newCta": "Post a brief",
       "count": "{count, plural, =0 {No briefs open right now} =1 {1 open brief} other {# open briefs}}",
-      "empty": "No open briefs right now.",
+      "empty": "No open briefs yet",
+      "emptySubtitle": "No briefs posted yet. Post your first brief to find Gulf creatives.",
+      "emptyCta": "Post a brief",
       "emptyHint": "Check back tomorrow — or post your own."
     },
     "card": {
@@ -309,7 +319,8 @@
       "newCta": "New product",
       "count": "{count, plural, =0 {No products yet} =1 {1 product} other {# products}}",
       "rowSales": "{count, plural, =0 {No sales} =1 {1 sale} other {# sales}}",
-      "empty": "Your store is empty.",
+      "empty": "Your store is empty",
+      "emptySubtitle": "List your first digital product. Presets, LUTs, templates, or guides -- drafts are private until you publish.",
       "emptyHint": "Create your first product — drafts are private until you publish.",
       "stats": {
         "takeHome": "All-time take-home",
@@ -434,7 +445,8 @@
       "headlineItalic": "in one place.",
       "subtitle": "Every thread with every client lives on Hikaya. Searchable, attachable, and a paper trail when it counts.",
       "backToAccount": "Back to account",
-      "empty": "No conversations yet.",
+      "empty": "No conversations yet",
+      "emptySubtitle": "Start a conversation by hiring a creative or responding to an inquiry.",
       "emptyHint": "Start one from a creator's profile, or wait for an inquiry to land.",
       "discoverCta": "Browse creatives",
       "noPreview": "No messages yet."
@@ -496,7 +508,8 @@
       "subtitle": "Itemized quotes with VAT, an expiry, and a one-click approval link for your client. No PDFs, no email back-and-forth.",
       "backToAccount": "Back to account",
       "newCta": "New quote",
-      "empty": "No quotes yet.",
+      "empty": "No quotes yet",
+      "emptySubtitle": "Create your first quote to send to a client. Itemized, with VAT, and a one-click approval link.",
       "emptyHint": "Build your first quote — it'll be ready to send in under a minute.",
       "expires": "Expires {date}",
       "noExpiry": "No expiry",
@@ -613,7 +626,8 @@
       "headlineItalic": "in one place.",
       "subtitle": "Contracts auto-generate from approved quotes. Both parties sign by typing their name; the document locks once both sign.",
       "backToAccount": "Back to account",
-      "empty": "No contracts yet.",
+      "empty": "No contracts yet",
+      "emptySubtitle": "Contracts are created automatically when a client approves a quote. Start by building a quote.",
       "emptyHint": "Contracts are created automatically when a client approves a quote — start there.",
       "newQuoteCta": "Build a quote",
       "updatedAt": "Updated {time}",
@@ -716,7 +730,8 @@
       "subtitle": "Curate the work, send a private link, and watch your client favorite their selects. No more WeTransfer. No more WhatsApp.",
       "backToAccount": "Back to account",
       "newCta": "New gallery",
-      "empty": "No galleries yet.",
+      "empty": "No galleries yet",
+      "emptySubtitle": "Create a gallery to deliver photos to your clients. Beautiful, password-protected, with favorites and downloads.",
       "emptyHint": "Create your first gallery — one per client, one per project.",
       "imageCount": "{count, plural, =0 {empty} =1 {1 image} other {# images}}",
       "visitorCount": "{count, plural, =0 {Not opened yet} =1 {1 visitor} other {# visitors}}",
@@ -1087,7 +1102,9 @@
     "headlineItalic": "the Gulf's quiet best.",
     "subtitle": "Curated creatives across Saudi Arabia. Filter by city, discipline, or availability — or just browse and let the work do the talking.",
     "count": "{count, plural, =0 {No creatives match} =1 {1 creative} other {# creatives}} on Hikaya",
-    "empty": "No creatives match these filters yet.",
+    "empty": "No creators yet",
+    "emptySubtitle": "Be the first to join Hikaya. Create your profile and get discovered by Gulf clients.",
+    "emptyCta": "Join as creator",
     "emptyHint": "Try clearing a filter, or check back soon — we're onboarding more talent every week.",
     "filters": {
       "city": "City",
@@ -1517,7 +1534,9 @@
     "feed": {
       "title": "The Journal",
       "subtitle": "Notes, behind-the-scenes, and craft from creatives on Hikaya.",
-      "empty": "No posts published yet.",
+      "empty": "No stories yet",
+      "emptySubtitle": "The Journal is waiting for its first story. Creatives on Hikaya share behind-the-scenes notes, craft insights, and project breakdowns here.",
+      "emptyCta": "Write your first post",
       "readingTime": "{minutes} min read"
     },
     "publicList": {
@@ -1540,7 +1559,8 @@
       "new": "+ New post",
       "published": "Published",
       "drafts": "Drafts",
-      "empty": "No posts yet. Write your first.",
+      "empty": "No journal posts yet",
+      "emptySubtitle": "Share your first behind-the-scenes story. Drafts are private until you publish.",
       "edit": "Edit",
       "delete": "Delete",
       "deleteConfirm": "Delete this post? This cannot be undone.",
@@ -1574,7 +1594,9 @@
     "eyebrow": "Studios",
     "headline": "Production studios across the Kingdom.",
     "count": "{count, plural, =0 {No studios listed yet} =1 {1 studio} other {# studios}}",
-    "empty": "No studios match these filters.",
+    "empty": "No studios yet",
+    "emptySubtitle": "Register your studio to appear here and connect with Gulf creatives.",
+    "emptyCta": "Register studio",
     "filterCity": "City",
     "filterAllCities": "All cities",
     "filterApply": "Apply",
@@ -1622,7 +1644,9 @@
     "public": {
       "title": "Studios for rent",
       "subtitle": "Cyc walls, daylight lofts, podcast sets, rooftops. Book by the hour or the day — Hikaya creators only.",
-      "empty": "No studios match these filters.",
+      "empty": "No spaces listed yet",
+      "emptySubtitle": "Studio spaces will appear here once hosts list them. Be the first to offer your space to Gulf creatives.",
+      "emptyCta": "List your space",
       "from": "From {price}/day",
       "fromHourly": "From {price}/hour",
       "capacity": "{count, plural, =1 {1 person} other {# people}}",
@@ -1673,7 +1697,8 @@
       "subtitle": "List your studio for rent. Set hourly and daily rates, mark dates, and let creators book the gear-ready bays you've built.",
       "back": "Back to account",
       "new": "New space",
-      "empty": "No spaces yet.",
+      "empty": "No spaces listed yet",
+      "emptySubtitle": "List your first studio space for rent. Set hourly and daily rates, and let creators book directly.",
       "emptyHint": "List your first studio — drafts are private until you publish.",
       "count": "{count, plural, =0 {No spaces yet} =1 {1 space} other {# spaces}}",
       "rowHourly": "{price}/hr",
