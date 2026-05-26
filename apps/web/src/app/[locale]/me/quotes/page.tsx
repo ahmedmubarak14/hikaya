@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge, Button, Card, CardBody } from '@hikaya/ui';
 
+import { EmptyState } from '@/components/empty-state';
 import { QuoteStatusBadge } from '@/components/quotes/quote-status-badge';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
@@ -85,10 +86,13 @@ export default async function MyQuotesPage({ params }: Props) {
         </div>
 
         {quotes.length === 0 ? (
-          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
-            <p className="text-surface/70 text-lg">{t('empty')}</p>
-            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
-          </div>
+          <EmptyState
+            title={t('empty')}
+            subtitle={t('emptySubtitle')}
+            ctaLabel={t('newCta')}
+            ctaHref={`/${locale}/me/quotes/new`}
+            icon={'\u{1F9FE}'}
+          />
         ) : (
           <ul className="flex flex-col gap-3">
             {quotes.map((q) => (

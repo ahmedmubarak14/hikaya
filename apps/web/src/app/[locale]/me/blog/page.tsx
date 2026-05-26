@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge, Button, Card, CardBody } from '@hikaya/ui';
 
+import { EmptyState } from '@/components/empty-state';
 import { DeletePostButton } from '@/components/blog/delete-post-button';
 import { PostStatusBadge } from '@/components/blog/post-status-badge';
 import { PublishPostButton } from '@/components/blog/publish-post-button';
@@ -90,9 +91,13 @@ export default async function MyBlogPage({ params }: Props) {
         </header>
 
         {posts.length === 0 ? (
-          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
-            <p className="text-surface/70 text-lg">{t('empty')}</p>
-          </div>
+          <EmptyState
+            title={t('empty')}
+            subtitle={t('emptySubtitle')}
+            ctaLabel={t('new')}
+            ctaHref={`/${locale}/me/blog/new`}
+            icon={'\u{270F}\u{FE0F}'}
+          />
         ) : (
           <div className="flex flex-col gap-10">
             {published.length > 0 ? (

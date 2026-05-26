@@ -97,7 +97,7 @@ export default async function ContractPrintPage({ params }: Props) {
 
       {/* Sections */}
       <div className="mb-8 flex flex-col gap-5">
-        {contract.sections.map((s) => (
+        {(contract.sections ?? []).map((s) => (
           <section key={s.key} className="print-section">
             <h3 className="mb-1 text-base font-semibold">
               {tSection(`${s.key}.title` as 'scopeOfWork.title')}

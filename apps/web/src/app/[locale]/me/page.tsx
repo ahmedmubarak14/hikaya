@@ -3,13 +3,14 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { Badge } from '@hikaya/ui';
+import { Badge, Button } from '@hikaya/ui';
 
 import { SignOutButton } from '@/components/auth/sign-out-button';
 import { StatTile } from '@/components/studio/stat-tile';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
+import { getMyCreatorProfile } from '@/lib/creators/queries';
 import {
   getDashboardStats,
   getRecentThreads,
@@ -39,6 +40,10 @@ export default async function MePage({ params }: Props) {
   const t = await getTranslations('me');
   const tAuth = await getTranslations('auth');
   const tDisciplines = await getTranslations('disciplines');
+
+  // Check if user has a creator profile for the onboarding banner
+  const creatorProfile = await getMyCreatorProfile(session.user.email);
+  const showOnboarding = !creatorProfile;
 
   const roleKey: 'roleClient' | 'roleCreator' | 'roleStudioOwner' =
     session.user.currentRole === 'CREATOR'
@@ -113,6 +118,21 @@ export default async function MePage({ params }: Props) {
             </Link>
           </div>
         </header>
+
+        {/* ---- Onboarding banner for new users without a creator profile ---- */}
+        {showOnboarding ? (
+          <div className="border-accent/30 bg-accent/[0.06] mb-8 flex flex-col gap-4 rounded-2xl border p-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-1">
+              <h2 className="text-surface text-lg font-semibold">{t('onboarding.title')}</h2>
+              <p className="text-surface/60 text-sm">{t('onboarding.body')}</p>
+            </div>
+            <Link href={`/${locale}/me/portfolio`} className="shrink-0">
+              <Button size="md" variant="primary">
+                {t('onboarding.cta')}
+              </Button>
+            </Link>
+          </div>
+        ) : null}
 
         {/* ---- Stats row ---- */}
         <section className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">

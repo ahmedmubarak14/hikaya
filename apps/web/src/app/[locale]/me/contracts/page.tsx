@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { ContractStatusBadge } from '@/components/contracts/contract-status-badge';
+import { EmptyState } from '@/components/empty-state';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -77,16 +78,13 @@ export default async function MyContractsPage({ params }: Props) {
         </header>
 
         {contracts.length === 0 ? (
-          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
-            <p className="text-surface/70 text-lg">{t('empty')}</p>
-            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
-            <Link
-              href={`/${locale}/me/quotes/new`}
-              className="bg-accent text-ink mt-6 inline-block rounded-full px-6 py-2.5 text-sm font-medium transition-transform hover:scale-[1.02]"
-            >
-              {t('newQuoteCta')}
-            </Link>
-          </div>
+          <EmptyState
+            title={t('empty')}
+            subtitle={t('emptySubtitle')}
+            ctaLabel={t('newQuoteCta')}
+            ctaHref={`/${locale}/me/quotes/new`}
+            icon={'\u{1F4C4}'}
+          />
         ) : (
           <ul className="flex flex-col gap-3">
             {contracts.map((c) => (

@@ -70,7 +70,7 @@ export default async function ManageGalleryPage({ params }: Props) {
   const shareUrl = `${baseUrl}/${locale}/g/${gallery.shareSlug}`;
 
   // Most-favorited list for the right sidebar.
-  const topFavorites = gallery.images
+  const topFavorites = (gallery.images ?? [])
     .map((img) => ({ img, count: selectionCounts.get(img.id) ?? 0 }))
     .filter((row) => row.count > 0)
     .sort((a, b) => b.count - a.count)
@@ -123,7 +123,7 @@ export default async function ManageGalleryPage({ params }: Props) {
             <CardBody className="flex flex-col gap-2 p-5">
               <span className="text-2xs text-surface/40">{t('stats')}</span>
               <ul className="grid grid-cols-3 gap-2 text-center">
-                <Stat label={t('imagesLabel')} value={String(gallery.images.length)} />
+                <Stat label={t('imagesLabel')} value={String((gallery.images ?? []).length)} />
                 <Stat label={t('visitorsLabel')} value={String(visitorCount)} />
                 <Stat
                   label={t('favoritesLabel')}
@@ -149,14 +149,14 @@ export default async function ManageGalleryPage({ params }: Props) {
           <div className="flex flex-col gap-6">
             <AddImagesForm locale={locale} galleryId={gallery.id} />
 
-            {gallery.images.length === 0 ? (
+            {(gallery.images ?? []).length === 0 ? (
               <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
                 <p className="text-surface/70 text-lg">{t('noImages')}</p>
                 <p className="text-surface/40 mt-2 text-sm">{t('noImagesHint')}</p>
               </div>
             ) : (
               <ul className="grid grid-cols-2 gap-3 md:grid-cols-3">
-                {gallery.images.map((img) => {
+                {(gallery.images ?? []).map((img) => {
                   const count = selectionCounts.get(img.id) ?? 0;
                   return (
                     <li key={img.id} className="group relative">

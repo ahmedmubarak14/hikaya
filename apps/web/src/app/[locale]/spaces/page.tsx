@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
+import { EmptyState } from '@/components/empty-state';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { SpaceCard } from '@/components/spaces/space-card';
@@ -76,9 +77,13 @@ export default async function PublicSpacesPage({ params, searchParams }: Props) 
         </div>
 
         {spaces.length === 0 ? (
-          <div className="border-surface/10 bg-surface/[0.03] mt-10 rounded-xl border p-10 text-center">
-            <p className="text-surface/70 text-lg">{t('empty')}</p>
-          </div>
+          <EmptyState
+            title={t('empty')}
+            subtitle={t('emptySubtitle')}
+            ctaLabel={t('emptyCta')}
+            ctaHref={`/${locale}/me/spaces/new`}
+            icon={'\u{1F3E0}'}
+          />
         ) : (
           <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
             {spaces.map((s) => (

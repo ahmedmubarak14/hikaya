@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge, Button } from '@hikaya/ui';
 
+import { EmptyState } from '@/components/empty-state';
 import { JobCard } from '@/components/jobs/job-card';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
@@ -53,10 +54,13 @@ export default async function JobsPage({ params }: Props) {
         </div>
 
         {jobs.length === 0 ? (
-          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
-            <p className="text-surface/70 text-lg">{t('empty')}</p>
-            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
-          </div>
+          <EmptyState
+            title={t('empty')}
+            subtitle={t('emptySubtitle')}
+            ctaLabel={t('emptyCta')}
+            ctaHref={`/${locale}/jobs/new`}
+            icon={'\u{1F4CB}'}
+          />
         ) : (
           <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {jobs.map((job) => (

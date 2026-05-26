@@ -78,7 +78,7 @@ export default async function MyPurchasesPage({ params, searchParams }: Props) {
         ) : (
           <ul className="flex flex-col gap-3">
             {orders.flatMap((order) =>
-              order.items.map((item) => {
+              (order.items ?? []).map((item) => {
                 const product = getProductById(item.productId);
                 const expired = new Date(item.downloadExpiresAt) < new Date();
                 const cover = product?.previewImageUrls[0];

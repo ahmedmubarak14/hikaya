@@ -125,10 +125,13 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
                   </Suspense>
                 </div>
                 {creators.length === 0 ? (
-                  <div className="border-surface/10 bg-surface/[0.03] mt-10 rounded-xl border p-10 text-center">
-                    <p className="text-surface/70 text-lg">{t('empty')}</p>
-                    <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
-                  </div>
+                  <EmptyState
+                    title={t('empty')}
+                    subtitle={t('emptySubtitle')}
+                    ctaLabel={t('emptyCta')}
+                    ctaHref={`/${locale}/sign-up`}
+                    icon={'\u{1F50D}'}
+                  />
                 ) : (
                   <ul className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">
                     {creators.map((creator) => (

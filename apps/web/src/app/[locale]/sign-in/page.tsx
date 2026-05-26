@@ -68,6 +68,13 @@ export default async function SignInPage({ params }: Props) {
           </div>
 
           <SignInForm locale={locale} />
+
+          <Link
+            href={`/${locale}/forgot-password`}
+            className="text-surface/50 hover:text-surface text-center text-sm transition-colors"
+          >
+            {t('forgotPasswordLink')}
+          </Link>
         </div>
       </div>
     </main>

@@ -266,59 +266,76 @@ export default async function HomePage({ params }: PageProps) {
                   {copy.creatorsKicker}
                 </p>
                 <h2 className="mt-3 max-w-2xl text-balance text-4xl font-bold leading-none tracking-tight md:text-6xl">
-                  {t('featured.title')}
+                  {featured.length > 0 ? t('featured.title') : t('featured.emptyTitle')}
                 </h2>
               </div>
-              <Link
-                href={`/${locale}/discover`}
-                className="w-fit rounded-full border border-bg/18 px-4 py-2 text-sm text-bg/72 transition-colors hover:border-bg/45 hover:text-bg"
-              >
-                {t('featured.viewAll')}
-              </Link>
+              {featured.length > 0 ? (
+                <Link
+                  href={`/${locale}/discover`}
+                  className="w-fit rounded-full border border-bg/18 px-4 py-2 text-sm text-bg/72 transition-colors hover:border-bg/45 hover:text-bg"
+                >
+                  {t('featured.viewAll')}
+                </Link>
+              ) : null}
             </div>
 
-            <ul className="grid gap-4 md:grid-cols-3">
-              {featured.map((creator, index) => {
-                const name = isArabic ? creator.displayNameAr : creator.displayNameEn;
-                const bio = isArabic ? creator.bioAr : creator.bioEn;
+            {featured.length > 0 ? (
+              <ul className="grid gap-4 md:grid-cols-3">
+                {featured.map((creator, index) => {
+                  const name = isArabic ? creator.displayNameAr : creator.displayNameEn;
+                  const bio = isArabic ? creator.bioAr : creator.bioEn;
 
-                return (
-                  <li key={creator.id}>
-                    <Link
-                      href={`/${locale}/${creator.username}`}
-                      className="group block overflow-hidden rounded-[1.25rem] bg-bg text-surface"
-                    >
-                      <div className="relative aspect-[4/5] overflow-hidden bg-bg">
-                        <Image
-                          src={heroImage}
-                          alt={`${name} portfolio preview`}
-                          fill
-                          sizes="(min-width: 1024px) 33vw, 95vw"
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                          style={{ objectPosition: creatorCrops[index % creatorCrops.length] }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-ink/72 via-ink/8 to-transparent" />
-                        <div className="absolute inset-x-0 bottom-0 p-5 text-paper">
-                          <div className="flex items-end justify-between gap-4">
-                            <div className="min-w-0">
-                              <h3 className="truncate text-xl font-semibold tracking-tight">
-                                {name}
-                              </h3>
-                              <p className="mt-1 line-clamp-2 text-sm leading-5 text-paper/72">
-                                {bio}
-                              </p>
+                  return (
+                    <li key={creator.id}>
+                      <Link
+                        href={`/${locale}/${creator.username}`}
+                        className="group block overflow-hidden rounded-[1.25rem] bg-bg text-surface"
+                      >
+                        <div className="relative aspect-[4/5] overflow-hidden bg-bg">
+                          <Image
+                            src={heroImage}
+                            alt={`${name} portfolio preview`}
+                            fill
+                            sizes="(min-width: 1024px) 33vw, 95vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            style={{ objectPosition: creatorCrops[index % creatorCrops.length] }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-ink/72 via-ink/8 to-transparent" />
+                          <div className="absolute inset-x-0 bottom-0 p-5 text-paper">
+                            <div className="flex items-end justify-between gap-4">
+                              <div className="min-w-0">
+                                <h3 className="truncate text-xl font-semibold tracking-tight">
+                                  {name}
+                                </h3>
+                                <p className="mt-1 line-clamp-2 text-sm leading-5 text-paper/72">
+                                  {bio}
+                                </p>
+                              </div>
+                              <span className="shrink-0 rounded-full bg-bg px-2.5 py-1 text-xs font-semibold text-surface">
+                                {creator.reviewScore.toFixed(1)}
+                              </span>
                             </div>
-                            <span className="shrink-0 rounded-full bg-bg px-2.5 py-1 text-xs font-semibold text-surface">
-                              {creator.reviewScore.toFixed(1)}
-                            </span>
                           </div>
                         </div>
-                      </div>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <div className="rounded-[1.25rem] border border-bg/12 bg-bg/[0.06] px-8 py-16 text-center">
+                <p className="mx-auto max-w-lg text-base leading-7 text-bg/65">
+                  {t('featured.emptyBody')}
+                </p>
+                <div className="mt-8">
+                  <Link href={`/${locale}/sign-up`}>
+                    <Button size="lg" variant="primary">
+                      {t('featured.emptyCta')}
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
