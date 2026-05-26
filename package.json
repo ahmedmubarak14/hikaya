@@ -22,6 +22,7 @@
     "db:studio": "pnpm --filter @hikaya/database db:studio"
   },
   "devDependencies": {
+    "next": "14.2.18",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",
     "turbo": "^2.3.3",

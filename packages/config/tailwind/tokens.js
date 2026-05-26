@@ -4,7 +4,7 @@
  * Theme-aware colors (bg, surface, line) resolve to CSS variables set in
  * apps/web/src/styles/globals.css. The default theme is LIGHT; users can
  * opt into dark via the theme toggle in the header (data-theme="dark" on
- * <html>). Brand accents (yellow-green, orange, sage, blue, purple) stay
+ * <html>). Brand accents (eucalyptus, fig, sage, blue) stay
  * constant across themes.
  *
  * Consumed by:
@@ -21,17 +21,17 @@ const colors = {
 
   // Fixed brand neutrals (used when we explicitly want one or the other,
   // regardless of theme — e.g. button text on the yellow accent must be dark).
-  ink: '#080808',
-  paper: '#f8f6f1',
+  ink: 'var(--ink)',
+  paper: 'var(--paper)',
 
   // Accents — same in both themes.
-  accent: '#e8ff47', // Electric yellow-green CTA
-  accentSecondary: '#ff6b35', // Orange highlight
+  accent: 'var(--accent)', // Eucalyptus CTA
+  accentSecondary: 'var(--accent-secondary)', // Muted fig highlight
 
   // Tertiaries — same in both themes.
-  sage: '#4a7a5a',
-  blue: '#3a6fd8',
-  purple: '#7c52c8',
+  sage: 'var(--sage)',
+  blue: 'var(--info)',
+  purple: 'var(--purple)',
 
   // Muted text — derived per theme via opacity utilities (text-surface/60).
   muted: 'var(--muted)',

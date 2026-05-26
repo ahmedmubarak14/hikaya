@@ -8,7 +8,7 @@ export const buttonVariants = cva(
     'inline-flex items-center justify-center gap-2 whitespace-nowrap',
     'font-sans font-medium tracking-tight',
     'rounded-full border border-transparent',
-    'transition-[transform,background-color,color,border-color] duration-fast ease-out',
+    'shadow-sm shadow-ink/5 transition-[transform,background-color,color,border-color,box-shadow] duration-fast ease-out',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg',
     'disabled:opacity-40 disabled:pointer-events-none',
     // Arabic body sits ~10% larger at same weight to match optical size.
@@ -17,12 +17,14 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: 'bg-accent text-ink hover:scale-[1.02] active:scale-[0.99]',
-        secondary: 'bg-surface text-ink hover:bg-surface/90 active:scale-[0.99]',
+        primary:
+          'bg-[var(--accent)] text-[var(--ink)] hover:scale-[1.01] hover:shadow-md hover:shadow-ink/10 active:scale-[0.99]',
+        secondary: 'bg-surface text-bg hover:bg-surface/90 active:scale-[0.99]',
         ghost: 'bg-transparent text-surface hover:bg-surface/10 active:bg-surface/15',
         outline:
-          'bg-transparent text-surface border-surface/30 hover:bg-surface/5 hover:border-surface/60',
-        destructive: 'bg-accent-secondary text-surface hover:brightness-110 active:scale-[0.99]',
+          'bg-bg/40 text-surface border-surface/20 hover:bg-surface/5 hover:border-surface/45',
+        destructive:
+          'bg-[var(--accent-secondary)] text-[var(--ink)] hover:brightness-105 active:scale-[0.99]',
       },
       size: {
         sm: 'h-9 px-4 text-sm',

@@ -10,7 +10,7 @@ export function SiteFooter() {
   const locale = useLocale() as Locale;
 
   return (
-    <footer className="mt-26 border-surface/5 border-t">
+    <footer className="border-surface/10 bg-bg mt-26 border-t">
       <div className="max-w-8xl mx-auto flex w-full flex-col gap-6 px-6 py-10 md:flex-row md:items-end md:justify-between md:px-10">
         <div className="flex flex-col gap-3">
           <div className="text-surface/80 flex items-center gap-3">
@@ -29,7 +29,7 @@ export function SiteFooter() {
             </Link>
           </div>
         </div>
-        <p className="text-surface/40 text-sm">{t('rights', { year: new Date().getFullYear() })}</p>
+        <p className="text-sm text-surface/40">{t('rights', { year: new Date().getFullYear() })}</p>
       </div>
     </footer>
   );

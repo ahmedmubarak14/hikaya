@@ -23,13 +23,13 @@ export async function SiteHeader() {
   const theme = (await getTheme()) ?? 'light';
 
   return (
-    <header className="border-surface/5 bg-bg/80 sticky top-0 z-40 border-b backdrop-blur-md">
-      <div className="max-w-8xl mx-auto flex h-16 w-full items-center justify-between px-6 md:px-10">
+    <header className="sticky top-0 z-40 border-b border-surface/10 bg-bg/75 backdrop-blur-xl">
+      <div className="max-w-8xl mx-auto flex h-18 w-full items-center justify-between px-5 md:px-10">
         <Link href={`/${locale}`} className="text-surface flex items-center" aria-label="Hikaya">
           <Logo arabic={locale === 'ar'} className="h-7" />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-1 rounded-full border border-surface/10 bg-surface/[0.035] p-1 md:flex">
           <NavLink href={`/${locale}/discover`}>{t('discover')}</NavLink>
           <NavLink href={`/${locale}/spaces`}>{t('spaces')}</NavLink>
           <NavLink href={`/${locale}/jobs`}>{t('jobs')}</NavLink>
@@ -66,7 +66,7 @@ export async function SiteHeader() {
             >
               <span
                 aria-hidden
-                className="bg-accent text-2xs text-ink grid h-6 w-6 place-items-center rounded-full font-semibold uppercase"
+                className="text-2xs grid h-6 w-6 place-items-center rounded-full bg-[var(--accent)] font-semibold uppercase text-[var(--ink)]"
               >
                 {session.user.displayName.charAt(0)}
               </span>
@@ -95,7 +95,10 @@ export async function SiteHeader() {
 
 function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <Link href={href} className="text-surface/70 hover:text-surface text-sm transition-colors">
+    <Link
+      href={href}
+      className="rounded-full px-4 py-2 text-sm text-surface/65 transition-colors hover:bg-bg/70 hover:text-surface"
+    >
       {children}
     </Link>
   );
