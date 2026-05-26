@@ -24,6 +24,13 @@ async function getClient() {
 // Mapping helpers — DB row -> front-end Contract shape
 // ---------------------------------------------------------------------------
 
+interface SignatureAuditEntry {
+  side: 'creator' | 'client';
+  name: string;
+  signedAt: string;
+  ip: string;
+}
+
 interface DbContractRow {
   id: string;
   bookingId: string;
@@ -40,6 +47,7 @@ interface DbContractRow {
   creatorSignedName: string | null;
   clientSignedAt: string | null;
   clientSignedName: string | null;
+  signatureAuditLog: SignatureAuditEntry[] | null;
   createdAt: string;
   updatedAt: string;
   Booking?: {
@@ -86,6 +94,7 @@ function mapContract(row: DbContractRow): Contract {
     creatorSignedAt: row.creatorSignedAt ?? undefined,
     clientSignedName: row.clientSignedName ?? undefined,
     clientSignedAt: row.clientSignedAt ?? undefined,
+    signatureAuditLog: row.signatureAuditLog ?? undefined,
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };
@@ -98,6 +107,7 @@ const CONTRACT_SELECT = `
   pdfUrl,
   creatorSignedAt, creatorSignedName,
   clientSignedAt, clientSignedName,
+  signatureAuditLog,
   createdAt, updatedAt,
   Booking (
     creatorProfileId, clientProfileId, totalHalalas,

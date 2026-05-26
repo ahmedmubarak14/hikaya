@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -9,6 +10,18 @@ import { getMyCreatorProfile } from '@/lib/creators/queries';
 import { createClient } from '@/lib/supabase/server';
 
 import { sectionKeys, signContractSchema, updateSectionsSchema } from './schemas';
+
+/**
+ * Read the client IP address from request headers.
+ */
+async function getClientIp(): Promise<string> {
+  const h = await headers();
+  return (
+    h.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    h.get('x-real-ip') ??
+    'unknown'
+  );
+}
 
 export type ContractErrorKey =
   | 'INVALID_INPUT'
@@ -147,8 +160,21 @@ export async function signAsCreatorAction(
   }
 
   const now = new Date().toISOString();
+  const ip = await getClientIp();
   const bothSigned = !!contract.clientSignedAt;
   const newStatus = bothSigned ? 'SIGNED' : 'CREATOR_SIGNED';
+
+  // Build audit log entry
+  const existingAudit = (contract as Record<string, unknown>).signatureAuditLog;
+  const auditLog: Record<string, unknown>[] = Array.isArray(existingAudit)
+    ? [...(existingAudit as Record<string, unknown>[])]
+    : [];
+  auditLog.push({
+    side: 'creator',
+    name: parsed.data.typedName,
+    signedAt: now,
+    ip,
+  });
 
   const { error: updateErr } = await supabase
     .from('Contract')
@@ -156,6 +182,7 @@ export async function signAsCreatorAction(
       creatorSignedName: parsed.data.typedName,
       creatorSignedAt: now,
       status: newStatus,
+      signatureAuditLog: auditLog,
       updatedAt: now,
     })
     .eq('id', contractId);
@@ -238,8 +265,21 @@ export async function signAsClientAction(
   }
 
   const now = new Date().toISOString();
+  const ip = await getClientIp();
   const bothSigned = !!contract.creatorSignedAt;
   const newStatus = bothSigned ? 'SIGNED' : 'CLIENT_SIGNED';
+
+  // Build audit log entry
+  const existingAudit = (contract as Record<string, unknown>).signatureAuditLog;
+  const auditLog: Record<string, unknown>[] = Array.isArray(existingAudit)
+    ? [...(existingAudit as Record<string, unknown>[])]
+    : [];
+  auditLog.push({
+    side: 'client',
+    name: parsed.data.typedName,
+    signedAt: now,
+    ip,
+  });
 
   const { error: updateErr } = await supabase
     .from('Contract')
@@ -247,6 +287,7 @@ export async function signAsClientAction(
       clientSignedName: parsed.data.typedName,
       clientSignedAt: now,
       status: newStatus,
+      signatureAuditLog: auditLog,
       updatedAt: now,
     })
     .eq('id', contract.id as string);

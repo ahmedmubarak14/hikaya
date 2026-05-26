@@ -1,5 +1,7 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
 import { getSession } from '@/lib/auth/session';
 import { createClient } from '@/lib/supabase/server';
 
@@ -73,4 +75,117 @@ export async function getUpcomingBookings(
       daysUntil,
     };
   });
+}
+
+type BookingActionResult = { ok: true } | { ok: false; error: string };
+
+/**
+ * Reschedule a booking by updating the session date.
+ */
+export async function rescheduleBookingAction(
+  bookingId: string,
+  newDate: string,
+  newTime: string,
+): Promise<BookingActionResult> {
+  const session = await getSession();
+  if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
+
+  const sessionStart = new Date(`${newDate}T${newTime}:00`);
+  if (Number.isNaN(sessionStart.getTime())) {
+    return { ok: false, error: 'INVALID_DATE' };
+  }
+
+  const supabase = await createClient();
+
+  // Verify the booking belongs to the current user (as creator)
+  const { data: profile } = await supabase
+    .from('CreatorProfile')
+    .select('id')
+    .eq('userId', session.user.id)
+    .maybeSingle();
+
+  if (!profile) return { ok: false, error: 'NO_CREATOR_PROFILE' };
+
+  const { data: booking } = await supabase
+    .from('Booking')
+    .select('id, creatorProfileId, status')
+    .eq('id', bookingId)
+    .maybeSingle();
+
+  if (!booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+  if ((booking.creatorProfileId as string) !== (profile.id as string)) {
+    return { ok: false, error: 'NOT_OWNER' };
+  }
+  if ((booking.status as string) === 'CANCELLED' || (booking.status as string) === 'COMPLETED') {
+    return { ok: false, error: 'CANNOT_RESCHEDULE' };
+  }
+
+  const { error } = await supabase
+    .from('Booking')
+    .update({
+      sessionStart: sessionStart.toISOString(),
+      updatedAt: new Date().toISOString(),
+    })
+    .eq('id', bookingId);
+
+  if (error) {
+    console.error('[bookings/actions] rescheduleBookingAction error:', error.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath('/me/studio');
+  return { ok: true };
+}
+
+/**
+ * Cancel a booking with a reason.
+ */
+export async function cancelBookingAction(
+  bookingId: string,
+  reason: string,
+): Promise<BookingActionResult> {
+  const session = await getSession();
+  if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
+
+  const supabase = await createClient();
+
+  // Verify the booking belongs to the current user
+  const { data: profile } = await supabase
+    .from('CreatorProfile')
+    .select('id')
+    .eq('userId', session.user.id)
+    .maybeSingle();
+
+  if (!profile) return { ok: false, error: 'NO_CREATOR_PROFILE' };
+
+  const { data: booking } = await supabase
+    .from('Booking')
+    .select('id, creatorProfileId, status')
+    .eq('id', bookingId)
+    .maybeSingle();
+
+  if (!booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+  if ((booking.creatorProfileId as string) !== (profile.id as string)) {
+    return { ok: false, error: 'NOT_OWNER' };
+  }
+  if ((booking.status as string) === 'CANCELLED') {
+    return { ok: false, error: 'ALREADY_CANCELLED' };
+  }
+
+  const { error } = await supabase
+    .from('Booking')
+    .update({
+      status: 'CANCELLED',
+      notes: reason ? `Cancellation reason: ${reason}` : null,
+      updatedAt: new Date().toISOString(),
+    })
+    .eq('id', bookingId);
+
+  if (error) {
+    console.error('[bookings/actions] cancelBookingAction error:', error.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath('/me/studio');
+  return { ok: true };
 }

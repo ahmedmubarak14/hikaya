@@ -60,10 +60,6 @@
     "signInCta": "Sign in",
     "continueWithGoogle": "Continue with Google",
     "orEmail": "or sign in with email",
-    "demoSignedInLabel": "Demo mode",
-    "demoSignedInBody": "You're signed in as {name}.",
-    "demoSignedInHint": "This static preview auto-signs you in so you can explore every page. Mutations (sending a quote, publishing a post, taking a booking) are inert in the preview — run the app locally for full interactivity.",
-    "demoSignedInGoToDashboard": "Go to your dashboard →",
     "signUpEyebrow": "Make it yours",
     "signUpTitle": "Create your Hikaya account",
     "signUpSubtitle": "It takes a minute. Build a portfolio or hire your first creative — both start here.",
@@ -89,9 +85,6 @@
     "panelLine": "your story.",
     "panelBody": "Hikaya is the all-in-one platform Gulf creatives use to showcase work, get hired, run their studio, deliver to clients, and sell what they make.",
     "panelFooter": "حكاية — A story, in Arabic.",
-    "demoLabel": "Demo accounts",
-    "demoCredentials": "Try <email>noor@hikaya.sa</email> / <password>password123</password> for the creator view, or <email>client@hikaya.sa</email> for the client view.",
-    "demoNote": "Backend is mocked in-memory; data resets on server restart.",
     "forgotPasswordLink": "Forgot password?",
     "forgotPasswordTitle": "Reset your password",
     "forgotPasswordSubtitle": "Enter your email and we'll send you a link to reset your password.",
@@ -105,6 +98,7 @@
     "resetPasswordError": "Something went wrong. Please try again.",
     "newPassword": "New password",
     "confirmPassword": "Confirm password",
+    "continueWithApple": "Continue with Apple",
     "errors": {
       "invalidCredentials": "Email or password is incorrect.",
       "emailTaken": "An account with this email already exists."
@@ -785,7 +779,6 @@
       "label": "Client account",
       "title": "You're signed in as a client.",
       "body": "Only creator accounts have a portfolio. To edit one, sign in as a creator — or create a new account and choose \"Showcase my work\".",
-      "demoHint": "Demo: sign in with noor@hikaya.sa / password123 to see the editor.",
       "discover": "Browse creatives instead"
     }
   },
@@ -1085,7 +1078,12 @@
       "saved": "Saved"
     },
     "dangerZone": "Danger zone",
-    "dangerZoneSubtitle": "Permanently delete your account and all associated data.",
+    "dangerZoneSubtitle": "Export your data or permanently delete your account.",
+    "exportTitle": "Download your data",
+    "exportBody": "Download a JSON file containing all your personal data stored on Hikaya. This satisfies your right to obtain personal data under Saudi PDPL Article 13.",
+    "exportCta": "Download my data",
+    "exportLoading": "Preparing export...",
+    "exportError": "Something went wrong. Please try again.",
     "deleteTitle": "Delete your account",
     "deleteBody": "This action is permanent. Your profile, portfolio, quotes, contracts, and all other data will be erased. This cannot be undone.",
     "deleteCta": "Delete my account",
@@ -1329,9 +1327,17 @@
       "daily": "Daily",
       "capacity": "Capacity",
       "address": "Address",
-      "availabilityTitle": "Check the calendar before booking",
+      "houseRulesTitle": "House rules",
+      "houseRulesEmpty": "No house rules specified.",
+      "addOnsTitle": "Optional add-ons",
+      "addOnFree": "Free",
+      "availabilityTitle": "Availability calendar",
       "availabilityEmpty": "No upcoming bookings on the books — you've got a clear runway.",
-      "availabilityRow": "{start} → {end}"
+      "availabilityRow": "{start} → {end}",
+      "calendarPrev": "Previous month",
+      "calendarNext": "Next month",
+      "calendarBooked": "Booked",
+      "calendarAvailable": "Available"
     },
     "book": {
       "title": "Reserve this space",
@@ -1344,7 +1350,10 @@
       "unavailable": "That window is already booked. Try different dates.",
       "needsSignIn": "Sign in to book a space.",
       "cannotBookOwn": "You can't book your own space.",
-      "error": "Couldn't confirm the booking. Please review and try again."
+      "error": "Couldn't confirm the booking. Please review and try again.",
+      "agreeRules": "I agree to the house rules",
+      "addOnsLabel": "Add-ons",
+      "addOnsTotal": "Add-ons total {price}"
     },
     "owner": {
       "eyebrow": "Studios",
@@ -1399,6 +1408,10 @@
       "photosHint": "One per line. First is the hero. 1–10 images.",
       "status": "Status",
       "statusHint": "Draft is private. Live is public. Paused hides it.",
+      "houseRules": "House rules",
+      "houseRulesHint": "Free-text rules shown to renters before booking.",
+      "addOnsLabel": "Optional add-ons (JSON)",
+      "addOnsHint": "One per line: Name, Price (SAR). e.g. \"Fog machine, 30\"",
       "submit": "Create space",
       "save": "Save changes",
       "saved": "Saved",
@@ -1435,7 +1448,19 @@
         "back": "Back to rentals",
         "title": "Rental — {name}",
         "dates": "{start} → {end}",
-        "totalLabel": "Total paid"
+        "totalLabel": "Total paid",
+        "checkIn": "Check in",
+        "checkOut": "Check out",
+        "checkedInAt": "Checked in at {time}",
+        "checkedOutAt": "Checked out at {time}",
+        "conditionPhotosTitle": "Condition photos",
+        "checkInPhotosLabel": "Check-in photos",
+        "checkOutPhotosLabel": "Check-out photos",
+        "addPhotoUrl": "Add photo URL",
+        "addPhotoPlaceholder": "https://images.example.com/photo.jpg",
+        "addPhoto": "Add",
+        "noPhotos": "No photos yet.",
+        "selectedAddOns": "Selected add-ons"
       },
       "cancel": "Cancel booking",
       "cancelConfirm": "Cancel this booking? This can't be undone."

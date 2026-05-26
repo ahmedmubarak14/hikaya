@@ -7,6 +7,7 @@ import { Card, CardBody } from '@hikaya/ui';
 import { CancelContractButton } from '@/components/contracts/cancel-contract-button';
 import { ContractSectionsForm } from '@/components/contracts/contract-sections-form';
 import { ContractStatusBadge } from '@/components/contracts/contract-status-badge';
+import { SignatureAuditLog } from '@/components/contracts/signature-audit-log';
 import { SignForm } from '@/components/contracts/sign-form';
 import { CopyLinkButton } from '@/components/galleries/copy-link-button';
 import { ReviewForm } from '@/components/reviews/review-form';
@@ -26,7 +27,6 @@ interface Props {
 }
 
 // Auth-gated route — generate one placeholder per locale so Next has
-// something to render; the page itself short-circuits to DemoModeNotice
 // when EXPORT=1, so the placeholder id is never actually used.
 export async function generateStaticParams() {
   const { locales } = await import('@/i18n/config');
@@ -62,10 +62,12 @@ export default async function ContractDetailPage({ params }: Props) {
   if (!contract || contract.creatorId !== creator.id) notFound();
 
   const t = await getTranslations('contracts.detail');
+  const tAudit = await getTranslations('contracts.audit');
   const tReviews = await getTranslations('reviews');
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
   const shareUrl = `${baseUrl}/${locale}/c/${contract.shareSlug}`;
+  const printUrl = `${baseUrl}/${locale}/c/${contract.shareSlug}/print`;
 
   const locked = contract.status === 'SIGNED' || contract.status === 'CANCELLED';
   const creatorSigned = Boolean(contract.creatorSignedAt);

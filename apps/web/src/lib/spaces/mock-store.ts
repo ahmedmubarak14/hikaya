@@ -146,6 +146,8 @@ export interface CreateSpaceInput {
   equipmentIncluded: string[];
   photos: string[];
   status: SpaceStatus;
+  houseRules?: string;
+  addOns?: { name: string; priceHalalas: number }[];
 }
 
 export function createSpace(input: CreateSpaceInput): Space {
@@ -163,6 +165,8 @@ export function createSpace(input: CreateSpaceInput): Space {
     equipmentIncluded: [...input.equipmentIncluded],
     photos: [...input.photos],
     status: input.status,
+    houseRules: input.houseRules ?? '',
+    addOns: input.addOns ? [...input.addOns] : [],
     createdAt: new Date().toISOString(),
   };
   store.spaces.set(id, space);
@@ -197,6 +201,7 @@ export interface CreateBookingInput {
   endISO: string;
   durationKind: BookingDurationKind;
   totalHalalas: number;
+  selectedAddOns?: { name: string; priceHalalas: number }[];
 }
 
 export function createBooking(input: CreateBookingInput): SpaceBooking {
@@ -210,6 +215,11 @@ export function createBooking(input: CreateBookingInput): SpaceBooking {
     durationKind: input.durationKind,
     totalHalalas: input.totalHalalas,
     status: 'PENDING',
+    checkInAt: null,
+    checkOutAt: null,
+    checkInPhotos: [],
+    checkOutPhotos: [],
+    selectedAddOns: input.selectedAddOns ?? [],
     createdAt: new Date().toISOString(),
   };
   store.bookings.set(id, booking);
@@ -220,6 +230,16 @@ export function setBookingStatus(id: string, status: BookingStatus): SpaceBookin
   const existing = store.bookings.get(id);
   if (!existing) throw new Error('BOOKING_NOT_FOUND');
   const updated: SpaceBooking = { ...existing, status };
+  store.bookings.set(id, updated);
+  return updated;
+}
+
+export type BookingPatch = Partial<Omit<SpaceBooking, 'id' | 'spaceId' | 'renterId' | 'createdAt'>>;
+
+export function updateBooking(id: string, patch: BookingPatch): SpaceBooking {
+  const existing = store.bookings.get(id);
+  if (!existing) throw new Error('BOOKING_NOT_FOUND');
+  const updated: SpaceBooking = { ...existing, ...patch };
   store.bookings.set(id, updated);
   return updated;
 }
