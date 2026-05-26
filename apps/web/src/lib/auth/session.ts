@@ -37,6 +37,10 @@ export interface SessionUser extends Pick<MockUser, 'id' | 'email' | 'displayNam
    * `primaryRole`. Use this for any "is this view appropriate?" decision.
    */
   currentRole: MockUserRole;
+  /** Avatar image URL from Supabase User table (nullable). */
+  avatarUrl?: string;
+  /** Creator username (slug) for public profile links. */
+  username?: string;
 }
 
 export interface Session {
@@ -106,9 +110,10 @@ export async function destroySession(): Promise<void> {
 }
 
 export async function getSession(): Promise<Session | null> {
-  // Static export build (GitHub Pages) has no cookies. We auto-sign-in as
-  // Noor — the seeded Creator + Studio Owner — so the entire authenticated
-  // experience renders on the public preview.
+  // ---- STATIC PREVIEW ONLY (GitHub Pages) ----
+  // The static export has no cookies / Supabase session. We auto-sign-in as
+  // the seeded creator so the authenticated experience renders on the public
+  // preview site. This block is never reached on the live Vercel deploy.
   if (process.env.EXPORT === '1') {
     const noor = findUserByEmail('noor@hikaya.sa');
     if (!noor) return null;

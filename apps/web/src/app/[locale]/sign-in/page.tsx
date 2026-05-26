@@ -29,10 +29,9 @@ export default async function SignInPage({ params }: Props) {
 
   const session = await getSession();
   // Live build: signed-in users get bounced to their dashboard. The static
-  // export ALSO has a session (auto-signed-in as Noor), but server-side
-  // redirect() during prerender turns into a meta-refresh hop on Pages — so
-  // we render an explicit "demo mode, you're already signed in" panel
-  // instead. Cleaner UX and avoids the form-with-no-functioning-action.
+  // export also has a session (for GitHub Pages preview), but server-side
+  // redirect() during prerender turns into a meta-refresh hop — so we skip
+  // it there. IS_STATIC_EXPORT check keeps the form rendered on the preview.
   if (session && !IS_STATIC_EXPORT) redirect(`/${locale}/me`);
 
   const t = await getTranslations('auth');

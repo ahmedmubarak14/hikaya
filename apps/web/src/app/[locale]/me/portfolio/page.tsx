@@ -115,7 +115,6 @@ async function NoCreatorProfile({ locale }: { locale: Locale }) {
             </Badge>
             <h1 className="text-balance text-3xl">{t('noProfile.title')}</h1>
             <p className="text-surface/60">{t('noProfile.body')}</p>
-            <p className="text-surface/50 text-sm">{t('noProfile.demoHint')}</p>
             <div className="mt-2 flex flex-wrap gap-2">
               <Link href={`/${locale}/discover`}>
                 <Button size="md" variant="outline">
