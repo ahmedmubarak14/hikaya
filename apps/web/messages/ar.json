@@ -1322,9 +1322,17 @@
       "daily": "باليوم",
       "capacity": "السعة",
       "address": "العنوان",
-      "availabilityTitle": "تحقّق من التوفّر قبل الحجز",
+      "houseRulesTitle": "شروط الاستخدام",
+      "houseRulesEmpty": "لم يتم تحديد شروط استخدام.",
+      "addOnsTitle": "إضافات اختياريّة",
+      "addOnFree": "مجّاني",
+      "availabilityTitle": "تقويم التوفّر",
       "availabilityEmpty": "لا توجد حجوزات قادمة — الجدول مفتوح بالكامل.",
-      "availabilityRow": "{start} ← {end}"
+      "availabilityRow": "{start} ← {end}",
+      "calendarPrev": "الشهر السابق",
+      "calendarNext": "الشهر التالي",
+      "calendarBooked": "محجوز",
+      "calendarAvailable": "متاح"
     },
     "book": {
       "title": "احجز هذا الاستوديو",
@@ -1337,7 +1345,10 @@
       "unavailable": "هذه الفترة محجوزة بالفعل. جرّب تواريخ أخرى.",
       "needsSignIn": "سجّل الدخول لحجز استوديو.",
       "cannotBookOwn": "لا يمكنك حجز استوديو تملكه.",
-      "error": "تعذّر تأكيد الحجز. راجع البيانات وحاول مجدّداً."
+      "error": "تعذّر تأكيد الحجز. راجع البيانات وحاول مجدّداً.",
+      "agreeRules": "أوافق على شروط الاستخدام",
+      "addOnsLabel": "إضافات",
+      "addOnsTotal": "إجمالي الإضافات {price}"
     },
     "owner": {
       "eyebrow": "استوديوهات",
@@ -1428,7 +1439,19 @@
         "back": "عودة إلى الإيجارات",
         "title": "إيجار — {name}",
         "dates": "{start} ← {end}",
-        "totalLabel": "الإجمالي المدفوع"
+        "totalLabel": "الإجمالي المدفوع",
+        "checkIn": "تسجيل الدخول",
+        "checkOut": "تسجيل الخروج",
+        "checkedInAt": "تمّ تسجيل الدخول في {time}",
+        "checkedOutAt": "تمّ تسجيل الخروج في {time}",
+        "conditionPhotosTitle": "صور حالة الاستوديو",
+        "checkInPhotosLabel": "صور تسجيل الدخول",
+        "checkOutPhotosLabel": "صور تسجيل الخروج",
+        "addPhotoUrl": "أضف رابط صورة",
+        "addPhotoPlaceholder": "https://images.example.com/photo.jpg",
+        "addPhoto": "إضافة",
+        "noPhotos": "لا توجد صور بعد.",
+        "selectedAddOns": "الإضافات المختارة"
       },
       "cancel": "إلغاء الحجز",
       "cancelConfirm": "هل تريد إلغاء هذا الحجز؟ لا يمكن التراجع."

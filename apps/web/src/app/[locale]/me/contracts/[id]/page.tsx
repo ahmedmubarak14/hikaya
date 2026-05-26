@@ -157,6 +157,35 @@ export default async function ContractDetailPage({ params }: Props) {
           />
         </section>
 
+        {/* Signature audit trail */}
+        {contract.signatureAuditLog && contract.signatureAuditLog.length > 0 ? (
+          <section className="mb-10">
+            <SignatureAuditLog
+              entries={contract.signatureAuditLog}
+              locale={locale}
+              title={tAudit('title')}
+              creatorLabel={tAudit('creatorSigned')}
+              clientLabel={tAudit('clientSigned')}
+              signedAtLabel={tAudit('signedAt')}
+              ipLabel={tAudit('ipAddress')}
+            />
+          </section>
+        ) : null}
+
+        {/* Print / download button */}
+        {contract.status === 'SIGNED' ? (
+          <section className="mb-10">
+            <Link
+              href={printUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm transition-colors"
+            >
+              {t('printDownload')} ↗
+            </Link>
+          </section>
+        ) : null}
+
         {/* Sign as creator */}
         {!locked && !creatorSigned ? (
           <section className="mb-10">
