@@ -52,6 +52,20 @@ export async function signInAction(
     return { ok: false, error: 'INVALID_CREDENTIALS' };
   }
 
+  // Audit log
+  try {
+    const { logAuditEvent } = await import('@/lib/audit/log');
+    await logAuditEvent({
+      userId: result.user.id,
+      action: 'SIGN_IN',
+      entityType: 'User',
+      entityId: result.user.id,
+      metadata: { email: parsed.data.email },
+    });
+  } catch {
+    // audit logging is best-effort
+  }
+
   redirect(`/${locale ?? defaultLocale}/me`);
 }
 

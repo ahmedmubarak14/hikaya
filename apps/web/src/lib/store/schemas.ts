@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const CATEGORY_VALUES = ['PRESET', 'LUT', 'TEMPLATE', 'OVERLAY', 'GUIDE', 'OTHER'] as const;
+const CATEGORY_VALUES = ['PRESET', 'LUT', 'TEMPLATE', 'OVERLAY', 'GUIDE', 'BUNDLE', 'OTHER'] as const;
 const STATUS_VALUES = ['DRAFT', 'ACTIVE', 'ARCHIVED'] as const;
 
 const urlList = (max: number) =>
@@ -38,6 +38,18 @@ export const productSchema = z
           .slice(0, 10),
       )
       .pipe(z.array(z.string().min(1).max(40))),
+    /** Comma-separated product IDs for BUNDLE category. */
+    bundleItemIdsRaw: z
+      .string()
+      .optional()
+      .default('')
+      .transform((raw) =>
+        raw
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0),
+      )
+      .pipe(z.array(z.string())),
   })
   .refine((v) => v.previewImagesRaw.length >= 1, {
     message: 'Add at least one preview image URL.',

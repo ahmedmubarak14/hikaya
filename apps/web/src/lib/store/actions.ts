@@ -262,7 +262,7 @@ export async function purchaseProductAction(
   // Find the product by creator + slug
   const { data: product, error: productErr } = await supabase
     .from('Product')
-    .select('id, creatorId, status, priceHalalas, titleEn, slug')
+    .select('id, creatorId, status, priceHalalas, titleEn, slug, fileUrl')
     .eq('creatorId', creator.id as string)
     .eq('slug', productSlug)
     .maybeSingle();
@@ -315,7 +315,7 @@ export async function purchaseProductAction(
     return { ok: false, error: 'UNKNOWN' };
   }
 
-  // Create the order item
+  // Create the order item (snapshot fileUrl for the download route)
   const { error: itemErr } = await supabase
     .from('OrderItem')
     .insert({
@@ -327,6 +327,7 @@ export async function purchaseProductAction(
       commissionHalalas: commissionFor(priceHalalas),
       downloadToken: randomUUID(),
       downloadExpiresAt: expires,
+      fileUrl: (product.fileUrl as string) ?? null,
     });
 
   if (itemErr) {

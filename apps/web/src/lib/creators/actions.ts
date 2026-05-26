@@ -15,6 +15,7 @@ export type EditorErrorKey =
   | 'INVALID_INPUT'
   | 'NOT_AUTHENTICATED'
   | 'NO_CREATOR_PROFILE'
+  | 'FREE_TIER_LIMIT'
   | 'UNKNOWN';
 
 export interface EditorFailure {
@@ -136,6 +137,30 @@ export async function addPortfolioItemAction(
     parsed.data.url || `https://picsum.photos/seed/${randomBytes(6).toString('hex')}/1200/900`;
 
   const supabase = await createClient();
+
+  // --- Free tier portfolio limit (10 items) ---
+  const { count: portfolioCount } = await supabase
+    .from('PortfolioItem')
+    .select('id', { count: 'exact', head: true })
+    .eq('creatorId', auth.creator.id);
+
+  if ((portfolioCount ?? 0) >= 10) {
+    // Check if creator has a Pro subscription
+    const { data: subscription } = await supabase
+      .from('Subscription')
+      .select('plan, status')
+      .eq('userId', auth.session.user.id)
+      .eq('status', 'ACTIVE')
+      .maybeSingle();
+
+    const isPro =
+      subscription &&
+      (subscription.plan as string) !== 'FREE';
+
+    if (!isPro) {
+      return { ok: false, error: 'FREE_TIER_LIMIT' };
+    }
+  }
 
   // Determine orderIndex: new item goes to the front (orderIndex 0).
   // Shift existing items up by 1.

@@ -5,7 +5,7 @@
  * products). The mock honors all of that on the server side.
  */
 
-export type ProductCategory = 'PRESET' | 'LUT' | 'TEMPLATE' | 'OVERLAY' | 'GUIDE' | 'OTHER';
+export type ProductCategory = 'PRESET' | 'LUT' | 'TEMPLATE' | 'OVERLAY' | 'GUIDE' | 'BUNDLE' | 'OTHER';
 
 export type ProductStatus = 'DRAFT' | 'ACTIVE' | 'ARCHIVED';
 
@@ -29,6 +29,8 @@ export interface Product {
   freeSampleUrl?: string;
   /** Software tags surfaced as pills on the product page. */
   compatibleSoftware: string[];
+  /** IDs of products included in a BUNDLE. Empty for non-bundle products. */
+  bundleItems: string[];
   salesCount: number;
   createdAt: string;
   updatedAt: string;
@@ -98,6 +100,7 @@ export const SEED_PRODUCTS: Product[] = [
     fileUrl: 'https://files.example.com/warm-light-preset-pack.zip',
     freeSampleUrl: 'https://files.example.com/warm-light-sample.xmp',
     compatibleSoftware: ['Lightroom Classic', 'Lightroom Mobile'],
+    bundleItems: [],
     salesCount: 142,
     createdAt: now,
     updatedAt: now,
@@ -118,6 +121,7 @@ export const SEED_PRODUCTS: Product[] = [
     previewImageUrls: [pic('lut-1', 1400, 800), pic('lut-2', 1400, 800)],
     fileUrl: 'https://files.example.com/golden-hour.cube',
     compatibleSoftware: ['DaVinci Resolve', 'Premiere Pro', 'Final Cut Pro'],
+    bundleItems: [],
     salesCount: 87,
     createdAt: now,
     updatedAt: now,
@@ -138,6 +142,7 @@ export const SEED_PRODUCTS: Product[] = [
     previewImageUrls: [pic('inv-1', 900, 1200), pic('inv-2', 900, 1200), pic('inv-3', 900, 1200)],
     fileUrl: 'https://files.example.com/editorial-invitation.zip',
     compatibleSoftware: ['Canva', 'Adobe InDesign'],
+    bundleItems: [],
     salesCount: 31,
     createdAt: now,
     updatedAt: now,
@@ -158,6 +163,7 @@ export const SEED_PRODUCTS: Product[] = [
     previewImageUrls: [pic('grain-1', 1200, 1200)],
     fileUrl: 'https://files.example.com/film-grain.zip',
     compatibleSoftware: ['Photoshop', 'Affinity Photo'],
+    bundleItems: [],
     salesCount: 56,
     createdAt: now,
     updatedAt: now,
@@ -178,6 +184,7 @@ export const SEED_PRODUCTS: Product[] = [
     previewImageUrls: [pic('guide-1', 1200, 800)],
     fileUrl: 'https://files.example.com/wedding-workflow.pdf',
     compatibleSoftware: [],
+    bundleItems: [],
     salesCount: 24,
     createdAt: now,
     updatedAt: now,
@@ -198,6 +205,7 @@ export const SEED_PRODUCTS: Product[] = [
     previewImageUrls: [pic('oud-1', 1400, 800)],
     fileUrl: 'https://files.example.com/oud-warm.cube',
     compatibleSoftware: ['DaVinci Resolve', 'Premiere Pro'],
+    bundleItems: [],
     salesCount: 0,
     createdAt: now,
     updatedAt: now,

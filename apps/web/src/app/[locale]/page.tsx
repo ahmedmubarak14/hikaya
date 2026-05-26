@@ -7,7 +7,7 @@ import { Button } from '@hikaya/ui';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
-import { listFeaturedCreators } from '@/lib/creators/queries';
+import { getRecommendedCreators } from '@/lib/creators/recommendations';
 
 interface PageProps {
   params: Promise<{ locale: Locale }>;
@@ -18,7 +18,7 @@ export default async function HomePage({ params }: PageProps) {
   setRequestLocale(locale);
 
   const t = await getTranslations('home');
-  const featured = (await listFeaturedCreators(3)).slice(0, 3);
+  const featured = (await getRecommendedCreators(undefined, 3)).slice(0, 3);
   const isArabic = locale === 'ar';
   const heroImage = '/landing-assets/hikaya-hero-collage.png';
   const creatorCrops = ['25% 45%', '58% 28%', '78% 62%'];
@@ -266,7 +266,7 @@ export default async function HomePage({ params }: PageProps) {
                   {copy.creatorsKicker}
                 </p>
                 <h2 className="mt-3 max-w-2xl text-balance text-4xl font-bold leading-none tracking-tight md:text-6xl">
-                  {featured.length > 0 ? t('featured.title') : t('featured.emptyTitle')}
+                  {featured.length > 0 ? t('featured.recommendedTitle') : t('featured.emptyTitle')}
                 </h2>
               </div>
               {featured.length > 0 ? (

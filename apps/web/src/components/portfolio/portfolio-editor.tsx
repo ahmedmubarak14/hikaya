@@ -277,6 +277,12 @@ function AddItemForm({ locale }: { locale: Locale }) {
       {serverState?.ok ? (
         <span className="text-2xs text-accent-secondary">{t('added')}</span>
       ) : null}
+      {serverState && !serverState.ok && serverState.error === 'FREE_TIER_LIMIT' ? (
+        <div className="border-accent-secondary/30 bg-accent-secondary/5 rounded-lg border p-4">
+          <p className="text-accent-secondary text-sm font-medium">{t('freeTierLimitTitle')}</p>
+          <p className="text-surface/60 mt-1 text-sm">{t('freeTierLimitBody')}</p>
+        </div>
+      ) : null}
     </form>
   );
 }

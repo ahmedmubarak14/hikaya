@@ -113,9 +113,9 @@ export default async function MyPurchasesPage({ params, searchParams }: Props) {
                             <span className="border-surface/15 text-2xs text-surface/50 rounded-full border px-3 py-1">
                               {t('expired')}
                             </span>
-                          ) : product ? (
+                          ) : item.downloadToken ? (
                             <a
-                              href={`${product.fileUrl}?token=${item.downloadToken}`}
+                              href={`/api/download/${item.downloadToken}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="bg-accent text-ink rounded-full px-5 py-2 text-sm font-medium transition-transform hover:scale-[1.02]"

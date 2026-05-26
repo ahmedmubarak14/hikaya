@@ -117,6 +117,7 @@ export interface CreateProductInput {
   fileUrl: string;
   freeSampleUrl?: string;
   compatibleSoftware: string[];
+  bundleItems?: string[];
 }
 
 export function createProduct(input: CreateProductInput): Product {
@@ -137,6 +138,7 @@ export function createProduct(input: CreateProductInput): Product {
     fileUrl: input.fileUrl,
     freeSampleUrl: input.freeSampleUrl,
     compatibleSoftware: input.compatibleSoftware,
+    bundleItems: input.bundleItems ?? [],
     salesCount: 0,
     createdAt: now,
     updatedAt: now,
