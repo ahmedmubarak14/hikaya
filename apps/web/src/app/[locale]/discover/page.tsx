@@ -2,17 +2,19 @@ import { Suspense } from 'react';
 
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { CreatorCard } from '@/components/creators/creator-card';
+import { CreatorCardWithFavorite } from '@/components/creators/creator-card-with-favorite';
 import { DiscoverHero } from '@/components/creators/discover-hero';
 import { DiscoverViewSwitcher } from '@/components/creators/discover-view-switcher';
 import { FilterBar } from '@/components/creators/filter-bar';
 import { ProjectsGrid } from '@/components/creators/projects-grid';
 import { type DiscoverView } from '@/components/creators/view-toggle';
+import { SaveSearchButton } from '@/components/favorites/save-search-button';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import type { City, Discipline } from '@/lib/creators/mock-data';
 import { listCreators } from '@/lib/creators/queries';
+import { getFavoriteStatus } from '@/lib/creators/actions';
 import { IS_STATIC_EXPORT } from '@/lib/static-export';
 
 import type { Metadata } from 'next';
@@ -88,6 +90,10 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
     available: availableOnly || undefined,
   });
 
+  // Get favorite status for all creators (no-op if not signed in)
+  const creatorIds = creators.map((c) => c.id);
+  const favoriteStatus = creatorIds.length > 0 ? await getFavoriteStatus(creatorIds) : {};
+
   return (
     <>
       <SiteHeader />
@@ -111,6 +117,12 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
                 <Suspense>
                   <FilterBar city={city} discipline={discipline} availableOnly={availableOnly} />
                 </Suspense>
+                <div className="mt-4 flex items-center justify-between">
+                  <div />
+                  <Suspense>
+                    <SaveSearchButton />
+                  </Suspense>
+                </div>
                 {creators.length === 0 ? (
                   <div className="border-surface/10 bg-surface/[0.03] mt-10 rounded-xl border p-10 text-center">
                     <p className="text-surface/70 text-lg">{t('empty')}</p>
@@ -120,7 +132,10 @@ export default async function DiscoverPage({ params, searchParams }: Props) {
                   <ul className="mt-6 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4 lg:gap-6">
                     {creators.map((creator) => (
                       <li key={creator.id}>
-                        <CreatorCard creator={creator} />
+                        <CreatorCardWithFavorite
+                          creator={creator}
+                          isFavorited={favoriteStatus[creator.id] ?? false}
+                        />
                       </li>
                     ))}
                   </ul>

@@ -5,9 +5,11 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { SignOutButton } from '@/components/auth/sign-out-button';
+import { UpcomingBookingsWidget } from '@/components/studio/upcoming-bookings-widget';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
+import { getUpcomingBookings } from '@/lib/bookings/actions';
 
 import type { Metadata } from 'next';
 
@@ -30,6 +32,7 @@ export default async function MePage({ params }: Props) {
 
   const t = await getTranslations('me');
   const tAuth = await getTranslations('auth');
+  const upcomingBookings = await getUpcomingBookings(session.user.id, 3);
 
   const roleKey: 'roleClient' | 'roleCreator' | 'roleStudioOwner' =
     session.user.currentRole === 'CREATOR'

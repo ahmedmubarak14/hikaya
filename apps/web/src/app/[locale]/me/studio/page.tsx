@@ -5,6 +5,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { BookingCalendar } from '@/components/studio/booking-calendar';
+import { ClientTable } from '@/components/studio/client-table';
+import { UpcomingBookingsWidget } from '@/components/studio/upcoming-bookings-widget';
 import { StatTile } from '@/components/studio/stat-tile';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
@@ -15,6 +17,7 @@ import {
   STUDIO_CLIENTS,
   type BookingStatus,
 } from '@/lib/studio/mock-data';
+import { getUpcomingBookings } from '@/lib/bookings/actions';
 
 import type { Metadata } from 'next';
 
@@ -54,6 +57,7 @@ export default async function StudioDashboardPage({ params }: Props) {
   const tCity = await getTranslations('cities');
 
   const stats = computeStudioStats();
+  const upcomingBookings = await getUpcomingBookings(session.user.id, 3);
 
   const fmtSar = (sar: number): string =>
     new Intl.NumberFormat(locale === 'ar' ? 'ar-SA' : 'en-SA', {
@@ -159,79 +163,20 @@ export default async function StudioDashboardPage({ params }: Props) {
           </aside>
         </section>
 
-        {/* Clients */}
-        <section className="border-surface/10 bg-surface/[0.03] overflow-hidden rounded-xl border">
-          <header className="flex items-baseline justify-between p-6">
-            <h3 className="text-surface text-2xl">{t('clients.title')}</h3>
-            <span className="text-2xs text-surface/40">
-              {t('clients.count', { count: STUDIO_CLIENTS.length })}
-            </span>
-          </header>
+        {/* Upcoming bookings widget */}
+        {upcomingBookings.length > 0 && (
+          <section className="mb-10">
+            <UpcomingBookingsWidget bookings={upcomingBookings} />
+          </section>
+        )}
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-start">
-              <thead className="border-surface/10 bg-surface/[0.02] border-y">
-                <tr className="text-2xs text-surface/40 text-start">
-                  <Th>{t('clients.name')}</Th>
-                  <Th>{t('clients.tags')}</Th>
-                  <Th align="end">{t('clients.bookings')}</Th>
-                  <Th align="end">{t('clients.totalSpend')}</Th>
-                  <Th align="end">{t('clients.lastSession')}</Th>
-                </tr>
-              </thead>
-              <tbody>
-                {STUDIO_CLIENTS.slice()
-                  .sort((a, b) => b.totalSpendSar - a.totalSpendSar)
-                  .map((c) => (
-                    <tr key={c.id} className="border-surface/5 border-b last:border-0">
-                      <Td>
-                        <div className="flex flex-col gap-0.5">
-                          <span className="text-surface text-base">{c.name}</span>
-                          <span className="text-2xs text-surface/40 font-mono">{c.email}</span>
-                        </div>
-                      </Td>
-                      <Td>
-                        <div className="flex flex-wrap gap-1.5">
-                          {c.isBusiness ? <Badge tone="info">{t('clients.business')}</Badge> : null}
-                          {c.tags.map((tag) => (
-                            <Badge key={tag} tone="neutral">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </Td>
-                      <Td align="end">{fmtNum(c.bookingsCount)}</Td>
-                      <Td align="end">{fmtSar(c.totalSpendSar)}</Td>
-                      <Td align="end">
-                        {new Intl.DateTimeFormat(locale === 'ar' ? 'ar-SA' : 'en-SA', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        }).format(new Date(c.lastBookingAt))}
-                      </Td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+        {/* Interactive Clients CRM */}
+        <ClientTable clients={STUDIO_CLIENTS} />
 
         <p className="text-2xs text-surface/30 mt-10 max-w-prose">{t('mockNote')}</p>
       </main>
     </>
   );
-}
-
-function Th({ children, align = 'start' }: { children: React.ReactNode; align?: 'start' | 'end' }) {
-  return (
-    <th className={align === 'end' ? 'p-4 text-end' : 'p-4 text-start'} scope="col">
-      {children}
-    </th>
-  );
-}
-
-function Td({ children, align = 'start' }: { children: React.ReactNode; align?: 'start' | 'end' }) {
-  return <td className={align === 'end' ? 'p-4 text-end' : 'p-4 text-start'}>{children}</td>;
 }
 
 const DISCIPLINE_KEYS_REVERSE: Record<string, string> = {
