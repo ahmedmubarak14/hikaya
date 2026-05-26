@@ -11,7 +11,9 @@ import { DisciplineTag } from '@/components/creators/discipline-tag';
 import { PortfolioGrid } from '@/components/creators/portfolio-grid';
 import { type ProfileTab } from '@/components/creators/profile-tabs';
 import { ProfileTabsSwitcher } from '@/components/creators/profile-tabs-switcher';
+import { ReviewsSection, type ReviewDisplay } from '@/components/creators/reviews-section';
 import { StartThreadButton } from '@/components/messages/start-thread-button';
+import { ServicesList } from '@/components/services/services-list';
 import { ProductCard } from '@/components/store/product-card';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
@@ -19,6 +21,8 @@ import { type Locale } from '@/i18n/config';
 import { getPublishedPostsByCreator } from '@/lib/blog/mock-store';
 import { CREATORS } from '@/lib/creators/mock-data';
 import { getCreatorByUsername } from '@/lib/creators/queries';
+import { getReviewsByCreatorProfileId } from '@/lib/reviews/mock-data';
+import type { CreatorService } from '@/lib/services/types';
 import { listActiveProductsByCreator } from '@/lib/store/mock-store';
 import { IS_STATIC_EXPORT } from '@/lib/static-export';
 
@@ -87,12 +91,42 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
   const t = await getTranslations('creator');
   const tCity = await getTranslations('cities');
   const tBlog = await getTranslations('blog.profile');
+  const tReviews = await getTranslations('reviews');
+
+  const tServices = await getTranslations('services');
+
+  // Fetch reviews for this creator
+  const reviewsRaw = getReviewsByCreatorProfileId(creator.id);
+  const reviews: ReviewDisplay[] = reviewsRaw.map((r) => ({
+    id: r.id,
+    authorName: r.authorName,
+    rating: r.rating,
+    body: r.body,
+    createdAt: r.createdAt,
+  }));
 
   const name = locale === 'ar' ? creator.displayNameAr : creator.displayNameEn;
   const bio = locale === 'ar' ? creator.bioAr : creator.bioEn;
   const products = listActiveProductsByCreator(creator.id);
   const hasStore = products.length > 0;
   const publishedPostCount = getPublishedPostsByCreator(creator.id).length;
+
+  // Fetch services from the CreatorProfile JSONB column (gracefully falls back to [])
+  let creatorServices: CreatorService[] = [];
+  try {
+    const { createClient } = await import('@/lib/supabase/server');
+    const supabase = await createClient();
+    const { data: svcRow } = await supabase
+      .from('CreatorProfile')
+      .select('services')
+      .eq('id', creator.id)
+      .single();
+    if (Array.isArray(svcRow?.services)) {
+      creatorServices = svcRow.services as CreatorService[];
+    }
+  } catch {
+    // Supabase unavailable or column doesn't exist yet — silent fallback
+  }
 
   // Force tab back to "work" if user asks for store but there's no store.
   const effectiveTab: ProfileTab = tab === 'store' && !hasStore ? 'work' : tab;
@@ -237,6 +271,12 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
                       })
                     : null
                 }
+                services={creatorServices}
+                servicesLabel={tServices('servicesLabel')}
+                locale={locale}
+                reviews={reviews}
+                reviewsTitle={tReviews('sectionTitle')}
+                reviewsEmpty={tReviews('sectionEmpty')}
               />
             }
           />
@@ -269,6 +309,12 @@ interface AboutProps {
   websiteLabel: string;
   priceLabel: string | null;
   priceValue: string | null;
+  services: CreatorService[];
+  servicesLabel: string;
+  locale: Locale;
+  reviews: ReviewDisplay[];
+  reviewsTitle: string;
+  reviewsEmpty: string;
 }
 
 function AboutTab({
@@ -281,11 +327,36 @@ function AboutTab({
   websiteLabel,
   priceLabel,
   priceValue,
+  services,
+  servicesLabel,
+  locale,
+  reviews,
+  reviewsTitle,
+  reviewsEmpty,
 }: AboutProps) {
+  const formatCurrency = (halalas: number) => {
+    const sar = halalas / 100;
+    return `SAR ${sar.toLocaleString(locale === 'ar' ? 'ar-SA' : 'en-SA')}`;
+  };
+
   return (
     <div className="mx-auto grid max-w-4xl grid-cols-1 gap-x-12 gap-y-8 md:grid-cols-[2fr_1fr]">
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <p className="text-surface/80 text-base leading-relaxed">{bio}</p>
+        {services.length > 0 ? (
+          <ServicesList
+            services={services}
+            locale={locale}
+            servicesLabel={servicesLabel}
+            currencyFormat={formatCurrency}
+          />
+        ) : null}
+        <ReviewsSection
+          reviews={reviews}
+          locale={locale}
+          title={reviewsTitle}
+          emptyText={reviewsEmpty}
+        />
       </div>
 
       <aside className="flex flex-col gap-3 text-sm">
