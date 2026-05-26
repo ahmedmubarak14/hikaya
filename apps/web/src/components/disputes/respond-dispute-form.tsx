@@ -14,7 +14,7 @@ interface Props {
   locale: Locale;
 }
 
-export function RespondDisputeForm({ disputeId, locale }: Props) {
+export function RespondDisputeForm({ disputeId, locale: _locale }: Props) {
   const t = useTranslations('disputes');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();

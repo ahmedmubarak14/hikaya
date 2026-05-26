@@ -136,7 +136,7 @@ export async function signAsCreatorAction(
 
   const { data: contract, error: fetchErr } = await supabase
     .from('Contract')
-    .select('id, creatorId, status, shareSlug, creatorSignedAt, clientSignedAt')
+    .select('id, creatorId, status, shareSlug, creatorSignedAt, clientSignedAt, signatureAuditLog')
     .eq('id', contractId)
     .maybeSingle();
 
@@ -242,7 +242,7 @@ export async function signAsClientAction(
 
   const { data: contract, error: fetchErr } = await supabase
     .from('Contract')
-    .select('id, status, shareSlug, clientSignedAt, creatorSignedAt')
+    .select('id, status, shareSlug, clientSignedAt, creatorSignedAt, signatureAuditLog')
     .eq('shareSlug', shareSlug)
     .maybeSingle();
 

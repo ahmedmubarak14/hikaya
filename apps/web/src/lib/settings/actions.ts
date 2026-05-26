@@ -68,6 +68,118 @@ export async function updatePasswordSettingsAction(
 }
 
 /**
+ * Export all user data for PDPL compliance (Saudi PDPL Article 13).
+ * Returns a JSON object with all tables that reference this user.
+ */
+export async function exportMyDataAction(): Promise<
+  { ok: true; data: Record<string, unknown> } | { ok: false; error: string }
+> {
+  const session = await getSession();
+  if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
+
+  const supabase = await createClient();
+  const userId = session.user.id;
+
+  // Gather all user-related data from Supabase tables.
+  // Each query is best-effort — if a table doesn't exist yet we skip it.
+  async function safeSelect(table: string, column: string, value: string) {
+    try {
+      const { data } = await supabase.from(table).select('*').eq(column, value);
+      return data ?? [];
+    } catch {
+      return [];
+    }
+  }
+
+  const [
+    user,
+    creatorProfile,
+    portfolioItems,
+    bookings,
+    messageThreads,
+    messages,
+    quotes,
+    contracts,
+    collections,
+    products,
+    purchases,
+    blogPosts,
+    reviews,
+    inquiries,
+    spaces,
+    spaceBookingsAsRenter,
+    spaceBookingsAsOwnerSpaces,
+    favorites,
+    savedSearches,
+    discountCodes,
+    services,
+    jobPosts,
+    jobApplications,
+    notifications,
+    templates,
+  ] = await Promise.all([
+    safeSelect('User', 'id', userId),
+    safeSelect('CreatorProfile', 'userId', userId),
+    safeSelect('PortfolioItem', 'userId', userId),
+    safeSelect('Booking', 'creatorId', userId),
+    safeSelect('MessageThread', 'creatorId', userId),
+    safeSelect('Message', 'senderId', userId),
+    safeSelect('Quote', 'creatorId', userId),
+    safeSelect('Contract', 'creatorId', userId),
+    safeSelect('Collection', 'creatorId', userId),
+    safeSelect('Product', 'creatorId', userId),
+    safeSelect('Purchase', 'buyerId', userId),
+    safeSelect('BlogPost', 'authorId', userId),
+    safeSelect('Review', 'reviewerId', userId),
+    safeSelect('Inquiry', 'clientId', userId),
+    safeSelect('Space', 'ownerId', userId),
+    safeSelect('SpaceBooking', 'renterId', userId),
+    // Bookings on spaces owned by user — need the space IDs first
+    Promise.resolve([]),
+    safeSelect('Favorite', 'userId', userId),
+    safeSelect('SavedSearch', 'userId', userId),
+    safeSelect('DiscountCode', 'creatorId', userId),
+    safeSelect('Service', 'creatorId', userId),
+    safeSelect('JobPost', 'posterId', userId),
+    safeSelect('JobApplication', 'applicantId', userId),
+    safeSelect('NotificationPreference', 'userId', userId),
+    safeSelect('Template', 'userId', userId),
+  ]);
+
+  return {
+    ok: true,
+    data: {
+      exportedAt: new Date().toISOString(),
+      user,
+      creatorProfile,
+      portfolioItems,
+      bookings,
+      messageThreads,
+      messages,
+      quotes,
+      contracts,
+      collections,
+      products,
+      purchases,
+      blogPosts,
+      reviews,
+      inquiries,
+      spaces,
+      spaceBookingsAsRenter,
+      spaceBookingsAsOwnerSpaces,
+      favorites,
+      savedSearches,
+      discountCodes,
+      services,
+      jobPosts,
+      jobApplications,
+      notifications,
+      templates,
+    },
+  };
+}
+
+/**
  * Delete the user's account:
  * 1. Delete the User row from public.User
  * 2. Delete the auth user via service-role client

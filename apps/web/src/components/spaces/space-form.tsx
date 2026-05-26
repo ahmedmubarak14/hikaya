@@ -40,6 +40,8 @@ interface FormShape {
   status: SpaceStatus;
   photosRaw: string;
   equipmentRaw: string;
+  houseRules: string;
+  addOnsRaw: string;
 }
 
 /**
@@ -79,6 +81,10 @@ export function SpaceForm({ locale, space }: Props) {
           status: space.status,
           photosRaw: space.photos.join('\n'),
           equipmentRaw: space.equipmentIncluded.join(', '),
+          houseRules: space.houseRules ?? '',
+          addOnsRaw: space.addOns
+            .map((a) => `${a.name}, ${Math.round(a.priceHalalas / 100)}`)
+            .join('\n'),
         }
       : {
           name: '',
@@ -91,6 +97,8 @@ export function SpaceForm({ locale, space }: Props) {
           status: 'DRAFT',
           photosRaw: '',
           equipmentRaw: '',
+          houseRules: '',
+          addOnsRaw: '',
         },
   });
 
@@ -108,6 +116,8 @@ export function SpaceForm({ locale, space }: Props) {
         fd.set('status', values.status);
         fd.set('photosRaw', values.photosRaw);
         fd.set('equipmentRaw', values.equipmentRaw);
+        fd.set('houseRules', values.houseRules);
+        fd.set('addOnsRaw', values.addOnsRaw);
         startTransition(() => formAction(fd));
       })}
       className="flex flex-col gap-6"
@@ -212,6 +222,30 @@ export function SpaceForm({ locale, space }: Props) {
         {...register('equipmentRaw')}
         error={errors.equipmentRaw?.message}
       />
+
+      <Field
+        label={t('houseRules')}
+        hint={t('houseRulesHint')}
+      >
+        <textarea
+          rows={3}
+          {...register('houseRules')}
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
+          placeholder="No food or drinks in the studio. Shoes off on the cyclorama."
+        />
+      </Field>
+
+      <Field
+        label={t('addOnsLabel')}
+        hint={t('addOnsHint')}
+      >
+        <textarea
+          rows={3}
+          {...register('addOnsRaw')}
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 font-mono text-sm outline-none"
+          placeholder={'Fog machine, 30\nOn-set assistant (4h), 200'}
+        />
+      </Field>
 
       {serverState?.error && serverState.error !== 'INVALID_INPUT' ? (
         <p className="text-accent-secondary text-sm" role="alert">

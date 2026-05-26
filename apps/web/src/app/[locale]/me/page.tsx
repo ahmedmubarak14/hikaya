@@ -171,6 +171,18 @@ export default async function MePage({ params }: Props) {
               {t('favoritesLink')} →
             </Link>
             <Link
+              href={`/${locale}/me/analytics`}
+              className="border-accent/40 bg-accent/10 text-accent-secondary hover:bg-accent/15 rounded-full border px-5 py-2 text-sm transition-colors"
+            >
+              {t('analyticsLink')} →
+            </Link>
+            <Link
+              href={`/${locale}/me/disputes`}
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
+            >
+              {t('disputesLink')} →
+            </Link>
+            <Link
               href={`/${locale}/me/settings`}
               className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >

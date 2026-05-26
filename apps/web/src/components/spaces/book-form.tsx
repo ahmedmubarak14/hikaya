@@ -9,6 +9,7 @@ import { Button } from '@hikaya/ui';
 import { type Locale } from '@/i18n/config';
 import { bookSpaceAction, type SpacesResult } from '@/lib/spaces/actions';
 import { formatSarFromHalalas } from '@/lib/format';
+import type { SpaceAddOn } from '@/lib/spaces/mock-data';
 
 interface Props {
   locale: Locale;
@@ -20,6 +21,10 @@ interface Props {
    * firing). `unauthenticated` falls through to the action, which redirects.
    */
   disabledReason?: 'OWN' | null;
+  /** House rules that must be agreed to before booking. */
+  houseRules?: string;
+  /** Optional add-ons for the space. */
+  addOns?: SpaceAddOn[];
 }
 
 /**
@@ -28,7 +33,7 @@ interface Props {
  * fancy calendar widget", which matches the rest of the platform's
  * intentionally lightweight form vocabulary.
  */
-export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disabledReason }: Props) {
+export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disabledReason, houseRules, addOns = [] }: Props) {
   const t = useTranslations('spaces.book');
   const action = bookSpaceAction.bind(null, locale, spaceId);
   const [serverState, formAction] = useFormState<SpacesResult | null, FormData>(action, null);
@@ -46,6 +51,20 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(tomorrow);
   const [kind, setKind] = useState<'HOURLY' | 'DAILY'>('DAILY');
+  const [agreedToRules, setAgreedToRules] = useState(!houseRules);
+  const [selectedAddOnIndexes, setSelectedAddOnIndexes] = useState<Set<number>>(new Set());
+
+  const hasRules = Boolean(houseRules);
+
+  const selectedAddOns = useMemo(
+    () => addOns.filter((_, i) => selectedAddOnIndexes.has(i)),
+    [addOns, selectedAddOnIndexes],
+  );
+
+  const addOnsTotal = useMemo(
+    () => selectedAddOns.reduce((sum, a) => sum + a.priceHalalas, 0),
+    [selectedAddOns],
+  );
 
   // Mirror the server's `computeTotalHalalas` for an honest live preview.
   const estimateHalalas = useMemo(() => {
@@ -60,6 +79,8 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
     const days = Math.max(1, Math.ceil(ms / (24 * 60 * 60 * 1000)));
     return days * dailyHalalas;
   }, [startDate, endDate, kind, hourlyHalalas, dailyHalalas]);
+
+  const totalWithAddOns = estimateHalalas + addOnsTotal;
 
   if (disabledReason === 'OWN') {
     return (
@@ -131,10 +152,66 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
         </label>
       </fieldset>
 
-      {estimateHalalas > 0 ? (
+      {/* Add-ons selection */}
+      {addOns.length > 0 ? (
+        <fieldset className="flex flex-col gap-2">
+          <legend className="text-surface/80 mb-1 text-sm font-medium">{t('addOnsLabel')}</legend>
+          {addOns.map((addon, idx) => (
+            <label
+              key={idx}
+              className="text-surface/80 flex cursor-pointer items-center gap-2 text-sm"
+            >
+              <input
+                type="checkbox"
+                checked={selectedAddOnIndexes.has(idx)}
+                onChange={(e) => {
+                  const next = new Set(selectedAddOnIndexes);
+                  if (e.target.checked) next.add(idx);
+                  else next.delete(idx);
+                  setSelectedAddOnIndexes(next);
+                }}
+                className="accent-accent h-4 w-4"
+              />
+              <span>
+                {addon.name}
+                {addon.priceHalalas > 0
+                  ? ` (+${formatSarFromHalalas(addon.priceHalalas, locale)})`
+                  : ''}
+              </span>
+            </label>
+          ))}
+          {addOnsTotal > 0 ? (
+            <p className="text-2xs text-surface/50">
+              {t('addOnsTotal', { price: formatSarFromHalalas(addOnsTotal, locale) })}
+            </p>
+          ) : null}
+        </fieldset>
+      ) : null}
+
+      {/* Hidden field for selected add-ons */}
+      <input
+        type="hidden"
+        name="selectedAddOns"
+        value={JSON.stringify(selectedAddOns)}
+      />
+
+      {totalWithAddOns > 0 ? (
         <p className="text-2xs text-surface/50 [lang=ar]:font-sansAr">
-          {t('total', { price: formatSarFromHalalas(estimateHalalas, locale) })}
+          {t('total', { price: formatSarFromHalalas(totalWithAddOns, locale) })}
         </p>
+      ) : null}
+
+      {/* House rules checkbox */}
+      {hasRules ? (
+        <label className="text-surface/80 flex cursor-pointer items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={agreedToRules}
+            onChange={(e) => setAgreedToRules(e.target.checked)}
+            className="accent-accent h-4 w-4"
+          />
+          {t('agreeRules')}
+        </label>
       ) : null}
 
       {serverState && !serverState.ok ? (
@@ -149,7 +226,12 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
         </p>
       ) : null}
 
-      <Button type="submit" size="lg" isLoading={isPending}>
+      <Button
+        type="submit"
+        size="lg"
+        isLoading={isPending}
+        disabled={hasRules && !agreedToRules}
+      >
         {t('submit')}
       </Button>
     </form>

@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { CancelBookingButton } from '@/components/spaces/cancel-booking-button';
+import { CheckInOutPanel } from '@/components/spaces/check-in-out-panel';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -103,6 +104,9 @@ export default async function SpaceRentalDetailPage({ params }: Props) {
                 {formatSarFromHalalas(booking.totalHalalas, locale)}
               </span>
             </div>
+
+            {/* Check-in / Check-out flow */}
+            <CheckInOutPanel locale={locale} booking={booking} />
 
             {canCancel ? (
               <div className="border-surface/10 border-t pt-4">
