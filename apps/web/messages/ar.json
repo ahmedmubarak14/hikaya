@@ -375,6 +375,8 @@
       "previewImagesHint": "رابط لكلّ سطر. الأوّل هو الغلاف. ١–١٠ صور.",
       "compatibleSoftware": "البرامج المتوافقة",
       "compatibleSoftwareHint": "وسوم مفصولة بفاصلة. مثل: \"Lightroom Classic, Lightroom Mobile\".",
+      "bundleItems": "تشمل الحزمة",
+      "bundleItemsHint": "اختر المنتجات المشمولة في هذه الحزمة (اضغط Ctrl/Cmd لتحديد متعدّد).",
       "save": "حفظ التعديلات",
       "create": "أنشئ المنتج",
       "saved": "تمّ الحفظ",
@@ -391,7 +393,11 @@
       "TEMPLATE": "قالب",
       "OVERLAY": "طبقة",
       "GUIDE": "دليل",
+      "BUNDLE": "حزمة",
       "OTHER": "أخرى"
+    },
+    "bundle": {
+      "includesTitle": "تشمل هذه الحزمة:"
     },
     "status": {
       "DRAFT": "مسودّة",
@@ -1613,6 +1619,8 @@
       "houseRulesEmpty": "لم يتم تحديد شروط استخدام.",
       "addOnsTitle": "إضافات اختياريّة",
       "addOnFree": "مجّاني",
+      "deposit": "تأمين مسترد",
+      "smartLockNotice": "سيتم إنشاء رمز القفل الذكي تلقائيًا عند تأكيد حجزك.",
       "availabilityTitle": "تقويم التوفّر",
       "availabilityEmpty": "لا توجد حجوزات قادمة — الجدول مفتوح بالكامل.",
       "availabilityRow": "{start} ← {end}",

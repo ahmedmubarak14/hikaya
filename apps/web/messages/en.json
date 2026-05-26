@@ -375,6 +375,8 @@
       "previewImagesHint": "One per line. First one is the cover. 1–10 images.",
       "compatibleSoftware": "Compatible software",
       "compatibleSoftwareHint": "Comma-separated tags. e.g. \"Lightroom Classic, Lightroom Mobile\".",
+      "bundleItems": "Bundle includes",
+      "bundleItemsHint": "Select the products included in this bundle (hold Ctrl/Cmd to multi-select).",
       "save": "Save changes",
       "create": "Create product",
       "saved": "Saved",
@@ -391,7 +393,11 @@
       "TEMPLATE": "Template",
       "OVERLAY": "Overlay",
       "GUIDE": "Guide",
+      "BUNDLE": "Bundle",
       "OTHER": "Other"
+    },
+    "bundle": {
+      "includesTitle": "This bundle includes:"
     },
     "status": {
       "DRAFT": "Draft",
@@ -1696,6 +1702,8 @@
       "houseRulesEmpty": "No house rules specified.",
       "addOnsTitle": "Optional add-ons",
       "addOnFree": "Free",
+      "deposit": "Refundable deposit",
+      "smartLockNotice": "Smart lock code will be generated automatically when your booking is confirmed.",
       "availabilityTitle": "Availability calendar",
       "availabilityEmpty": "No upcoming bookings on the books — you've got a clear runway.",
       "availabilityRow": "{start} → {end}",
@@ -1733,6 +1741,7 @@
       "rowHourly": "{price}/hr",
       "rowDaily": "{price}/day",
       "edit": "Edit",
+      "teamLink": "Team",
       "pause": "Pause",
       "activate": "Activate",
       "publish": "Publish",
@@ -1778,6 +1787,20 @@
       "houseRulesHint": "Free-text rules shown to renters before booking.",
       "addOnsLabel": "Optional add-ons (JSON)",
       "addOnsHint": "One per line: Name, Price (SAR). e.g. \"Fog machine, 30\"",
+      "depositLabel": "Damage deposit (SAR)",
+      "depositHint": "Refundable deposit held during the booking. Set to 0 for no deposit.",
+      "smartLockTitle": "Smart lock",
+      "smartLockProvider": "Provider",
+      "smartLockProviders": {
+        "NONE": "None",
+        "TTLOCK": "TTLock",
+        "NUKI": "Nuki",
+        "AUGUST": "August"
+      },
+      "smartLockLockId": "Lock ID",
+      "smartLockLockIdHint": "The identifier for your lock device.",
+      "smartLockApiKey": "API key",
+      "smartLockApiKeyHint": "Your provider API key. Stored encrypted.",
       "submit": "Create space",
       "save": "Save changes",
       "saved": "Saved",
@@ -1826,10 +1849,48 @@
         "addPhotoPlaceholder": "https://images.example.com/photo.jpg",
         "addPhoto": "Add",
         "noPhotos": "No photos yet.",
-        "selectedAddOns": "Selected add-ons"
+        "selectedAddOns": "Selected add-ons",
+        "accessCodeLabel": "Access code",
+        "accessCodeNotYet": "Your access code will appear here during your booking window.",
+        "depositLabel": "Damage deposit",
+        "deposit": {
+          "HELD": "Held",
+          "RELEASED": "Released",
+          "CLAIMED": "Claimed"
+        },
+        "smartLockAutoCode": "Smart lock code will be generated automatically."
       },
       "cancel": "Cancel booking",
       "cancelConfirm": "Cancel this booking? This can't be undone."
+    },
+    "team": {
+      "pageTitle": "Space team",
+      "title": "Team members",
+      "headline": "Your team",
+      "subtitle": "Add team members who can help manage this space.",
+      "backToSpace": "Back to space",
+      "count": "{count, plural, =0 {No members} =1 {1 member} other {# members}}",
+      "empty": "No team members yet. Invite someone to get started.",
+      "roleAdmin": "Admin",
+      "roleMember": "Member",
+      "joinedAt": "Joined {date}",
+      "remove": "Remove",
+      "inviteTitle": "Invite a team member",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "e.g. assistant@example.com",
+      "roleLabel": "Role",
+      "inviteCta": "Invite",
+      "inviteSuccess": "Team member invited successfully.",
+      "errors": {
+        "NOT_AUTHENTICATED": "Please sign in.",
+        "NOT_OWNER": "Only the space owner can manage the team.",
+        "INVALID_EMAIL": "Please enter a valid email address.",
+        "USER_NOT_FOUND": "No Hikaya user found with that email.",
+        "ALREADY_MEMBER": "This user is already a team member.",
+        "MEMBER_NOT_FOUND": "Member not found.",
+        "CANNOT_REMOVE_SELF": "You can't remove yourself from the team.",
+        "UNKNOWN": "Something went wrong. Please try again."
+      }
     }
   },
   "templates": {
