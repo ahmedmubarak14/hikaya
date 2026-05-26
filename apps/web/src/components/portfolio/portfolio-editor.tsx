@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { useState, useTransition } from 'react';
+import { useCallback, useRef, useState, useTransition } from 'react';
 import { useFormState } from 'react-dom';
 import { useForm } from 'react-hook-form';
 
@@ -14,6 +14,7 @@ import {
   addPortfolioItemAction,
   deletePortfolioItemAction,
   movePortfolioItemAction,
+  reorderPortfolioItemAction,
   type EditorResult,
 } from '@/lib/creators/actions';
 import type { PortfolioItem } from '@/lib/creators/mock-data';
@@ -28,6 +29,52 @@ interface Props {
 export function PortfolioEditor({ locale, items, altPrefix }: Props) {
   const t = useTranslations('portfolioEditor.items');
   const [isPending, startTransition] = useTransition();
+
+  // --- Drag & Drop state ---
+  const dragItemIdx = useRef<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
+  const [draggingIdx, setDraggingIdx] = useState<number | null>(null);
+
+  const handleDragStart = useCallback((idx: number) => {
+    dragItemIdx.current = idx;
+    setDraggingIdx(idx);
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent, idx: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverIdx(idx);
+  }, []);
+
+  const handleDragLeave = useCallback(() => {
+    setDragOverIdx(null);
+  }, []);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent, toIdx: number) => {
+      e.preventDefault();
+      const fromIdx = dragItemIdx.current;
+      setDragOverIdx(null);
+      setDraggingIdx(null);
+      dragItemIdx.current = null;
+
+      if (fromIdx === null || fromIdx === toIdx) return;
+
+      const item = items[fromIdx];
+      if (!item) return;
+
+      startTransition(() => {
+        void reorderPortfolioItemAction(locale, item.id, toIdx);
+      });
+    },
+    [items, locale, startTransition],
+  );
+
+  const handleDragEnd = useCallback(() => {
+    setDragOverIdx(null);
+    setDraggingIdx(null);
+    dragItemIdx.current = null;
+  }, []);
 
   const move = (itemId: string, dir: 'up' | 'down') => {
     startTransition(() => {
@@ -59,14 +106,29 @@ export function PortfolioEditor({ locale, items, altPrefix }: Props) {
           aria-busy={isPending || undefined}
         >
           {items.map((item, idx) => (
-            <li key={item.id} className="group relative">
+            <li
+              key={item.id}
+              className={cn(
+                'group relative cursor-grab transition-all duration-200',
+                draggingIdx === idx && 'opacity-40 scale-95',
+                dragOverIdx === idx &&
+                  draggingIdx !== idx &&
+                  'ring-2 ring-accent rounded-md scale-[1.02]',
+              )}
+              draggable
+              onDragStart={() => handleDragStart(idx)}
+              onDragOver={(e) => handleDragOver(e, idx)}
+              onDragLeave={handleDragLeave}
+              onDrop={(e) => handleDrop(e, idx)}
+              onDragEnd={handleDragEnd}
+            >
               <figure className="border-surface/10 bg-surface/5 relative aspect-[4/5] overflow-hidden rounded-md border">
                 <Image
                   src={item.url}
                   alt={`${altPrefix} — ${item.titleEn ?? `${idx + 1}`}`}
                   fill
                   sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                  className="object-cover"
+                  className="pointer-events-none object-cover"
                 />
                 <div className="from-bg/80 to-bg/40 pointer-events-none absolute inset-0 bg-gradient-to-t via-transparent opacity-0 transition-opacity group-hover:opacity-100" />
 

@@ -729,7 +729,7 @@
       "profile": "Profile",
       "profileSubtitle": "What clients see at the top of your page. Both languages, please — bilingual creators rank higher in discover.",
       "portfolio": "Portfolio",
-      "portfolioSubtitle": "Drag-free reorder via the arrows, hover to delete. Add new images by URL — the eventual flow uploads directly to Cloudinary."
+      "portfolioSubtitle": "Drag to reorder, or use the arrows. Hover to delete. Add new images by URL — the eventual flow uploads directly to Cloudinary."
     },
     "profile": {
       "displayNameEn": "Display name (English)",
