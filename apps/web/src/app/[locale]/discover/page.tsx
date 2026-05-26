@@ -8,6 +8,7 @@ import { DiscoverViewSwitcher } from '@/components/creators/discover-view-switch
 import { FilterBar } from '@/components/creators/filter-bar';
 import { ProjectsGrid } from '@/components/creators/projects-grid';
 import { type DiscoverView } from '@/components/creators/view-toggle';
+import { EmptyState } from '@/components/empty-state';
 import { SaveSearchButton } from '@/components/favorites/save-search-button';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
