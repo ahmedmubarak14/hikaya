@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge } from '@hikaya/ui';
 
 import { DisciplineTag } from '@/components/creators/discipline-tag';
+import { EmptyState } from '@/components/empty-state';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
@@ -95,7 +96,13 @@ export default async function StudiosPage({ params, searchParams }: Props) {
         ) : null}
 
         {studios.length === 0 ? (
-          <p className="text-surface/50 py-20 text-center">{t('empty')}</p>
+          <EmptyState
+            title={t('empty')}
+            subtitle={t('emptySubtitle')}
+            ctaLabel={t('emptyCta')}
+            ctaHref={`/${locale}/me/studio`}
+            icon={'\u{1F3E2}'}
+          />
         ) : (
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {studios.map((studio) => {

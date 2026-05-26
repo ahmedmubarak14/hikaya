@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge, Button, Card, CardBody } from '@hikaya/ui';
 
+import { EmptyState } from '@/components/empty-state';
 import { CategoryBadge } from '@/components/store/category-badge';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
@@ -114,10 +115,13 @@ export default async function MyStorePage({ params }: Props) {
         </div>
 
         {products.length === 0 ? (
-          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
-            <p className="text-surface/70 text-lg">{t('empty')}</p>
-            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
-          </div>
+          <EmptyState
+            title={t('empty')}
+            subtitle={t('emptySubtitle')}
+            ctaLabel={t('newCta')}
+            ctaHref={`/${locale}/me/store/new`}
+            icon={'\u{1F6D2}'}
+          />
         ) : (
           <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {products.map((p) => {

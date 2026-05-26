@@ -9,7 +9,6 @@ import { GoogleSignInButton } from '@/components/auth/google-sign-in-button';
 import { SignInForm } from '@/components/auth/sign-in-form';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
-import { IS_STATIC_EXPORT } from '@/lib/static-export';
 
 import type { Metadata } from 'next';
 
@@ -28,11 +27,7 @@ export default async function SignInPage({ params }: Props) {
   setRequestLocale(locale);
 
   const session = await getSession();
-  // Live build: signed-in users get bounced to their dashboard. The static
-  // export also has a session (for GitHub Pages preview), but server-side
-  // redirect() during prerender turns into a meta-refresh hop — so we skip
-  // it there. IS_STATIC_EXPORT check keeps the form rendered on the preview.
-  if (session && !IS_STATIC_EXPORT) redirect(`/${locale}/me`);
+  if (session) redirect(`/${locale}/me`);
 
   const t = await getTranslations('auth');
 
@@ -68,6 +63,13 @@ export default async function SignInPage({ params }: Props) {
           </div>
 
           <SignInForm locale={locale} />
+
+          <Link
+            href={`/${locale}/forgot-password`}
+            className="text-surface/50 hover:text-surface text-center text-sm transition-colors"
+          >
+            {t('forgotPassword')}
+          </Link>
         </div>
       </div>
     </main>

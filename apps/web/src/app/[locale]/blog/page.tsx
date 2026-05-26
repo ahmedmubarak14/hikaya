@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
+import { EmptyState } from '@/components/empty-state';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
@@ -47,9 +48,13 @@ export default async function JournalFeedPage({ params }: Props) {
         </header>
 
         {posts.length === 0 ? (
-          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
-            <p className="text-surface/70 text-lg">{t('empty')}</p>
-          </div>
+          <EmptyState
+            title={t('empty')}
+            subtitle={t('emptySubtitle')}
+            ctaLabel={t('emptyCta')}
+            ctaHref={`/${locale}/sign-up`}
+            icon={'\u{270F}\u{FE0F}'}
+          />
         ) : (
           <ul className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             {posts.map((p) => {

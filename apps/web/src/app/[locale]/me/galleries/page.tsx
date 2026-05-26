@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge, Button, Card, CardBody } from '@hikaya/ui';
 
+import { EmptyState } from '@/components/empty-state';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -69,10 +70,13 @@ export default async function MyGalleriesPage({ params }: Props) {
         </div>
 
         {galleries.length === 0 ? (
-          <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
-            <p className="text-surface/70 text-lg">{t('empty')}</p>
-            <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
-          </div>
+          <EmptyState
+            title={t('empty')}
+            subtitle={t('emptySubtitle')}
+            ctaLabel={t('newCta')}
+            ctaHref={`/${locale}/me/galleries/new`}
+            icon={'\u{1F5BC}\u{FE0F}'}
+          />
         ) : (
           <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {galleries.map((g) => {

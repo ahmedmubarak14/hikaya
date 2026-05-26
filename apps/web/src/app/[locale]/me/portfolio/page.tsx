@@ -80,7 +80,7 @@ export default async function MyPortfolioPage({ params }: Props) {
             title={t('sections.portfolio')}
             subtitle={t('sections.portfolioSubtitle')}
           />
-          <PortfolioEditor locale={locale} items={creator.portfolio} altPrefix={displayName} />
+          <PortfolioEditor locale={locale} items={creator.portfolio ?? []} altPrefix={displayName} />
         </section>
       </main>
     </>

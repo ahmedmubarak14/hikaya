@@ -31,8 +31,15 @@ export async function ProjectsGrid({ locale, creators, emptyLabel }: Props) {
 
   if (tiles.length === 0) {
     return (
-      <div className="border-surface/10 bg-surface/[0.03] mt-10 rounded-xl border p-10 text-center">
-        <p className="text-surface/70 text-lg">{emptyLabel}</p>
+      <div className="from-surface/[0.02] via-surface/[0.05] to-surface/[0.02] relative mt-6 overflow-hidden rounded-2xl border border-surface/10 bg-gradient-to-br px-8 py-14 text-center">
+        <div className="pointer-events-none absolute -top-16 -end-16 h-48 w-48 rounded-full bg-accent/[0.04]" />
+        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-surface/[0.06] text-2xl">
+          {'\u{1F3A8}'}
+        </div>
+        <p className="text-surface text-xl font-semibold tracking-tight">{emptyLabel}</p>
+        <p className="text-surface/55 mx-auto mt-3 max-w-md text-sm leading-relaxed">
+          {t('emptySubtitle')}
+        </p>
       </div>
     );
   }
