@@ -343,6 +343,7 @@ model CreatorProfile {
   bookings          Booking[]
   products          Product[]
   studioMembership  StudioMember[]
+  favoritedBy       Favorite[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

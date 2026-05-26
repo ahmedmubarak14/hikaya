@@ -6,6 +6,7 @@ import { useFormState } from 'react-dom';
 
 import { Button } from '@hikaya/ui';
 
+import { TemplatePicker } from '@/components/templates/template-picker';
 import { type Locale } from '@/i18n/config';
 import { updateContractSectionsAction, type ContractResult } from '@/lib/contracts/actions';
 import type { ContractSection } from '@/lib/contracts/mock-data';
@@ -36,6 +37,23 @@ export function ContractSectionsForm({ locale, contractId, sections, locked }: P
       }}
       className="flex flex-col gap-6"
     >
+      {/* Load from template */}
+      {!locked && (
+        <TemplatePicker
+          kind="CONTRACT"
+          onSelect={(tpl) => {
+            // Populate the first textarea (scopeOfWork) with the template body
+            const firstTextarea = document.querySelector<HTMLTextAreaElement>(
+              `textarea[name="${sectionKeys[0]}"]`,
+            );
+            if (firstTextarea) {
+              firstTextarea.value = tpl.bodyHtml;
+              firstTextarea.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+          }}
+        />
+      )}
+
       {sectionKeys.map((key) => (
         <SectionField
           key={key}
