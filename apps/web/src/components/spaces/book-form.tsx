@@ -152,10 +152,66 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
         </label>
       </fieldset>
 
-      {estimateHalalas > 0 ? (
+      {/* Add-ons selection */}
+      {addOns.length > 0 ? (
+        <fieldset className="flex flex-col gap-2">
+          <legend className="text-surface/80 mb-1 text-sm font-medium">{t('addOnsLabel')}</legend>
+          {addOns.map((addon, idx) => (
+            <label
+              key={idx}
+              className="text-surface/80 flex cursor-pointer items-center gap-2 text-sm"
+            >
+              <input
+                type="checkbox"
+                checked={selectedAddOnIndexes.has(idx)}
+                onChange={(e) => {
+                  const next = new Set(selectedAddOnIndexes);
+                  if (e.target.checked) next.add(idx);
+                  else next.delete(idx);
+                  setSelectedAddOnIndexes(next);
+                }}
+                className="accent-accent h-4 w-4"
+              />
+              <span>
+                {addon.name}
+                {addon.priceHalalas > 0
+                  ? ` (+${formatSarFromHalalas(addon.priceHalalas, locale)})`
+                  : ''}
+              </span>
+            </label>
+          ))}
+          {addOnsTotal > 0 ? (
+            <p className="text-2xs text-surface/50">
+              {t('addOnsTotal', { price: formatSarFromHalalas(addOnsTotal, locale) })}
+            </p>
+          ) : null}
+        </fieldset>
+      ) : null}
+
+      {/* Hidden field for selected add-ons */}
+      <input
+        type="hidden"
+        name="selectedAddOns"
+        value={JSON.stringify(selectedAddOns)}
+      />
+
+      {totalWithAddOns > 0 ? (
         <p className="text-2xs text-surface/50 [lang=ar]:font-sansAr">
-          {t('total', { price: formatSarFromHalalas(estimateHalalas, locale) })}
+          {t('total', { price: formatSarFromHalalas(totalWithAddOns, locale) })}
         </p>
+      ) : null}
+
+      {/* House rules checkbox */}
+      {hasRules ? (
+        <label className="text-surface/80 flex cursor-pointer items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={agreedToRules}
+            onChange={(e) => setAgreedToRules(e.target.checked)}
+            className="accent-accent h-4 w-4"
+          />
+          {t('agreeRules')}
+        </label>
       ) : null}
 
       {serverState && !serverState.ok ? (
@@ -170,7 +226,12 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
         </p>
       ) : null}
 
-      <Button type="submit" size="lg" isLoading={isPending}>
+      <Button
+        type="submit"
+        size="lg"
+        isLoading={isPending}
+        disabled={hasRules && !agreedToRules}
+      >
         {t('submit')}
       </Button>
     </form>

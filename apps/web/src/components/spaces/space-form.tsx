@@ -40,6 +40,8 @@ interface FormShape {
   status: SpaceStatus;
   photosRaw: string;
   equipmentRaw: string;
+  houseRules: string;
+  addOnsRaw: string;
 }
 
 /**
@@ -79,6 +81,10 @@ export function SpaceForm({ locale, space }: Props) {
           status: space.status,
           photosRaw: space.photos.join('\n'),
           equipmentRaw: space.equipmentIncluded.join(', '),
+          houseRules: space.houseRules ?? '',
+          addOnsRaw: space.addOns
+            .map((a) => `${a.name}, ${Math.round(a.priceHalalas / 100)}`)
+            .join('\n'),
         }
       : {
           name: '',
@@ -91,6 +97,8 @@ export function SpaceForm({ locale, space }: Props) {
           status: 'DRAFT',
           photosRaw: '',
           equipmentRaw: '',
+          houseRules: '',
+          addOnsRaw: '',
         },
   });
 
@@ -108,6 +116,8 @@ export function SpaceForm({ locale, space }: Props) {
         fd.set('status', values.status);
         fd.set('photosRaw', values.photosRaw);
         fd.set('equipmentRaw', values.equipmentRaw);
+        fd.set('houseRules', values.houseRules);
+        fd.set('addOnsRaw', values.addOnsRaw);
         startTransition(() => formAction(fd));
       })}
       className="flex flex-col gap-6"
