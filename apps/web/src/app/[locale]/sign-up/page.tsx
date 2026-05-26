@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Logo } from '@hikaya/ui';
 
+import { GoogleSignInButton } from '@/components/auth/google-sign-in-button';
 import { SignUpForm } from '@/components/auth/sign-up-form';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -45,6 +46,14 @@ export default async function SignUpPage({ params }: Props) {
           <div className="flex flex-col gap-2">
             <h1 className="text-balance text-3xl font-bold tracking-tight">{t('signUpTitle')}</h1>
             <p className="text-surface/60 text-sm">{t('signUpSubtitle')}</p>
+          </div>
+
+          <GoogleSignInButton locale={locale} label={t('continueWithGoogle')} />
+
+          <div className="flex items-center gap-3">
+            <span className="bg-surface/10 h-px flex-1" />
+            <span className="text-surface/40 text-xs">{t('orEmail')}</span>
+            <span className="bg-surface/10 h-px flex-1" />
           </div>
 
           <SignUpForm locale={locale} />

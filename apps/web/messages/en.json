@@ -58,6 +58,8 @@
     "signInTitle": "Sign in to Hikaya",
     "signInSubtitle": "Pick up where you left off — your studio, your clients, your work.",
     "signInCta": "Sign in",
+    "continueWithGoogle": "Continue with Google",
+    "orEmail": "or sign in with email",
     "demoSignedInLabel": "Demo mode",
     "demoSignedInBody": "You're signed in as {name}.",
     "demoSignedInHint": "This static preview auto-signs you in so you can explore every page. Mutations (sending a quote, publishing a post, taking a booking) are inert in the preview — run the app locally for full interactivity.",
