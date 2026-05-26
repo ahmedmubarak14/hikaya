@@ -8,7 +8,8 @@ import { ThreadCard } from '@/components/messages/thread-card';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
-import { countUnreadFor, getMessagesByThread, listThreadsForUser } from '@/lib/messages/mock-store';
+import { getMessagesByThread, listThreadsForUser } from '@/lib/messages/queries';
+import { countUnreadFor } from '@/lib/messages/mock-store';
 
 import type { Metadata } from 'next';
 
@@ -30,7 +31,19 @@ export default async function MyMessagesPage({ params }: Props) {
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/messages`);
 
   const t = await getTranslations('messages.list');
-  const threads = listThreadsForUser(session.user.id);
+  const threads = await listThreadsForUser(session.user.id);
+
+  // Pre-fetch last message for each thread
+  const threadPreviews = await Promise.all(
+    threads.map(async (thread) => {
+      const messages = await getMessagesByThread(thread.id);
+      const last = messages[messages.length - 1];
+      const viewerSide: 'creator' | 'client' =
+        thread.creatorUserId === session.user.id ? 'creator' : 'client';
+      const unread = countUnreadFor(thread, session.user.id);
+      return { thread, preview: last?.body, unread, viewerSide };
+    }),
+  );
 
   return (
     <>
@@ -53,7 +66,7 @@ export default async function MyMessagesPage({ params }: Props) {
           <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
         </header>
 
-        {threads.length === 0 ? (
+        {threadPreviews.length === 0 ? (
           <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
             <p className="text-surface/70 text-lg">{t('empty')}</p>
             <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
@@ -66,22 +79,16 @@ export default async function MyMessagesPage({ params }: Props) {
           </div>
         ) : (
           <ul className="flex flex-col gap-3">
-            {threads.map((thread) => {
-              const messages = getMessagesByThread(thread.id);
-              const last = messages[messages.length - 1];
-              const viewerSide = thread.creatorUserId === session.user.id ? 'creator' : 'client';
-              const unread = countUnreadFor(thread, session.user.id);
-              return (
-                <li key={thread.id}>
-                  <ThreadCard
-                    thread={thread}
-                    preview={last?.body}
-                    unreadCount={unread}
-                    viewerSide={viewerSide}
-                  />
-                </li>
-              );
-            })}
+            {threadPreviews.map(({ thread, preview, unread, viewerSide }) => (
+              <li key={thread.id}>
+                <ThreadCard
+                  thread={thread}
+                  preview={preview}
+                  unreadCount={unread}
+                  viewerSide={viewerSide}
+                />
+              </li>
+            ))}
           </ul>
         )}
       </main>

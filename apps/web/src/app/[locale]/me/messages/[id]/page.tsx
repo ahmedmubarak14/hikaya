@@ -4,8 +4,9 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge } from '@hikaya/ui';
 
-import { Composer } from '@/components/messages/composer';
-import { MessageBubble } from '@/components/messages/message-bubble';
+import { RealtimeComposer } from '@/components/messages/realtime-composer';
+import { RealtimeMessages } from '@/components/messages/realtime-messages';
+import { ThreadQuickActions } from '@/components/messages/thread-quick-actions';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -13,6 +14,8 @@ import { markThreadReadAction } from '@/lib/messages/actions';
 import {
   getMessagesByThread,
   getThreadById,
+} from '@/lib/messages/queries';
+import {
   isParticipant,
   markThreadRead,
 } from '@/lib/messages/mock-store';
@@ -42,7 +45,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, id } = await params;
-  const thread = getThreadById(id);
+  const thread = await getThreadById(id);
   const t = await getTranslations({ locale, namespace: 'messages.thread' });
   if (!thread) return { title: t('title') };
   return { title: `${t('title')} · ${thread.creatorName}` };
@@ -55,7 +58,7 @@ export default async function ThreadDetailPage({ params }: Props) {
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/messages/${id}`);
 
-  const thread = getThreadById(id);
+  const thread = await getThreadById(id);
   if (!thread || !isParticipant(thread, session.user.id)) notFound();
 
   const t = await getTranslations('messages.thread');
@@ -67,9 +70,21 @@ export default async function ThreadDetailPage({ params }: Props) {
   // Fire the action too so any client-side caches invalidate consistently.
   await markThreadReadAction(locale, thread.id);
 
-  const messages = getMessagesByThread(thread.id);
+  const messages = await getMessagesByThread(thread.id);
   const otherName =
     thread.creatorUserId === session.user.id ? thread.clientName : thread.creatorName;
+
+  // Try to resolve the other user's email for quick actions (best-effort)
+  let otherUserEmail: string | undefined;
+  try {
+    const { findUserById } = await import('@/lib/auth/mock-store');
+    const otherId =
+      thread.creatorUserId === session.user.id ? thread.clientUserId : thread.creatorUserId;
+    const otherUser = findUserById(otherId);
+    otherUserEmail = otherUser?.email;
+  } catch {
+    // Not critical — quick actions will work without the email
+  }
 
   return (
     <>
@@ -81,7 +96,7 @@ export default async function ThreadDetailPage({ params }: Props) {
               href={`/${locale}/me/messages`}
               className="text-2xs text-surface/40 hover:text-surface transition-colors"
             >
-              ← {t('back')}
+              {'←'} {t('back')}
             </Link>
             <h1 className="text-surface text-2xl">{otherName}</h1>
           </div>
@@ -90,21 +105,23 @@ export default async function ThreadDetailPage({ params }: Props) {
           </Badge>
         </header>
 
-        <section className="flex flex-1 flex-col-reverse overflow-y-auto px-6 py-6 md:px-0">
-          <ul className="flex flex-col gap-3">
-            {messages.length === 0 ? (
-              <li className="text-2xs text-surface/40 py-12 text-center">{t('empty')}</li>
-            ) : (
-              messages.map((m) => (
-                <li key={m.id}>
-                  <MessageBubble message={m} mine={m.senderId === session.user.id} />
-                </li>
-              ))
-            )}
-          </ul>
-        </section>
+        {/* Real-time message list — initial messages loaded server-side */}
+        <RealtimeMessages
+          threadId={thread.id}
+          currentUserId={session.user.id}
+          initialMessages={messages}
+          otherUserName={otherName}
+        />
 
-        <Composer locale={locale} threadId={thread.id} />
+        {/* Quick actions above the composer */}
+        <ThreadQuickActions otherUserEmail={otherUserEmail} />
+
+        {/* Enhanced composer with typing broadcast + attachments */}
+        <RealtimeComposer
+          locale={locale}
+          threadId={thread.id}
+          currentUserId={session.user.id}
+        />
       </main>
     </>
   );

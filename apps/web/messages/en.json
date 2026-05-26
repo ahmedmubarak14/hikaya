@@ -108,30 +108,77 @@
     }
   },
   "me": {
-    "title": "Your account",
-    "greeting": "Hi, {name}.",
-    "subtitle": "This is your account home. The dashboard, portfolio editor, bookings, and messages all branch from here.",
-    "emailLabel": "Email",
-    "roleLabel": "Active role",
-    "inquiriesLink": "View my inquiries",
-    "studioLink": "Studio dashboard",
-    "portfolioLink": "Edit portfolio",
-    "galleriesLink": "Client galleries",
-    "quotesLink": "Quotes",
-    "contractsLink": "Contracts",
-    "messagesLink": "Messages",
-    "jobsLink": "Job board",
-    "storeLink": "My store",
-    "purchasesLink": "My purchases",
+    "title": "Dashboard",
+    "greeting": "Welcome back, {name}.",
+    "subtitle": "Your creative practice at a glance.",
+    "editProfile": "Edit profile",
+    "viewPublicProfile": "View public profile",
     "settingsLink": "Settings",
-    "servicesLink": "My services",
-    "templatesLink": "Document templates",
-    "availabilityLink": "Availability",
-    "discountsLink": "Discount codes",
-    "favoritesLink": "Favorites",
-    "analyticsLink": "Analytics",
-    "disputesLink": "Disputes",
-    "adminLink": "Admin panel"
+    "stats": {
+      "profileViews": "Profile views",
+      "activeBookings": "Active bookings",
+      "unreadMessages": "Unread messages",
+      "revenueThisMonth": "Revenue this month"
+    },
+    "activity": {
+      "recentMessages": "Recent messages",
+      "upcomingSessions": "Upcoming sessions",
+      "noMessages": "No recent conversations.",
+      "noMessagesHint": "Start a thread from a creator's profile.",
+      "noSessions": "No upcoming sessions.",
+      "noSessionsHint": "Bookings you confirm will appear here.",
+      "viewAll": "View all"
+    },
+    "nav": {
+      "create": "Create",
+      "business": "Business",
+      "account": "Account"
+    },
+    "links": {
+      "portfolio": "Portfolio",
+      "portfolioHint": "Edit your public work",
+      "blog": "Journal",
+      "blogHint": "Write and publish posts",
+      "store": "Store",
+      "storeHint": "Sell presets, LUTs, and guides",
+      "galleries": "Galleries",
+      "galleriesHint": "Deliver work to clients",
+      "quotes": "Quotes",
+      "quotesHint": "Build and send quotes",
+      "contracts": "Contracts",
+      "contractsHint": "Review and sign contracts",
+      "bookings": "Bookings",
+      "bookingsHint": "Manage your sessions",
+      "studio": "Studio",
+      "studioHint": "Your studio command center",
+      "settings": "Settings",
+      "settingsHint": "Account preferences",
+      "analytics": "Analytics",
+      "analyticsHint": "Track your performance",
+      "favorites": "Favorites",
+      "favoritesHint": "Saved creators and searches",
+      "disputes": "Disputes",
+      "disputesHint": "Resolve issues",
+      "jobs": "Job board",
+      "jobsHint": "Browse and post briefs",
+      "inquiries": "Inquiries",
+      "inquiriesHint": "Project requests you've sent",
+      "services": "Services",
+      "servicesHint": "Manage your service listings",
+      "templates": "Templates",
+      "templatesHint": "Reusable document templates",
+      "availability": "Availability",
+      "availabilityHint": "Set your schedule",
+      "discounts": "Discounts",
+      "discountsHint": "Manage promo codes",
+      "purchases": "Purchases",
+      "purchasesHint": "Products you've bought",
+      "spaces": "Spaces",
+      "spacesHint": "Manage your studio spaces",
+      "admin": "Admin",
+      "adminHint": "Platform administration"
+    },
+    "signOut": "Sign out"
   },
   "jobs": {
     "list": {
@@ -410,7 +457,25 @@
     },
     "composer": {
       "placeholder": "Write a message…",
-      "send": "Send"
+      "send": "Send",
+      "attach": "Attach file",
+      "attachUrlPlaceholder": "Paste a file URL…",
+      "addAttachment": "Add",
+      "cancelAttachment": "Cancel",
+      "removeAttachment": "Remove attachment",
+      "attachmentMessage": "Shared a file"
+    },
+    "typing": {
+      "indicator": "{name} is typing…"
+    },
+    "attachments": {
+      "imageAlt": "Attached image"
+    },
+    "quickActions": {
+      "label": "Quick:",
+      "sendQuote": "Send quote",
+      "sendContract": "Send contract",
+      "createBooking": "Create booking"
     },
     "start": {
       "cta": "Message",
@@ -801,9 +866,8 @@
     "eyebrow": "Studio",
     "headline": "The business side,",
     "headlineItalic": "in one view.",
-    "subtitle": "Bookings, clients, and revenue in a single command center. Everything below is mocked — wire to @hikaya/api when you're ready.",
+    "subtitle": "Bookings, clients, and revenue in a single command center.",
     "backToAccount": "Back to account",
-    "mockNote": "Mock data — bookings + clients live in memory and reset on server restart.",
     "stats": {
       "monthRevenue": "Revenue this month",
       "monthRevenueHint": "Captured to wallet",

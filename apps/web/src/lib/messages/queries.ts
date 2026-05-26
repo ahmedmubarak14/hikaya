@@ -2,6 +2,7 @@ import 'server-only';
 
 import type { Message, Thread } from './mock-data';
 import {
+  countUnreadFor as countUnreadForRaw,
   getMessagesByThread as getMessagesByThreadRaw,
   getThreadById as getThreadByIdRaw,
   listThreadsForUser as listThreadsForUserRaw,
@@ -55,4 +56,19 @@ export async function getMessagesByThread(threadId: string): Promise<Message[]> 
   }
 
   return getMessagesByThreadRaw(threadId);
+}
+
+export async function getUnreadMessageCount(userId: string): Promise<number> {
+  if (!isStaticExport) {
+    try {
+      const { getUnreadMessageCountFromDB } = await import('./supabase-queries');
+      return await getUnreadMessageCountFromDB(userId);
+    } catch {
+      // Supabase unavailable — fall through to mock
+    }
+  }
+
+  // Mock fallback: sum unread across all threads for the user
+  const threads = listThreadsForUserRaw(userId);
+  return threads.reduce((sum, thread) => sum + countUnreadForRaw(thread, userId), 0);
 }

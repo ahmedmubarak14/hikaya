@@ -151,7 +151,7 @@ export async function getSupabaseSession(): Promise<{ user: SessionUser } | null
 
   const { data: userRow } = await supabase
     .from('User')
-    .select('id, email, displayName, roles, activeRole, locale')
+    .select('id, email, displayName, roles, activeRole, locale, avatarUrl')
     .eq('id', authUser.id)
     .single();
 
@@ -160,6 +160,17 @@ export async function getSupabaseSession(): Promise<{ user: SessionUser } | null
   const locale = userRow.locale === 'AR' ? 'ar' : 'en';
   const roles = (userRow.roles ?? ['CLIENT']) as UserRole[];
   const currentRole = (userRow.activeRole ?? roles[0] ?? 'CLIENT') as UserRole;
+
+  // Resolve creator username for public profile link
+  let username: string | undefined;
+  if (roles.includes('CREATOR')) {
+    const { data: creatorProfile } = await supabase
+      .from('CreatorProfile')
+      .select('username')
+      .eq('userId', authUser.id)
+      .maybeSingle();
+    username = (creatorProfile?.username as string) ?? undefined;
+  }
 
   return {
     user: {
@@ -170,6 +181,8 @@ export async function getSupabaseSession(): Promise<{ user: SessionUser } | null
       primaryRole: roles[0] ?? 'CLIENT',
       currentRole,
       locale,
+      avatarUrl: (userRow.avatarUrl as string) ?? undefined,
+      username,
     },
   };
 }

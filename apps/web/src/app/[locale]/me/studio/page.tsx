@@ -187,7 +187,6 @@ export default async function StudioDashboardPage({ params }: Props) {
         {/* Interactive Clients CRM */}
         <ClientTable clients={STUDIO_CLIENTS} />
 
-        <p className="text-2xs text-surface/30 mt-10 max-w-prose">{t('mockNote')}</p>
       </main>
     </>
   );

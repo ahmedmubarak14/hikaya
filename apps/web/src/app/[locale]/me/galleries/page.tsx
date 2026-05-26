@@ -155,7 +155,6 @@ function NoCreatorState({
             </Badge>
             <h1 className="text-balance text-3xl">{t('title')}</h1>
             <p className="text-surface/60">{t('body')}</p>
-            <p className="text-surface/50 text-sm">{t('demoHint')}</p>
           </CardBody>
         </Card>
       </main>
