@@ -783,6 +783,7 @@ model Contract {
   creatorSignedName String?
   clientSignedAt    DateTime?
   clientSignedName  String?
+  signatureAuditLog Json           @default("[]") // [{ side, name, signedAt, ip }]
 
   booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 

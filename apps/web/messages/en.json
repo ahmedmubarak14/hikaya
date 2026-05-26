@@ -128,7 +128,10 @@
     "templatesLink": "Document templates",
     "availabilityLink": "Availability",
     "discountsLink": "Discount codes",
-    "favoritesLink": "Favorites"
+    "favoritesLink": "Favorites",
+    "analyticsLink": "Analytics",
+    "disputesLink": "Disputes",
+    "adminLink": "Admin panel"
   },
   "jobs": {
     "list": {
@@ -571,7 +574,8 @@
       "cancelContract": "Cancel contract",
       "cancelConfirm": "Cancel this contract? This cannot be undone.",
       "signedLabel": "Fully signed",
-      "signedBody": "Both parties have signed. The contract is locked and a copy is preserved on file."
+      "signedBody": "Both parties have signed. The contract is locked and a copy is preserved on file.",
+      "printDownload": "Print / Download PDF"
     },
     "viewer": {
       "headline": "Your contract,",
@@ -621,6 +625,13 @@
         "title": "Additional terms",
         "description": "Anything else — amendments, dispute resolution. Optional."
       }
+    },
+    "audit": {
+      "title": "Signature audit trail",
+      "creatorSigned": "Creator signed",
+      "clientSigned": "Client signed",
+      "signedAt": "Signed at",
+      "ipAddress": "IP"
     },
     "status": {
       "DRAFT": "Draft",
@@ -884,6 +895,8 @@
       "tomorrow": "Tomorrow",
       "daysUntil": "{count, plural, =1 {1 day} other {# days}}"
     },
+    "teamLink": "Manage team",
+    "teamLinkHint": "Invite team members, assign roles, and manage your studio crew.",
     "status": {
       "INQUIRY": "Inquiry",
       "QUOTED": "Quoted",
@@ -894,6 +907,68 @@
       "COMPLETED": "Completed",
       "CANCELLED": "Cancelled"
     }
+  },
+  "studioTeam": {
+    "pageTitle": "Studio team",
+    "title": "Team members",
+    "headline": "Your team",
+    "subtitle": "Invite photographers and assistants to your studio. Admins can manage bookings and clients.",
+    "backToStudio": "Back to studio",
+    "count": "{count, plural, =0 {No members} =1 {1 member} other {# members}}",
+    "empty": "No team members yet. Invite someone to get started.",
+    "roleAdmin": "Admin",
+    "rolePhotographer": "Photographer",
+    "joinedAt": "Joined {date}",
+    "makeAdmin": "Make admin",
+    "makePhotographer": "Make photographer",
+    "remove": "Remove",
+    "inviteTitle": "Invite a team member",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "e.g. photographer@example.com",
+    "roleLabel": "Role",
+    "inviteCta": "Invite",
+    "inviteSuccess": "Team member invited successfully.",
+    "errors": {
+      "NOT_AUTHENTICATED": "Please sign in.",
+      "NO_STUDIO": "You don't have a studio profile.",
+      "INVALID_EMAIL": "Please enter a valid email address.",
+      "USER_NOT_FOUND": "No Hikaya user found with that email.",
+      "ALREADY_MEMBER": "This user is already a team member.",
+      "MEMBER_NOT_FOUND": "Member not found.",
+      "NOT_OWNER": "Only the studio owner can manage the team.",
+      "CANNOT_REMOVE_SELF": "You can't remove yourself from the team.",
+      "UNKNOWN": "Something went wrong. Please try again."
+    }
+  },
+  "bookingDetail": {
+    "discipline": "Discipline",
+    "sessionDate": "Session date",
+    "city": "City",
+    "status": {
+      "INQUIRY": "Inquiry",
+      "QUOTED": "Quoted",
+      "CONTRACTED": "Contracted",
+      "CONFIRMED": "Confirmed",
+      "IN_PROGRESS": "In progress",
+      "DELIVERED": "Delivered",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    },
+    "cancellationPolicyTitle": "Cancellation policy",
+    "cancellationPolicyText": "Cancellation more than 30 days before the session: deposit applied to a future booking within 12 months. Within 30 days: deposit is forfeit. The creator may cancel for cause and refund all monies paid.",
+    "reschedule": "Reschedule",
+    "cancelBooking": "Cancel booking",
+    "rescheduleTitle": "Reschedule this booking",
+    "newDate": "New date",
+    "newTime": "New time",
+    "confirmReschedule": "Confirm reschedule",
+    "back": "Back",
+    "cancelTitle": "Cancel this booking",
+    "cancelReasonPlaceholder": "Why are you cancelling? (optional)",
+    "confirmCancel": "Confirm cancellation",
+    "error": "Something went wrong. Please try again.",
+    "rescheduledSuccess": "Booking rescheduled successfully.",
+    "cancelledSuccess": "Booking cancelled."
   },
   "inquiry": {
     "title": "Send an inquiry",
@@ -1113,6 +1188,13 @@
     "serviceDescriptionHint": "Optional. What's included.",
     "addService": "+ Add a service",
     "removeService": "Remove",
+    "tiersLabel": "Package tiers",
+    "tierUntitled": "Untitled tier",
+    "tierName": "Tier name",
+    "tierPrice": "Tier price (SAR)",
+    "tierDescription": "What's included",
+    "addTier": "+ Add a package tier",
+    "removeTier": "Remove tier",
     "saveServices": "Save services",
     "servicesSaved": "Saved",
     "servicesError": "Something went wrong. Please try again.",
