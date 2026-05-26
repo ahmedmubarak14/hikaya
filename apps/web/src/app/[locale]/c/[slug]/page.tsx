@@ -6,6 +6,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge, Logo } from '@hikaya/ui';
 
 import { ContractStatusBadge } from '@/components/contracts/contract-status-badge';
+import { SignatureAuditLog } from '@/components/contracts/signature-audit-log';
 import { SignForm } from '@/components/contracts/sign-form';
 import { type Locale } from '@/i18n/config';
 import { getContractBySlug } from '@/lib/contracts/mock-store';
@@ -47,6 +48,7 @@ export default async function PublicContractPage({ params }: Props) {
   const creator = getCreatorById(contract.creatorId);
   const t = await getTranslations('contracts.viewer');
   const tSection = await getTranslations('contracts.sections');
+  const tAudit = await getTranslations('contracts.audit');
 
   const clientSigned = Boolean(contract.clientSignedAt);
   const cancelled = contract.status === 'CANCELLED';
@@ -138,6 +140,21 @@ export default async function PublicContractPage({ params }: Props) {
               side="client"
               contractRef={contract.shareSlug}
               defaultName={contract.clientName}
+            />
+          </section>
+        ) : null}
+
+        {/* Signature audit trail */}
+        {contract.signatureAuditLog && contract.signatureAuditLog.length > 0 ? (
+          <section className="mt-10">
+            <SignatureAuditLog
+              entries={contract.signatureAuditLog}
+              locale={locale}
+              title={tAudit('title')}
+              creatorLabel={tAudit('creatorSigned')}
+              clientLabel={tAudit('clientSigned')}
+              signedAtLabel={tAudit('signedAt')}
+              ipLabel={tAudit('ipAddress')}
             />
           </section>
         ) : null}
