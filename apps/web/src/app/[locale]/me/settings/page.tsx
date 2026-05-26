@@ -7,6 +7,7 @@ import { Badge } from '@hikaya/ui';
 import { SiteHeader } from '@/components/site-header';
 import { SettingsProfileForm } from '@/components/settings/settings-profile-form';
 import { SettingsPasswordForm } from '@/components/settings/settings-password-form';
+import { SettingsDataExport } from '@/components/settings/settings-data-export';
 import { SettingsDeleteAccount } from '@/components/settings/settings-delete-account';
 import { NotificationPreferencesForm } from '@/components/settings/notification-preferences-form';
 import { type Locale } from '@/i18n/config';

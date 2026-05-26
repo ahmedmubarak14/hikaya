@@ -223,6 +223,30 @@ export function SpaceForm({ locale, space }: Props) {
         error={errors.equipmentRaw?.message}
       />
 
+      <Field
+        label={t('houseRules')}
+        hint={t('houseRulesHint')}
+      >
+        <textarea
+          rows={3}
+          {...register('houseRules')}
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
+          placeholder="No food or drinks in the studio. Shoes off on the cyclorama."
+        />
+      </Field>
+
+      <Field
+        label={t('addOnsLabel')}
+        hint={t('addOnsHint')}
+      >
+        <textarea
+          rows={3}
+          {...register('addOnsRaw')}
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 font-mono text-sm outline-none"
+          placeholder={'Fog machine, 30\nOn-set assistant (4h), 200'}
+        />
+      </Field>
+
       {serverState?.error && serverState.error !== 'INVALID_INPUT' ? (
         <p className="text-accent-secondary text-sm" role="alert">
           {t('errorGeneric')}
