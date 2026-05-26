@@ -14,7 +14,12 @@ export async function middleware(request: NextRequest) {
   // 1. Refresh the Supabase session cookie (keeps auth alive).
   await updateSession(request);
 
-  // 2. Run the next-intl locale middleware (redirect, rewrite, etc.)
+  // 2. Skip i18n middleware for the OAuth callback route — it's not locale-prefixed.
+  if (request.nextUrl.pathname.startsWith('/auth/')) {
+    return;
+  }
+
+  // 3. Run the next-intl locale middleware (redirect, rewrite, etc.)
   return intlMiddleware(request);
 }
 

@@ -99,3 +99,57 @@ export async function signOutAction(locale: Locale): Promise<void> {
   await supabaseSignOut();
   redirect(`/${locale ?? defaultLocale}`);
 }
+
+// ---------------------------------------------------------------------------
+// Password reset
+// ---------------------------------------------------------------------------
+
+export async function forgotPasswordAction(
+  locale: Locale,
+  email: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  if (!email || !email.includes('@')) {
+    return { ok: false, error: 'INVALID_INPUT' };
+  }
+
+  const { createClient } = await import('@/lib/supabase/server');
+  const supabase = await createClient();
+
+  // Determine the origin for the redirect URL. In production this is the
+  // Vercel deployment URL; locally it falls back to localhost.
+  const origin =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${origin}/auth/reset-password?locale=${locale}`,
+  });
+
+  if (error) {
+    console.error('[auth/actions] forgotPasswordAction error:', error.message);
+    // Still return ok:true to avoid leaking whether the email exists
+  }
+
+  return { ok: true };
+}
+
+export async function resetPasswordAction(
+  locale: Locale,
+  newPassword: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  if (!newPassword || newPassword.length < 8) {
+    return { ok: false, error: 'PASSWORD_TOO_SHORT' };
+  }
+
+  const { createClient } = await import('@/lib/supabase/server');
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+  if (error) {
+    console.error('[auth/actions] resetPasswordAction error:', error.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  redirect(`/${locale ?? defaultLocale}/sign-in`);
+}

@@ -55,14 +55,22 @@ export function SignInForm({ locale }: Props) {
         error={errors.email?.message}
         required
       />
-      <Input
-        label={t('password')}
-        type="password"
-        autoComplete="current-password"
-        {...register('password')}
-        error={errors.password?.message}
-        required
-      />
+      <div className="flex flex-col gap-1.5">
+        <Input
+          label={t('password')}
+          type="password"
+          autoComplete="current-password"
+          {...register('password')}
+          error={errors.password?.message}
+          required
+        />
+        <Link
+          href={`/${locale}/forgot-password`}
+          className="text-surface/60 hover:text-accent-secondary self-end text-xs underline-offset-4 hover:underline"
+        >
+          {t('forgotPasswordLink')}
+        </Link>
+      </div>
 
       {serverState?.error === 'INVALID_CREDENTIALS' ? (
         <p className="text-accent-secondary text-sm" role="alert">

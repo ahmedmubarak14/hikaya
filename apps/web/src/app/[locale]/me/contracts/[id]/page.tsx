@@ -9,12 +9,15 @@ import { ContractSectionsForm } from '@/components/contracts/contract-sections-f
 import { ContractStatusBadge } from '@/components/contracts/contract-status-badge';
 import { SignForm } from '@/components/contracts/sign-form';
 import { CopyLinkButton } from '@/components/galleries/copy-link-button';
+import { ReviewForm } from '@/components/reviews/review-form';
+import { Stars } from '@/components/creators/reviews-section';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getContractById } from '@/lib/contracts/mock-store';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
 import { formatDateTime, formatSarFromHalalas } from '@/lib/format';
+import { getReviewByBookingAndAuthor } from '@/lib/reviews/mock-data';
 
 import type { Metadata } from 'next';
 
@@ -59,12 +62,19 @@ export default async function ContractDetailPage({ params }: Props) {
   if (!contract || contract.creatorId !== creator.id) notFound();
 
   const t = await getTranslations('contracts.detail');
+  const tReviews = await getTranslations('reviews');
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
   const shareUrl = `${baseUrl}/${locale}/c/${contract.shareSlug}`;
 
   const locked = contract.status === 'SIGNED' || contract.status === 'CANCELLED';
   const creatorSigned = Boolean(contract.creatorSignedAt);
+
+  // Check if a review exists for this contract's associated booking
+  // For demo purposes, use the contract id as a stand-in for bookingId
+  const existingReview = getReviewByBookingAndAuthor(contract.id, session.user.id);
+  const isCompleted = contract.status === 'SIGNED';
+  const isClient = session.user.currentRole === 'CLIENT';
 
   return (
     <>
@@ -167,12 +177,38 @@ export default async function ContractDetailPage({ params }: Props) {
         ) : null}
 
         {contract.status === 'SIGNED' ? (
-          <Card className="border-sage/40 bg-sage/10">
+          <Card className="border-sage/40 bg-sage/10 mb-6">
             <CardBody className="p-5">
               <span className="text-2xs text-sage">{t('signedLabel')}</span>
               <p className="text-surface/70 mt-1 text-sm">{t('signedBody')}</p>
             </CardBody>
           </Card>
+        ) : null}
+
+        {/* Review section — show for completed (signed) contracts */}
+        {isCompleted && !existingReview ? (
+          <section className="mb-10">
+            <ReviewForm
+              bookingId={contract.id}
+              creatorProfileId={creator.id}
+              subjectUserId={session.user.id}
+            />
+          </section>
+        ) : null}
+
+        {isCompleted && existingReview ? (
+          <section className="mb-10">
+            <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5">
+              <h3 className="text-surface mb-2 text-lg font-medium">{tReviews('existingReviewTitle')}</h3>
+              <div className="mb-2 flex items-center gap-2">
+                <Stars rating={existingReview.rating} size="sm" />
+                <span className="text-surface/60 text-sm">{existingReview.rating} / 5</span>
+              </div>
+              {existingReview.body ? (
+                <p className="text-surface/70 text-sm">{existingReview.body}</p>
+              ) : null}
+            </div>
+          </section>
         ) : null}
       </main>
     </>

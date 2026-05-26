@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge, Logo, cn } from '@hikaya/ui';
 
+import { GalleryGridClient } from '@/components/galleries/gallery-grid-client';
 import { HeartButton } from '@/components/galleries/heart-button';
 import { type Locale } from '@/i18n/config';
 import { getCreatorById } from '@/lib/creators/mock-store';
@@ -134,52 +135,63 @@ export default async function PublicGalleryPage({ params }: Props) {
             <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
           </div>
         ) : (
-          <div className="columns-1 gap-3 sm:columns-2 lg:columns-3 [&>*]:mb-3 [&>*]:break-inside-avoid">
-            {gallery.images.map((img, idx) => {
-              const isSelected = selected.has(img.id);
-              return (
-                <figure
-                  key={img.id}
-                  className="bg-surface/5 group relative overflow-hidden rounded-md"
-                >
-                  <div className="relative" style={{ aspectRatio: `${img.width} / ${img.height}` }}>
-                    <Image
-                      src={img.url}
-                      alt={img.titleEn ?? `${title} — ${idx + 1}`}
-                      fill
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      className={cn(
-                        'duration-cinematic object-cover transition-transform ease-out group-hover:scale-[1.01]',
-                        gallery.watermarkPreviews && 'opacity-95',
-                      )}
-                    />
-
-                    {gallery.watermarkPreviews ? (
-                      <div className="text-surface/30 pointer-events-none absolute inset-0 flex items-center justify-center">
-                        <span className="font-display rotate-[-30deg] text-3xl tracking-widest md:text-5xl">
-                          {creatorName.toUpperCase()}
-                        </span>
-                      </div>
-                    ) : null}
-                  </div>
-
-                  <div
-                    className={cn(
-                      'absolute inset-x-2 top-2 flex items-center justify-end opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100',
-                      isSelected && 'opacity-100',
-                    )}
+          <GalleryGridClient
+            images={gallery.images.map((img) => ({
+              id: img.id,
+              url: img.url,
+              width: img.width,
+              height: img.height,
+              titleEn: img.titleEn,
+            }))}
+          >
+            <div className="columns-1 gap-3 sm:columns-2 lg:columns-3 [&>*]:mb-3 [&>*]:break-inside-avoid">
+              {gallery.images.map((img, idx) => {
+                const isSelected = selected.has(img.id);
+                return (
+                  <figure
+                    key={img.id}
+                    data-lightbox-index={idx}
+                    className="bg-surface/5 group relative cursor-pointer overflow-hidden rounded-md"
                   >
-                    <HeartButton
-                      locale={locale}
-                      shareSlug={gallery.shareSlug}
-                      imageId={img.id}
-                      initialSelected={isSelected}
-                    />
-                  </div>
-                </figure>
-              );
-            })}
-          </div>
+                    <div className="relative" style={{ aspectRatio: `${img.width} / ${img.height}` }}>
+                      <Image
+                        src={img.url}
+                        alt={img.titleEn ?? `${title} — ${idx + 1}`}
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        className={cn(
+                          'duration-cinematic object-cover transition-transform ease-out group-hover:scale-[1.01]',
+                          gallery.watermarkPreviews && 'opacity-95',
+                        )}
+                      />
+
+                      {gallery.watermarkPreviews ? (
+                        <div className="text-surface/30 pointer-events-none absolute inset-0 flex items-center justify-center">
+                          <span className="font-display rotate-[-30deg] text-3xl tracking-widest md:text-5xl">
+                            {creatorName.toUpperCase()}
+                          </span>
+                        </div>
+                      ) : null}
+                    </div>
+
+                    <div
+                      className={cn(
+                        'absolute inset-x-2 top-2 flex items-center justify-end opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100',
+                        isSelected && 'opacity-100',
+                      )}
+                    >
+                      <HeartButton
+                        locale={locale}
+                        shareSlug={gallery.shareSlug}
+                        imageId={img.id}
+                        initialSelected={isSelected}
+                      />
+                    </div>
+                  </figure>
+                );
+              })}
+            </div>
+          </GalleryGridClient>
         )}
       </section>
 

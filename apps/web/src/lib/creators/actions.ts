@@ -250,3 +250,340 @@ export async function movePortfolioItemAction(
 
   return { ok: true };
 }
+
+/**
+ * Reorder a portfolio item via drag-and-drop.
+ * Moves the item at `fromIndex` to `toIndex`, shifting others accordingly.
+ */
+export async function reorderPortfolioItemAction(
+  locale: Locale,
+  itemId: string,
+  toIndex: number,
+): Promise<EditorResult> {
+  const auth = await requireOwnedCreator();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+
+  const { data: items, error: fetchErr } = await supabase
+    .from('PortfolioItem')
+    .select('id, orderIndex')
+    .eq('creatorId', auth.creator.id)
+    .order('orderIndex', { ascending: true });
+
+  if (fetchErr || !items || items.length === 0) {
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  const fromIndex = items.findIndex((p) => (p.id as string) === itemId);
+  if (fromIndex === -1) return { ok: true };
+  if (toIndex < 0 || toIndex >= items.length || fromIndex === toIndex) return { ok: true };
+
+  // Build new ordering: remove item, insert at target position
+  const ordered = [...items];
+  const [moved] = ordered.splice(fromIndex, 1);
+  ordered.splice(toIndex, 0, moved!);
+
+  // Update each item's orderIndex
+  for (let i = 0; i < ordered.length; i++) {
+    const item = ordered[i]!;
+    if ((item.orderIndex as number) !== i) {
+      await supabase
+        .from('PortfolioItem')
+        .update({ orderIndex: i })
+        .eq('id', item.id as string);
+    }
+  }
+
+  revalidatePath(`/${locale}/${auth.creator.username}`);
+  revalidatePath(`/${locale}/me/portfolio`);
+
+  return { ok: true };
+}
+
+// ---------------------------------------------------------------------------
+// Discount Code actions
+// ---------------------------------------------------------------------------
+
+export async function createDiscountAction(
+  locale: Locale,
+  _prev: EditorResult | null,
+  formData: FormData,
+): Promise<EditorResult> {
+  const auth = await requireOwnedCreator();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const code = (formData.get('code') as string | null)?.trim().toUpperCase();
+  if (!code || code.length < 3 || code.length > 30) {
+    return { ok: false, error: 'INVALID_INPUT', fieldErrors: { code: 'Code must be 3-30 characters.' } };
+  }
+
+  const discountType = formData.get('discountType') as string; // 'percentage' | 'fixed'
+  const amount = Number(formData.get('amount'));
+  if (!amount || amount <= 0) {
+    return { ok: false, error: 'INVALID_INPUT', fieldErrors: { amount: 'Amount must be positive.' } };
+  }
+
+  const maxUses = formData.get('maxUses') ? Number(formData.get('maxUses')) : null;
+  const minOrder = formData.get('minOrderHalalas') ? Number(formData.get('minOrderHalalas')) : null;
+  const expiresInDays = formData.get('expiresInDays') ? Number(formData.get('expiresInDays')) : null;
+
+  const supabase = await createClient();
+  const now = new Date().toISOString();
+  const expiresAt = expiresInDays
+    ? new Date(Date.now() + expiresInDays * 86400000).toISOString()
+    : null;
+
+  const { error } = await supabase.from('DiscountCode').insert({
+    ownerUserId: auth.session.user.id,
+    code,
+    percentageOff: discountType === 'percentage' ? amount : null,
+    amountOffHalalas: discountType === 'fixed' ? Math.round(amount * 100) : null,
+    minOrderHalalas: minOrder ? Math.round(minOrder * 100) : null,
+    maxUses: maxUses || null,
+    usedCount: 0,
+    expiresAt,
+    isActive: true,
+    createdAt: now,
+    updatedAt: now,
+  });
+
+  if (error) {
+    console.error('[creators/actions] createDiscountAction error:', error.message);
+    if (error.message.includes('unique') || error.message.includes('duplicate')) {
+      return { ok: false, error: 'INVALID_INPUT', fieldErrors: { code: 'Code already exists.' } };
+    }
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/discounts`);
+  return { ok: true, message: 'DISCOUNT_CREATED' };
+}
+
+export async function updateDiscountAction(
+  locale: Locale,
+  discountId: string,
+  formData: FormData,
+): Promise<EditorResult> {
+  const auth = await requireOwnedCreator();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+
+  const isActive = formData.get('isActive') === 'true';
+  const maxUses = formData.get('maxUses') ? Number(formData.get('maxUses')) : null;
+
+  const { error } = await supabase
+    .from('DiscountCode')
+    .update({
+      isActive,
+      maxUses: maxUses || null,
+      updatedAt: new Date().toISOString(),
+    })
+    .eq('id', discountId)
+    .eq('ownerUserId', auth.session.user.id);
+
+  if (error) {
+    console.error('[creators/actions] updateDiscountAction error:', error.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/discounts`);
+  return { ok: true, message: 'DISCOUNT_UPDATED' };
+}
+
+export async function deleteDiscountAction(
+  locale: Locale,
+  discountId: string,
+): Promise<EditorResult> {
+  const auth = await requireOwnedCreator();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from('DiscountCode')
+    .delete()
+    .eq('id', discountId)
+    .eq('ownerUserId', auth.session.user.id);
+
+  if (error) {
+    console.error('[creators/actions] deleteDiscountAction error:', error.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/discounts`);
+  return { ok: true, message: 'DISCOUNT_DELETED' };
+}
+
+export async function validateDiscountAction(
+  code: string,
+): Promise<
+  | { ok: true; discountId: string; percentageOff: number | null; amountOffHalalas: number | null }
+  | { ok: false; error: string }
+> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('DiscountCode')
+    .select('id, percentageOff, amountOffHalalas, maxUses, usedCount, expiresAt, isActive')
+    .eq('code', code.trim().toUpperCase())
+    .single();
+
+  if (error || !data) return { ok: false, error: 'INVALID_CODE' };
+  if (!(data.isActive as boolean)) return { ok: false, error: 'CODE_INACTIVE' };
+  if (data.maxUses && (data.usedCount as number) >= (data.maxUses as number))
+    return { ok: false, error: 'CODE_EXHAUSTED' };
+  if (data.expiresAt && new Date(data.expiresAt as string) < new Date())
+    return { ok: false, error: 'CODE_EXPIRED' };
+
+  return {
+    ok: true,
+    discountId: data.id as string,
+    percentageOff: data.percentageOff as number | null,
+    amountOffHalalas: data.amountOffHalalas as number | null,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Favorites actions
+// ---------------------------------------------------------------------------
+
+export async function toggleFavoriteAction(
+  creatorProfileId: string,
+): Promise<{ ok: boolean; isFavorited: boolean }> {
+  const session = await getSession();
+  if (!session) return { ok: false, isFavorited: false };
+
+  const supabase = await createClient();
+  const userId = session.user.id;
+
+  // Check if already favorited
+  const { data: existing } = await supabase
+    .from('Favorite')
+    .select('id')
+    .eq('userId', userId)
+    .eq('creatorProfileId', creatorProfileId)
+    .maybeSingle();
+
+  if (existing) {
+    await supabase.from('Favorite').delete().eq('id', existing.id as string);
+    return { ok: true, isFavorited: false };
+  }
+
+  const { error } = await supabase.from('Favorite').insert({
+    userId,
+    creatorProfileId,
+    createdAt: new Date().toISOString(),
+  });
+
+  if (error) {
+    console.error('[creators/actions] toggleFavoriteAction error:', error.message);
+    return { ok: false, isFavorited: false };
+  }
+
+  return { ok: true, isFavorited: true };
+}
+
+export async function getFavoriteStatus(
+  creatorProfileIds: string[],
+): Promise<Record<string, boolean>> {
+  const session = await getSession();
+  if (!session) return {};
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('Favorite')
+    .select('creatorProfileId')
+    .eq('userId', session.user.id)
+    .in('creatorProfileId', creatorProfileIds);
+
+  const result: Record<string, boolean> = {};
+  for (const id of creatorProfileIds) result[id] = false;
+  if (data) {
+    for (const row of data) result[row.creatorProfileId as string] = true;
+  }
+  return result;
+}
+
+export async function getMyFavorites(): Promise<string[]> {
+  const session = await getSession();
+  if (!session) return [];
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('Favorite')
+    .select('creatorProfileId')
+    .eq('userId', session.user.id)
+    .order('createdAt', { ascending: false });
+
+  return data ? data.map((r) => r.creatorProfileId as string) : [];
+}
+
+// ---------------------------------------------------------------------------
+// Saved Search actions
+// ---------------------------------------------------------------------------
+
+export async function saveSearchAction(
+  locale: Locale,
+  name: string,
+  params: { city?: string; discipline?: string; available?: string },
+): Promise<EditorResult> {
+  const session = await getSession();
+  if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
+
+  const supabase = await createClient();
+  const now = new Date().toISOString();
+
+  const { error } = await supabase.from('SavedSearch').insert({
+    userId: session.user.id,
+    name: name.trim() || 'Untitled search',
+    filterParams: params,
+    createdAt: now,
+  });
+
+  if (error) {
+    console.error('[creators/actions] saveSearchAction error:', error.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/favorites`);
+  return { ok: true, message: 'SEARCH_SAVED' };
+}
+
+export async function deleteSavedSearchAction(
+  locale: Locale,
+  searchId: string,
+): Promise<EditorResult> {
+  const session = await getSession();
+  if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from('SavedSearch')
+    .delete()
+    .eq('id', searchId)
+    .eq('userId', session.user.id);
+
+  if (error) {
+    console.error('[creators/actions] deleteSavedSearchAction error:', error.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/favorites`);
+  return { ok: true, message: 'SEARCH_DELETED' };
+}
+
+export async function getMySavedSearches(): Promise<
+  { id: string; name: string; filterParams: Record<string, string>; createdAt: string }[]
+> {
+  const session = await getSession();
+  if (!session) return [];
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('SavedSearch')
+    .select('id, name, filterParams, createdAt')
+    .eq('userId', session.user.id)
+    .order('createdAt', { ascending: false });
+
+  return (data ?? []) as { id: string; name: string; filterParams: Record<string, string>; createdAt: string }[];
+}
