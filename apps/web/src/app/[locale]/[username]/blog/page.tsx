@@ -113,9 +113,9 @@ export default async function CreatorBlogListPage({ params }: Props) {
 
                       <p className="text-surface/70 line-clamp-3">{firstParagraph}</p>
 
-                      {p.tags.length > 0 ? (
+                      {(p.tags ?? []).length > 0 ? (
                         <div className="flex flex-wrap gap-1.5 pt-1">
-                          {p.tags.slice(0, 4).map((tag) => (
+                          {(p.tags ?? []).slice(0, 4).map((tag) => (
                             <span
                               key={tag}
                               className="bg-surface/5 text-2xs text-surface/60 rounded-full px-2.5 py-1"

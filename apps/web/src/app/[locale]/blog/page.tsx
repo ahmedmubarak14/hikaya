@@ -115,9 +115,9 @@ export default async function JournalFeedPage({ params }: Props) {
                         <span className="text-surface/70 text-sm">{creatorName}</span>
                       </div>
 
-                      {p.tags.length > 0 ? (
+                      {(p.tags ?? []).length > 0 ? (
                         <div className="flex flex-wrap gap-1.5">
-                          {p.tags.slice(0, 4).map((tag) => (
+                          {(p.tags ?? []).slice(0, 4).map((tag) => (
                             <span
                               key={tag}
                               className="bg-surface/5 text-2xs text-surface/60 rounded-full px-2.5 py-1"

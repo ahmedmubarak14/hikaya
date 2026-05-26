@@ -119,7 +119,7 @@ export default async function PublicGalleryPage({ params }: Props) {
       <section className="border-surface/10 bg-bg/85 sticky top-0 z-20 border-b backdrop-blur-md">
         <div className="max-w-8xl mx-auto flex w-full items-center justify-between gap-3 px-6 py-3 md:px-10">
           <p className="text-2xs text-surface/50">
-            {t('imageCount', { count: gallery.images.length })}
+            {t('imageCount', { count: (gallery.images ?? []).length })}
           </p>
           <p className="text-2xs text-accent-secondary">
             ♥ {t('youSelected', { count: selectedCount })}
@@ -129,14 +129,14 @@ export default async function PublicGalleryPage({ params }: Props) {
 
       {/* Masonry */}
       <section className="max-w-8xl mx-auto w-full px-4 py-10 md:px-8">
-        {gallery.images.length === 0 ? (
+        {(gallery.images ?? []).length === 0 ? (
           <div className="border-surface/10 bg-surface/[0.03] rounded-xl border p-10 text-center">
             <p className="text-surface/70 text-lg">{t('emptyTitle')}</p>
             <p className="text-surface/40 mt-2 text-sm">{t('emptyHint')}</p>
           </div>
         ) : (
           <GalleryGridClient
-            images={gallery.images.map((img) => ({
+            images={(gallery.images ?? []).map((img) => ({
               id: img.id,
               url: img.url,
               width: img.width,
@@ -145,7 +145,7 @@ export default async function PublicGalleryPage({ params }: Props) {
             }))}
           >
             <div className="columns-1 gap-3 sm:columns-2 lg:columns-3 [&>*]:mb-3 [&>*]:break-inside-avoid">
-              {gallery.images.map((img, idx) => {
+              {(gallery.images ?? []).map((img, idx) => {
                 const isSelected = selected.has(img.id);
                 return (
                   <figure

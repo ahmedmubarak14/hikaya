@@ -130,13 +130,13 @@ export default async function CreatorBlogPostPage({ params }: Props) {
           ))}
         </article>
 
-        {post.tags.length > 0 ? (
+        {(post.tags ?? []).length > 0 ? (
           <footer className="border-surface/10 mt-12 flex flex-col gap-3 border-t pt-6">
             <span className="text-2xs text-surface/40 uppercase tracking-wider">
               {tList('tags')}
             </span>
             <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
+              {(post.tags ?? []).map((tag) => (
                 <span
                   key={tag}
                   className="bg-surface/5 text-surface/70 rounded-full px-3 py-1 text-xs"

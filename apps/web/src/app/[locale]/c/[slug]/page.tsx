@@ -101,7 +101,7 @@ export default async function PublicContractPage({ params }: Props) {
 
         {/* Sections */}
         <article className="mt-8 flex flex-col gap-6">
-          {contract.sections.map((s) => (
+          {(contract.sections ?? []).map((s) => (
             <section
               key={s.key}
               className="border-surface/10 bg-surface/[0.03] rounded-xl border p-5"

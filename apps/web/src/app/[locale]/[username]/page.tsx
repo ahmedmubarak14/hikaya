@@ -169,7 +169,7 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
 
               {/* Stats pills row */}
               <ul className="text-surface/70 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-                <Stat>{t('stats.projects', { count: creator.portfolio.length })}</Stat>
+                <Stat>{t('stats.projects', { count: (creator.portfolio ?? []).length })}</Stat>
                 <Dot />
                 <Stat>
                   <span className="text-accent-secondary">★</span>{' '}
@@ -195,7 +195,7 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
               ) : null}
 
               <div className="flex flex-wrap gap-1.5 pt-1">
-                {creator.disciplines.map((d) => (
+                {(creator.disciplines ?? []).map((d) => (
                   <DisciplineTag key={d} discipline={d} />
                 ))}
               </div>
@@ -235,7 +235,7 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
             storeEnabled={hasStore}
             workNode={
               <PortfolioGrid
-                items={creator.portfolio}
+                items={creator.portfolio ?? []}
                 layout={creator.preferredLayout}
                 altPrefix={name}
               />
@@ -255,11 +255,11 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
             aboutNode={
               <AboutTab
                 bio={bio}
-                languages={creator.languages.join(' · ').toUpperCase()}
+                languages={(creator.languages ?? []).join(' · ').toUpperCase()}
                 languagesLabel={t('languages')}
                 linksLabel={t('about.links')}
-                instagram={creator.socialLinks.instagram}
-                website={creator.socialLinks.website}
+                instagram={creator.socialLinks?.instagram}
+                website={creator.socialLinks?.website}
                 websiteLabel={t('website')}
                 priceLabel={creator.startingPriceSar ? t('startingFrom') : null}
                 priceValue={
