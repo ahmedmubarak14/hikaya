@@ -74,7 +74,7 @@ export default async function ContractDetailPage({ params }: Props) {
   // For demo purposes, use the contract id as a stand-in for bookingId
   const existingReview = getReviewByBookingAndAuthor(contract.id, session.user.id);
   const isCompleted = contract.status === 'SIGNED';
-  const isClient = session.user.currentRole === 'CLIENT';
+  const _isClient = session.user.currentRole === 'CLIENT';
 
   return (
     <>

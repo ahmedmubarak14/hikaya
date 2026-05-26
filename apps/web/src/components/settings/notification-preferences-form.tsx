@@ -80,7 +80,7 @@ function CheckboxRow({
   onChange: () => void;
 }) {
   return (
-    <label className="flex cursor-pointer items-start gap-3">
+    <label className="flex cursor-pointer items-start gap-3" aria-label={label}>
       <input
         type="checkbox"
         checked={checked}

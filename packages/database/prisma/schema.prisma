@@ -277,6 +277,8 @@ model User {
   payouts             Payout[]
   sessions            Session[]
   studioMemberships   StudioMember[]
+  favorites           Favorite[]
+  savedSearches       SavedSearch[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1043,6 +1045,38 @@ model Notification {
   createdAt DateTime @default(now())
 
   @@index([userId, readAt])
+}
+
+// -----------------------------------------------------------------------------
+// Favorites & Saved Searches
+// -----------------------------------------------------------------------------
+
+model Favorite {
+  id                String   @id @default(cuid())
+  userId            String
+  creatorProfileId  String
+
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creatorProfile  CreatorProfile  @relation(fields: [creatorProfileId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, creatorProfileId])
+  @@index([userId])
+  @@index([creatorProfileId])
+}
+
+model SavedSearch {
+  id            String   @id @default(cuid())
+  userId        String
+  name          String   @default("Untitled search")
+  filterParams  Json     @default("{}")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
 }
 
 // =============================================================================

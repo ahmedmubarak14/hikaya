@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useState, useTransition } from 'react';
 
-import { Button, Input, cn } from '@hikaya/ui';
+import { Button, Input } from '@hikaya/ui';
 
 import { validateDiscountAction } from '@/lib/creators/actions';
 

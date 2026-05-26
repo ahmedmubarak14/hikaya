@@ -8,9 +8,11 @@ import { SiteHeader } from '@/components/site-header';
 import { SettingsProfileForm } from '@/components/settings/settings-profile-form';
 import { SettingsPasswordForm } from '@/components/settings/settings-password-form';
 import { SettingsDeleteAccount } from '@/components/settings/settings-delete-account';
+import { NotificationPreferencesForm } from '@/components/settings/notification-preferences-form';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { createClient } from '@/lib/supabase/server';
+import { getNotificationPreferencesAction } from '@/lib/notifications/actions';
 
 import type { Metadata } from 'next';
 
@@ -40,6 +42,8 @@ export default async function SettingsPage({ params }: Props) {
     .select('id, email, displayName, avatarUrl, locale')
     .eq('id', session.user.id)
     .single();
+
+  const notificationPrefs = await getNotificationPreferencesAction();
 
   const user = userRow ?? {
     id: session.user.id,
@@ -89,6 +93,15 @@ export default async function SettingsPage({ params }: Props) {
         <section className="mb-12">
           <SectionHeader title={t('passwordSection')} subtitle={t('passwordSectionSubtitle')} />
           <SettingsPasswordForm locale={locale} />
+        </section>
+
+        {/* Notification preferences */}
+        <section className="mb-12">
+          <SectionHeader
+            title={t('notificationsSection')}
+            subtitle={t('notificationsSectionSubtitle')}
+          />
+          <NotificationPreferencesForm initialPrefs={notificationPrefs} />
         </section>
 
         {/* Danger zone */}

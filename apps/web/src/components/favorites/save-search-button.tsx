@@ -1,10 +1,10 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
+import { Button, Input } from '@hikaya/ui';
+import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState, useTransition } from 'react';
 
-import { Button, Input, cn } from '@hikaya/ui';
 
 import { type Locale } from '@/i18n/config';
 import { saveSearchAction } from '@/lib/creators/actions';

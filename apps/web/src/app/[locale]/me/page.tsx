@@ -71,6 +71,13 @@ export default async function MePage({ params }: Props) {
           </Card>
         </div>
 
+        {/* Upcoming bookings */}
+        {upcomingBookings.length > 0 && (
+          <div className="mt-8">
+            <UpcomingBookingsWidget bookings={upcomingBookings} />
+          </div>
+        )}
+
         <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap gap-2">
             <Link
@@ -138,6 +145,30 @@ export default async function MePage({ params }: Props) {
               className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
             >
               {t('servicesLink')} →
+            </Link>
+            <Link
+              href={`/${locale}/me/templates`}
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
+            >
+              {t('templatesLink')} →
+            </Link>
+            <Link
+              href={`/${locale}/me/availability`}
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
+            >
+              {t('availabilityLink')} →
+            </Link>
+            <Link
+              href={`/${locale}/me/discounts`}
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
+            >
+              {t('discountsLink')} →
+            </Link>
+            <Link
+              href={`/${locale}/me/favorites`}
+              className="border-surface/15 text-surface/80 hover:border-surface/40 hover:text-surface rounded-full border px-5 py-2 text-sm transition-colors"
+            >
+              {t('favoritesLink')} →
             </Link>
             <Link
               href={`/${locale}/me/settings`}
