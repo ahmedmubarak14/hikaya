@@ -11,6 +11,7 @@ const TONE: Record<ProductCategory, 'neutral' | 'accent' | 'sage' | 'info' | 'pu
     TEMPLATE: 'info',
     OVERLAY: 'sage',
     GUIDE: 'warning',
+    BUNDLE: 'info',
     OTHER: 'neutral',
   };
 

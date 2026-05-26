@@ -149,7 +149,7 @@ export interface CreateSpaceInput {
   houseRules?: string;
   addOns?: { name: string; priceHalalas: number }[];
   depositHalalas?: number;
-  smartLockConfig?: { provider: string; lockId: string; apiKey: string } | null;
+  smartLockConfig?: Space['smartLockConfig'];
 }
 
 export function createSpace(input: CreateSpaceInput): Space {

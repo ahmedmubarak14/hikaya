@@ -1658,6 +1658,7 @@
       "rowHourly": "{price}/ساعة",
       "rowDaily": "{price}/يوم",
       "edit": "تعديل",
+      "teamLink": "الفريق",
       "pause": "إيقاف مؤقّت",
       "activate": "تفعيل",
       "publish": "نشر",
@@ -1703,6 +1704,20 @@
       "houseRulesHint": "نصّ حرّ يعرض للمستأجرين قبل الحجز.",
       "addOnsLabel": "إضافات اختياريّة (JSON)",
       "addOnsHint": "واحدة في كلّ سطر: الاسم، السعر (ر.س). مثلاً \"آلة ضباب، ٣٠\"",
+      "depositLabel": "تأمين الأضرار (ر.س)",
+      "depositHint": "تأمين مسترد يُحتجز خلال الحجز. اكتب ٠ إذا لا يوجد تأمين.",
+      "smartLockTitle": "القفل الذكي",
+      "smartLockProvider": "المزوّد",
+      "smartLockProviders": {
+        "NONE": "بدون",
+        "TTLOCK": "TTLock",
+        "NUKI": "Nuki",
+        "AUGUST": "August"
+      },
+      "smartLockLockId": "معرّف القفل",
+      "smartLockLockIdHint": "المعرّف الخاص بجهاز القفل.",
+      "smartLockApiKey": "مفتاح API",
+      "smartLockApiKeyHint": "مفتاح API الخاص بالمزوّد. يُحفظ مشفّراً.",
       "submit": "إنشاء الاستوديو",
       "save": "حفظ التغييرات",
       "saved": "تم الحفظ",
@@ -1751,10 +1766,48 @@
         "addPhotoPlaceholder": "https://images.example.com/photo.jpg",
         "addPhoto": "إضافة",
         "noPhotos": "لا توجد صور بعد.",
-        "selectedAddOns": "الإضافات المختارة"
+        "selectedAddOns": "الإضافات المختارة",
+        "accessCodeLabel": "رمز الدخول",
+        "accessCodeNotYet": "سيظهر رمز الدخول هنا خلال فترة حجزك.",
+        "depositLabel": "تأمين الأضرار",
+        "deposit": {
+          "HELD": "محتجز",
+          "RELEASED": "مسترد",
+          "CLAIMED": "مطالَب به"
+        },
+        "smartLockAutoCode": "سيتم إنشاء رمز القفل الذكي تلقائياً."
       },
       "cancel": "إلغاء الحجز",
       "cancelConfirm": "هل تريد إلغاء هذا الحجز؟ لا يمكن التراجع."
+    },
+    "team": {
+      "pageTitle": "فريق الاستوديو",
+      "title": "أعضاء الفريق",
+      "headline": "فريقك",
+      "subtitle": "أضف أعضاء فريق يمكنهم المساعدة في إدارة هذا الاستوديو.",
+      "backToSpace": "العودة إلى الاستوديو",
+      "count": "{count, plural, =0 {لا أعضاء} =1 {عضو واحد} =2 {عضوان} few {# أعضاء} many {# عضواً} other {# عضو}}",
+      "empty": "لا يوجد أعضاء فريق بعد. ادعُ شخصاً للبدء.",
+      "roleAdmin": "مدير",
+      "roleMember": "عضو",
+      "joinedAt": "انضمّ {date}",
+      "remove": "إزالة",
+      "inviteTitle": "دعوة عضو فريق",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "مثلاً: assistant@example.com",
+      "roleLabel": "الدور",
+      "inviteCta": "دعوة",
+      "inviteSuccess": "تمّت دعوة عضو الفريق بنجاح.",
+      "errors": {
+        "NOT_AUTHENTICATED": "يرجى تسجيل الدخول.",
+        "NOT_OWNER": "فقط مالك الاستوديو يمكنه إدارة الفريق.",
+        "INVALID_EMAIL": "يرجى إدخال بريد إلكتروني صالح.",
+        "USER_NOT_FOUND": "لم يُعثَر على مستخدم حكاية بهذا البريد.",
+        "ALREADY_MEMBER": "هذا المستخدم عضو بالفعل.",
+        "MEMBER_NOT_FOUND": "العضو غير موجود.",
+        "CANNOT_REMOVE_SELF": "لا يمكنك إزالة نفسك من الفريق.",
+        "UNKNOWN": "حدث خطأ ما. يرجى المحاولة مرّة أخرى."
+      }
     }
   },
   "templates": {
