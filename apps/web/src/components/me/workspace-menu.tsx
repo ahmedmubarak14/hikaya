@@ -92,7 +92,11 @@ export function WorkspaceMenu({ locale, user, workspaceLabel, labels }: Props) {
       />
       <PopoverItem icon={<Settings size={16} />} label={labels.settings} href={`${me}/settings`} />
       <PopoverSeparator label={labels.switchWorkspace} />
-      <PopoverItem icon={<HelpCircle size={16} />} label={labels.help} href={`/${locale}/q`} />
+      <PopoverItem
+        icon={<HelpCircle size={16} />}
+        label={labels.help}
+        href={`/${locale}/terms`}
+      />
       <PopoverItem
         icon={<LogOut size={16} />}
         label={isSigningOut ? `${labels.logOut}…` : labels.logOut}

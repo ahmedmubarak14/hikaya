@@ -1324,7 +1324,10 @@
     "deleteError": "Something went wrong. Please try again.",
     "profileAvatarLabel": "Avatar",
     "profileAvatarUpload": "Upload photo",
-    "profileAvatarUploading": "Uploading…"
+    "profileAvatarUploading": "Uploading…",
+    "profileAvatarUploadFailed": "Upload failed. The Supabase \"avatars\" storage bucket may not be configured.",
+    "profileAvatarTooLarge": "Image too large — must be under 5MB.",
+    "profileAvatarInvalidType": "That file isn't an image."
   },
   "services": {
     "servicesLabel": "Services & pricing",
@@ -1419,8 +1422,9 @@
     "newCoupon": "New Coupon",
     "giftCards": {
       "emptyTitle": "Offer gift cards to your clients",
-      "emptyBody": "Get started creating a gift card to share.",
-      "newCta": "New Gift Card"
+      "emptyBody": "Gift cards are coming soon. In the meantime, you can use Coupons to offer discounts.",
+      "newCta": "New Gift Card",
+      "backToCoupons": "Back to Coupons"
     }
   },
   "favorites": {

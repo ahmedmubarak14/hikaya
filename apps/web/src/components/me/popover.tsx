@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -93,9 +94,9 @@ export function PopoverItem({ icon, label, description, href, onClick, destructi
   );
   if (href) {
     return (
-      <a href={href} className={className}>
+      <Link href={href} className={className}>
         {body}
-      </a>
+      </Link>
     );
   }
   return (
