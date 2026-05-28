@@ -25,13 +25,14 @@ const colors = {
   paper: 'var(--paper)',
 
   // Accents — same in both themes.
-  accent: 'var(--accent)', // Eucalyptus CTA
-  accentSecondary: 'var(--accent-secondary)', // Muted fig highlight
+  accent: 'var(--accent)', // Juicy Yellow Green
+  accentSecondary: 'var(--accent-secondary)', // Simple Lavender
 
   // Tertiaries — same in both themes.
-  sage: 'var(--sage)',
-  blue: 'var(--info)',
-  purple: 'var(--purple)',
+  sage: 'var(--sage)', // Spray (cyan)
+  blue: 'var(--info)', // Laser Blue
+  purple: 'var(--purple)', // Gold Blush
+  orange: 'var(--orange)', // Outrageous Orange
 
   // Muted text — derived per theme via opacity utilities (text-surface/60).
   muted: 'var(--muted)',

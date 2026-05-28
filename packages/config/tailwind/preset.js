@@ -27,6 +27,7 @@ module.exports = {
         sage: tokens.colors.sage,
         info: tokens.colors.blue,
         purple: tokens.colors.purple,
+        orange: tokens.colors.orange,
       },
       fontFamily: tokens.fontFamily,
       fontSize: tokens.fontSize,
