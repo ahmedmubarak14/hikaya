@@ -58,6 +58,8 @@ const ROLE_ICONS: Record<MockUserRole, typeof Sparkles> = {
   CLIENT: Briefcase,
 };
 
+const KNOWN_ROLES = new Set<MockUserRole>(['CREATOR', 'STUDIO_OWNER', 'CLIENT']);
+
 export function WorkspaceMenu({
   locale,
   user,
@@ -71,6 +73,13 @@ export function WorkspaceMenu({
   const initial = user.displayName.charAt(0).toUpperCase();
   const [isSigningOut, startSignOut] = useTransition();
   const [isSwitching, startSwitch] = useTransition();
+
+  // The DB UserRole enum includes ADMIN / AGENCY / RENTAL_COMPANY which this
+  // menu doesn't render. Filter them out so we never try to look up an icon
+  // for an unknown role (which would crash with "<undefined /> is not a valid
+  // React element").
+  const renderableRoles = availableRoles.filter((r) => KNOWN_ROLES.has(r));
+  const safeCurrentRole: MockUserRole = KNOWN_ROLES.has(currentRole) ? currentRole : 'CLIENT';
 
   const roleLabels: Record<MockUserRole, string> = {
     CREATOR: labels.roleCreator,
@@ -116,7 +125,7 @@ export function WorkspaceMenu({
             </span>
           )}
           <span className="flex min-w-0 flex-1 flex-col">
-            <span className="text-muted truncate text-[11px]">{roleLabels[currentRole]}</span>
+            <span className="text-muted truncate text-[11px]">{roleLabels[safeCurrentRole]}</span>
             <span className="text-surface truncate text-sm font-medium">{user.displayName}</span>
           </span>
           <ChevronRight size={14} className="text-muted shrink-0" />
@@ -138,10 +147,10 @@ export function WorkspaceMenu({
       <PopoverItem icon={<Settings size={16} />} label={labels.settings} href={`${me}/settings`} />
 
       <PopoverSeparator label={labels.switchWorkspace} />
-      {availableRoles.length > 1
-        ? availableRoles.map((role) => {
+      {renderableRoles.length > 1
+        ? renderableRoles.map((role) => {
             const Icon = ROLE_ICONS[role];
-            const isCurrent = role === currentRole;
+            const isCurrent = role === safeCurrentRole;
             return (
               <button
                 key={role}
