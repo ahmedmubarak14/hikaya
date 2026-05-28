@@ -214,7 +214,8 @@
       "wsSwitchWorkspace": "تبديل مساحة العمل",
       "wsHelp": "المساعدة",
       "wsLogOut": "تسجيل الخروج",
-      "wsAddWorkspace": "إضافة مساحة عمل"
+      "wsAddWorkspace": "إضافة مساحة عمل",
+      "notifications": "الإشعارات"
     },
     "welcome": "مرحبا، {name}",
     "actionItems": "مهامك",
@@ -1559,7 +1560,13 @@
     "moderationEyebrow": "الإشراف",
     "moderationSubtitle": "مراجعة المحتوى المبلّغ عنه.",
     "moderationEmpty": "لا بلاغات بعد.",
-    "moderationEmptyHint": "ستظهر البلاغات هنا عند تفعيل ميزة الإبلاغ."
+    "moderationEmptyHint": "ستظهر البلاغات هنا عند تفعيل ميزة الإبلاغ.",
+    "moderation": {
+      "resolve": "تحديد كمحلول",
+      "dismiss": "تجاهل",
+      "reporterLabel": "المُبلِغ",
+      "targetLabel": "الهدف"
+    }
   },
   "analytics": {
     "title": "التحليلات",
@@ -2002,5 +2009,30 @@
       "NOT_FOUND": "لم نتمكن من العثور على حسابك.",
       "UPDATE_FAILED": "تعذرت إضافة مساحة العمل. حاول مرة أخرى."
     }
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "unreadCount": "{n, plural, =1 {غير مقروء واحد} other {# غير مقروءة}}",
+    "allCaughtUp": "لا توجد إشعارات جديدة.",
+    "emptyTitle": "لا توجد إشعارات بعد",
+    "emptyBody": "ستظهر الاستفسارات والرسائل والحجوزات الجديدة هنا.",
+    "markAllRead": "تحديد الكل كمقروء",
+    "markingAll": "جارٍ التحديد…",
+    "markRead": "تحديد كمقروء"
+  },
+  "safety": {
+    "block": "حظر",
+    "blocking": "جارٍ الحظر…",
+    "blocked": "تم الحظر.",
+    "report": "إبلاغ",
+    "reported": "تم إرسال البلاغ.",
+    "cancel": "إلغاء",
+    "submitReport": "إرسال البلاغ",
+    "submitting": "جارٍ الإرسال…",
+    "notePlaceholder": "اختياري: المزيد من التفاصيل عمّا حدث.",
+    "reason_SPAM": "محتوى مزعج",
+    "reason_HARASSMENT": "تحرّش",
+    "reason_INAPPROPRIATE": "محتوى غير لائق",
+    "reason_OTHER": "أخرى"
   }
 }

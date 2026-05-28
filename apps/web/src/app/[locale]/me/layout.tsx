@@ -10,6 +10,7 @@ import {
   getProfileActionItems,
   getProfileCompletionPercent,
 } from '@/lib/me/profile-completion';
+import { countMyUnreadNotifications } from '@/lib/notifications/queries';
 
 interface Props {
   children: ReactNode;
@@ -30,6 +31,7 @@ export default async function MeLayout({ children, params }: Props) {
   const creator = await getMyCreatorProfile(session.user.email);
   const actionItems = getProfileActionItems(creator, locale);
   const completion = getProfileCompletionPercent(actionItems);
+  const unreadNotifications = await countMyUnreadNotifications(session.user.id);
 
   const labels = {
     completeProfile: t('sidebar.completeProfile'),
@@ -38,6 +40,7 @@ export default async function MeLayout({ children, params }: Props) {
     profile: tLinks('portfolio'),
     inquiries: tLinks('inquiries'),
     messages: t('sidebar.messages'),
+    notifications: t('sidebar.notifications'),
     wallet: t('sidebar.wallet'),
     payments: t('sidebar.payments'),
     discover: t('sidebar.discover'),
@@ -85,6 +88,7 @@ export default async function MeLayout({ children, params }: Props) {
         currentRole={session.user.currentRole ?? 'CLIENT'}
         availableRoles={Array.isArray(session.user.roles) ? session.user.roles : []}
         completionPercent={completion}
+        unreadNotifications={unreadNotifications}
         labels={labels}
       />
       <main className="min-w-0 flex-1">{children}</main>

@@ -76,3 +76,37 @@ export async function updateNotificationPreferencesAction(
   revalidatePath('/me/settings');
   return { ok: true };
 }
+
+/**
+ * Mark a single notification as read (or, if `all` is true, all of the
+ * user's unread notifications). Revalidates /me/notifications.
+ */
+export async function markNotificationReadAction(
+  notificationId: string | null,
+  opts?: { all?: boolean },
+): Promise<ActionResult> {
+  const session = await getSession();
+  if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
+
+  const supabase = await createClient();
+  const now = new Date().toISOString();
+
+  let query = supabase
+    .from('Notification')
+    .update({ readAt: now })
+    .eq('userId', session.user.id)
+    .is('readAt', null);
+
+  if (!opts?.all && notificationId) {
+    query = query.eq('id', notificationId);
+  }
+
+  const { error } = await query;
+  if (error) {
+    console.error('[notifications/actions] markNotificationReadAction error:', error.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath('/me/notifications');
+  return { ok: true };
+}

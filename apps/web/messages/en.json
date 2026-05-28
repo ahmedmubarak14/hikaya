@@ -214,7 +214,8 @@
       "wsSwitchWorkspace": "Switch workspace",
       "wsHelp": "Help",
       "wsLogOut": "Log out",
-      "wsAddWorkspace": "Add workspace"
+      "wsAddWorkspace": "Add workspace",
+      "notifications": "Notifications"
     },
     "welcome": "Welcome, {name}",
     "actionItems": "Your action items",
@@ -1559,7 +1560,13 @@
     "moderationEyebrow": "Moderation",
     "moderationSubtitle": "Review reported content. Reports from users will appear here once the reporting feature is live.",
     "moderationEmpty": "No reports yet.",
-    "moderationEmptyHint": "When users report content, those reports will appear here for review."
+    "moderationEmptyHint": "When users report content, those reports will appear here for review.",
+    "moderation": {
+      "resolve": "Mark resolved",
+      "dismiss": "Dismiss",
+      "reporterLabel": "Reporter",
+      "targetLabel": "Target"
+    }
   },
   "analytics": {
     "title": "Analytics",
@@ -2002,5 +2009,30 @@
       "NOT_FOUND": "We couldn't find your account.",
       "UPDATE_FAILED": "Couldn't add the workspace. Please try again."
     }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unreadCount": "{n, plural, =1 {1 unread} other {# unread}}",
+    "allCaughtUp": "You're all caught up.",
+    "emptyTitle": "No notifications yet",
+    "emptyBody": "New inquiries, messages, and bookings will show up here.",
+    "markAllRead": "Mark all as read",
+    "markingAll": "Marking…",
+    "markRead": "Mark read"
+  },
+  "safety": {
+    "block": "Block",
+    "blocking": "Blocking…",
+    "blocked": "Blocked.",
+    "report": "Report",
+    "reported": "Report sent.",
+    "cancel": "Cancel",
+    "submitReport": "Submit report",
+    "submitting": "Sending…",
+    "notePlaceholder": "Optional: more detail about what happened.",
+    "reason_SPAM": "Spam",
+    "reason_HARASSMENT": "Harassment",
+    "reason_INAPPROPRIATE": "Inappropriate",
+    "reason_OTHER": "Other"
   }
 }

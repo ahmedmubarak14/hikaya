@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
+  Bell,
   Briefcase,
   ChevronDown,
   Compass,
@@ -56,6 +57,7 @@ interface Props {
   currentRole: MockUserRole;
   availableRoles: MockUserRole[];
   completionPercent: number;
+  unreadNotifications: number;
   labels: {
     completeProfile: string;
     create: string;
@@ -63,6 +65,7 @@ interface Props {
     profile: string;
     inquiries: string;
     messages: string;
+    notifications: string;
     wallet: string;
     payments: string;
     discover: string;
@@ -108,6 +111,7 @@ export function MeSidebar({
   currentRole,
   availableRoles,
   completionPercent,
+  unreadNotifications,
   labels,
 }: Props) {
   const pathname = usePathname();
@@ -118,6 +122,12 @@ export function MeSidebar({
     { href: `${base}/portfolio`, label: labels.profile, icon: User },
     { href: `${base}/inquiries`, label: labels.inquiries, icon: Inbox },
     { href: `${base}/messages`, label: labels.messages, icon: MessageSquare },
+    {
+      href: `${base}/notifications`,
+      label: labels.notifications,
+      icon: Bell,
+      trailing: unreadNotifications > 0 ? String(unreadNotifications) : undefined,
+    },
     { href: `${base}/purchases`, label: labels.wallet, icon: Wallet },
     {
       label: labels.payments,
