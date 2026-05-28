@@ -186,7 +186,69 @@
       "body": "Set up your creator profile to start showcasing your work, getting hired, and managing your studio.",
       "cta": "Create creator profile"
     },
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "sidebar": {
+      "home": "Home",
+      "messages": "Messages",
+      "completeProfile": "Complete your profile",
+      "create": "Create",
+      "workspace": "Independent workspace",
+      "wallet": "Wallet",
+      "payments": "Payments",
+      "discover": "Discover",
+      "people": "People and Projects",
+      "studios": "Verified Studios",
+      "promoTitle": "Get paid for your taste",
+      "promoCta": "Join Hikaya labs",
+      "createPost": "Post",
+      "createProject": "Project",
+      "createProduct": "Product",
+      "createService": "Service",
+      "createPaymentLink": "Payment link",
+      "createInvoice": "Invoice",
+      "wsDashboard": "Dashboard",
+      "wsAnalytics": "Analytics",
+      "wsNetwork": "Network",
+      "wsPortfolio": "Portfolio",
+      "wsSettings": "Settings",
+      "wsSwitchWorkspace": "Switch workspace",
+      "wsHelp": "Help",
+      "wsLogOut": "Log out"
+    },
+    "welcome": "Welcome, {name}",
+    "actionItems": "Your action items",
+    "completeProfile": "Complete profile",
+    "actions": {
+      "cover": "Add a profile cover image or video",
+      "rate": "Add your rate",
+      "social": "Share a social link",
+      "work": "Add 4 pieces of work to your profile",
+      "wallet": "Verify identity & set up your wallet",
+      "bio": "Add a profile one-liner"
+    },
+    "promo": {
+      "invoice": "Get paid on time and keep 100% of what you earn.",
+      "sendInvoice": "Send invoice",
+      "project": "Streamline your contract creation and client workflows.",
+      "startProject": "Start project"
+    },
+    "opportunities": {
+      "title": "Discover new opportunities",
+      "cta": "Discover opportunities"
+    },
+    "discovery": {
+      "title": "Discovery score",
+      "pts": "pts",
+      "body": "View how you rank and get detailed insights on how to boost your score."
+    },
+    "income": {
+      "title": "Income",
+      "body": "Start your first project to see income trends here."
+    },
+    "views": {
+      "title": "Views",
+      "body": "Share your profile to start tracking views."
+    }
   },
   "jobs": {
     "list": {
@@ -1334,6 +1396,18 @@
         "CODE_EXHAUSTED": "This code has reached its usage limit.",
         "CODE_EXPIRED": "This code has expired."
       }
+    },
+    "tabs": {
+      "coupons": "Coupons",
+      "giftCards": "Gift Cards"
+    },
+    "emptyTitle": "Offer session discounts to your clients",
+    "emptyBody": "Get started creating a coupon promo code.",
+    "newCoupon": "New Coupon",
+    "giftCards": {
+      "emptyTitle": "Offer gift cards to your clients",
+      "emptyBody": "Get started creating a gift card to share.",
+      "newCta": "New Gift Card"
     }
   },
   "favorites": {

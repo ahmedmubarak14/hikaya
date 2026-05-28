@@ -4,7 +4,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge } from '@hikaya/ui';
 
-import { SiteHeader } from '@/components/site-header';
 import { TemplateList } from '@/components/templates/template-list';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -34,7 +33,6 @@ export default async function TemplatesPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-4xl px-6 md:px-10">
         <Link
           href={`/${locale}/me`}

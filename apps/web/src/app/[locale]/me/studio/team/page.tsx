@@ -4,7 +4,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge } from '@hikaya/ui';
 
-import { SiteHeader } from '@/components/site-header';
 import { TeamManager, type TeamMember } from '@/components/studio/team-manager';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -64,7 +63,6 @@ export default async function StudioTeamPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <Link
           href={`/${locale}/me/studio`}

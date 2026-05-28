@@ -6,7 +6,6 @@ import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { CancelBookingButton } from '@/components/spaces/cancel-booking-button';
 import { CheckInOutPanel } from '@/components/spaces/check-in-out-panel';
-import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { formatDateTime, formatSarFromHalalas } from '@/lib/format';
@@ -63,7 +62,6 @@ export default async function SpaceRentalDetailPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link

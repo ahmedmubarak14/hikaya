@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { SiteHeader } from '@/components/site-header';
 import { FavoriteCreatorGrid } from '@/components/favorites/favorite-creator-grid';
 import { SavedSearchList } from '@/components/favorites/saved-search-list';
 import { type Locale } from '@/i18n/config';
@@ -41,7 +40,6 @@ export default async function FavoritesPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
         <header className="mb-12 flex flex-col gap-3">
           <Link

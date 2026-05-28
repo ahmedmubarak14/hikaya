@@ -8,7 +8,6 @@ import { EmptyState } from '@/components/empty-state';
 import { DeletePostButton } from '@/components/blog/delete-post-button';
 import { PostStatusBadge } from '@/components/blog/post-status-badge';
 import { PublishPostButton } from '@/components/blog/publish-post-button';
-import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import type { BlogPost } from '@/lib/blog/mock-data';
@@ -41,7 +40,6 @@ export default async function MyBlogPage({ params }: Props) {
   if (!creator) {
     return (
       <>
-        <SiteHeader />
         <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
           <Card>
             <CardBody className="flex flex-col gap-3 p-8">
@@ -65,7 +63,6 @@ export default async function MyBlogPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link

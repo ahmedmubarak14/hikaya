@@ -6,7 +6,6 @@ import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { ContractStatusBadge } from '@/components/contracts/contract-status-badge';
 import { EmptyState } from '@/components/empty-state';
-import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { listContractsByCreator } from '@/lib/contracts/mock-store';
@@ -38,7 +37,6 @@ export default async function MyContractsPage({ params }: Props) {
   if (!creator) {
     return (
       <>
-        <SiteHeader />
         <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
           <Card>
             <CardBody className="flex flex-col gap-3 p-8">
@@ -58,7 +56,6 @@ export default async function MyContractsPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link

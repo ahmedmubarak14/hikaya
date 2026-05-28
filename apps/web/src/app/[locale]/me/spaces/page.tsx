@@ -6,7 +6,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge, Button, Card } from '@hikaya/ui';
 
 import { EmptyState } from '@/components/empty-state';
-import { SiteHeader } from '@/components/site-header';
 import { SpaceStatusButton } from '@/components/spaces/space-status-button';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -46,7 +45,6 @@ export default async function MySpacesPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
