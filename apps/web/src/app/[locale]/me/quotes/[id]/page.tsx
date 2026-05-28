@@ -86,8 +86,14 @@ export default async function QuoteDetailPage({ params }: Props) {
             <CardBody className="flex flex-col gap-3 p-5">
               <span className="text-2xs text-accent-secondary">{t('draftLabel')}</span>
               <p className="text-surface/70 text-sm">{t('draftBody')}</p>
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 <SendQuoteButton locale={locale} quoteId={quote.id} />
+                <a
+                  href={`/api/quotes/${quote.id}/pdf`}
+                  className="border-line/80 text-surface hover:bg-surface/[0.04] inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-sm font-medium transition-colors"
+                >
+                  {t('downloadPdf')}
+                </a>
                 <DeleteQuoteButton locale={locale} quoteId={quote.id} />
               </div>
             </CardBody>

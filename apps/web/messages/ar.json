@@ -650,7 +650,8 @@
       "approvedBody": "تمّت الموافقة {when}. العقد جاهز للتوقيع.",
       "viewContract": "عرض العقد",
       "rejectedLabel": "مرفوض",
-      "rejectedNoReason": "لم يترك العميل سبباً."
+      "rejectedNoReason": "لم يترك العميل سبباً.",
+      "downloadPdf": "تنزيل PDF"
     },
     "viewer": {
       "headline": "عرض سعر",
@@ -870,6 +871,15 @@
     "share": {
       "copy": "انسخ الرابط",
       "copied": "تمّ النسخ"
+    },
+    "bulkUpload": {
+      "dropTitle": "أفلت الصور هنا أو انقر للرفع",
+      "dropBody": "PNG، JPG حتى 25MB لكل صورة. اضغط Shift لتحديد عدة ملفات.",
+      "uploading": "جارٍ الرفع…",
+      "error": "فشل",
+      "saving": "جارٍ الحفظ…",
+      "saveCount": "حفظ {count} في المعرض",
+      "someFailed": "فشلت بعض عمليات الرفع — راجع أعلاه."
     }
   },
   "portfolioEditor": {
