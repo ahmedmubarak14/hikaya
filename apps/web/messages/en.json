@@ -229,11 +229,19 @@
       "invoice": "Get paid on time and keep 100% of what you earn.",
       "sendInvoice": "Send invoice",
       "project": "Streamline your contract creation and client workflows.",
-      "startProject": "Start project"
+      "startProject": "Start project",
+      "invoiceAmount": "₼ 20,000"
     },
     "opportunities": {
       "title": "Discover new opportunities",
-      "cta": "Discover opportunities"
+      "cta": "Discover opportunities",
+      "items": [
+        "Wedding Photographer",
+        "Brand Designer",
+        "Motion Designer",
+        "Product Photographer",
+        "Color Grader"
+      ]
     },
     "discovery": {
       "title": "Discovery score",
@@ -1673,7 +1681,9 @@
       "bodyHint": "Blank line between paragraphs.",
       "statusLabel": "Status",
       "save": "Save",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "titleLabelArabic": "Title (Arabic)",
+      "bodyLabelArabic": "Body (Arabic)"
     },
     "profile": {
       "linkToBlog": "Read {count, plural, =1 {1 post} other {# posts}} on Journal →"
