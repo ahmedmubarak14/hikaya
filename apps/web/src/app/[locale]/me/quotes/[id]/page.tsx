@@ -9,7 +9,6 @@ import { DeleteQuoteButton } from '@/components/quotes/delete-quote-button';
 import { QuoteStatusBadge } from '@/components/quotes/quote-status-badge';
 import { QuoteSummary } from '@/components/quotes/quote-summary';
 import { SendQuoteButton } from '@/components/quotes/send-quote-button';
-import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
@@ -64,7 +63,6 @@ export default async function QuoteDetailPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link

@@ -7,7 +7,6 @@ import { Badge } from '@hikaya/ui';
 import { RealtimeComposer } from '@/components/messages/realtime-composer';
 import { RealtimeMessages } from '@/components/messages/realtime-messages';
 import { ThreadQuickActions } from '@/components/messages/thread-quick-actions';
-import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { markThreadReadAction } from '@/lib/messages/actions';
@@ -88,7 +87,6 @@ export default async function ThreadDetailPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="mx-auto flex h-[calc(100dvh-4rem)] w-full max-w-3xl flex-col px-0 md:px-6">
         <header className="border-surface/10 flex items-baseline justify-between gap-3 border-b px-6 py-5 md:px-0">
           <div className="flex flex-col gap-1.5">

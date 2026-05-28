@@ -5,7 +5,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { ServicesEditor } from '@/components/services/services-editor';
-import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
@@ -50,7 +49,6 @@ export default async function MyServicesPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <Link
           href={`/${locale}/me`}
@@ -89,7 +87,6 @@ async function NoCreatorProfile({ locale }: { locale: Locale }) {
   const t = await getTranslations('services');
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <Link
           href={`/${locale}/me`}

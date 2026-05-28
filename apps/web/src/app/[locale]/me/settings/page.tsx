@@ -4,7 +4,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge } from '@hikaya/ui';
 
-import { SiteHeader } from '@/components/site-header';
 import { SettingsProfileForm } from '@/components/settings/settings-profile-form';
 import { SettingsPasswordForm } from '@/components/settings/settings-password-form';
 import { SettingsDataExport } from '@/components/settings/settings-data-export';
@@ -56,7 +55,6 @@ export default async function SettingsPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <Link
           href={`/${locale}/me`}

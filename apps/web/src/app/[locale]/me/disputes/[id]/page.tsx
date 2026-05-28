@@ -4,7 +4,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
-import { SiteHeader } from '@/components/site-header';
 import { RespondDisputeForm } from '@/components/disputes/respond-dispute-form';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -46,7 +45,6 @@ export default async function DisputeDetailPage({ params }: Props) {
   if (!dispute) {
     return (
       <>
-        <SiteHeader />
         <main className="py-22 mx-auto w-full max-w-2xl px-6 md:px-10">
           <p className="text-surface/60">{t('notFound')}</p>
         </main>
@@ -72,7 +70,6 @@ export default async function DisputeDetailPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-2xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link

@@ -6,7 +6,6 @@ import { Badge, Button, Card, CardBody } from '@hikaya/ui';
 
 import { PortfolioEditor } from '@/components/portfolio/portfolio-editor';
 import { ProfileEditForm } from '@/components/portfolio/profile-edit-form';
-import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
@@ -39,7 +38,6 @@ export default async function MyPortfolioPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
         <header className="mb-12 flex flex-col gap-3">
           <Link
@@ -100,7 +98,6 @@ async function NoCreatorProfile({ locale }: { locale: Locale }) {
   const t = await getTranslations('portfolioEditor');
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <Link
           href={`/${locale}/me`}

@@ -8,7 +8,6 @@ import { BookingCalendar } from '@/components/studio/booking-calendar';
 import { ClientTable } from '@/components/studio/client-table';
 import { UpcomingBookingsWidget } from '@/components/studio/upcoming-bookings-widget';
 import { StatTile } from '@/components/studio/stat-tile';
-import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import {
@@ -71,7 +70,6 @@ export default async function StudioDashboardPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="max-w-8xl py-22 mx-auto w-full px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link

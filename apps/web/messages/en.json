@@ -1338,6 +1338,18 @@
         "CODE_EXHAUSTED": "This code has reached its usage limit.",
         "CODE_EXPIRED": "This code has expired."
       }
+    },
+    "tabs": {
+      "coupons": "Coupons",
+      "giftCards": "Gift Cards"
+    },
+    "emptyTitle": "Offer session discounts to your clients",
+    "emptyBody": "Get started creating a coupon promo code.",
+    "newCoupon": "New Coupon",
+    "giftCards": {
+      "emptyTitle": "Offer gift cards to your clients",
+      "emptyBody": "Get started creating a gift card to share.",
+      "newCta": "New Gift Card"
     }
   },
   "favorites": {

@@ -6,7 +6,6 @@ import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { ProductForm } from '@/components/store/product-form';
 import { StatusButton } from '@/components/store/status-button';
-import { SiteHeader } from '@/components/site-header';
 import { CopyLinkButton } from '@/components/galleries/copy-link-button';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -63,7 +62,6 @@ export default async function EditProductPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-4xl px-6 md:px-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link

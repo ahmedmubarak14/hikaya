@@ -1,11 +1,12 @@
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { Tag } from 'lucide-react';
 
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { DiscountManager } from '@/components/discounts/discount-manager';
-import { SiteHeader } from '@/components/site-header';
+import { EmptyState } from '@/components/me/empty-state';
+import { PageHeader } from '@/components/me/page-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
@@ -31,34 +32,33 @@ export default async function DiscountsPage({ params }: Props) {
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/discounts`);
 
   const t = await getTranslations('discounts');
+  const tLinks = await getTranslations('me.links');
   const creator = await getMyCreatorProfile(session.user.email);
+
+  const tabs = [
+    { href: `/${locale}/me/discounts`, label: t('tabs.coupons') },
+    { href: `/${locale}/me/discounts/gift-cards`, label: t('tabs.giftCards') },
+  ];
 
   if (!creator) {
     return (
       <>
-        <SiteHeader />
-        <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
-          <Link
-            href={`/${locale}/me`}
-            className="text-2xs text-surface/40 hover:text-surface transition-colors"
-          >
-            {t('backToAccount')}
-          </Link>
-          <Card className="mt-8">
+        <PageHeader title={tLinks('discounts')} tabs={tabs} />
+        <div className="mx-auto w-full max-w-3xl px-8 pb-10">
+          <Card>
             <CardBody className="flex flex-col gap-4 p-8">
               <Badge tone="warning" className="self-start">
                 {t('clientLabel')}
               </Badge>
-              <h1 className="text-balance text-3xl">{t('clientTitle')}</h1>
-              <p className="text-surface/60">{t('clientBody')}</p>
+              <h2 className="text-balance text-xl font-semibold">{t('clientTitle')}</h2>
+              <p className="text-muted">{t('clientBody')}</p>
             </CardBody>
           </Card>
-        </main>
+        </div>
       </>
     );
   }
 
-  // Fetch existing discount codes
   const supabase = await createClient();
   const { data: discounts } = await supabase
     .from('DiscountCode')
@@ -66,28 +66,23 @@ export default async function DiscountsPage({ params }: Props) {
     .eq('ownerUserId', session.user.id)
     .order('createdAt', { ascending: false });
 
+  const items = discounts ?? [];
+
   return (
     <>
-      <SiteHeader />
-      <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
-        <header className="mb-12 flex flex-col gap-3">
-          <Link
-            href={`/${locale}/me`}
-            className="text-2xs text-surface/40 hover:text-surface transition-colors"
-          >
-            {'← '}{t('backToAccount')}
-          </Link>
-          <h1 className="text-balance text-4xl font-bold tracking-tight md:text-5xl">
-            <span>{t('headline')}</span>{' '}
-            <span className="text-accent-secondary font-bold">{t('headlineItalic')}</span>
-          </h1>
-          <p className="text-surface/60 max-w-prose">{t('subtitle')}</p>
-        </header>
-
-        <DiscountManager
-          locale={locale}
-          discounts={
-            (discounts ?? []).map((d) => ({
+      <PageHeader title={tLinks('discounts')} tabs={tabs} />
+      <div className="px-8 pb-10">
+        {items.length === 0 ? (
+          <EmptyState
+            icon={<Tag size={32} strokeWidth={1.5} />}
+            title={t('emptyTitle')}
+            body={t('emptyBody')}
+            cta={{ href: `/${locale}/me/discounts?new=1`, label: t('newCoupon') }}
+          />
+        ) : (
+          <DiscountManager
+            locale={locale}
+            discounts={items.map((d) => ({
               id: d.id as string,
               code: d.code as string,
               percentageOff: d.percentageOff as number | null,
@@ -98,10 +93,10 @@ export default async function DiscountsPage({ params }: Props) {
               expiresAt: d.expiresAt as string | null,
               isActive: d.isActive as boolean,
               createdAt: d.createdAt as string,
-            }))
-          }
-        />
-      </main>
+            }))}
+          />
+        )}
+      </div>
     </>
   );
 }

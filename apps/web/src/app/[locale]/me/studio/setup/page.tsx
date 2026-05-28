@@ -4,7 +4,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge } from '@hikaya/ui';
 
-import { SiteHeader } from '@/components/site-header';
 import { StudioProfileForm } from '@/components/studio/studio-profile-form';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -38,7 +37,6 @@ export default async function StudioSetupPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link

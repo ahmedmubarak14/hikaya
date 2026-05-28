@@ -4,7 +4,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
-import { SiteHeader } from '@/components/site-header';
 import { SpaceForm } from '@/components/spaces/space-form';
 import { SpaceStatusButton } from '@/components/spaces/space-status-button';
 import { type Locale } from '@/i18n/config';
@@ -53,7 +52,6 @@ export default async function EditSpacePage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-4xl px-6 md:px-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link

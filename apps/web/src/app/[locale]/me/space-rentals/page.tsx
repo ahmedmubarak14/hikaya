@@ -4,7 +4,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge, Button } from '@hikaya/ui';
 
-import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { formatDate, formatSarFromHalalas } from '@/lib/format';
@@ -49,7 +48,6 @@ export default async function MySpaceRentalsPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader />
       <main className="py-22 mx-auto w-full max-w-4xl px-6 md:px-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
