@@ -186,7 +186,11 @@
       "body": "Set up your creator profile to start showcasing your work, getting hired, and managing your studio.",
       "cta": "Create creator profile"
     },
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "sidebar": {
+      "home": "Home",
+      "messages": "Messages"
+    }
   },
   "jobs": {
     "list": {
