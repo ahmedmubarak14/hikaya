@@ -29,10 +29,12 @@ interface DbSpaceRow {
   capacity: number;
   hourlyHalalas: number;
   dailyHalalas: number;
+  halfDayHalalas: number | null;
   equipmentIncluded: string[];
   photos: string[];
   status: string;
   houseRules: string | null;
+  cancellationPolicy: string | null;
   addOns: SpaceAddOn[] | null;
   createdAt: string;
 }
@@ -65,10 +67,12 @@ function mapSpace(row: DbSpaceRow): Space {
     capacity: row.capacity,
     hourlyHalalas: row.hourlyHalalas,
     dailyHalalas: row.dailyHalalas,
+    halfDayHalalas: row.halfDayHalalas ?? 0,
     equipmentIncluded: row.equipmentIncluded ?? [],
     photos: row.photos ?? [],
     status: row.status as SpaceStatus,
     houseRules: row.houseRules ?? '',
+    cancellationPolicy: row.cancellationPolicy ?? '',
     addOns: (row.addOns as SpaceAddOn[] | null) ?? [],
     createdAt: row.createdAt,
   };
@@ -95,9 +99,9 @@ function mapSpaceBooking(row: DbSpaceBookingRow): SpaceBooking {
 
 const SPACE_SELECT = `
   id, ownerId, name, description, address, city,
-  capacity, hourlyHalalas, dailyHalalas,
+  capacity, hourlyHalalas, dailyHalalas, halfDayHalalas,
   equipmentIncluded, photos, status,
-  houseRules, addOns, createdAt
+  houseRules, cancellationPolicy, addOns, createdAt
 `;
 
 const BOOKING_SELECT = `

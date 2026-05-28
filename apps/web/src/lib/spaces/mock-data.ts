@@ -16,7 +16,7 @@ export type SpaceStatus = 'DRAFT' | 'ACTIVE' | 'PAUSED';
 
 export type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
 
-export type BookingDurationKind = 'HOURLY' | 'DAILY';
+export type BookingDurationKind = 'HOURLY' | 'HALF_DAY' | 'DAILY';
 
 export interface SpaceAddOn {
   name: string;
@@ -37,6 +37,8 @@ export interface Space {
   hourlyHalalas: number;
   /** Per-day rate in halalas. */
   dailyHalalas: number;
+  /** Half-day (single ~5h block) rate in halalas. 0 = not offered. */
+  halfDayHalalas: number;
   /** Free-text tags surfaced as chips on the detail page. */
   equipmentIncluded: string[];
   /** 1–10 photo URLs. First is the hero. */
@@ -44,6 +46,8 @@ export interface Space {
   status: SpaceStatus;
   /** Free-text house rules displayed on the detail page. */
   houseRules: string;
+  /** Free-text cancellation policy shown + agreed to before booking. */
+  cancellationPolicy: string;
   /** Optional add-ons the renter can select during booking. */
   addOns: SpaceAddOn[];
   createdAt: string;
@@ -101,10 +105,12 @@ export const SEED_SPACES: Space[] = [
     capacity: 12,
     hourlyHalalas: 250 * SAR,
     dailyHalalas: 1800 * SAR,
+    halfDayHalalas: 1080 * SAR,
     equipmentIncluded: ['Cyclorama', 'Profoto B10X x3', 'Backdrops', 'C-stands'],
     photos: [pic('cyc-1', 1600, 1067), pic('cyc-2', 1600, 1067), pic('cyc-3', 1600, 1067)],
     status: 'ACTIVE',
     houseRules: 'No food or drinks near the cyclorama. Shoes off on the seamless. Strike all gear before leaving.',
+    cancellationPolicy: 'Free cancellation up to 48 hours before the booking start. Cancellations within 48 hours are charged 50% of the booking total. No-shows are charged in full.',
     addOns: [
       { name: 'Extra Profoto head', priceHalalas: 50 * SAR },
       { name: 'Fog machine', priceHalalas: 30 * SAR },
@@ -123,6 +129,7 @@ export const SEED_SPACES: Space[] = [
     capacity: 8,
     hourlyHalalas: 180 * SAR,
     dailyHalalas: 1200 * SAR,
+    halfDayHalalas: 720 * SAR,
     equipmentIncluded: ['Diffusion frames', 'Reflectors', 'Wardrobe rack', 'Kitchenette'],
     photos: [
       pic('daylight-1', 1600, 1067),
@@ -131,6 +138,7 @@ export const SEED_SPACES: Space[] = [
     ],
     status: 'ACTIVE',
     houseRules: 'Keep windows closed during shoots to maintain temperature. Clean kitchenette after use.',
+    cancellationPolicy: 'Free cancellation up to 48 hours before the booking start. Cancellations within 48 hours are charged 50% of the booking total. No-shows are charged in full.',
     addOns: [
       { name: 'Wardrobe steamer', priceHalalas: 20 * SAR },
     ],
@@ -147,10 +155,12 @@ export const SEED_SPACES: Space[] = [
     capacity: 6,
     hourlyHalalas: 350 * SAR,
     dailyHalalas: 2400 * SAR,
+    halfDayHalalas: 1440 * SAR,
     equipmentIncluded: ['Sony FX3 x3', 'Shure SM7B x4', 'Rodecaster Pro II', 'Engineer included'],
     photos: [pic('podcast-1', 1600, 1067), pic('podcast-2', 1600, 1067)],
     status: 'ACTIVE',
     houseRules: 'No touching camera rigs. Engineer handles all technical setup. Quiet in the hallway during recording.',
+    cancellationPolicy: 'Free cancellation up to 48 hours before the booking start. Cancellations within 48 hours are charged 50% of the booking total. No-shows are charged in full.',
     addOns: [
       { name: 'Extra mic channel', priceHalalas: 40 * SAR },
       { name: 'Teleprompter', priceHalalas: 60 * SAR },
@@ -168,10 +178,12 @@ export const SEED_SPACES: Space[] = [
     capacity: 20,
     hourlyHalalas: 220 * SAR,
     dailyHalalas: 1500 * SAR,
+    halfDayHalalas: 900 * SAR,
     equipmentIncluded: ['Power drops', 'Shade canopy', 'Loading lift'],
     photos: [pic('rooftop-1', 1600, 1067), pic('rooftop-2', 1600, 1067)],
     status: 'ACTIVE',
     houseRules: 'Wind advisory: do not set up tall stands without sandbags. All trash must be removed.',
+    cancellationPolicy: 'Free cancellation up to 48 hours before the booking start. Cancellations within 48 hours are charged 50% of the booking total. No-shows are charged in full.',
     addOns: [],
     createdAt: now,
   },
@@ -186,6 +198,7 @@ export const SEED_SPACES: Space[] = [
     capacity: 15,
     hourlyHalalas: 280 * SAR,
     dailyHalalas: 1950 * SAR,
+    halfDayHalalas: 1170 * SAR,
     equipmentIncluded: ['Green screen', 'Aputure 1200d', 'C-stands', 'Sound dampening'],
     photos: [
       pic('blackbox-1', 1600, 1067),
@@ -194,6 +207,7 @@ export const SEED_SPACES: Space[] = [
     ],
     status: 'ACTIVE',
     houseRules: 'Blackout curtains must stay sealed during shoots. No smoking inside.',
+    cancellationPolicy: 'Free cancellation up to 48 hours before the booking start. Cancellations within 48 hours are charged 50% of the booking total. No-shows are charged in full.',
     addOns: [
       { name: 'Aputure 600d Pro', priceHalalas: 80 * SAR },
     ],
@@ -210,10 +224,12 @@ export const SEED_SPACES: Space[] = [
     capacity: 10,
     hourlyHalalas: 200 * SAR,
     dailyHalalas: 1400 * SAR,
+    halfDayHalalas: 840 * SAR,
     equipmentIncluded: ['Practical lights', 'Props library', 'Wardrobe room'],
     photos: [pic('lounge-1', 1600, 1067), pic('lounge-2', 1600, 1067)],
     status: 'ACTIVE',
     houseRules: 'Props are free to use but must be returned to their shelf. No rearranging furniture without permission.',
+    cancellationPolicy: 'Free cancellation up to 48 hours before the booking start. Cancellations within 48 hours are charged 50% of the booking total. No-shows are charged in full.',
     addOns: [
       { name: 'Props library access', priceHalalas: 0 },
       { name: 'Hair & makeup station', priceHalalas: 100 * SAR },

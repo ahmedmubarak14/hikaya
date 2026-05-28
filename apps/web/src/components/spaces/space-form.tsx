@@ -37,10 +37,12 @@ interface FormShape {
   capacity: number;
   hourlySar: number;
   dailySar: number;
+  halfDaySar: number;
   status: SpaceStatus;
   photosRaw: string;
   equipmentRaw: string;
   houseRules: string;
+  cancellationPolicy: string;
   addOnsRaw: string;
 }
 
@@ -78,10 +80,12 @@ export function SpaceForm({ locale, space }: Props) {
           capacity: space.capacity,
           hourlySar: Math.round(space.hourlyHalalas / 100),
           dailySar: Math.round(space.dailyHalalas / 100),
+          halfDaySar: Math.round((space.halfDayHalalas ?? 0) / 100),
           status: space.status,
           photosRaw: space.photos.join('\n'),
           equipmentRaw: space.equipmentIncluded.join(', '),
           houseRules: space.houseRules ?? '',
+          cancellationPolicy: space.cancellationPolicy ?? '',
           addOnsRaw: space.addOns
             .map((a) => `${a.name}, ${Math.round(a.priceHalalas / 100)}`)
             .join('\n'),
@@ -94,10 +98,12 @@ export function SpaceForm({ locale, space }: Props) {
           capacity: 4,
           hourlySar: 0,
           dailySar: 0,
+          halfDaySar: 0,
           status: 'DRAFT',
           photosRaw: '',
           equipmentRaw: '',
           houseRules: '',
+          cancellationPolicy: '',
           addOnsRaw: '',
         },
   });
@@ -113,10 +119,12 @@ export function SpaceForm({ locale, space }: Props) {
         fd.set('capacity', String(values.capacity));
         fd.set('hourlySar', String(values.hourlySar));
         fd.set('dailySar', String(values.dailySar));
+        fd.set('halfDaySar', String(values.halfDaySar));
         fd.set('status', values.status);
         fd.set('photosRaw', values.photosRaw);
         fd.set('equipmentRaw', values.equipmentRaw);
         fd.set('houseRules', values.houseRules);
+        fd.set('cancellationPolicy', values.cancellationPolicy);
         fd.set('addOnsRaw', values.addOnsRaw);
         startTransition(() => formAction(fd));
       })}
@@ -187,6 +195,14 @@ export function SpaceForm({ locale, space }: Props) {
           {...register('dailySar')}
           error={errors.dailySar?.message ?? serverState?.fieldErrors?.dailySar}
         />
+        <Input
+          type="number"
+          inputMode="numeric"
+          label={t('halfDay')}
+          hint={t('halfDayHint')}
+          {...register('halfDaySar')}
+          error={errors.halfDaySar?.message ?? serverState?.fieldErrors?.halfDaySar}
+        />
       </section>
 
       <Field label={t('status')} hint={t('statusHint')} error={errors.status?.message}>
@@ -232,6 +248,15 @@ export function SpaceForm({ locale, space }: Props) {
           {...register('houseRules')}
           className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
           placeholder="No food or drinks in the studio. Shoes off on the cyclorama."
+        />
+      </Field>
+
+      <Field label={t('cancellationPolicy')} hint={t('cancellationPolicyHint')}>
+        <textarea
+          rows={3}
+          {...register('cancellationPolicy')}
+          className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent rounded-md border px-3 py-2 text-base outline-none"
+          placeholder="Free cancellation up to 48 hours before the booking. 50% charge within 48 hours."
         />
       </Field>
 

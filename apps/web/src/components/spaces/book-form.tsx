@@ -16,6 +16,7 @@ interface Props {
   spaceId: string;
   hourlyHalalas: number;
   dailyHalalas: number;
+  halfDayHalalas?: number;
   /**
    * Disable for the owner's own space (CTA renders disabled instead of
    * firing). `unauthenticated` falls through to the action, which redirects.
@@ -23,6 +24,8 @@ interface Props {
   disabledReason?: 'OWN' | null;
   /** House rules that must be agreed to before booking. */
   houseRules?: string;
+  /** Cancellation policy shown above the submit button. */
+  cancellationPolicy?: string;
   /** Optional add-ons for the space. */
   addOns?: SpaceAddOn[];
 }
@@ -33,7 +36,7 @@ interface Props {
  * fancy calendar widget", which matches the rest of the platform's
  * intentionally lightweight form vocabulary.
  */
-export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disabledReason, houseRules, addOns = [] }: Props) {
+export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, halfDayHalalas = 0, disabledReason, houseRules, cancellationPolicy, addOns = [] }: Props) {
   const t = useTranslations('spaces.book');
   const action = bookSpaceAction.bind(null, locale, spaceId);
   const [serverState, formAction] = useFormState<SpacesResult | null, FormData>(action, null);
@@ -50,7 +53,7 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
 
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(tomorrow);
-  const [kind, setKind] = useState<'HOURLY' | 'DAILY'>('DAILY');
+  const [kind, setKind] = useState<'HOURLY' | 'HALF_DAY' | 'DAILY'>('DAILY');
   const [agreedToRules, setAgreedToRules] = useState(!houseRules);
   const [selectedAddOnIndexes, setSelectedAddOnIndexes] = useState<Set<number>>(new Set());
 
@@ -77,8 +80,11 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
       return hours * hourlyHalalas;
     }
     const days = Math.max(1, Math.ceil(ms / (24 * 60 * 60 * 1000)));
+    if (kind === 'HALF_DAY') {
+      return days * (halfDayHalalas > 0 ? halfDayHalalas : Math.round(dailyHalalas * 0.6));
+    }
     return days * dailyHalalas;
-  }, [startDate, endDate, kind, hourlyHalalas, dailyHalalas]);
+  }, [startDate, endDate, kind, hourlyHalalas, dailyHalalas, halfDayHalalas]);
 
   const totalWithAddOns = estimateHalalas + addOnsTotal;
 
@@ -139,6 +145,19 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
           />
           {t('kindDaily')}
         </label>
+        {halfDayHalalas > 0 ? (
+          <label className="border-surface/15 text-surface/80 has-[:checked]:border-accent has-[:checked]:bg-accent/5 has-[:checked]:text-surface inline-flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm">
+            <input
+              type="radio"
+              name="durationKind"
+              value="HALF_DAY"
+              checked={kind === 'HALF_DAY'}
+              onChange={() => setKind('HALF_DAY')}
+              className="sr-only"
+            />
+            {t('kindHalfDay')}
+          </label>
+        ) : null}
         <label className="border-surface/15 text-surface/80 has-[:checked]:border-accent has-[:checked]:bg-accent/5 has-[:checked]:text-surface inline-flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm">
           <input
             type="radio"
@@ -212,6 +231,17 @@ export function BookForm({ locale, spaceId, hourlyHalalas, dailyHalalas, disable
           />
           {t('agreeRules')}
         </label>
+      ) : null}
+
+      {cancellationPolicy ? (
+        <div className="border-surface/10 bg-surface/[0.02] rounded-lg border p-3">
+          <p className="text-surface/70 text-2xs font-medium uppercase tracking-wide">
+            {t('cancellationPolicyTitle')}
+          </p>
+          <p className="text-surface/60 mt-1 whitespace-pre-wrap text-xs leading-relaxed">
+            {cancellationPolicy}
+          </p>
+        </div>
       ) : null}
 
       {serverState && !serverState.ok ? (

@@ -143,10 +143,12 @@ export interface CreateSpaceInput {
   capacity: number;
   hourlyHalalas: number;
   dailyHalalas: number;
+  halfDayHalalas?: number;
   equipmentIncluded: string[];
   photos: string[];
   status: SpaceStatus;
   houseRules?: string;
+  cancellationPolicy?: string;
   addOns?: { name: string; priceHalalas: number }[];
 }
 
@@ -162,10 +164,12 @@ export function createSpace(input: CreateSpaceInput): Space {
     capacity: input.capacity,
     hourlyHalalas: input.hourlyHalalas,
     dailyHalalas: input.dailyHalalas,
+    halfDayHalalas: input.halfDayHalalas ?? 0,
     equipmentIncluded: [...input.equipmentIncluded],
     photos: [...input.photos],
     status: input.status,
     houseRules: input.houseRules ?? '',
+    cancellationPolicy: input.cancellationPolicy ?? '',
     addOns: input.addOns ? [...input.addOns] : [],
     createdAt: new Date().toISOString(),
   };

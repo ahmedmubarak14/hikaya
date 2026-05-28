@@ -1773,7 +1773,8 @@
       "calendarPrev": "الشهر السابق",
       "calendarNext": "الشهر التالي",
       "calendarBooked": "محجوز",
-      "calendarAvailable": "متاح"
+      "calendarAvailable": "متاح",
+      "halfDay": "نصف يوم"
     },
     "book": {
       "title": "احجز هذا الاستوديو",
@@ -1789,7 +1790,9 @@
       "error": "تعذّر تأكيد الحجز. راجع البيانات وحاول مجدّداً.",
       "agreeRules": "أوافق على شروط الاستخدام",
       "addOnsLabel": "إضافات",
-      "addOnsTotal": "إجمالي الإضافات {price}"
+      "addOnsTotal": "إجمالي الإضافات {price}",
+      "kindHalfDay": "نصف يوم",
+      "cancellationPolicyTitle": "سياسة الإلغاء"
     },
     "owner": {
       "eyebrow": "استوديوهات",
@@ -1852,7 +1855,11 @@
       "submit": "إنشاء الاستوديو",
       "save": "حفظ التغييرات",
       "saved": "تم الحفظ",
-      "errorGeneric": "حدث خطأ ما. راجع البيانات وحاول مجدّداً."
+      "errorGeneric": "حدث خطأ ما. راجع البيانات وحاول مجدّداً.",
+      "halfDay": "سعر نصف اليوم (ر.س)",
+      "halfDayHint": "اختياري. فترة ~5 ساعات. اترك 0 إن لم تكن متاحة.",
+      "cancellationPolicy": "سياسة الإلغاء",
+      "cancellationPolicyHint": "تُعرض للمستأجرين ويجب الموافقة عليها قبل الحجز."
     },
     "bookings": {
       "eyebrow": "الحجوزات",

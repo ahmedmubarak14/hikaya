@@ -11,7 +11,7 @@ const CITY_VALUES = [
   'ABHA',
 ] as const;
 const STATUS_VALUES = ['DRAFT', 'ACTIVE', 'PAUSED'] as const;
-const DURATION_VALUES = ['HOURLY', 'DAILY'] as const;
+const DURATION_VALUES = ['HOURLY', 'HALF_DAY', 'DAILY'] as const;
 
 const urlList = (max: number) =>
   z
@@ -46,16 +46,18 @@ export const spaceSchema = z
     /** UI collects SAR; we widen to halalas at the action boundary. */
     hourlySar: z.coerce.number().int().nonnegative().max(100_000),
     dailySar: z.coerce.number().int().nonnegative().max(1_000_000),
+    halfDaySar: z.coerce.number().int().nonnegative().max(1_000_000).optional().default(0),
     status: z.enum(STATUS_VALUES).default('DRAFT'),
     photosRaw: urlList(10),
     equipmentRaw: tagList(15),
+    cancellationPolicy: z.string().max(2000).optional().default(''),
   })
   .refine((v) => v.photosRaw.length >= 1, {
     message: 'Add at least one photo URL.',
     path: ['photosRaw'],
   })
-  .refine((v) => v.hourlySar > 0 || v.dailySar > 0, {
-    message: 'Set at least one rate (hourly or daily).',
+  .refine((v) => v.hourlySar > 0 || v.dailySar > 0 || v.halfDaySar > 0, {
+    message: 'Set at least one rate (hourly, half-day, or daily).',
     path: ['hourlySar'],
   });
 

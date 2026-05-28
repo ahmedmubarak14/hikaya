@@ -127,10 +127,12 @@ export async function createSpaceAction(
       capacity: parsed.data.capacity,
       hourlyHalalas: parsed.data.hourlySar * SAR_TO_HALALAS,
       dailyHalalas: parsed.data.dailySar * SAR_TO_HALALAS,
+      halfDayHalalas: parsed.data.halfDaySar * SAR_TO_HALALAS,
       equipmentIncluded: parsed.data.equipmentRaw,
       photos: parsed.data.photosRaw,
       status: parsed.data.status,
       houseRules,
+      cancellationPolicy: parsed.data.cancellationPolicy,
       addOns,
       createdAt: now,
     });
@@ -175,6 +177,7 @@ export async function updateSpaceAction(
   }
 
   const houseRulesUpdate = formData.get('houseRules')?.toString() ?? '';
+  const cancellationPolicyUpdate = formData.get('cancellationPolicy')?.toString() ?? '';
   const addOnsRawUpdate = formData.get('addOnsRaw')?.toString() ?? '';
   const addOnsUpdate = parseAddOnsText(addOnsRawUpdate);
 
@@ -188,10 +191,12 @@ export async function updateSpaceAction(
       capacity: parsed.data.capacity,
       hourlyHalalas: parsed.data.hourlySar * SAR_TO_HALALAS,
       dailyHalalas: parsed.data.dailySar * SAR_TO_HALALAS,
+      halfDayHalalas: parsed.data.halfDaySar * SAR_TO_HALALAS,
       equipmentIncluded: parsed.data.equipmentRaw,
       photos: parsed.data.photosRaw,
       status: parsed.data.status,
       houseRules: houseRulesUpdate,
+      cancellationPolicy: cancellationPolicyUpdate,
       addOns: addOnsUpdate,
     })
     .eq('id', spaceId);
@@ -254,9 +259,10 @@ export async function setSpaceStatusAction(
 function computeTotalHalalas(
   start: number,
   end: number,
-  kind: 'HOURLY' | 'DAILY',
+  kind: 'HOURLY' | 'HALF_DAY' | 'DAILY',
   hourly: number,
   daily: number,
+  halfDay: number,
 ): number {
   const ms = end - start;
   if (kind === 'HOURLY') {
@@ -264,6 +270,10 @@ function computeTotalHalalas(
     return hours * hourly;
   }
   const days = Math.max(1, Math.ceil(ms / (24 * 60 * 60 * 1000)));
+  // Half-day bills the half-day rate per booked day.
+  if (kind === 'HALF_DAY') {
+    return days * (halfDay > 0 ? halfDay : Math.round(daily * 0.6));
+  }
   return days * daily;
 }
 
@@ -282,7 +292,7 @@ export async function bookSpaceAction(
 
   const { data: space, error: spaceFetchErr } = await supabase
     .from('Space')
-    .select('id, ownerId, status, hourlyHalalas, dailyHalalas')
+    .select('id, ownerId, status, hourlyHalalas, dailyHalalas, halfDayHalalas')
     .eq('id', spaceId)
     .maybeSingle();
 
@@ -338,6 +348,7 @@ export async function bookSpaceAction(
     parsed.data.durationKind,
     space.hourlyHalalas as number,
     space.dailyHalalas as number,
+    (space.halfDayHalalas as number) ?? 0,
   ) + addOnsTotal;
 
   const bookingId = `sb_${randomBytes(6).toString('hex')}`;

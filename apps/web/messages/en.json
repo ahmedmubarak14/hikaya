@@ -1773,7 +1773,8 @@
       "calendarPrev": "Previous month",
       "calendarNext": "Next month",
       "calendarBooked": "Booked",
-      "calendarAvailable": "Available"
+      "calendarAvailable": "Available",
+      "halfDay": "Half-day"
     },
     "book": {
       "title": "Reserve this space",
@@ -1789,7 +1790,9 @@
       "error": "Couldn't confirm the booking. Please review and try again.",
       "agreeRules": "I agree to the house rules",
       "addOnsLabel": "Add-ons",
-      "addOnsTotal": "Add-ons total {price}"
+      "addOnsTotal": "Add-ons total {price}",
+      "kindHalfDay": "Half-day",
+      "cancellationPolicyTitle": "Cancellation policy"
     },
     "owner": {
       "eyebrow": "Studios",
@@ -1852,7 +1855,11 @@
       "submit": "Create space",
       "save": "Save changes",
       "saved": "Saved",
-      "errorGeneric": "Something went wrong. Please review and try again."
+      "errorGeneric": "Something went wrong. Please review and try again.",
+      "halfDay": "Half-day rate (SAR)",
+      "halfDayHint": "Optional. A single ~5-hour block. Leave 0 if not offered.",
+      "cancellationPolicy": "Cancellation policy",
+      "cancellationPolicyHint": "Shown to renters and must be agreed to before booking."
     },
     "bookings": {
       "eyebrow": "Bookings",
