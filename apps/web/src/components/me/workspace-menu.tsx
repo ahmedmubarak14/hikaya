@@ -1,21 +1,30 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
   BarChart3,
+  Briefcase,
+  Building2,
+  Check,
   ChevronRight,
   HelpCircle,
   Image as ImageIcon,
   LayoutDashboard,
   LogOut,
   Settings,
+  Sparkles,
   Users,
 } from 'lucide-react';
 import { useTransition } from 'react';
 
+import { setActiveRole } from '@/lib/auth/active-role-actions';
 import { signOutAction } from '@/lib/auth/actions';
+import type { MockUserRole } from '@/lib/auth/mock-store';
 
 import { Popover, PopoverItem, PopoverSeparator } from './popover';
+
+import { cn } from '@/lib/utils';
 
 interface Props {
   locale: string;
@@ -24,6 +33,8 @@ interface Props {
     avatarUrl: string | null;
   };
   workspaceLabel: string;
+  currentRole: MockUserRole;
+  availableRoles: MockUserRole[];
   labels: {
     dashboard: string;
     analytics: string;
@@ -33,17 +44,49 @@ interface Props {
     switchWorkspace: string;
     help: string;
     logOut: string;
+    roleCreator: string;
+    roleStudioOwner: string;
+    roleClient: string;
   };
 }
 
-export function WorkspaceMenu({ locale, user, workspaceLabel, labels }: Props) {
+const ROLE_ICONS: Record<MockUserRole, typeof Sparkles> = {
+  CREATOR: Sparkles,
+  STUDIO_OWNER: Building2,
+  CLIENT: Briefcase,
+};
+
+export function WorkspaceMenu({
+  locale,
+  user,
+  workspaceLabel,
+  currentRole,
+  availableRoles,
+  labels,
+}: Props) {
+  const router = useRouter();
   const me = `/${locale}/me`;
   const initial = user.displayName.charAt(0).toUpperCase();
   const [isSigningOut, startSignOut] = useTransition();
+  const [isSwitching, startSwitch] = useTransition();
+
+  const roleLabels: Record<MockUserRole, string> = {
+    CREATOR: labels.roleCreator,
+    STUDIO_OWNER: labels.roleStudioOwner,
+    CLIENT: labels.roleClient,
+  };
 
   const handleSignOut = () => {
     startSignOut(() => {
       void signOutAction(locale as 'en' | 'ar');
+    });
+  };
+
+  const handleSwitchRole = (role: MockUserRole) => {
+    if (role === currentRole) return;
+    startSwitch(async () => {
+      await setActiveRole(role);
+      router.refresh();
     });
   };
 
@@ -71,7 +114,7 @@ export function WorkspaceMenu({ locale, user, workspaceLabel, labels }: Props) {
             </span>
           )}
           <span className="flex min-w-0 flex-1 flex-col">
-            <span className="text-muted truncate text-[11px]">{workspaceLabel}</span>
+            <span className="text-muted truncate text-[11px]">{roleLabels[currentRole]}</span>
             <span className="text-surface truncate text-sm font-medium">{user.displayName}</span>
           </span>
           <ChevronRight size={14} className="text-muted shrink-0" />
@@ -91,8 +134,40 @@ export function WorkspaceMenu({ locale, user, workspaceLabel, labels }: Props) {
         href={`${me}/portfolio`}
       />
       <PopoverItem icon={<Settings size={16} />} label={labels.settings} href={`${me}/settings`} />
-      <PopoverSeparator label={labels.switchWorkspace} />
-      <PopoverItem icon={<HelpCircle size={16} />} label={labels.help} href={`/${locale}/q`} />
+
+      {availableRoles.length > 1 ? (
+        <>
+          <PopoverSeparator label={labels.switchWorkspace} />
+          {availableRoles.map((role) => {
+            const Icon = ROLE_ICONS[role];
+            const isCurrent = role === currentRole;
+            return (
+              <button
+                key={role}
+                type="button"
+                onClick={() => handleSwitchRole(role)}
+                disabled={isSwitching || isCurrent}
+                className={cn(
+                  'flex w-full items-center gap-3 rounded-md px-3 py-2 text-start text-sm transition-colors',
+                  'hover:bg-surface/[0.05] disabled:cursor-default',
+                  'text-surface',
+                )}
+              >
+                <Icon size={16} className="text-muted shrink-0" />
+                <span className="flex-1 truncate">{roleLabels[role]}</span>
+                {isCurrent ? <Check size={14} className="text-accent shrink-0" /> : null}
+              </button>
+            );
+          })}
+          <PopoverSeparator />
+        </>
+      ) : null}
+
+      <PopoverItem
+        icon={<HelpCircle size={16} />}
+        label={labels.help}
+        href={`/${locale}/terms`}
+      />
       <PopoverItem
         icon={<LogOut size={16} />}
         label={isSigningOut ? `${labels.logOut}…` : labels.logOut}

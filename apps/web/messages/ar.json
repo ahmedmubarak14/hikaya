@@ -1324,7 +1324,10 @@
     "deleteError": "حدث خطأ ما. حاول مرّة أخرى.",
     "profileAvatarLabel": "الصورة الشخصية",
     "profileAvatarUpload": "رفع صورة",
-    "profileAvatarUploading": "جارٍ الرفع…"
+    "profileAvatarUploading": "جارٍ الرفع…",
+    "profileAvatarUploadFailed": "فشل الرفع. قد لا تكون حاوية تخزين \"avatars\" في Supabase مُهيأة.",
+    "profileAvatarTooLarge": "الصورة كبيرة جداً — يجب أن تكون أقل من 5MB.",
+    "profileAvatarInvalidType": "هذا الملف ليس صورة."
   },
   "services": {
     "servicesLabel": "الخدمات والأسعار",
@@ -1419,8 +1422,9 @@
     "newCoupon": "قسيمة جديدة",
     "giftCards": {
       "emptyTitle": "قدّم بطاقات هدايا لعملائك",
-      "emptyBody": "ابدأ بإنشاء بطاقة هدية لمشاركتها.",
-      "newCta": "بطاقة هدية جديدة"
+      "emptyBody": "بطاقات الهدايا قادمة قريباً. في غضون ذلك، يمكنك استخدام القسائم لتقديم الخصومات.",
+      "newCta": "بطاقة هدية جديدة",
+      "backToCoupons": "العودة إلى القسائم"
     }
   },
   "favorites": {

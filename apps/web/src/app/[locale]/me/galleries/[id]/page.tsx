@@ -55,7 +55,7 @@ export default async function ManageGalleryPage({ params }: Props) {
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/galleries/${id}`);
 
   const creator = await getMyCreatorProfile(session.user.email);
-  if (!creator) redirect(`/${locale}/me/galleries`);
+  if (!creator) redirect(`/${locale}/me/portfolio`);
 
   const gallery = getGalleryById(id);
   if (!gallery || gallery.creatorId !== creator.id) notFound();

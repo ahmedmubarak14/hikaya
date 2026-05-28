@@ -50,7 +50,7 @@ export default async function EditProductPage({ params }: Props) {
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/store/${id}`);
 
   const creator = await getMyCreatorProfile(session.user.email);
-  if (!creator) redirect(`/${locale}/me/store`);
+  if (!creator) redirect(`/${locale}/me/portfolio`);
 
   const product = getProductById(id);
   if (!product || product.creatorId !== creator.id) notFound();

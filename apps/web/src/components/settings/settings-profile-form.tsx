@@ -135,7 +135,13 @@ export function SettingsProfileForm({ locale, user }: Props) {
 
       {error ? (
         <p className="text-accent-secondary text-sm" role="alert">
-          {t('profileError')}
+          {error === 'UPLOAD_FAILED'
+            ? t('profileAvatarUploadFailed')
+            : error === 'TOO_LARGE'
+              ? t('profileAvatarTooLarge')
+              : error === 'INVALID_TYPE'
+                ? t('profileAvatarInvalidType')
+                : t('profileError')}
         </p>
       ) : null}
 

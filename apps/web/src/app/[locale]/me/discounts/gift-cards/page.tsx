@@ -39,7 +39,7 @@ export default async function GiftCardsPage({ params }: Props) {
         <EmptyState
           title={t('giftCards.emptyTitle')}
           body={t('giftCards.emptyBody')}
-          cta={{ href: `/${locale}/me/discounts/gift-cards?new=1`, label: t('giftCards.newCta') }}
+          secondaryCta={{ href: `/${locale}/me/discounts`, label: t('giftCards.backToCoupons') }}
         />
       </div>
     </>

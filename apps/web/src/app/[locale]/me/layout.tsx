@@ -33,6 +33,7 @@ export default async function MeLayout({ children, params }: Props) {
 
   const t = await getTranslations({ locale, namespace: 'me' });
   const tLinks = await getTranslations({ locale, namespace: 'me.links' });
+  const tAuth = await getTranslations({ locale, namespace: 'auth' });
 
   const creator = await getMyCreatorProfile(session.user.email);
   const completion = profileCompletion(creator);
@@ -73,6 +74,9 @@ export default async function MeLayout({ children, params }: Props) {
     ws_switchWorkspace: t('sidebar.wsSwitchWorkspace'),
     ws_help: t('sidebar.wsHelp'),
     ws_logOut: t('sidebar.wsLogOut'),
+    ws_roleCreator: tAuth('roleCreator'),
+    ws_roleStudioOwner: tAuth('roleStudioOwner'),
+    ws_roleClient: tAuth('roleClient'),
   };
 
   return (
@@ -84,6 +88,8 @@ export default async function MeLayout({ children, params }: Props) {
           avatarUrl: session.user.avatarUrl ?? null,
         }}
         workspaceLabel={t('sidebar.workspace')}
+        currentRole={session.user.currentRole}
+        availableRoles={session.user.roles}
         completionPercent={completion}
         labels={labels}
       />

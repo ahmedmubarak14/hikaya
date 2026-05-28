@@ -3,7 +3,6 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { DiscountManager } from '@/components/discounts/discount-manager';
-import { EmptyState } from '@/components/me/empty-state';
 import { PageHeader } from '@/components/me/page-header';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -70,29 +69,21 @@ export default async function DiscountsPage({ params }: Props) {
     <>
       <PageHeader title={tLinks('discounts')} tabs={tabs} />
       <div className="px-8 pb-10">
-        {items.length === 0 ? (
-          <EmptyState
-            title={t('emptyTitle')}
-            body={t('emptyBody')}
-            cta={{ href: `/${locale}/me/discounts?new=1`, label: t('newCoupon') }}
-          />
-        ) : (
-          <DiscountManager
-            locale={locale}
-            discounts={items.map((d) => ({
-              id: d.id as string,
-              code: d.code as string,
-              percentageOff: d.percentageOff as number | null,
-              amountOffHalalas: d.amountOffHalalas as number | null,
-              minOrderHalalas: d.minOrderHalalas as number | null,
-              maxUses: d.maxUses as number | null,
-              usedCount: d.usedCount as number,
-              expiresAt: d.expiresAt as string | null,
-              isActive: d.isActive as boolean,
-              createdAt: d.createdAt as string,
-            }))}
-          />
-        )}
+        <DiscountManager
+          locale={locale}
+          discounts={items.map((d) => ({
+            id: d.id as string,
+            code: d.code as string,
+            percentageOff: d.percentageOff as number | null,
+            amountOffHalalas: d.amountOffHalalas as number | null,
+            minOrderHalalas: d.minOrderHalalas as number | null,
+            maxUses: d.maxUses as number | null,
+            usedCount: d.usedCount as number,
+            expiresAt: d.expiresAt as string | null,
+            isActive: d.isActive as boolean,
+            createdAt: d.createdAt as string,
+          }))}
+        />
       </div>
     </>
   );
