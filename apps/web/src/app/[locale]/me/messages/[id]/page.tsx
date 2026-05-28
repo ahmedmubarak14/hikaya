@@ -10,6 +10,7 @@ import { ThreadQuickActions } from '@/components/messages/thread-quick-actions';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { markThreadReadAction } from '@/lib/messages/actions';
+import { SafetyMenu } from '@/components/safety/safety-menu';
 import {
   getMessagesByThread,
   getThreadById,
@@ -73,13 +74,15 @@ export default async function ThreadDetailPage({ params }: Props) {
   const otherName =
     thread.creatorUserId === session.user.id ? thread.clientName : thread.creatorName;
 
-  // Try to resolve the other user's email for quick actions (best-effort)
+  // Resolve the other participant's id once — used by SafetyMenu (block/
+  // report) and best-effort by ThreadQuickActions.
+  const otherUserId =
+    thread.creatorUserId === session.user.id ? thread.clientUserId : thread.creatorUserId;
+
   let otherUserEmail: string | undefined;
   try {
     const { findUserById } = await import('@/lib/auth/mock-store');
-    const otherId =
-      thread.creatorUserId === session.user.id ? thread.clientUserId : thread.creatorUserId;
-    const otherUser = findUserById(otherId);
+    const otherUser = findUserById(otherUserId);
     otherUserEmail = otherUser?.email;
   } catch {
     // Not critical — quick actions will work without the email
@@ -97,9 +100,17 @@ export default async function ThreadDetailPage({ params }: Props) {
             </Link>
             <h1 className="text-surface text-2xl">{otherName}</h1>
           </div>
-          <Badge tone={thread.type === 'BOOKING' ? 'sage' : 'neutral'}>
-            {t(`type.${thread.type}` as 'type.GENERAL')}
-          </Badge>
+          <div className="flex items-center gap-3">
+            <Badge tone={thread.type === 'BOOKING' ? 'sage' : 'neutral'}>
+              {t(`type.${thread.type}` as 'type.GENERAL')}
+            </Badge>
+            <SafetyMenu
+              locale={locale}
+              targetUserId={otherUserId}
+              reportTargetKind="USER"
+              reportTargetRef={thread.id}
+            />
+          </div>
         </header>
 
         {/* Real-time message list — initial messages loaded server-side */}

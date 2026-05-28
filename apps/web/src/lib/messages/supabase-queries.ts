@@ -90,6 +90,16 @@ const MESSAGE_SELECT = `
 export async function listThreadsForUserFromDB(userId: string): Promise<Thread[]> {
   const supabase = await getClient();
 
+  // Pull the ids of users this viewer has blocked once, so we can drop any
+  // thread whose counter-party is on that list.
+  const { data: blockRows } = await supabase
+    .from('UserBlock')
+    .select('blockedId')
+    .eq('blockerId', userId);
+  const blockedIds = new Set<string>(
+    (blockRows ?? []).map((b) => b.blockedId as string),
+  );
+
   const { data, error } = await supabase
     .from('Thread')
     .select(THREAD_SELECT)
@@ -101,7 +111,13 @@ export async function listThreadsForUserFromDB(userId: string): Promise<Thread[]
     return [];
   }
 
-  return (data ?? []).map((row: unknown) => mapThread(row as DbThreadRow));
+  const rows = (data ?? []).map((row: unknown) => mapThread(row as DbThreadRow));
+  if (blockedIds.size === 0) return rows;
+
+  return rows.filter((t) => {
+    const otherId = t.creatorUserId === userId ? t.clientUserId : t.creatorUserId;
+    return !blockedIds.has(otherId);
+  });
 }
 
 export async function getThreadByIdFromDB(id: string): Promise<Thread | null> {

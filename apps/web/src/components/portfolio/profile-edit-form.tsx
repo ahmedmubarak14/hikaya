@@ -87,6 +87,7 @@ export function ProfileEditForm({ locale, creator }: Props) {
       startingPriceSar: creator.startingPriceSar ?? undefined,
       availability: creator.availability,
       preferredLayout: creator.preferredLayout,
+      accentColor: creator.accentColor ?? '',
     },
   });
 
@@ -112,6 +113,7 @@ export function ProfileEditForm({ locale, creator }: Props) {
         if (values.startingPriceSar) fd.set('startingPriceSar', String(values.startingPriceSar));
         fd.set('availability', values.availability);
         fd.set('preferredLayout', values.preferredLayout);
+        fd.set('accentColor', values.accentColor ?? '');
         startTransition(() => formAction(fd));
       })}
       className="flex w-full flex-col gap-6"
@@ -243,6 +245,35 @@ export function ProfileEditForm({ locale, creator }: Props) {
               </label>
             );
           })}
+        </div>
+      </Field>
+
+      <Field
+        label={t('accentColor')}
+        hint={t('accentColorHint')}
+        error={errors.accentColor?.message}
+      >
+        <div className="flex items-center gap-3">
+          <input
+            type="color"
+            value={watch('accentColor') || '#c8d32d'}
+            onChange={(e) => setValue('accentColor', e.target.value, { shouldDirty: true })}
+            className="border-surface/15 h-11 w-16 cursor-pointer rounded-md border bg-transparent"
+            aria-label={t('accentColor')}
+          />
+          <input
+            type="text"
+            {...register('accentColor')}
+            placeholder="#c8d32d"
+            className="border-surface/15 bg-surface/5 text-surface focus-visible:border-accent h-11 w-32 rounded-md border px-3 font-mono text-sm outline-none"
+          />
+          <button
+            type="button"
+            onClick={() => setValue('accentColor', '', { shouldDirty: true })}
+            className="text-muted hover:text-surface text-xs transition-colors"
+          >
+            {t('accentColorClear')}
+          </button>
         </div>
       </Field>
 

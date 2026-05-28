@@ -46,6 +46,8 @@ export const profileEditSchema = z.object({
     .or(z.nan().transform(() => undefined)),
   availability: z.enum(['AVAILABLE', 'BUSY', 'ON_VACATION']),
   preferredLayout: z.enum(['MASONRY', 'EDITORIAL', 'REEL']),
+  /** Optional hex color (#rrggbb). Empty string clears. */
+  accentColor: z.string().regex(/^#[0-9a-fA-F]{6}$/, 'Use a 6-digit hex like #c8d32d').optional().or(z.literal('')),
 });
 
 export type ProfileEditValues = z.infer<typeof profileEditSchema>;

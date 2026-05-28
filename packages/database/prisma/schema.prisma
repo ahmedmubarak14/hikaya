@@ -332,6 +332,11 @@ model CreatorProfile {
   profileViewCount  Int            @default(0)
 
   preferredLayout   PortfolioLayout @default(MASONRY)
+  /**
+   * Optional brand accent color (CSS hex like "#c8d32d") applied to the
+   * public profile. NULL falls back to the platform's default accent.
+   */
+  accentColor       String?
 
   // Relations
   user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)

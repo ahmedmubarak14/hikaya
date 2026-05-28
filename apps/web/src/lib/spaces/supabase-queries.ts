@@ -29,10 +29,12 @@ interface DbSpaceRow {
   capacity: number;
   hourlyHalalas: number;
   dailyHalalas: number;
+  halfDayHalalas: number | null;
   equipmentIncluded: string[];
   photos: string[];
   status: string;
   houseRules: string | null;
+  cancellationPolicy: string | null;
   addOns: SpaceAddOn[] | null;
   createdAt: string;
 }
@@ -51,6 +53,7 @@ interface DbSpaceBookingRow {
   checkInPhotos: string[] | null;
   checkOutPhotos: string[] | null;
   selectedAddOns: SpaceAddOn[] | null;
+  accessCode: string | null;
   createdAt: string;
 }
 
@@ -65,10 +68,12 @@ function mapSpace(row: DbSpaceRow): Space {
     capacity: row.capacity,
     hourlyHalalas: row.hourlyHalalas,
     dailyHalalas: row.dailyHalalas,
+    halfDayHalalas: row.halfDayHalalas ?? 0,
     equipmentIncluded: row.equipmentIncluded ?? [],
     photos: row.photos ?? [],
     status: row.status as SpaceStatus,
     houseRules: row.houseRules ?? '',
+    cancellationPolicy: row.cancellationPolicy ?? '',
     addOns: (row.addOns as SpaceAddOn[] | null) ?? [],
     createdAt: row.createdAt,
   };
@@ -89,22 +94,23 @@ function mapSpaceBooking(row: DbSpaceBookingRow): SpaceBooking {
     checkInPhotos: row.checkInPhotos ?? [],
     checkOutPhotos: row.checkOutPhotos ?? [],
     selectedAddOns: (row.selectedAddOns as SpaceAddOn[] | null) ?? [],
+    accessCode: row.accessCode ?? null,
     createdAt: row.createdAt,
   };
 }
 
 const SPACE_SELECT = `
   id, ownerId, name, description, address, city,
-  capacity, hourlyHalalas, dailyHalalas,
+  capacity, hourlyHalalas, dailyHalalas, halfDayHalalas,
   equipmentIncluded, photos, status,
-  houseRules, addOns, createdAt
+  houseRules, cancellationPolicy, addOns, createdAt
 `;
 
 const BOOKING_SELECT = `
   id, spaceId, renterId, startISO, endISO,
   durationKind, totalHalalas, status,
   checkInAt, checkOutAt, checkInPhotos, checkOutPhotos,
-  selectedAddOns, createdAt
+  selectedAddOns, accessCode, createdAt
 `;
 
 // ---------------------------------------------------------------------------

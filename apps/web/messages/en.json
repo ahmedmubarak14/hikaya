@@ -214,7 +214,9 @@
       "wsSwitchWorkspace": "Switch workspace",
       "wsHelp": "Help",
       "wsLogOut": "Log out",
-      "wsAddWorkspace": "Add workspace"
+      "wsAddWorkspace": "Add workspace",
+      "notifications": "Notifications",
+      "billing": "Billing"
     },
     "welcome": "Welcome, {name}",
     "actionItems": "Your action items",
@@ -869,7 +871,8 @@
       "watermarked": "Preview only",
       "emptyTitle": "Your gallery is empty.",
       "emptyHint": "The creator hasn't added images yet. Check back soon.",
-      "footerNote": "Delivered via Hikaya"
+      "footerNote": "Delivered via Hikaya",
+      "download": "Download"
     },
     "heart": {
       "favorite": "Favorite",
@@ -953,7 +956,11 @@
       "title": "You're signed in as a client.",
       "body": "Only creator accounts have a portfolio. To edit one, sign in as a creator — or create a new account and choose \"Showcase my work\".",
       "discover": "Browse creatives instead"
-    }
+    },
+    "freeTierLimit": "Free plan caps your portfolio at 10 items. Upgrade to Pro to add more.",
+    "accentColor": "Profile accent color",
+    "accentColorHint": "Used for buttons, links, and highlights on your public profile.",
+    "accentColorClear": "Use default"
   },
   "studio": {
     "title": "Studio dashboard",
@@ -1559,7 +1566,13 @@
     "moderationEyebrow": "Moderation",
     "moderationSubtitle": "Review reported content. Reports from users will appear here once the reporting feature is live.",
     "moderationEmpty": "No reports yet.",
-    "moderationEmptyHint": "When users report content, those reports will appear here for review."
+    "moderationEmptyHint": "When users report content, those reports will appear here for review.",
+    "moderation": {
+      "resolve": "Mark resolved",
+      "dismiss": "Dismiss",
+      "reporterLabel": "Reporter",
+      "targetLabel": "Target"
+    }
   },
   "analytics": {
     "title": "Analytics",
@@ -1577,7 +1590,17 @@
     "conversionRateHint": "{approved} approved of {total} total",
     "quotesOverview": "Quotes overview",
     "quotesTotal": "Total quotes",
-    "quotesApproved": "Approved"
+    "quotesApproved": "Approved",
+    "funnel": {
+      "title": "Hiring funnel",
+      "inquiries": "Inquiries",
+      "quotes": "Quotes",
+      "bookings": "Bookings",
+      "completed": "Completed"
+    },
+    "revenueByMonth": {
+      "title": "Revenue by month"
+    }
   },
   "legal": {
     "draftNotice": "DRAFT -- subject to legal review. This document is provided for informational purposes and does not constitute legal advice.",
@@ -1773,7 +1796,8 @@
       "calendarPrev": "Previous month",
       "calendarNext": "Next month",
       "calendarBooked": "Booked",
-      "calendarAvailable": "Available"
+      "calendarAvailable": "Available",
+      "halfDay": "Half-day"
     },
     "book": {
       "title": "Reserve this space",
@@ -1789,7 +1813,9 @@
       "error": "Couldn't confirm the booking. Please review and try again.",
       "agreeRules": "I agree to the house rules",
       "addOnsLabel": "Add-ons",
-      "addOnsTotal": "Add-ons total {price}"
+      "addOnsTotal": "Add-ons total {price}",
+      "kindHalfDay": "Half-day",
+      "cancellationPolicyTitle": "Cancellation policy"
     },
     "owner": {
       "eyebrow": "Studios",
@@ -1852,7 +1878,11 @@
       "submit": "Create space",
       "save": "Save changes",
       "saved": "Saved",
-      "errorGeneric": "Something went wrong. Please review and try again."
+      "errorGeneric": "Something went wrong. Please review and try again.",
+      "halfDay": "Half-day rate (SAR)",
+      "halfDayHint": "Optional. A single ~5-hour block. Leave 0 if not offered.",
+      "cancellationPolicy": "Cancellation policy",
+      "cancellationPolicyHint": "Shown to renters and must be agreed to before booking."
     },
     "bookings": {
       "eyebrow": "Bookings",
@@ -1871,7 +1901,17 @@
         "CONFIRMED": "Confirmed",
         "CANCELLED": "Cancelled",
         "COMPLETED": "Completed"
-      }
+      },
+      "stats": {
+        "revenue": "Total revenue",
+        "occupancy": "Occupancy (30d)",
+        "occupancyHint": "Booked days ÷ available days",
+        "noSpaces": "No published spaces",
+        "pending": "Pending",
+        "completed": "Completed"
+      },
+      "confirm": "Confirm",
+      "confirming": "Confirming…"
     },
     "rentals": {
       "eyebrow": "Rentals",
@@ -1901,6 +1941,16 @@
       },
       "cancel": "Cancel booking",
       "cancelConfirm": "Cancel this booking? This can't be undone."
+    },
+    "entryCode": {
+      "title": "Entry code",
+      "subtitle": "Use this 6-digit code at the space during your booking window.",
+      "pendingConfirmation": "The host hasn’t confirmed your booking yet. The code unlocks once they do.",
+      "cancelled": "This booking was cancelled. No entry code is available.",
+      "completed": "This booking is completed.",
+      "availableIn": "Your code unlocks {hours}h before the booking start.",
+      "expired": "Your booking window has passed.",
+      "windowHint": "Code is only visible while your booking is active."
     }
   },
   "templates": {
@@ -1975,5 +2025,43 @@
       "NOT_FOUND": "We couldn't find your account.",
       "UPDATE_FAILED": "Couldn't add the workspace. Please try again."
     }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unreadCount": "{n, plural, =1 {1 unread} other {# unread}}",
+    "allCaughtUp": "You're all caught up.",
+    "emptyTitle": "No notifications yet",
+    "emptyBody": "New inquiries, messages, and bookings will show up here.",
+    "markAllRead": "Mark all as read",
+    "markingAll": "Marking…",
+    "markRead": "Mark read"
+  },
+  "safety": {
+    "block": "Block",
+    "blocking": "Blocking…",
+    "blocked": "Blocked.",
+    "report": "Report",
+    "reported": "Report sent.",
+    "cancel": "Cancel",
+    "submitReport": "Submit report",
+    "submitting": "Sending…",
+    "notePlaceholder": "Optional: more detail about what happened.",
+    "reason_SPAM": "Spam",
+    "reason_HARASSMENT": "Harassment",
+    "reason_INAPPROPRIATE": "Inappropriate",
+    "reason_OTHER": "Other"
+  },
+  "billing": {
+    "title": "Billing history",
+    "subtitle": "Invoices for bookings, products, and subscriptions you've been billed on.",
+    "emptyTitle": "No invoices yet",
+    "emptyBody": "Invoices appear here once a payment lands or a booking is confirmed.",
+    "colNumber": "Number",
+    "colIssued": "Issued",
+    "colSubtotal": "Subtotal",
+    "colVat": "VAT",
+    "colTotal": "Total",
+    "colStatus": "Status",
+    "downloadPdf": "Download PDF"
   }
 }

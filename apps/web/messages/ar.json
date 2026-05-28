@@ -214,7 +214,9 @@
       "wsSwitchWorkspace": "تبديل مساحة العمل",
       "wsHelp": "المساعدة",
       "wsLogOut": "تسجيل الخروج",
-      "wsAddWorkspace": "إضافة مساحة عمل"
+      "wsAddWorkspace": "إضافة مساحة عمل",
+      "notifications": "الإشعارات",
+      "billing": "الفواتير"
     },
     "welcome": "مرحبا، {name}",
     "actionItems": "مهامك",
@@ -869,7 +871,8 @@
       "watermarked": "معاينة فقط",
       "emptyTitle": "المعرض فارغ.",
       "emptyHint": "لم يُضِف المبدع صوراً بعد. عُد قريباً.",
-      "footerNote": "سُلِّم عبر حكاية"
+      "footerNote": "سُلِّم عبر حكاية",
+      "download": "تنزيل"
     },
     "heart": {
       "favorite": "أضف للمفضّلة",
@@ -953,7 +956,11 @@
       "title": "أنت مسجّل دخول كعميل.",
       "body": "حسابات المبدعين فقط لها معرض أعمال. لتحرير معرض، سجّل الدخول كمبدع — أو أنشئ حساباً جديداً واختر \"عرض أعمالي\".",
       "discover": "تصفّح المبدعين"
-    }
+    },
+    "freeTierLimit": "الخطة المجانية تحد معرضك بـ 10 عناصر. ارقِ إلى Pro لإضافة المزيد.",
+    "accentColor": "لون مميّز للملف",
+    "accentColorHint": "يُستخدم للأزرار والروابط والإبرازات في ملفك العام.",
+    "accentColorClear": "استخدم الافتراضي"
   },
   "studio": {
     "title": "لوحة الاستوديو",
@@ -1559,7 +1566,13 @@
     "moderationEyebrow": "الإشراف",
     "moderationSubtitle": "مراجعة المحتوى المبلّغ عنه.",
     "moderationEmpty": "لا بلاغات بعد.",
-    "moderationEmptyHint": "ستظهر البلاغات هنا عند تفعيل ميزة الإبلاغ."
+    "moderationEmptyHint": "ستظهر البلاغات هنا عند تفعيل ميزة الإبلاغ.",
+    "moderation": {
+      "resolve": "تحديد كمحلول",
+      "dismiss": "تجاهل",
+      "reporterLabel": "المُبلِغ",
+      "targetLabel": "الهدف"
+    }
   },
   "analytics": {
     "title": "التحليلات",
@@ -1577,7 +1590,17 @@
     "conversionRateHint": "{approved} موافقة من أصل {total}",
     "quotesOverview": "نظرة على العروض",
     "quotesTotal": "إجمالي العروض",
-    "quotesApproved": "الموافَق عليها"
+    "quotesApproved": "الموافَق عليها",
+    "funnel": {
+      "title": "مسار التوظيف",
+      "inquiries": "استفسارات",
+      "quotes": "عروض أسعار",
+      "bookings": "حجوزات",
+      "completed": "مكتملة"
+    },
+    "revenueByMonth": {
+      "title": "الإيرادات الشهرية"
+    }
   },
   "legal": {
     "draftNotice": "مسوّدة — قيد المراجعة القانونيّة. لا يشكّل هذا المستند استشارة قانونيّة.",
@@ -1773,7 +1796,8 @@
       "calendarPrev": "الشهر السابق",
       "calendarNext": "الشهر التالي",
       "calendarBooked": "محجوز",
-      "calendarAvailable": "متاح"
+      "calendarAvailable": "متاح",
+      "halfDay": "نصف يوم"
     },
     "book": {
       "title": "احجز هذا الاستوديو",
@@ -1789,7 +1813,9 @@
       "error": "تعذّر تأكيد الحجز. راجع البيانات وحاول مجدّداً.",
       "agreeRules": "أوافق على شروط الاستخدام",
       "addOnsLabel": "إضافات",
-      "addOnsTotal": "إجمالي الإضافات {price}"
+      "addOnsTotal": "إجمالي الإضافات {price}",
+      "kindHalfDay": "نصف يوم",
+      "cancellationPolicyTitle": "سياسة الإلغاء"
     },
     "owner": {
       "eyebrow": "استوديوهات",
@@ -1852,7 +1878,11 @@
       "submit": "إنشاء الاستوديو",
       "save": "حفظ التغييرات",
       "saved": "تم الحفظ",
-      "errorGeneric": "حدث خطأ ما. راجع البيانات وحاول مجدّداً."
+      "errorGeneric": "حدث خطأ ما. راجع البيانات وحاول مجدّداً.",
+      "halfDay": "سعر نصف اليوم (ر.س)",
+      "halfDayHint": "اختياري. فترة ~5 ساعات. اترك 0 إن لم تكن متاحة.",
+      "cancellationPolicy": "سياسة الإلغاء",
+      "cancellationPolicyHint": "تُعرض للمستأجرين ويجب الموافقة عليها قبل الحجز."
     },
     "bookings": {
       "eyebrow": "الحجوزات",
@@ -1871,7 +1901,17 @@
         "CONFIRMED": "مؤكّد",
         "CANCELLED": "ملغى",
         "COMPLETED": "مكتمل"
-      }
+      },
+      "stats": {
+        "revenue": "إجمالي الإيرادات",
+        "occupancy": "الإشغال (30 يوماً)",
+        "occupancyHint": "الأيام المحجوزة ÷ الأيام المتاحة",
+        "noSpaces": "لا توجد مساحات منشورة",
+        "pending": "بانتظار التأكيد",
+        "completed": "مكتملة"
+      },
+      "confirm": "تأكيد",
+      "confirming": "جارٍ التأكيد…"
     },
     "rentals": {
       "eyebrow": "الإيجارات",
@@ -1901,6 +1941,16 @@
       },
       "cancel": "إلغاء الحجز",
       "cancelConfirm": "هل تريد إلغاء هذا الحجز؟ لا يمكن التراجع."
+    },
+    "entryCode": {
+      "title": "رمز الدخول",
+      "subtitle": "استخدم هذا الرمز المكوّن من 6 أرقام في المساحة خلال فترة حجزك.",
+      "pendingConfirmation": "لم يؤكّد المضيف حجزك بعد. سيُفتح الرمز بمجرد التأكيد.",
+      "cancelled": "تم إلغاء هذا الحجز. لا يوجد رمز دخول.",
+      "completed": "هذا الحجز مكتمل.",
+      "availableIn": "سيُفتح رمزك قبل {hours} ساعة من بداية الحجز.",
+      "expired": "انتهت فترة حجزك.",
+      "windowHint": "الرمز مرئي فقط أثناء فترة الحجز النشطة."
     }
   },
   "templates": {
@@ -1975,5 +2025,43 @@
       "NOT_FOUND": "لم نتمكن من العثور على حسابك.",
       "UPDATE_FAILED": "تعذرت إضافة مساحة العمل. حاول مرة أخرى."
     }
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "unreadCount": "{n, plural, =1 {غير مقروء واحد} other {# غير مقروءة}}",
+    "allCaughtUp": "لا توجد إشعارات جديدة.",
+    "emptyTitle": "لا توجد إشعارات بعد",
+    "emptyBody": "ستظهر الاستفسارات والرسائل والحجوزات الجديدة هنا.",
+    "markAllRead": "تحديد الكل كمقروء",
+    "markingAll": "جارٍ التحديد…",
+    "markRead": "تحديد كمقروء"
+  },
+  "safety": {
+    "block": "حظر",
+    "blocking": "جارٍ الحظر…",
+    "blocked": "تم الحظر.",
+    "report": "إبلاغ",
+    "reported": "تم إرسال البلاغ.",
+    "cancel": "إلغاء",
+    "submitReport": "إرسال البلاغ",
+    "submitting": "جارٍ الإرسال…",
+    "notePlaceholder": "اختياري: المزيد من التفاصيل عمّا حدث.",
+    "reason_SPAM": "محتوى مزعج",
+    "reason_HARASSMENT": "تحرّش",
+    "reason_INAPPROPRIATE": "محتوى غير لائق",
+    "reason_OTHER": "أخرى"
+  },
+  "billing": {
+    "title": "سجلّ الفواتير",
+    "subtitle": "فواتير الحجوزات والمنتجات والاشتراكات التي تم تحصيلها.",
+    "emptyTitle": "لا توجد فواتير بعد",
+    "emptyBody": "ستظهر الفواتير هنا بمجرّد تحصيل الدفع أو تأكيد الحجز.",
+    "colNumber": "الرقم",
+    "colIssued": "تاريخ الإصدار",
+    "colSubtotal": "المجموع الفرعي",
+    "colVat": "ضريبة القيمة المضافة",
+    "colTotal": "الإجمالي",
+    "colStatus": "الحالة",
+    "downloadPdf": "تنزيل PDF"
   }
 }

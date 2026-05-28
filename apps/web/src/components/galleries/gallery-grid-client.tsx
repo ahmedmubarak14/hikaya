@@ -7,6 +7,8 @@ import { Lightbox, type LightboxImage } from './lightbox';
 interface Props {
   images: LightboxImage[];
   children: React.ReactNode;
+  allowDownloads?: boolean;
+  downloadLabel?: string;
 }
 
 /**
@@ -14,7 +16,7 @@ interface Props {
  * to open the lightbox at the clicked index. Each clickable figure must carry
  * a `data-lightbox-index` attribute.
  */
-export function GalleryGridClient({ images, children }: Props) {
+export function GalleryGridClient({ images, children, allowDownloads, downloadLabel }: Props) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   function handleClick(e: React.MouseEvent) {
@@ -37,6 +39,8 @@ export function GalleryGridClient({ images, children }: Props) {
           images={images}
           initialIndex={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
+          allowDownloads={allowDownloads}
+          downloadLabel={downloadLabel}
         />
       )}
     </>

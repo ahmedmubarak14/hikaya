@@ -16,6 +16,18 @@ export interface CreatorAnalytics {
   quotesTotal: number;
   quotesApproved: number;
   conversionRate: number; // 0-100
+  /** Hiring funnel: Inquiry → Quote → Booking (CONFIRMED+) → Completed. */
+  funnel: {
+    inquiries: number;
+    quotes: number;
+    bookings: number;
+    completed: number;
+  };
+  /**
+   * Trailing 12 months of revenue, oldest first. Each entry is the calendar
+   * month bucket plus the sum of Booking.totalHalalas created in that month.
+   */
+  revenueByMonth: { monthIso: string; halalas: number }[];
 }
 
 // ---------------------------------------------------------------------------
@@ -48,10 +60,10 @@ export async function getCreatorAnalyticsAction(): Promise<CreatorAnalytics | nu
     0,
   );
 
-  // Bookings + revenue
+  // Bookings + revenue. createdAt drives the monthly bucket.
   const { data: bookings } = await supabase
     .from('Booking')
-    .select('id, totalHalalas, status')
+    .select('id, totalHalalas, status, createdAt')
     .eq('creatorProfileId', profile.id);
 
   const totalBookings = (bookings ?? []).length;
@@ -89,6 +101,35 @@ export async function getCreatorAnalyticsAction(): Promise<CreatorAnalytics | nu
     ? Math.round((quotesApproved / quotesTotal) * 100)
     : 0;
 
+  // Funnel — counts at each stage. Quotes use the existing approval pass-
+  // through, bookings count CONFIRMED+IN_PROGRESS+COMPLETED, completed
+  // counts COMPLETED only.
+  type BookingRow = { id: string; status: string; totalHalalas: number; createdAt: string };
+  const bookingRows = (bookings ?? []) as BookingRow[];
+  const bookingsCount = bookingRows.filter((b) =>
+    ['CONFIRMED', 'IN_PROGRESS', 'COMPLETED'].includes(b.status),
+  ).length;
+  const completedCount = bookingRows.filter((b) => b.status === 'COMPLETED').length;
+
+  // Revenue by month — 12-month window ending this month. Group by the
+  // booking's createdAt month bucket (YYYY-MM-01).
+  const now = new Date();
+  const buckets = new Map<string, number>();
+  for (let i = 11; i >= 0; i -= 1) {
+    const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1));
+    buckets.set(d.toISOString().slice(0, 7), 0);
+  }
+  for (const b of bookingRows) {
+    if (!b.createdAt) continue;
+    const monthKey = b.createdAt.slice(0, 7);
+    if (!buckets.has(monthKey)) continue;
+    buckets.set(monthKey, (buckets.get(monthKey) ?? 0) + (b.totalHalalas ?? 0));
+  }
+  const revenueByMonth = [...buckets.entries()].map(([month, halalas]) => ({
+    monthIso: `${month}-01`,
+    halalas,
+  }));
+
   return {
     profileViews: (profile.profileViewCount as number) ?? 0,
     portfolioViews,
@@ -98,5 +139,12 @@ export async function getCreatorAnalyticsAction(): Promise<CreatorAnalytics | nu
     quotesTotal,
     quotesApproved,
     conversionRate,
+    funnel: {
+      inquiries: inquiryCount ?? 0,
+      quotes: quotesTotal,
+      bookings: bookingsCount,
+      completed: completedCount,
+    },
+    revenueByMonth,
   };
 }

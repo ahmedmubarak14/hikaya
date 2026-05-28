@@ -21,6 +21,7 @@ export type SpacesErrorKey =
   | 'CANNOT_BOOK_OWN'
   | 'BOOKING_NOT_FOUND'
   | 'NOT_RENTER'
+  | 'WRONG_STATE'
   | 'UNKNOWN';
 
 export interface SpacesFailure {
@@ -127,10 +128,12 @@ export async function createSpaceAction(
       capacity: parsed.data.capacity,
       hourlyHalalas: parsed.data.hourlySar * SAR_TO_HALALAS,
       dailyHalalas: parsed.data.dailySar * SAR_TO_HALALAS,
+      halfDayHalalas: parsed.data.halfDaySar * SAR_TO_HALALAS,
       equipmentIncluded: parsed.data.equipmentRaw,
       photos: parsed.data.photosRaw,
       status: parsed.data.status,
       houseRules,
+      cancellationPolicy: parsed.data.cancellationPolicy,
       addOns,
       createdAt: now,
     });
@@ -175,6 +178,7 @@ export async function updateSpaceAction(
   }
 
   const houseRulesUpdate = formData.get('houseRules')?.toString() ?? '';
+  const cancellationPolicyUpdate = formData.get('cancellationPolicy')?.toString() ?? '';
   const addOnsRawUpdate = formData.get('addOnsRaw')?.toString() ?? '';
   const addOnsUpdate = parseAddOnsText(addOnsRawUpdate);
 
@@ -188,10 +192,12 @@ export async function updateSpaceAction(
       capacity: parsed.data.capacity,
       hourlyHalalas: parsed.data.hourlySar * SAR_TO_HALALAS,
       dailyHalalas: parsed.data.dailySar * SAR_TO_HALALAS,
+      halfDayHalalas: parsed.data.halfDaySar * SAR_TO_HALALAS,
       equipmentIncluded: parsed.data.equipmentRaw,
       photos: parsed.data.photosRaw,
       status: parsed.data.status,
       houseRules: houseRulesUpdate,
+      cancellationPolicy: cancellationPolicyUpdate,
       addOns: addOnsUpdate,
     })
     .eq('id', spaceId);
@@ -254,9 +260,10 @@ export async function setSpaceStatusAction(
 function computeTotalHalalas(
   start: number,
   end: number,
-  kind: 'HOURLY' | 'DAILY',
+  kind: 'HOURLY' | 'HALF_DAY' | 'DAILY',
   hourly: number,
   daily: number,
+  halfDay: number,
 ): number {
   const ms = end - start;
   if (kind === 'HOURLY') {
@@ -264,6 +271,10 @@ function computeTotalHalalas(
     return hours * hourly;
   }
   const days = Math.max(1, Math.ceil(ms / (24 * 60 * 60 * 1000)));
+  // Half-day bills the half-day rate per booked day.
+  if (kind === 'HALF_DAY') {
+    return days * (halfDay > 0 ? halfDay : Math.round(daily * 0.6));
+  }
   return days * daily;
 }
 
@@ -282,7 +293,7 @@ export async function bookSpaceAction(
 
   const { data: space, error: spaceFetchErr } = await supabase
     .from('Space')
-    .select('id, ownerId, status, hourlyHalalas, dailyHalalas')
+    .select('id, ownerId, status, hourlyHalalas, dailyHalalas, halfDayHalalas')
     .eq('id', spaceId)
     .maybeSingle();
 
@@ -338,10 +349,14 @@ export async function bookSpaceAction(
     parsed.data.durationKind,
     space.hourlyHalalas as number,
     space.dailyHalalas as number,
+    (space.halfDayHalalas as number) ?? 0,
   ) + addOnsTotal;
 
   const bookingId = `sb_${randomBytes(6).toString('hex')}`;
   const now = new Date().toISOString();
+  // 6-digit access code, generated at booking time. Surfaced to the renter
+  // only inside the booking window — see space-rentals/[id]/page.tsx.
+  const accessCode = String(Math.floor(100_000 + Math.random() * 900_000));
 
   const { error: bookingErr } = await supabase
     .from('SpaceBooking')
@@ -355,6 +370,7 @@ export async function bookSpaceAction(
       totalHalalas: total,
       status: 'PENDING',
       selectedAddOns,
+      accessCode,
       createdAt: now,
     });
 
@@ -532,5 +548,52 @@ export async function cancelBookingAction(
   if (booking.spaceId) {
     revalidatePath(`/${locale}/spaces/${booking.spaceId as string}`);
   }
+  return { ok: true };
+}
+
+/**
+ * Host confirms a PENDING booking → CONFIRMED. Until this happens the
+ * renter can't check in and the access code stays hidden.
+ */
+export async function confirmBookingAction(
+  locale: Locale,
+  bookingId: string,
+): Promise<SpacesResult> {
+  const auth = await requireSession();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+
+  const { data: booking, error: fetchErr } = await supabase
+    .from('SpaceBooking')
+    .select('id, status, spaceId, Space:spaceId(ownerId)')
+    .eq('id', bookingId)
+    .maybeSingle();
+
+  if (fetchErr || !booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+
+  // Supabase returns joined relations as arrays. Pull the single Space row.
+  type JoinedSpace = { ownerId: string } | { ownerId: string }[] | null;
+  const rawSpace = (booking as unknown as { Space?: JoinedSpace }).Space;
+  const ownerId = Array.isArray(rawSpace) ? rawSpace[0]?.ownerId : rawSpace?.ownerId;
+  if (!ownerId || ownerId !== auth.session.user.id) {
+    return { ok: false, error: 'NOT_OWNER' };
+  }
+  if ((booking.status as string) !== 'PENDING') {
+    return { ok: false, error: 'WRONG_STATE' };
+  }
+
+  const { error: updateErr } = await supabase
+    .from('SpaceBooking')
+    .update({ status: 'CONFIRMED' })
+    .eq('id', bookingId);
+
+  if (updateErr) {
+    console.error('[spaces/actions] confirmBookingAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/space-bookings`);
+  revalidatePath(`/${locale}/me/space-rentals/${bookingId}`);
   return { ok: true };
 }

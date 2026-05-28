@@ -49,6 +49,7 @@ interface DbCreatorRow {
   languages: string[];
   availability: Availability;
   preferredLayout: PortfolioLayout;
+  accentColor: string | null;
   reviewScore: number;
   reviewCount: number;
   isVerified: boolean;
@@ -99,6 +100,7 @@ function mapCreator(row: DbCreatorRow): CreatorProfile {
     languages: (row.languages ?? []).map(mapLocale),
     availability: row.availability,
     preferredLayout: row.preferredLayout,
+    accentColor: row.accentColor ?? null,
     reviewScore: row.reviewScore,
     reviewCount: row.reviewCount,
     isVerified: row.isVerified,
@@ -116,7 +118,7 @@ const CREATOR_SELECT = `
   disciplines, city,
   startingPriceSar, yearsExperience,
   languages, availability,
-  preferredLayout,
+  preferredLayout, accentColor,
   reviewScore, reviewCount,
   isVerified, socialLinks,
   User ( email ),
@@ -184,6 +186,19 @@ export async function getCreatorByUsernameFromDB(
   return mapCreator(data as unknown as DbCreatorRow);
 }
 
+/**
+ * Featured creators — homepage recommendation algorithm.
+ *
+ * Pulls a 50-row candidate window (verified-first, top reviewScore) from
+ * Supabase, then re-ranks in JS using a simple weighted score that combines
+ * three signals: verified badge (boost), normalised reviewScore (0-5), and a
+ * log-scaled profileViewCount so popular profiles surface without burying
+ * new high-quality ones.
+ *
+ * Score = (isVerified ? 1.0 : 0) + (reviewScore / 5) + log10(viewCount+1)/4
+ *
+ * Tie-break: createdAt desc so fresh additions get a fair shake.
+ */
 export async function listFeaturedCreatorsFromDB(limit = 4): Promise<CreatorProfile[]> {
   const supabase = await getClient();
 
@@ -192,14 +207,40 @@ export async function listFeaturedCreatorsFromDB(limit = 4): Promise<CreatorProf
     .select(CREATOR_SELECT)
     .order('isVerified', { ascending: false })
     .order('reviewScore', { ascending: false })
-    .limit(limit);
+    .limit(50);
 
   if (error) {
     console.error('[supabase-queries] listFeaturedCreatorsFromDB error:', error.message);
     return [];
   }
 
-  return (data ?? []).map((row: unknown) => mapCreator(row as DbCreatorRow));
+  const candidates = (data ?? []).map((row: unknown) => mapCreator(row as DbCreatorRow));
+
+  // Re-rank with the weighted score. `profileViewCount` lives outside the
+  // CreatorProfile select; fetch a small batch for the candidate ids.
+  let viewsById = new Map<string, number>();
+  if (candidates.length > 0) {
+    const ids = candidates.map((c) => c.id);
+    const { data: viewRows } = await supabase
+      .from('CreatorProfile')
+      .select('id, profileViewCount')
+      .in('id', ids);
+    viewsById = new Map(
+      (viewRows ?? []).map((r) => [r.id as string, (r.profileViewCount as number) ?? 0]),
+    );
+  }
+
+  const scored = candidates.map((c) => {
+    const views = viewsById.get(c.id) ?? 0;
+    const score =
+      (c.isVerified ? 1 : 0) +
+      (c.reviewScore ?? 0) / 5 +
+      Math.log10(views + 1) / 4;
+    return { c, score };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, limit).map(({ c }) => c);
 }
 
 export async function getCreatorByOwnerEmailFromDB(

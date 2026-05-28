@@ -126,6 +126,14 @@ export default async function SpaceDetailPage({ params }: Props) {
                     : '—'}
                 </span>
               </div>
+              {space.halfDayHalalas > 0 ? (
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="text-2xs text-surface/40">{t('halfDay')}</span>
+                  <span className="text-surface font-mono text-base tabular-nums">
+                    {formatSarFromHalalas(space.halfDayHalalas, locale)}
+                  </span>
+                </div>
+              ) : null}
               <div className="flex items-baseline justify-between gap-3">
                 <span className="text-2xs text-surface/40">{t('daily')}</span>
                 <span className="text-surface font-mono text-base tabular-nums">
@@ -183,8 +191,10 @@ export default async function SpaceDetailPage({ params }: Props) {
               spaceId={space.id}
               hourlyHalalas={space.hourlyHalalas}
               dailyHalalas={space.dailyHalalas}
+              halfDayHalalas={space.halfDayHalalas}
               disabledReason={isOwn ? 'OWN' : null}
               houseRules={space.houseRules}
+              cancellationPolicy={space.cancellationPolicy}
               addOns={space.addOns}
             />
 

@@ -74,6 +74,8 @@ export interface CreatorProfile {
   languages: Locale[];
   availability: Availability;
   preferredLayout: PortfolioLayout;
+  /** Optional CSS hex like "#c8d32d" applied to the public profile. */
+  accentColor?: string | null;
   reviewScore: number;
   reviewCount: number;
   isVerified: boolean;
