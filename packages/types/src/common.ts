@@ -19,7 +19,7 @@ export interface PaginatedResult<T> {
 
 /**
  * Cities supported in Phase 1. Stored as enum so search facets and analytics
- * can rely on a closed set; expanded to a full lookup in Phase 2 (Gulf-wide).
+ * can rely on a closed set; expanded to a full lookup in Phase 2 (region-wide).
  */
 export const citySchema = z.enum([
   'RIYADH',

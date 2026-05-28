@@ -162,7 +162,7 @@ export const SEED_SPACES: Space[] = [
     ownerId: SEED_OWNER_PLACEHOLDER,
     name: 'Corniche Rooftop — Golden Hour',
     description:
-      'Open-air rooftop on the Khobar Corniche with unobstructed Gulf views. Ideal for fashion editorials, music videos, and BTS golden-hour content. Power and shade available.',
+      'Open-air rooftop on the Khobar Corniche with unobstructed sea views. Ideal for fashion editorials, music videos, and BTS golden-hour content. Power and shade available.',
     address: 'Corniche Road',
     city: 'KHOBAR',
     capacity: 20,

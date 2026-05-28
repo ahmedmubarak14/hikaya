@@ -142,8 +142,8 @@ export const CREATORS: CreatorProfile[] = [
     displayNameEn: 'Yara Hejazi',
     displayNameAr: 'يارا الحجازي',
     bioEn:
-      'Commercial videographer. Brand films for the way the Gulf actually feels — slow, considered, cinematic.',
-    bioAr: 'صانعة فيديو تجاري. أفلام علامات تجاريّة بإيقاع الخليج الحقيقي — متأنّي، سينمائي.',
+      'Commercial videographer. Brand films for the way the region actually feels — slow, considered, cinematic.',
+    bioAr: 'صانعة فيديو تجاري. أفلام علامات تجاريّة بإيقاع حقيقي — متأنّي، سينمائي.',
     avatarUrl: pic('avatar-yara', 200, 200),
     coverUrl: pic('cover-yara', 1800, 800),
     disciplines: ['COMMERCIAL_VIDEO', 'DOCUMENTARY'],

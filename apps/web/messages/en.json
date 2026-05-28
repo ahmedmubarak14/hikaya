@@ -2,7 +2,7 @@
   "brand": {
     "name": "Hikaya",
     "tagline": "Tell your story.",
-    "description": "All-in-one platform for Gulf creative professionals."
+    "description": "All-in-one platform for creative professionals."
   },
   "nav": {
     "discover": "Discover",
@@ -21,7 +21,7 @@
   },
   "home": {
     "headline": {
-      "lineOne": "Where Gulf creatives",
+      "lineOne": "Where creatives",
       "lineTwoItalic": "show up,",
       "lineThree": "get hired, and get paid."
     },
@@ -32,7 +32,7 @@
       "title": "Featured creators",
       "viewAll": "Explore all →",
       "emptyTitle": "The stage is set",
-      "emptyBody": "Hikaya's creator directory is just getting started. Be among the first to join and get discovered by Gulf clients.",
+      "emptyBody": "Hikaya's creator directory is just getting started. Be among the first to join and get discovered by clients.",
       "emptyCta": "Create your profile"
     },
     "valuePropsTitle": "Everything you need to run a creative practice.",
@@ -89,7 +89,7 @@
     "signUpLink": "Create an account",
     "panelLineItalic": "Tell",
     "panelLine": "your story.",
-    "panelBody": "Hikaya is the all-in-one platform Gulf creatives use to showcase work, get hired, run their studio, deliver to clients, and sell what they make.",
+    "panelBody": "Hikaya is the all-in-one platform creatives use to showcase work, get hired, run their studio, deliver to clients, and sell what they make.",
     "panelFooter": "حكاية — A story, in Arabic.",
     "forgotPasswordLink": "Forgot password?",
     "forgotPasswordTitle": "Reset your password",
@@ -261,13 +261,13 @@
     "list": {
       "title": "Job board",
       "eyebrow": "Job board",
-      "headline": "Briefs from Gulf clients —",
+      "headline": "Briefs from clients —",
       "headlineItalic": "apply in a click.",
       "subtitle": "Real briefs from real businesses. Filter by discipline and city; apply with a cover note and a proposed rate. Posts auto-expire after 30 days.",
       "newCta": "Post a brief",
       "count": "{count, plural, =0 {No briefs open right now} =1 {1 open brief} other {# open briefs}}",
       "empty": "No open briefs yet",
-      "emptySubtitle": "No briefs posted yet. Post your first brief to find Gulf creatives.",
+      "emptySubtitle": "No briefs posted yet. Post your first brief to find creatives.",
       "emptyCta": "Post a brief",
       "emptyHint": "Check back tomorrow — or post your own."
     },
@@ -496,7 +496,7 @@
       "subtitle": "Your downloads live here. Links are valid for seven days from purchase; come back anytime to refresh.",
       "backToAccount": "Back to account",
       "purchasedLabel": "Purchase complete",
-      "purchasedBody": "Thanks for supporting a Gulf creator. Your download is ready below.",
+      "purchasedBody": "Thanks for supporting a creator. Your download is ready below.",
       "empty": "No purchases yet.",
       "emptyHint": "Find a creator whose work you love, then check their store.",
       "discoverCta": "Browse creatives",
@@ -1170,7 +1170,7 @@
   },
   "discover": {
     "title": "Discover creatives",
-    "heroTitle": "Hire Gulf creatives",
+    "heroTitle": "Hire creatives",
     "searchPlaceholder": "Search creatives by name, discipline, or city",
     "searchAction": "Search",
     "viewProjects": "Projects",
@@ -1178,11 +1178,11 @@
     "projectFallback": "Project by {name}",
     "eyebrow": "Discover",
     "headline": "Photographers, designers, filmmakers —",
-    "headlineItalic": "the Gulf's quiet best.",
+    "headlineItalic": "the quiet best.",
     "subtitle": "Curated creatives across Saudi Arabia. Filter by city, discipline, or availability — or just browse and let the work do the talking.",
     "count": "{count, plural, =0 {No creatives match} =1 {1 creative} other {# creatives}} on Hikaya",
     "empty": "No creators yet",
-    "emptySubtitle": "Be the first to join Hikaya. Create your profile and get discovered by Gulf clients.",
+    "emptySubtitle": "Be the first to join Hikaya. Create your profile and get discovered by clients.",
     "emptyCta": "Join as creator",
     "emptyHint": "Try clearing a filter, or check back soon — we're onboarding more talent every week.",
     "filters": {
@@ -1601,7 +1601,7 @@
       "title": "Privacy Policy",
       "lastUpdated": "Last updated: May 2026",
       "section1Title": "1. Overview",
-      "section1Body": "This Privacy Policy explains how Hikaya (\"we\", \"us\") collects, uses, and protects your personal data in accordance with the Kingdom of Saudi Arabia's Personal Data Protection Law (PDPL) and applicable Gulf Cooperation Council regulations. By using the Platform, you consent to the practices described herein.",
+      "section1Body": "This Privacy Policy explains how Hikaya (\"we\", \"us\") collects, uses, and protects your personal data in accordance with the Kingdom of Saudi Arabia's Personal Data Protection Law (PDPL) and applicable regional data-protection regulations. By using the Platform, you consent to the practices described herein.",
       "section2Title": "2. Data We Collect",
       "section2Body": "We collect information you provide directly: name, email address, phone number, profile information (bio, portfolio, location, services), and payment-related data. We also collect data automatically: IP address, browser type, device information, pages visited, and interaction patterns. For creators, we process business-related data including booking history, revenue, and client interactions to provide analytics and platform services.",
       "section3Title": "3. How We Use Your Data",
@@ -1695,7 +1695,7 @@
     "headline": "Production studios across the Kingdom.",
     "count": "{count, plural, =0 {No studios listed yet} =1 {1 studio} other {# studios}}",
     "empty": "No studios yet",
-    "emptySubtitle": "Register your studio to appear here and connect with Gulf creatives.",
+    "emptySubtitle": "Register your studio to appear here and connect with creatives.",
     "emptyCta": "Register studio",
     "filterCity": "City",
     "filterAllCities": "All cities",
@@ -1745,7 +1745,7 @@
       "title": "Studios for rent",
       "subtitle": "Cyc walls, daylight lofts, podcast sets, rooftops. Book by the hour or the day — Hikaya creators only.",
       "empty": "No spaces listed yet",
-      "emptySubtitle": "Studio spaces will appear here once hosts list them. Be the first to offer your space to Gulf creatives.",
+      "emptySubtitle": "Studio spaces will appear here once hosts list them. Be the first to offer your space to creatives.",
       "emptyCta": "List your space",
       "from": "From {price}/day",
       "fromHourly": "From {price}/hour",

@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     template: '%s · Hikaya',
   },
   description:
-    'All-in-one platform for Gulf creative professionals. Showcase work, get hired, run your studio, deliver to clients.',
+    'All-in-one platform for creative professionals. Showcase work, get hired, run your studio, deliver to clients.',
   applicationName: 'Hikaya',
   alternates: {
     canonical: '/',
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Hikaya — Tell your story',
-    description: 'All-in-one platform for Gulf creative professionals.',
+    description: 'All-in-one platform for creative professionals.',
     siteName: 'Hikaya',
     type: 'website',
   },
