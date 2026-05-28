@@ -74,6 +74,11 @@ export interface SpaceBooking {
   checkInPhotos: string[];
   /** Photo URLs documenting condition at check-out. */
   checkOutPhotos: string[];
+  /**
+   * 6-digit entry code generated at booking time. Time-limited: only
+   * revealed to the renter inside [start - 30min, end + 30min].
+   */
+  accessCode: string | null;
   /** Add-ons selected at booking time. */
   selectedAddOns: SpaceAddOn[];
   createdAt: string;
@@ -265,6 +270,7 @@ export const SEED_BOOKINGS: SpaceBooking[] = [
     checkInPhotos: [],
     checkOutPhotos: [],
     selectedAddOns: [],
+    accessCode: '482917',
     createdAt: now,
   },
   {
@@ -281,6 +287,7 @@ export const SEED_BOOKINGS: SpaceBooking[] = [
     checkInPhotos: [],
     checkOutPhotos: [],
     selectedAddOns: [],
+    accessCode: null,
     createdAt: now,
   },
 ];

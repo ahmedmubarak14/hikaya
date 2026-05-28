@@ -1878,7 +1878,17 @@
         "CONFIRMED": "Confirmed",
         "CANCELLED": "Cancelled",
         "COMPLETED": "Completed"
-      }
+      },
+      "stats": {
+        "revenue": "Total revenue",
+        "occupancy": "Occupancy (30d)",
+        "occupancyHint": "Booked days ÷ available days",
+        "noSpaces": "No published spaces",
+        "pending": "Pending",
+        "completed": "Completed"
+      },
+      "confirm": "Confirm",
+      "confirming": "Confirming…"
     },
     "rentals": {
       "eyebrow": "Rentals",
@@ -1908,6 +1918,16 @@
       },
       "cancel": "Cancel booking",
       "cancelConfirm": "Cancel this booking? This can't be undone."
+    },
+    "entryCode": {
+      "title": "Entry code",
+      "subtitle": "Use this 6-digit code at the space during your booking window.",
+      "pendingConfirmation": "The host hasn’t confirmed your booking yet. The code unlocks once they do.",
+      "cancelled": "This booking was cancelled. No entry code is available.",
+      "completed": "This booking is completed.",
+      "availableIn": "Your code unlocks {hours}h before the booking start.",
+      "expired": "Your booking window has passed.",
+      "windowHint": "Code is only visible while your booking is active."
     }
   },
   "templates": {

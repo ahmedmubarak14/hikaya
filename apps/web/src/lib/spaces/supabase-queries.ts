@@ -53,6 +53,7 @@ interface DbSpaceBookingRow {
   checkInPhotos: string[] | null;
   checkOutPhotos: string[] | null;
   selectedAddOns: SpaceAddOn[] | null;
+  accessCode: string | null;
   createdAt: string;
 }
 
@@ -93,6 +94,7 @@ function mapSpaceBooking(row: DbSpaceBookingRow): SpaceBooking {
     checkInPhotos: row.checkInPhotos ?? [],
     checkOutPhotos: row.checkOutPhotos ?? [],
     selectedAddOns: (row.selectedAddOns as SpaceAddOn[] | null) ?? [],
+    accessCode: row.accessCode ?? null,
     createdAt: row.createdAt,
   };
 }
@@ -108,7 +110,7 @@ const BOOKING_SELECT = `
   id, spaceId, renterId, startISO, endISO,
   durationKind, totalHalalas, status,
   checkInAt, checkOutAt, checkInPhotos, checkOutPhotos,
-  selectedAddOns, createdAt
+  selectedAddOns, accessCode, createdAt
 `;
 
 // ---------------------------------------------------------------------------

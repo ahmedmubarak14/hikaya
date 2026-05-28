@@ -21,6 +21,7 @@ export type SpacesErrorKey =
   | 'CANNOT_BOOK_OWN'
   | 'BOOKING_NOT_FOUND'
   | 'NOT_RENTER'
+  | 'WRONG_STATE'
   | 'UNKNOWN';
 
 export interface SpacesFailure {
@@ -353,6 +354,9 @@ export async function bookSpaceAction(
 
   const bookingId = `sb_${randomBytes(6).toString('hex')}`;
   const now = new Date().toISOString();
+  // 6-digit access code, generated at booking time. Surfaced to the renter
+  // only inside the booking window — see space-rentals/[id]/page.tsx.
+  const accessCode = String(Math.floor(100_000 + Math.random() * 900_000));
 
   const { error: bookingErr } = await supabase
     .from('SpaceBooking')
@@ -366,6 +370,7 @@ export async function bookSpaceAction(
       totalHalalas: total,
       status: 'PENDING',
       selectedAddOns,
+      accessCode,
       createdAt: now,
     });
 
@@ -543,5 +548,52 @@ export async function cancelBookingAction(
   if (booking.spaceId) {
     revalidatePath(`/${locale}/spaces/${booking.spaceId as string}`);
   }
+  return { ok: true };
+}
+
+/**
+ * Host confirms a PENDING booking → CONFIRMED. Until this happens the
+ * renter can't check in and the access code stays hidden.
+ */
+export async function confirmBookingAction(
+  locale: Locale,
+  bookingId: string,
+): Promise<SpacesResult> {
+  const auth = await requireSession();
+  if (!auth.ok) return { ok: false, error: auth.error };
+
+  const supabase = await createClient();
+
+  const { data: booking, error: fetchErr } = await supabase
+    .from('SpaceBooking')
+    .select('id, status, spaceId, Space:spaceId(ownerId)')
+    .eq('id', bookingId)
+    .maybeSingle();
+
+  if (fetchErr || !booking) return { ok: false, error: 'BOOKING_NOT_FOUND' };
+
+  // Supabase returns joined relations as arrays. Pull the single Space row.
+  type JoinedSpace = { ownerId: string } | { ownerId: string }[] | null;
+  const rawSpace = (booking as unknown as { Space?: JoinedSpace }).Space;
+  const ownerId = Array.isArray(rawSpace) ? rawSpace[0]?.ownerId : rawSpace?.ownerId;
+  if (!ownerId || ownerId !== auth.session.user.id) {
+    return { ok: false, error: 'NOT_OWNER' };
+  }
+  if ((booking.status as string) !== 'PENDING') {
+    return { ok: false, error: 'WRONG_STATE' };
+  }
+
+  const { error: updateErr } = await supabase
+    .from('SpaceBooking')
+    .update({ status: 'CONFIRMED' })
+    .eq('id', bookingId);
+
+  if (updateErr) {
+    console.error('[spaces/actions] confirmBookingAction error:', updateErr.message);
+    return { ok: false, error: 'UNKNOWN' };
+  }
+
+  revalidatePath(`/${locale}/me/space-bookings`);
+  revalidatePath(`/${locale}/me/space-rentals/${bookingId}`);
   return { ok: true };
 }

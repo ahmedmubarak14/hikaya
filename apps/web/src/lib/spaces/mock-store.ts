@@ -206,6 +206,7 @@ export interface CreateBookingInput {
   durationKind: BookingDurationKind;
   totalHalalas: number;
   selectedAddOns?: { name: string; priceHalalas: number }[];
+  accessCode?: string | null;
 }
 
 export function createBooking(input: CreateBookingInput): SpaceBooking {
@@ -224,6 +225,7 @@ export function createBooking(input: CreateBookingInput): SpaceBooking {
     checkInPhotos: [],
     checkOutPhotos: [],
     selectedAddOns: input.selectedAddOns ?? [],
+    accessCode: input.accessCode ?? null,
     createdAt: new Date().toISOString(),
   };
   store.bookings.set(id, booking);
