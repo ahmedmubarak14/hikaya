@@ -75,5 +75,25 @@ export async function submitInquiryAction(
     budgetMaxSar: parsed.data.budgetMaxSar,
   });
 
+  // Fire-and-forget email notification to the creator. No-ops when
+  // RESEND_API_KEY isn't configured.
+  if (creator.ownerEmail) {
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? '';
+    const threadUrl = `${appUrl}/${locale}/me/inquiries`;
+    const unsubscribeUrl = `${appUrl}/${locale}/me/settings#notifications`;
+    const { newInquiryEmail } = await import('@/lib/email/templates');
+    const { sendEmail } = await import('@/lib/email/client');
+    const { subject, html } = newInquiryEmail({
+      recipientName: creator.displayNameEn,
+      clientName: session.user.displayName,
+      discipline: parsed.data.discipline,
+      city: parsed.data.city,
+      description: parsed.data.description,
+      threadUrl,
+      unsubscribeUrl,
+    });
+    void sendEmail({ to: creator.ownerEmail, subject, html, replyTo: session.user.email });
+  }
+
   redirect(`/${locale}/me/inquiries?sent=1`);
 }

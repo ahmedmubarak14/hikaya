@@ -11,6 +11,9 @@ import {
   Settings,
   Users,
 } from 'lucide-react';
+import { useTransition } from 'react';
+
+import { signOutAction } from '@/lib/auth/actions';
 
 import { Popover, PopoverItem, PopoverSeparator } from './popover';
 
@@ -36,6 +39,13 @@ interface Props {
 export function WorkspaceMenu({ locale, user, workspaceLabel, labels }: Props) {
   const me = `/${locale}/me`;
   const initial = user.displayName.charAt(0).toUpperCase();
+  const [isSigningOut, startSignOut] = useTransition();
+
+  const handleSignOut = () => {
+    startSignOut(() => {
+      void signOutAction(locale as 'en' | 'ar');
+    });
+  };
 
   return (
     <Popover
@@ -85,8 +95,8 @@ export function WorkspaceMenu({ locale, user, workspaceLabel, labels }: Props) {
       <PopoverItem icon={<HelpCircle size={16} />} label={labels.help} href={`/${locale}/q`} />
       <PopoverItem
         icon={<LogOut size={16} />}
-        label={labels.logOut}
-        href={`/${locale}/auth/callback?signout=1`}
+        label={isSigningOut ? `${labels.logOut}…` : labels.logOut}
+        onClick={handleSignOut}
         destructive
       />
     </Popover>

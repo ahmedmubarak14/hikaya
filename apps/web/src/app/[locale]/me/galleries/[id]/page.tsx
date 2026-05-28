@@ -6,6 +6,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { AddImagesForm } from '@/components/galleries/add-images-form';
+import { BulkUploadDropzone } from '@/components/galleries/bulk-upload-dropzone';
 import { CopyLinkButton } from '@/components/galleries/copy-link-button';
 import { DeleteGalleryButton } from '@/components/galleries/delete-gallery-button';
 import { RemoveImageButton } from '@/components/galleries/remove-image-button';
@@ -144,6 +145,7 @@ export default async function ManageGalleryPage({ params }: Props) {
 
         <section className="grid grid-cols-1 gap-10 lg:grid-cols-[2fr_1fr]">
           <div className="flex flex-col gap-6">
+            <BulkUploadDropzone locale={locale} galleryId={gallery.id} />
             <AddImagesForm locale={locale} galleryId={gallery.id} />
 
             {(gallery.images ?? []).length === 0 ? (

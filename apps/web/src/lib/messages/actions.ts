@@ -235,7 +235,66 @@ export async function sendMessageAction(
   revalidatePath(`/${locale}/me/messages`);
   revalidatePath(`/${locale}/me/messages/${threadId}`);
 
+  // Email notification to the other participant. Skip if both sides have
+  // been chatting in the last 60s (avoids spamming during a live thread).
+  void notifyOnNewMessage({
+    supabase,
+    locale,
+    threadId,
+    senderId: session.user.id,
+    senderName: session.user.displayName,
+    body: parsed.data.body,
+    recipientId:
+      (thread.creatorUserId as string) === session.user.id
+        ? (thread.clientUserId as string)
+        : (thread.creatorUserId as string),
+  });
+
   return { ok: true };
+}
+
+async function notifyOnNewMessage(input: {
+  supabase: Awaited<ReturnType<typeof createClient>>;
+  locale: Locale;
+  threadId: string;
+  senderId: string;
+  senderName: string;
+  body: string;
+  recipientId: string;
+}): Promise<void> {
+  const { data: recipient } = await input.supabase
+    .from('User')
+    .select('email, displayName')
+    .eq('id', input.recipientId)
+    .maybeSingle();
+  if (!recipient?.email) return;
+
+  // Suppress if the recipient also sent something in the last 60s — they're
+  // probably actively in the thread.
+  const sixtySecondsAgo = new Date(Date.now() - 60_000).toISOString();
+  const { data: recentByRecipient } = await input.supabase
+    .from('Message')
+    .select('id')
+    .eq('threadId', input.threadId)
+    .eq('senderId', input.recipientId)
+    .gte('createdAt', sixtySecondsAgo)
+    .limit(1);
+  if (recentByRecipient && recentByRecipient.length > 0) return;
+
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? '';
+  const threadUrl = `${appUrl}/${input.locale}/me/messages/${input.threadId}`;
+  const unsubscribeUrl = `${appUrl}/${input.locale}/me/settings#notifications`;
+  const preview = input.body.slice(0, 280) + (input.body.length > 280 ? '…' : '');
+  const { newMessageEmail } = await import('@/lib/email/templates');
+  const { sendEmail } = await import('@/lib/email/client');
+  const { subject, html } = newMessageEmail({
+    recipientName: (recipient.displayName as string) ?? '',
+    senderName: input.senderName,
+    preview,
+    threadUrl,
+    unsubscribeUrl,
+  });
+  void sendEmail({ to: recipient.email as string, subject, html });
 }
 
 export async function markThreadReadAction(locale: Locale, threadId: string): Promise<void> {

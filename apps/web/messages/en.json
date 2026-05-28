@@ -650,7 +650,8 @@
       "approvedBody": "Approved {when}. The contract is ready to sign.",
       "viewContract": "View contract",
       "rejectedLabel": "Rejected",
-      "rejectedNoReason": "The client didn't leave a reason."
+      "rejectedNoReason": "The client didn't leave a reason.",
+      "downloadPdf": "Download PDF"
     },
     "viewer": {
       "headline": "A quote for",
@@ -870,6 +871,15 @@
     "share": {
       "copy": "Copy link",
       "copied": "Copied"
+    },
+    "bulkUpload": {
+      "dropTitle": "Drop images here or click to upload",
+      "dropBody": "PNG, JPG up to 25MB each. Hold Shift to select multiple.",
+      "uploading": "Uploading…",
+      "error": "Failed",
+      "saving": "Saving…",
+      "saveCount": "Save {count} to gallery",
+      "someFailed": "Some uploads failed — review above."
     }
   },
   "portfolioEditor": {
