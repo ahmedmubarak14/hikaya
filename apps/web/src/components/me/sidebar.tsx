@@ -117,7 +117,7 @@ export function MeSidebar({
     { href: `${base}/portfolio`, label: labels.profile, icon: User },
     { href: `${base}/inquiries`, label: labels.inquiries, icon: Inbox },
     { href: `${base}/messages`, label: labels.messages, icon: MessageSquare },
-    { href: `${base}/purchases`, label: labels.wallet, icon: Wallet, trailing: '$0.00' },
+    { href: `${base}/purchases`, label: labels.wallet, icon: Wallet },
     {
       label: labels.payments,
       icon: CreditCard,

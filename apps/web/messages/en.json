@@ -193,7 +193,7 @@
       "completeProfile": "Complete your profile",
       "create": "Create",
       "workspace": "Independent workspace",
-      "wallet": "Wallet",
+      "wallet": "Purchases",
       "payments": "Payments",
       "discover": "Discover",
       "people": "People and Projects",
@@ -219,12 +219,10 @@
     "actionItems": "Your action items",
     "completeProfile": "Complete profile",
     "actions": {
-      "cover": "Add a profile cover image or video",
-      "rate": "Add your rate",
-      "social": "Share a social link",
+      "bio": "Add a profile bio",
+      "rate": "Add your starting rate",
       "work": "Add 4 pieces of work to your profile",
-      "wallet": "Verify identity & set up your wallet",
-      "bio": "Add a profile one-liner"
+      "location": "Set your city"
     },
     "promo": {
       "invoice": "Get paid on time and keep 100% of what you earn.",

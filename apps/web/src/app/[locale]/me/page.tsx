@@ -37,22 +37,21 @@ export default async function MePage({ params }: Props) {
     rate: Boolean(creator?.startingPriceSar),
     social: Boolean(creator?.username),
     work: Boolean(creator?.disciplines && creator.disciplines.length > 0),
-    wallet: Boolean(creator?.city),
     bio: Boolean(creator?.bioEn || creator?.bioAr),
+    location: Boolean(creator?.city),
   };
   const items: ActionItem[] = [
     {
-      id: 'cover',
-      label: t('actions.cover'),
+      id: 'bio',
+      label: t('actions.bio'),
       href: `/${locale}/me/portfolio`,
-      done: checks.cover,
+      done: checks.bio,
     },
-    { id: 'rate', label: t('actions.rate'), href: `/${locale}/me/portfolio`, done: checks.rate },
     {
-      id: 'social',
-      label: t('actions.social'),
-      href: `/${locale}/me/settings`,
-      done: checks.social,
+      id: 'rate',
+      label: t('actions.rate'),
+      href: `/${locale}/me/portfolio`,
+      done: checks.rate,
     },
     {
       id: 'work',
@@ -61,12 +60,11 @@ export default async function MePage({ params }: Props) {
       done: checks.work,
     },
     {
-      id: 'wallet',
-      label: t('actions.wallet'),
-      href: `/${locale}/me/settings`,
-      done: checks.wallet,
+      id: 'location',
+      label: t('actions.location'),
+      href: `/${locale}/me/portfolio`,
+      done: checks.location,
     },
-    { id: 'bio', label: t('actions.bio'), href: `/${locale}/me/portfolio`, done: checks.bio },
   ];
   const doneCount = items.filter((i) => i.done).length;
   const percent = Math.round((doneCount / items.length) * 100);
