@@ -179,7 +179,11 @@ export function MeSidebar({
         />
 
         <div className="mt-3">
-          <ProfileCompletion percent={completionPercent} label={labels.completeProfile} />
+          <ProfileCompletion
+            percent={completionPercent}
+            label={labels.completeProfile}
+            href={`${base}/portfolio`}
+          />
         </div>
 
         <div className="mt-3">

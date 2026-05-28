@@ -1,13 +1,16 @@
+import Link from 'next/link';
+
 import { cn } from '@/lib/utils';
 
 interface Props {
   /** 0-100 */
   percent: number;
   label: string;
+  href: string;
   className?: string;
 }
 
-export function ProfileCompletion({ percent, label, className }: Props) {
+export function ProfileCompletion({ percent, label, href, className }: Props) {
   const clamped = Math.max(0, Math.min(100, percent));
   const radius = 12;
   const stroke = 2.5;
@@ -15,13 +18,14 @@ export function ProfileCompletion({ percent, label, className }: Props) {
   const offset = circumference * (1 - clamped / 100);
 
   return (
-    <div
+    <Link
+      href={href}
       className={cn(
-        'border-line/60 flex w-full items-center gap-2 rounded-lg border bg-bg/40 px-3 py-2',
+        'border-line/60 hover:bg-surface/[0.04] flex w-full items-center gap-2 rounded-lg border bg-bg/40 px-3 py-2 transition-colors',
         className,
       )}
     >
-      <span className="relative inline-flex h-7 w-7 items-center justify-center">
+      <span className="relative inline-flex h-7 w-7 shrink-0 items-center justify-center">
         <svg width="28" height="28" viewBox="0 0 28 28" className="-rotate-90">
           <circle
             cx="14"
@@ -42,7 +46,7 @@ export function ProfileCompletion({ percent, label, className }: Props) {
             strokeDasharray={circumference}
             strokeDashoffset={offset}
             strokeLinecap="round"
-            className="text-surface transition-[stroke-dashoffset] duration-500"
+            className="text-accent transition-[stroke-dashoffset] duration-500"
           />
         </svg>
         <span className="text-surface absolute text-[9px] font-semibold tabular-nums">
@@ -50,6 +54,6 @@ export function ProfileCompletion({ percent, label, className }: Props) {
         </span>
       </span>
       <span className="text-surface min-w-0 truncate text-xs font-medium">{label}</span>
-    </div>
+    </Link>
   );
 }
