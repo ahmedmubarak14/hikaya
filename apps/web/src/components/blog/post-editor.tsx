@@ -104,7 +104,7 @@ export function PostEditor({ locale, post }: Props) {
           required
         />
         <Input
-          label={`${t('titleLabel')} — العربيّة`}
+          label={t('titleLabelArabic')}
           dir="rtl"
           {...register('titleAr')}
           error={errors.titleAr?.message}
@@ -131,7 +131,7 @@ export function PostEditor({ locale, post }: Props) {
       </Field>
 
       <Field
-        label={`${t('bodyLabel')} — العربيّة`}
+        label={t('bodyLabelArabic')}
         hint={t('bodyHint')}
         error={errors.bodyAr?.message}
       >

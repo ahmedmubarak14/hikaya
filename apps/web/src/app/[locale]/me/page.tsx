@@ -69,13 +69,11 @@ export default async function MePage({ params }: Props) {
   const doneCount = items.filter((i) => i.done).length;
   const percent = Math.round((doneCount / items.length) * 100);
 
-  const opportunities = [
-    'Wedding Photographer',
-    'Brand Designer',
-    'Motion Designer',
-    'Product Photographer',
-    'Color Grader',
-  ];
+  const tRaw = await getTranslations({ locale, namespace: 'me.opportunities' });
+  const opportunitiesRaw = tRaw.raw('items') as unknown;
+  const opportunities = Array.isArray(opportunitiesRaw)
+    ? (opportunitiesRaw as string[])
+    : [];
 
   return (
     <div className="mx-auto w-full max-w-6xl px-8 py-10">
@@ -113,7 +111,7 @@ export default async function MePage({ params }: Props) {
           <PromoCard
             visual={
               <div className="bg-accent/10 text-accent flex h-full items-center justify-center rounded-lg text-xl font-semibold">
-                ﷼{' '}20K
+                {t('promo.invoiceAmount')}
               </div>
             }
             body={t('promo.invoice')}
@@ -156,7 +154,7 @@ export default async function MePage({ params }: Props) {
       <div className="mt-6">
         <DiscoveryScore
           percent={percent}
-          score={0}
+          score={percent * 10}
           scoreLabel={t('discovery.pts')}
           title={t('discovery.title')}
           body={t('discovery.body')}
