@@ -136,9 +136,12 @@ export default async function PublicGalleryPage({ params }: Props) {
           </div>
         ) : (
           <GalleryGridClient
+            allowDownloads={gallery.allowDownloads}
+            downloadLabel={t('download')}
             images={(gallery.images ?? []).map((img) => ({
               id: img.id,
               url: img.url,
+              fullResUrl: img.fullResUrl ?? null,
               width: img.width,
               height: img.height,
               titleEn: img.titleEn,

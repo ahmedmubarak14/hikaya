@@ -870,7 +870,8 @@
       "watermarked": "معاينة فقط",
       "emptyTitle": "المعرض فارغ.",
       "emptyHint": "لم يُضِف المبدع صوراً بعد. عُد قريباً.",
-      "footerNote": "سُلِّم عبر حكاية"
+      "footerNote": "سُلِّم عبر حكاية",
+      "download": "تنزيل"
     },
     "heart": {
       "favorite": "أضف للمفضّلة",

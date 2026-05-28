@@ -870,7 +870,8 @@
       "watermarked": "Preview only",
       "emptyTitle": "Your gallery is empty.",
       "emptyHint": "The creator hasn't added images yet. Check back soon.",
-      "footerNote": "Delivered via Hikaya"
+      "footerNote": "Delivered via Hikaya",
+      "download": "Download"
     },
     "heart": {
       "favorite": "Favorite",

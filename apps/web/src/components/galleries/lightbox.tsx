@@ -8,6 +8,8 @@ import { cn } from '@hikaya/ui';
 export interface LightboxImage {
   id: string;
   url: string;
+  /** Optional high-resolution variant served when downloads are allowed. */
+  fullResUrl?: string | null;
   width: number;
   height: number;
   titleEn?: string;
@@ -17,6 +19,10 @@ interface Props {
   images: LightboxImage[];
   initialIndex: number;
   onClose: () => void;
+  /** When true the lightbox renders a Download button per image. */
+  allowDownloads?: boolean;
+  /** Aria-label for the download button (translated upstream). */
+  downloadLabel?: string;
 }
 
 /**
@@ -24,7 +30,13 @@ interface Props {
  * image centered, left/right navigation, keyboard support, and a close
  * button. Pure CSS + React state — no external dependencies.
  */
-export function Lightbox({ images, initialIndex, onClose }: Props) {
+export function Lightbox({
+  images,
+  initialIndex,
+  onClose,
+  allowDownloads = false,
+  downloadLabel = 'Download',
+}: Props) {
   const [index, setIndex] = useState(initialIndex);
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -116,6 +128,19 @@ export function Lightbox({ images, initialIndex, onClose }: Props) {
       <div className="absolute left-4 top-4 z-10 select-none font-mono text-sm text-white/70 md:left-6 md:top-6">
         {index + 1} / {total}
       </div>
+
+      {/* Download — top center. Only when the gallery allows downloads. */}
+      {allowDownloads && images[index] ? (
+        <a
+          href={images[index]!.fullResUrl ?? images[index]!.url}
+          download
+          aria-label={downloadLabel}
+          onClick={(e) => e.stopPropagation()}
+          className="absolute left-1/2 top-4 z-10 -translate-x-1/2 rounded-full border border-white/20 px-4 py-1.5 text-xs font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white md:top-6"
+        >
+          {downloadLabel}
+        </a>
+      ) : null}
 
       {/* Close button — top right */}
       <button

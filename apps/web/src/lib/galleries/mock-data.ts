@@ -11,6 +11,8 @@ export type GalleryAccess = 'OPEN_LINK' | 'PASSWORD' | 'EMAIL_GATED';
 export interface GalleryImage {
   id: string;
   url: string;
+  /** High-resolution variant for clients with download permission. */
+  fullResUrl?: string | null;
   width: number;
   height: number;
   /** Short caption shown on hover; optional. */

@@ -112,9 +112,7 @@ export default async function MyPurchasesPage({ params, searchParams }: Props) {
                             </span>
                           ) : product ? (
                             <a
-                              href={`${product.fileUrl}?token=${item.downloadToken}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              href={`/api/store/download/${item.downloadToken}`}
                               className="bg-accent text-ink rounded-full px-5 py-2 text-sm font-medium transition-transform hover:scale-[1.02]"
                             >
                               {t('download')}

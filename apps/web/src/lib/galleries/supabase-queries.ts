@@ -23,6 +23,7 @@ interface DbCollectionImageRow {
   id: string;
   url: string;
   thumbnailUrl: string | null;
+  fullResUrl: string | null;
   width: number | null;
   height: number | null;
   orderIndex: number;
@@ -54,6 +55,7 @@ function mapGallery(row: DbCollectionRow): Gallery {
     .map((img) => ({
       id: img.id,
       url: img.url,
+      fullResUrl: img.fullResUrl ?? null,
       width: img.width ?? 1200,
       height: img.height ?? 900,
     }));
@@ -83,7 +85,7 @@ const COLLECTION_SELECT = `
   coverUrl, message,
   access, allowDownloads, watermarkPreviews,
   expiresAt, publishedAt, createdAt,
-  CollectionImage ( id, url, thumbnailUrl, width, height, orderIndex )
+  CollectionImage ( id, url, thumbnailUrl, fullResUrl, width, height, orderIndex )
 `;
 
 // ---------------------------------------------------------------------------
