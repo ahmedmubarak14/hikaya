@@ -199,7 +199,55 @@
       "people": "الأشخاص والمشاريع",
       "studios": "الاستوديوهات الموثقة",
       "promoTitle": "احصل على أجر مقابل ذوقك",
-      "promoCta": "انضم إلى Hikaya labs"
+      "promoCta": "انضم إلى Hikaya labs",
+      "createPost": "منشور",
+      "createProject": "مشروع",
+      "createProduct": "منتج",
+      "createService": "خدمة",
+      "createPaymentLink": "رابط دفع",
+      "createInvoice": "فاتورة",
+      "wsDashboard": "لوحة التحكم",
+      "wsAnalytics": "التحليلات",
+      "wsNetwork": "الشبكة",
+      "wsPortfolio": "المعرض",
+      "wsSettings": "الإعدادات",
+      "wsSwitchWorkspace": "تبديل مساحة العمل",
+      "wsHelp": "المساعدة",
+      "wsLogOut": "تسجيل الخروج"
+    },
+    "welcome": "مرحبا، {name}",
+    "actionItems": "مهامك",
+    "completeProfile": "أكمل ملفك الشخصي",
+    "actions": {
+      "cover": "أضف صورة أو فيديو غلاف للملف الشخصي",
+      "rate": "أضف سعرك",
+      "social": "شارك رابطاً اجتماعياً",
+      "work": "أضف 4 أعمال إلى ملفك الشخصي",
+      "wallet": "تحقق من هويتك وأنشئ محفظتك",
+      "bio": "أضف وصفاً مختصراً للملف الشخصي"
+    },
+    "promo": {
+      "invoice": "احصل على أجرك في الوقت المحدد واحتفظ بـ100% مما تكسبه.",
+      "sendInvoice": "إرسال فاتورة",
+      "project": "بسّط إنشاء العقود وسير عمل العملاء.",
+      "startProject": "بدء مشروع"
+    },
+    "opportunities": {
+      "title": "اكتشف فرصاً جديدة",
+      "cta": "اكتشف الفرص"
+    },
+    "discovery": {
+      "title": "درجة الاكتشاف",
+      "pts": "نقطة",
+      "body": "اطّلع على ترتيبك واحصل على رؤى مفصلة حول كيفية تحسين درجتك."
+    },
+    "income": {
+      "title": "الدخل",
+      "body": "ابدأ مشروعك الأول لرؤية اتجاهات الدخل هنا."
+    },
+    "views": {
+      "title": "المشاهدات",
+      "body": "شارك ملفك الشخصي لتبدأ تتبع المشاهدات."
     }
   },
   "jobs": {

@@ -1,18 +1,15 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   Briefcase,
   ChevronDown,
-  ChevronRight,
   Compass,
   CreditCard,
   Home,
   Inbox,
   MessageSquare,
-  Plus,
   User,
   Wallet,
 } from 'lucide-react';
@@ -23,7 +20,9 @@ import { Logo } from '@hikaya/ui';
 import { cn } from '@/lib/utils';
 import { type Locale } from '@/i18n/config';
 
+import { CreateMenu } from './create-menu';
 import { ProfileCompletion } from './profile-completion';
+import { WorkspaceMenu } from './workspace-menu';
 
 import type { LucideIcon } from 'lucide-react';
 
@@ -77,6 +76,21 @@ interface Props {
     services: string;
     promoTitle: string;
     promoCta: string;
+    // Popover labels
+    create_post: string;
+    create_project: string;
+    create_product: string;
+    create_service: string;
+    create_paymentLink: string;
+    create_invoice: string;
+    ws_dashboard: string;
+    ws_analytics: string;
+    ws_network: string;
+    ws_portfolio: string;
+    ws_settings: string;
+    ws_switchWorkspace: string;
+    ws_help: string;
+    ws_logOut: string;
   };
 }
 
@@ -126,8 +140,6 @@ export function MeSidebar({ locale, user, workspaceLabel, completionPercent, lab
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
-  const initial = user.displayName.charAt(0).toUpperCase();
-
   return (
     <aside className="bg-paper hidden w-60 shrink-0 flex-col lg:flex">
       <div className="px-6 py-5">
@@ -137,42 +149,39 @@ export function MeSidebar({ locale, user, workspaceLabel, completionPercent, lab
       </div>
 
       <div className="px-3">
-        <button
-          type="button"
-          className="border-line/60 hover:bg-surface/[0.03] flex w-full items-center gap-3 rounded-lg border px-3 py-2 text-left transition-colors"
-        >
-          {user.avatarUrl ? (
-            <Image
-              src={user.avatarUrl}
-              alt={user.displayName}
-              width={28}
-              height={28}
-              className="h-7 w-7 shrink-0 rounded-full object-cover"
-            />
-          ) : (
-            <span className="bg-accent/20 text-accent flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
-              {initial}
-            </span>
-          )}
-          <span className="flex min-w-0 flex-1 flex-col">
-            <span className="text-muted truncate text-[11px]">{workspaceLabel}</span>
-            <span className="text-surface truncate text-sm font-medium">{user.displayName}</span>
-          </span>
-          <ChevronRight size={14} className="text-muted shrink-0" />
-        </button>
+        <WorkspaceMenu
+          locale={locale}
+          user={user}
+          workspaceLabel={workspaceLabel}
+          labels={{
+            dashboard: labels.ws_dashboard,
+            analytics: labels.ws_analytics,
+            network: labels.ws_network,
+            portfolio: labels.ws_portfolio,
+            settings: labels.ws_settings,
+            switchWorkspace: labels.ws_switchWorkspace,
+            help: labels.ws_help,
+            logOut: labels.ws_logOut,
+          }}
+        />
 
         <div className="mt-3">
           <ProfileCompletion percent={completionPercent} label={labels.completeProfile} />
         </div>
 
         <div className="mt-3">
-          <button
-            type="button"
-            className="bg-surface text-bg hover:bg-surface/90 flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors"
-          >
-            <Plus size={16} strokeWidth={2.5} />
-            <span>{labels.create}</span>
-          </button>
+          <CreateMenu
+            locale={locale}
+            labels={{
+              create: labels.create,
+              post: labels.create_post,
+              project: labels.create_project,
+              product: labels.create_product,
+              service: labels.create_service,
+              paymentLink: labels.create_paymentLink,
+              invoice: labels.create_invoice,
+            }}
+          />
         </div>
       </div>
 

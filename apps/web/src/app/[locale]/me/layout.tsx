@@ -59,6 +59,20 @@ export default async function MeLayout({ children, params }: Props) {
     services: tLinks('services'),
     promoTitle: t('sidebar.promoTitle'),
     promoCta: t('sidebar.promoCta'),
+    create_post: t('sidebar.createPost'),
+    create_project: t('sidebar.createProject'),
+    create_product: t('sidebar.createProduct'),
+    create_service: t('sidebar.createService'),
+    create_paymentLink: t('sidebar.createPaymentLink'),
+    create_invoice: t('sidebar.createInvoice'),
+    ws_dashboard: t('sidebar.wsDashboard'),
+    ws_analytics: t('sidebar.wsAnalytics'),
+    ws_network: t('sidebar.wsNetwork'),
+    ws_portfolio: t('sidebar.wsPortfolio'),
+    ws_settings: t('sidebar.wsSettings'),
+    ws_switchWorkspace: t('sidebar.wsSwitchWorkspace'),
+    ws_help: t('sidebar.wsHelp'),
+    ws_logOut: t('sidebar.wsLogOut'),
   };
 
   return (
