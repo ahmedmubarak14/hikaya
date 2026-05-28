@@ -77,6 +77,7 @@ export default async function MeLayout({ children, params }: Props) {
     ws_roleCreator: tAuth('roleCreator'),
     ws_roleStudioOwner: tAuth('roleStudioOwner'),
     ws_roleClient: tAuth('roleClient'),
+    ws_addWorkspace: t('sidebar.wsAddWorkspace'),
   };
 
   return (

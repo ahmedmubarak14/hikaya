@@ -97,6 +97,7 @@ interface Props {
     ws_roleCreator: string;
     ws_roleStudioOwner: string;
     ws_roleClient: string;
+    ws_addWorkspace: string;
   };
 }
 
@@ -181,6 +182,7 @@ export function MeSidebar({
             roleCreator: labels.ws_roleCreator,
             roleStudioOwner: labels.ws_roleStudioOwner,
             roleClient: labels.ws_roleClient,
+            addWorkspace: labels.ws_addWorkspace,
           }}
         />
 

@@ -213,7 +213,8 @@
       "wsSettings": "Settings",
       "wsSwitchWorkspace": "Switch workspace",
       "wsHelp": "Help",
-      "wsLogOut": "Log out"
+      "wsLogOut": "Log out",
+      "wsAddWorkspace": "Add workspace"
     },
     "welcome": "Welcome, {name}",
     "actionItems": "Your action items",
@@ -1950,5 +1951,19 @@
     "reasonPlaceholder": "e.g. Family trip, Eid holiday",
     "addDate": "Add date",
     "remove": "Remove"
+  },
+  "workspaces": {
+    "newTitle": "Add a workspace",
+    "newBody": "Pick the kind of work this workspace is for. You can switch between workspaces from the menu in the sidebar.",
+    "back": "Back to account",
+    "alreadyHave": "You already have this",
+    "creatorBody": "Build a profile, take inquiries, sell services and products as a creative.",
+    "studioBody": "Run a studio: list rentable spaces, manage bookings, host a team.",
+    "clientBody": "Hire creators and studios, manage projects you commission.",
+    "errors": {
+      "INVALID_ROLE": "That workspace type isn't recognised.",
+      "NOT_FOUND": "We couldn't find your account.",
+      "UPDATE_FAILED": "Couldn't add the workspace. Please try again."
+    }
   }
 }
