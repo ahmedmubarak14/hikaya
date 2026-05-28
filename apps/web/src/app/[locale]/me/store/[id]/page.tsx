@@ -61,8 +61,7 @@ export default async function EditProductPage({ params }: Props) {
   const shareUrl = `${baseUrl}/${locale}/${creator.username}/store/${product.slug}`;
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-4xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-4xl px-8 py-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/store`}
@@ -146,7 +145,6 @@ export default async function EditProductPage({ params }: Props) {
             />
           </div>
         ) : null}
-      </main>
-    </>
+      </div>
   );
 }

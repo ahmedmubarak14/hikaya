@@ -61,8 +61,7 @@ export default async function SpaceRentalDetailPage({ params }: Props) {
   const canCancel = booking.status !== 'CANCELLED' && booking.status !== 'COMPLETED';
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-3xl px-8 py-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/space-rentals`}
@@ -115,7 +114,6 @@ export default async function SpaceRentalDetailPage({ params }: Props) {
             <p className="text-2xs text-surface/40">{t('subtitle')}</p>
           </CardBody>
         </Card>
-      </main>
-    </>
+      </div>
   );
 }

@@ -86,8 +86,7 @@ export default async function ThreadDetailPage({ params }: Props) {
   }
 
   return (
-    <>
-      <main className="mx-auto flex h-[calc(100dvh-4rem)] w-full max-w-3xl flex-col px-0 md:px-6">
+    <div className="mx-auto flex h-[calc(100vh-2rem)] w-full max-w-3xl flex-col px-4 md:px-6">
         <header className="border-surface/10 flex items-baseline justify-between gap-3 border-b px-6 py-5 md:px-0">
           <div className="flex flex-col gap-1.5">
             <Link
@@ -120,7 +119,6 @@ export default async function ThreadDetailPage({ params }: Props) {
           threadId={thread.id}
           currentUserId={session.user.id}
         />
-      </main>
-    </>
+    </div>
   );
 }

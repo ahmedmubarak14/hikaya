@@ -78,8 +78,7 @@ export default async function ContractDetailPage({ params }: Props) {
   const _isClient = session.user.currentRole === 'CLIENT';
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-5xl px-8 py-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/contracts`}
@@ -239,8 +238,7 @@ export default async function ContractDetailPage({ params }: Props) {
             </div>
           </section>
         ) : null}
-      </main>
-    </>
+      </div>
   );
 }
 

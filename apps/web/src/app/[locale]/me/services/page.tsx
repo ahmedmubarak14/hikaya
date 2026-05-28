@@ -48,8 +48,7 @@ export default async function MyServicesPage({ params }: Props) {
     : [];
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-3xl px-8 py-10">
         <Link
           href={`/${locale}/me`}
           className="text-2xs text-surface/40 hover:text-surface transition-colors"
@@ -78,16 +77,14 @@ export default async function MyServicesPage({ params }: Props) {
         </header>
 
         <ServicesEditor locale={locale} initialServices={services} />
-      </main>
-    </>
+      </div>
   );
 }
 
 async function NoCreatorProfile({ locale }: { locale: Locale }) {
   const t = await getTranslations('services');
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-3xl px-8 py-10">
         <Link
           href={`/${locale}/me`}
           className="text-2xs text-surface/40 hover:text-surface transition-colors"
@@ -103,7 +100,6 @@ async function NoCreatorProfile({ locale }: { locale: Locale }) {
             <p className="text-surface/60">{t('noProfileBody')}</p>
           </CardBody>
         </Card>
-      </main>
-    </>
+      </div>
   );
 }

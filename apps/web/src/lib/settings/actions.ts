@@ -43,6 +43,43 @@ export async function updateProfileSettingsAction(
 }
 
 /**
+ * Upload a new avatar image to Supabase Storage and return the public URL.
+ * The bucket `avatars` is expected to exist and be publicly readable.
+ */
+export async function uploadAvatarAction(
+  formData: FormData,
+): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  const session = await getSession();
+  if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
+
+  const file = formData.get('file');
+  if (!(file instanceof File) || file.size === 0) {
+    return { ok: false, error: 'NO_FILE' };
+  }
+  if (!file.type.startsWith('image/')) {
+    return { ok: false, error: 'INVALID_TYPE' };
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    return { ok: false, error: 'TOO_LARGE' };
+  }
+
+  const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg';
+  const key = `${session.user.id}/${Date.now()}.${ext}`;
+
+  const supabase = await createServiceClient();
+  const { error: uploadErr } = await supabase.storage
+    .from('avatars')
+    .upload(key, file, { upsert: true, contentType: file.type, cacheControl: '3600' });
+  if (uploadErr) {
+    console.error('[settings/actions] uploadAvatarAction error:', uploadErr.message);
+    return { ok: false, error: 'UPLOAD_FAILED' };
+  }
+
+  const { data } = supabase.storage.from('avatars').getPublicUrl(key);
+  return { ok: true, url: data.publicUrl };
+}
+
+/**
  * Update the user's password via Supabase Auth.
  */
 export async function updatePasswordSettingsAction(

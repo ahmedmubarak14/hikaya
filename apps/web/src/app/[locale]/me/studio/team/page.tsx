@@ -62,8 +62,7 @@ export default async function StudioTeamPage({ params }: Props) {
   });
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-3xl px-8 py-10">
         <Link
           href={`/${locale}/me/studio`}
           className="text-2xs text-surface/40 hover:text-surface transition-colors"
@@ -82,7 +81,6 @@ export default async function StudioTeamPage({ params }: Props) {
         </header>
 
         <TeamManager members={members} isOwner={isOwner} />
-      </main>
-    </>
+      </div>
   );
 }

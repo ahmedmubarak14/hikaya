@@ -36,8 +36,7 @@ export default async function MyQuotesPage({ params }: Props) {
 
   if (!creator) {
     return (
-      <>
-        <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
+      <div className="mx-auto w-full max-w-3xl px-8 py-10">
           <Card>
             <CardBody className="flex flex-col gap-3 p-8">
               <Badge tone="warning" className="self-start">
@@ -47,16 +46,14 @@ export default async function MyQuotesPage({ params }: Props) {
               <p className="text-surface/60">{t('clientBody')}</p>
             </CardBody>
           </Card>
-        </main>
-      </>
+        </div>
     );
   }
 
   const quotes = listQuotesByCreator(creator.id);
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-6xl px-8 py-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
@@ -117,7 +114,6 @@ export default async function MyQuotesPage({ params }: Props) {
             ))}
           </ul>
         )}
-      </main>
-    </>
+      </div>
   );
 }

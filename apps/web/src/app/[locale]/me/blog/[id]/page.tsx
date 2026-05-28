@@ -54,8 +54,7 @@ export default async function EditPostPage({ params }: Props) {
   const t = await getTranslations('blog.owner');
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-3xl px-8 py-10">
         <header className="mb-8 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/blog`}
@@ -70,7 +69,6 @@ export default async function EditPostPage({ params }: Props) {
         </header>
 
         <PostEditor locale={locale} post={post} />
-      </main>
-    </>
+      </div>
   );
 }

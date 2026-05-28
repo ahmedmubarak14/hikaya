@@ -40,8 +40,7 @@ export default async function MyGalleriesPage({ params }: Props) {
   const galleries = listGalleriesByCreator(creator.id);
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-6xl px-8 py-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
@@ -119,8 +118,7 @@ export default async function MyGalleriesPage({ params }: Props) {
             })}
           </ul>
         )}
-      </main>
-    </>
+      </div>
   );
 }
 
@@ -141,8 +139,7 @@ function NoCreatorState({
   backLabel: string;
 }) {
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-3xl px-8 py-10">
         <Link
           href={`/${locale}/me`}
           className="text-2xs text-surface/40 hover:text-surface transition-colors"
@@ -158,7 +155,6 @@ function NoCreatorState({
             <p className="text-surface/60">{t('body')}</p>
           </CardBody>
         </Card>
-      </main>
-    </>
+      </div>
   );
 }
