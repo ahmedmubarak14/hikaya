@@ -128,7 +128,7 @@ export function MeSidebar({
         { href: `${base}/discounts`, label: labels.discounts, icon: CreditCard },
       ],
     },
-    { href: `/${locale}/discover`, label: labels.discover, icon: Compass },
+    { href: `${base}/discover`, label: labels.discover, icon: Compass },
     { href: `${base}/jobs`, label: labels.jobs, icon: Briefcase },
   ];
 

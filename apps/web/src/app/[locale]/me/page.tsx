@@ -9,6 +9,10 @@ import { PromoCard } from '@/components/me/promo-card';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
+import {
+  getProfileActionItems,
+  getProfileCompletionPercent,
+} from '@/lib/me/profile-completion';
 
 import type { Metadata } from 'next';
 
@@ -32,42 +36,14 @@ export default async function MePage({ params }: Props) {
   const t = await getTranslations('me');
   const creator = await getMyCreatorProfile(session.user.email);
 
-  const checks = {
-    cover: Boolean(creator?.avatarUrl),
-    rate: Boolean(creator?.startingPriceSar),
-    social: Boolean(creator?.username),
-    work: Boolean(creator?.disciplines && creator.disciplines.length > 0),
-    bio: Boolean(creator?.bioEn || creator?.bioAr),
-    location: Boolean(creator?.city),
-  };
-  const items: ActionItem[] = [
-    {
-      id: 'bio',
-      label: t('actions.bio'),
-      href: `/${locale}/me/portfolio`,
-      done: checks.bio,
-    },
-    {
-      id: 'rate',
-      label: t('actions.rate'),
-      href: `/${locale}/me/portfolio`,
-      done: checks.rate,
-    },
-    {
-      id: 'work',
-      label: t('actions.work'),
-      href: `/${locale}/me/portfolio`,
-      done: checks.work,
-    },
-    {
-      id: 'location',
-      label: t('actions.location'),
-      href: `/${locale}/me/portfolio`,
-      done: checks.location,
-    },
-  ];
-  const doneCount = items.filter((i) => i.done).length;
-  const percent = Math.round((doneCount / items.length) * 100);
+  const actionItems = getProfileActionItems(creator, locale);
+  const items: ActionItem[] = actionItems.map((it) => ({
+    id: it.id,
+    label: t(`actions.${it.labelKey}` as 'actions.bio'),
+    href: it.href,
+    done: it.done,
+  }));
+  const percent = getProfileCompletionPercent(actionItems);
 
   const tRaw = await getTranslations({ locale, namespace: 'me.opportunities' });
   const opportunitiesRaw = tRaw.raw('items') as unknown;
