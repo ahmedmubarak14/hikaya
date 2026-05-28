@@ -189,7 +189,17 @@
     "signOut": "تسجيل الخروج",
     "sidebar": {
       "home": "الرئيسية",
-      "messages": "الرسائل"
+      "messages": "الرسائل",
+      "completeProfile": "أكمل ملفك الشخصي",
+      "create": "إنشاء",
+      "workspace": "مساحة عمل مستقلة",
+      "wallet": "المحفظة",
+      "payments": "المدفوعات",
+      "discover": "استكشاف",
+      "people": "الأشخاص والمشاريع",
+      "studios": "الاستوديوهات الموثقة",
+      "promoTitle": "احصل على أجر مقابل ذوقك",
+      "promoCta": "انضم إلى Hikaya labs"
     }
   },
   "jobs": {

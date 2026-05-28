@@ -1,7 +1,5 @@
 import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Tag } from 'lucide-react';
-
 import { Badge, Card, CardBody } from '@hikaya/ui';
 
 import { DiscountManager } from '@/components/discounts/discount-manager';
@@ -74,7 +72,6 @@ export default async function DiscountsPage({ params }: Props) {
       <div className="px-8 pb-10">
         {items.length === 0 ? (
           <EmptyState
-            icon={<Tag size={32} strokeWidth={1.5} />}
             title={t('emptyTitle')}
             body={t('emptyBody')}
             cta={{ href: `/${locale}/me/discounts?new=1`, label: t('newCoupon') }}

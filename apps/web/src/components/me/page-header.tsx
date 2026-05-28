@@ -21,14 +21,14 @@ export function PageHeader({ title, tabs, actions }: Props) {
   const pathname = usePathname();
 
   return (
-    <div className="border-line/60 mb-8 border-b">
-      <div className="flex flex-wrap items-start justify-between gap-4 px-8 pt-8">
-        <h1 className="text-surface text-2xl font-semibold tracking-tight">{title}</h1>
+    <div className="mb-6 px-8 pt-10">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <h1 className="text-surface text-3xl font-semibold tracking-tight">{title}</h1>
         {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
       </div>
 
       {tabs && tabs.length > 0 ? (
-        <nav className="-mb-px mt-6 flex gap-6 px-8" aria-label="Tabs">
+        <nav className="border-line/40 mt-6 flex gap-6 border-b" aria-label="Tabs">
           {tabs.map((tab) => {
             const active = pathname === tab.href;
             return (
@@ -36,9 +36,9 @@ export function PageHeader({ title, tabs, actions }: Props) {
                 key={tab.href}
                 href={tab.href}
                 className={cn(
-                  'border-b-2 pb-3 text-sm transition-colors',
+                  '-mb-px border-b-2 pb-3 text-sm transition-colors',
                   active
-                    ? 'border-accent text-surface font-medium'
+                    ? 'text-surface border-surface font-medium'
                     : 'text-muted hover:text-surface border-transparent',
                 )}
               >
@@ -47,9 +47,7 @@ export function PageHeader({ title, tabs, actions }: Props) {
             );
           })}
         </nav>
-      ) : (
-        <div className="h-6" />
-      )}
+      ) : null}
     </div>
   );
 }

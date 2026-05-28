@@ -1,168 +1,280 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  BarChart3,
   Briefcase,
-  Building2,
-  Calendar,
-  FileText,
-  Heart,
+  ChevronDown,
+  ChevronRight,
+  Compass,
+  CreditCard,
   Home,
-  Image as ImageIcon,
   Inbox,
-  Layers,
-  LayoutTemplate,
   MessageSquare,
-  PenSquare,
-  Receipt,
-  Settings,
-  ShieldAlert,
-  ShoppingBag,
-  Store as StoreIcon,
-  Tag,
+  Plus,
+  User,
+  Wallet,
 } from 'lucide-react';
+import { useState } from 'react';
 
 import { Logo } from '@hikaya/ui';
 
 import { cn } from '@/lib/utils';
 import { type Locale } from '@/i18n/config';
 
+import { ProfileCompletion } from './profile-completion';
+
 import type { LucideIcon } from 'lucide-react';
 
-type NavItem = {
+type SimpleItem = {
   href: string;
   label: string;
   icon: LucideIcon;
+  trailing?: string;
 };
 
-type NavGroup = {
-  heading?: string;
-  items: NavItem[];
+type GroupItem = {
+  label: string;
+  icon: LucideIcon;
+  children: SimpleItem[];
 };
+
+type NavEntry = SimpleItem | GroupItem;
+
+function isGroup(entry: NavEntry): entry is GroupItem {
+  return 'children' in entry;
+}
 
 interface Props {
   locale: Locale;
+  user: {
+    displayName: string;
+    avatarUrl: string | null;
+  };
+  workspaceLabel: string;
+  completionPercent: number;
   labels: {
+    completeProfile: string;
+    create: string;
     home: string;
-    portfolio: string;
+    profile: string;
     inquiries: string;
     messages: string;
-    tools: string;
-    blog: string;
-    store: string;
-    galleries: string;
-    studio: string;
-    services: string;
+    wallet: string;
+    payments: string;
+    discover: string;
     jobs: string;
+    // Children
+    portfolio: string;
+    studio: string;
     quotes: string;
     contracts: string;
-    templates: string;
-    spaces: string;
-    availability: string;
-    discounts: string;
-    settings: string;
-    analytics: string;
-    favorites: string;
     purchases: string;
-    disputes: string;
+    discounts: string;
+    people: string;
+    studios: string;
+    services: string;
+    promoTitle: string;
+    promoCta: string;
   };
 }
 
-export function MeSidebar({ locale, labels }: Props) {
+export function MeSidebar({ locale, user, workspaceLabel, completionPercent, labels }: Props) {
   const pathname = usePathname();
   const base = `/${locale}/me`;
 
-  const groups: NavGroup[] = [
+  const entries: NavEntry[] = [
+    { href: base, label: labels.home, icon: Home },
+    { href: `${base}/portfolio`, label: labels.profile, icon: User },
+    { href: `${base}/inquiries`, label: labels.inquiries, icon: Inbox },
+    { href: `${base}/messages`, label: labels.messages, icon: MessageSquare },
+    { href: `${base}/purchases`, label: labels.wallet, icon: Wallet, trailing: '$0.00' },
     {
-      items: [
-        { href: base, label: labels.home, icon: Home },
-        { href: `${base}/portfolio`, label: labels.portfolio, icon: ImageIcon },
-        { href: `${base}/inquiries`, label: labels.inquiries, icon: Inbox },
-        { href: `${base}/messages`, label: labels.messages, icon: MessageSquare },
+      label: labels.payments,
+      icon: CreditCard,
+      children: [
+        { href: `${base}/quotes`, label: labels.quotes, icon: CreditCard },
+        { href: `${base}/contracts`, label: labels.contracts, icon: CreditCard },
+        { href: `${base}/discounts`, label: labels.discounts, icon: CreditCard },
       ],
     },
     {
-      heading: labels.tools,
-      items: [
-        { href: `${base}/studio`, label: labels.studio, icon: Building2 },
-        { href: `${base}/services`, label: labels.services, icon: Layers },
-        { href: `${base}/jobs`, label: labels.jobs, icon: Briefcase },
-        { href: `${base}/quotes`, label: labels.quotes, icon: Receipt },
-        { href: `${base}/contracts`, label: labels.contracts, icon: FileText },
-        { href: `${base}/templates`, label: labels.templates, icon: LayoutTemplate },
-        { href: `${base}/availability`, label: labels.availability, icon: Calendar },
-        { href: `${base}/discounts`, label: labels.discounts, icon: Tag },
-        { href: `${base}/blog`, label: labels.blog, icon: PenSquare },
-        { href: `${base}/store`, label: labels.store, icon: StoreIcon },
-        { href: `${base}/galleries`, label: labels.galleries, icon: ImageIcon },
-        { href: `${base}/spaces`, label: labels.spaces, icon: Home },
+      label: labels.discover,
+      icon: Compass,
+      children: [
+        { href: `/${locale}/discover`, label: labels.people, icon: Compass },
+        { href: `/${locale}/studios`, label: labels.studios, icon: Compass },
+        { href: `${base}/services`, label: labels.services, icon: Compass },
       ],
     },
-    {
-      items: [
-        { href: `${base}/analytics`, label: labels.analytics, icon: BarChart3 },
-        { href: `${base}/favorites`, label: labels.favorites, icon: Heart },
-        { href: `${base}/purchases`, label: labels.purchases, icon: ShoppingBag },
-        { href: `${base}/disputes`, label: labels.disputes, icon: ShieldAlert },
-        { href: `${base}/settings`, label: labels.settings, icon: Settings },
-      ],
-    },
+    { href: `${base}/jobs`, label: labels.jobs, icon: Briefcase },
   ];
+
+  const initialOpen: Record<string, boolean> = {};
+  for (const e of entries) {
+    if (isGroup(e)) {
+      initialOpen[e.label] = e.children.some(
+        (c) => pathname === c.href || pathname.startsWith(`${c.href}/`),
+      );
+    }
+  }
+  const [open, setOpen] = useState<Record<string, boolean>>(initialOpen);
 
   const isActive = (href: string) => {
     if (href === base) return pathname === base || pathname === `${base}/`;
     return pathname === href || pathname.startsWith(`${href}/`);
   };
 
+  const initial = user.displayName.charAt(0).toUpperCase();
+
   return (
-    <aside className="border-line/60 hidden w-60 shrink-0 flex-col border-e bg-bg/40 lg:flex">
+    <aside className="bg-paper hidden w-60 shrink-0 flex-col lg:flex">
       <div className="px-6 py-5">
         <Link href={`/${locale}`} className="text-surface inline-flex items-center">
-          <Logo className="h-6 w-auto" />
+          <Logo className="h-5 w-auto" />
         </Link>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 pb-6">
-        {groups.map((group, gi) => (
-          <div key={gi} className="mb-5">
-            {group.heading ? (
-              <p className="text-muted px-3 pb-2 pt-1 text-[11px] font-medium uppercase tracking-wider">
-                {group.heading}
-              </p>
-            ) : null}
-            <ul className="flex flex-col gap-0.5">
-              {group.items.map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item.href);
-                return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
+      <div className="px-3">
+        <button
+          type="button"
+          className="border-line/60 hover:bg-surface/[0.03] flex w-full items-center gap-3 rounded-lg border px-3 py-2 text-left transition-colors"
+        >
+          {user.avatarUrl ? (
+            <Image
+              src={user.avatarUrl}
+              alt={user.displayName}
+              width={28}
+              height={28}
+              className="h-7 w-7 shrink-0 rounded-full object-cover"
+            />
+          ) : (
+            <span className="bg-accent/20 text-accent flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold">
+              {initial}
+            </span>
+          )}
+          <span className="flex min-w-0 flex-1 flex-col">
+            <span className="text-muted truncate text-[11px]">{workspaceLabel}</span>
+            <span className="text-surface truncate text-sm font-medium">{user.displayName}</span>
+          </span>
+          <ChevronRight size={14} className="text-muted shrink-0" />
+        </button>
+
+        <div className="mt-3">
+          <ProfileCompletion percent={completionPercent} label={labels.completeProfile} />
+        </div>
+
+        <div className="mt-3">
+          <button
+            type="button"
+            className="bg-surface text-bg hover:bg-surface/90 flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors"
+          >
+            <Plus size={16} strokeWidth={2.5} />
+            <span>{labels.create}</span>
+          </button>
+        </div>
+      </div>
+
+      <nav className="mt-4 flex-1 overflow-y-auto px-3 pb-6">
+        <ul className="flex flex-col gap-0.5">
+          {entries.map((entry, i) => {
+            if (isGroup(entry)) {
+              const Icon = entry.icon;
+              const isOpen = open[entry.label];
+              const groupActive = entry.children.some((c) => isActive(c.href));
+              return (
+                <li key={`g-${i}`}>
+                  <button
+                    type="button"
+                    onClick={() => setOpen((o) => ({ ...o, [entry.label]: !o[entry.label] }))}
+                    className={cn(
+                      'group flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
+                      groupActive
+                        ? 'text-surface font-medium'
+                        : 'text-surface/70 hover:text-surface',
+                    )}
+                  >
+                    <Icon
+                      size={16}
+                      strokeWidth={1.75}
+                      className={cn(groupActive ? 'text-surface' : 'text-surface/60')}
+                    />
+                    <span className="flex-1 text-start">{entry.label}</span>
+                    <ChevronDown
+                      size={14}
                       className={cn(
-                        'group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
-                        active
-                          ? 'bg-surface/[0.06] text-surface font-medium'
-                          : 'text-surface/70 hover:bg-surface/[0.04] hover:text-surface',
+                        'text-muted transition-transform',
+                        isOpen ? 'rotate-0' : '-rotate-90 rtl:rotate-90',
                       )}
-                    >
-                      <Icon
-                        size={16}
-                        strokeWidth={active ? 2.25 : 2}
-                        className={cn(
-                          active ? 'text-accent' : 'text-surface/50 group-hover:text-surface/80',
-                        )}
-                      />
-                      <span className="truncate">{item.label}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
+                    />
+                  </button>
+                  {isOpen ? (
+                    <ul className="ms-7 mt-0.5 flex flex-col gap-0.5">
+                      {entry.children.map((c) => {
+                        const active = isActive(c.href);
+                        return (
+                          <li key={c.href}>
+                            <Link
+                              href={c.href}
+                              className={cn(
+                                'block rounded-md px-3 py-1.5 text-sm transition-colors',
+                                active
+                                  ? 'bg-surface/[0.05] text-surface font-medium'
+                                  : 'text-surface/70 hover:text-surface',
+                              )}
+                            >
+                              {c.label}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : null}
+                </li>
+              );
+            }
+
+            const Icon = entry.icon;
+            const active = isActive(entry.href);
+            return (
+              <li key={entry.href}>
+                <Link
+                  href={entry.href}
+                  className={cn(
+                    'group flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
+                    active
+                      ? 'text-surface font-medium'
+                      : 'text-surface/70 hover:text-surface',
+                  )}
+                >
+                  <Icon
+                    size={16}
+                    strokeWidth={1.75}
+                    className={cn(active ? 'text-surface' : 'text-surface/60')}
+                  />
+                  <span className="flex-1">{entry.label}</span>
+                  {entry.trailing ? (
+                    <span className="text-muted text-xs">{entry.trailing}</span>
+                  ) : null}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </nav>
+
+      <div className="px-3 pb-4">
+        <div className="bg-accent/15 border-accent/20 flex items-center gap-3 rounded-xl border p-3">
+          <div className="bg-accent/30 text-accent flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm">
+            ✦
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col">
+            <span className="text-surface truncate text-xs font-medium">{labels.promoTitle}</span>
+            <span className="text-muted truncate text-[11px]">{labels.promoCta} →</span>
+          </div>
+        </div>
+      </div>
     </aside>
   );
 }

@@ -189,7 +189,17 @@
     "signOut": "Sign out",
     "sidebar": {
       "home": "Home",
-      "messages": "Messages"
+      "messages": "Messages",
+      "completeProfile": "Complete your profile",
+      "create": "Create",
+      "workspace": "Independent workspace",
+      "wallet": "Wallet",
+      "payments": "Payments",
+      "discover": "Discover",
+      "people": "People and Projects",
+      "studios": "Verified Studios",
+      "promoTitle": "Get paid for your taste",
+      "promoCta": "Join Hikaya labs"
     }
   },
   "jobs": {

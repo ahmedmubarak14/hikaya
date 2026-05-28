@@ -1,7 +1,5 @@
 import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Gift } from 'lucide-react';
-
 import { EmptyState } from '@/components/me/empty-state';
 import { PageHeader } from '@/components/me/page-header';
 import { type Locale } from '@/i18n/config';
@@ -39,7 +37,6 @@ export default async function GiftCardsPage({ params }: Props) {
       <PageHeader title={tLinks('discounts')} tabs={tabs} />
       <div className="px-8 pb-10">
         <EmptyState
-          icon={<Gift size={32} strokeWidth={1.5} />}
           title={t('giftCards.emptyTitle')}
           body={t('giftCards.emptyBody')}
           cta={{ href: `/${locale}/me/discounts/gift-cards?new=1`, label: t('giftCards.newCta') }}
