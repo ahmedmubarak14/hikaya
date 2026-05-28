@@ -27,7 +27,7 @@ export default async function NewGalleryPage({ params }: Props) {
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/galleries/new`);
 
   const creator = await getMyCreatorProfile(session.user.email);
-  if (!creator) redirect(`/${locale}/me/galleries`);
+  if (!creator) redirect(`/${locale}/me/portfolio`);
 
   const t = await getTranslations('gallery.create');
 

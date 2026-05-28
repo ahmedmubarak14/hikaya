@@ -55,7 +55,7 @@ export default async function ContractDetailPage({ params }: Props) {
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/contracts/${id}`);
 
   const creator = await getMyCreatorProfile(session.user.email);
-  if (!creator) redirect(`/${locale}/me/contracts`);
+  if (!creator) redirect(`/${locale}/me/portfolio`);
 
   const contract = getContractById(id);
   if (!contract || contract.creatorId !== creator.id) notFound();

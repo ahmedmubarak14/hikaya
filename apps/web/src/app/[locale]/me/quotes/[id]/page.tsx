@@ -51,7 +51,7 @@ export default async function QuoteDetailPage({ params }: Props) {
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/quotes/${id}`);
 
   const creator = await getMyCreatorProfile(session.user.email);
-  if (!creator) redirect(`/${locale}/me/quotes`);
+  if (!creator) redirect(`/${locale}/me/portfolio`);
 
   const quote = getQuoteById(id);
   if (!quote || quote.creatorId !== creator.id) notFound();

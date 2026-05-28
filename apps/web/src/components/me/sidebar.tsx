@@ -24,6 +24,7 @@ import { CreateMenu } from './create-menu';
 import { ProfileCompletion } from './profile-completion';
 import { WorkspaceMenu } from './workspace-menu';
 
+import type { MockUserRole } from '@/lib/auth/mock-store';
 import type { LucideIcon } from 'lucide-react';
 
 type SimpleItem = {
@@ -52,6 +53,8 @@ interface Props {
     avatarUrl: string | null;
   };
   workspaceLabel: string;
+  currentRole: MockUserRole;
+  availableRoles: MockUserRole[];
   completionPercent: number;
   labels: {
     completeProfile: string;
@@ -91,10 +94,21 @@ interface Props {
     ws_switchWorkspace: string;
     ws_help: string;
     ws_logOut: string;
+    ws_roleCreator: string;
+    ws_roleStudioOwner: string;
+    ws_roleClient: string;
   };
 }
 
-export function MeSidebar({ locale, user, workspaceLabel, completionPercent, labels }: Props) {
+export function MeSidebar({
+  locale,
+  user,
+  workspaceLabel,
+  currentRole,
+  availableRoles,
+  completionPercent,
+  labels,
+}: Props) {
   const pathname = usePathname();
   const base = `/${locale}/me`;
 
@@ -153,6 +167,8 @@ export function MeSidebar({ locale, user, workspaceLabel, completionPercent, lab
           locale={locale}
           user={user}
           workspaceLabel={workspaceLabel}
+          currentRole={currentRole}
+          availableRoles={availableRoles}
           labels={{
             dashboard: labels.ws_dashboard,
             analytics: labels.ws_analytics,
@@ -162,6 +178,9 @@ export function MeSidebar({ locale, user, workspaceLabel, completionPercent, lab
             switchWorkspace: labels.ws_switchWorkspace,
             help: labels.ws_help,
             logOut: labels.ws_logOut,
+            roleCreator: labels.ws_roleCreator,
+            roleStudioOwner: labels.ws_roleStudioOwner,
+            roleClient: labels.ws_roleClient,
           }}
         />
 
@@ -274,7 +293,10 @@ export function MeSidebar({ locale, user, workspaceLabel, completionPercent, lab
       </nav>
 
       <div className="px-3 pb-4">
-        <div className="bg-accent/15 border-accent/20 flex items-center gap-3 rounded-xl border p-3">
+        <Link
+          href={`/${locale}/me/portfolio`}
+          className="bg-accent/15 border-accent/20 hover:bg-accent/20 flex items-center gap-3 rounded-xl border p-3 transition-colors"
+        >
           <div className="bg-accent/30 text-accent flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm">
             ✦
           </div>
@@ -282,7 +304,7 @@ export function MeSidebar({ locale, user, workspaceLabel, completionPercent, lab
             <span className="text-surface truncate text-xs font-medium">{labels.promoTitle}</span>
             <span className="text-muted truncate text-[11px]">{labels.promoCta} →</span>
           </div>
-        </div>
+        </Link>
       </div>
     </aside>
   );
