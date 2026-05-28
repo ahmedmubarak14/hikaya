@@ -6,22 +6,14 @@ import { MeSidebar } from '@/components/me/sidebar';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { getMyCreatorProfile } from '@/lib/creators/queries';
+import {
+  getProfileActionItems,
+  getProfileCompletionPercent,
+} from '@/lib/me/profile-completion';
 
 interface Props {
   children: ReactNode;
   params: Promise<{ locale: Locale }>;
-}
-
-function profileCompletion(creator: Awaited<ReturnType<typeof getMyCreatorProfile>>): number {
-  if (!creator) return 11;
-  let score = 20;
-  if (creator.username) score += 15;
-  if (creator.bioEn || creator.bioAr) score += 15;
-  if (creator.avatarUrl) score += 15;
-  if (creator.city) score += 10;
-  if (creator.disciplines && creator.disciplines.length > 0) score += 15;
-  if (creator.startingPriceSar) score += 10;
-  return Math.min(100, score);
 }
 
 export default async function MeLayout({ children, params }: Props) {
@@ -36,7 +28,8 @@ export default async function MeLayout({ children, params }: Props) {
   const tAuth = await getTranslations({ locale, namespace: 'auth' });
 
   const creator = await getMyCreatorProfile(session.user.email);
-  const completion = profileCompletion(creator);
+  const actionItems = getProfileActionItems(creator, locale);
+  const completion = getProfileCompletionPercent(actionItems);
 
   const labels = {
     completeProfile: t('sidebar.completeProfile'),
