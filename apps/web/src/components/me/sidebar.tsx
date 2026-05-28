@@ -76,6 +76,7 @@ interface Props {
     quotes: string;
     contracts: string;
     purchases: string;
+    billing: string;
     discounts: string;
     people: string;
     studios: string;
@@ -136,6 +137,7 @@ export function MeSidebar({
         { href: `${base}/quotes`, label: labels.quotes, icon: CreditCard },
         { href: `${base}/contracts`, label: labels.contracts, icon: CreditCard },
         { href: `${base}/discounts`, label: labels.discounts, icon: CreditCard },
+        { href: `${base}/billing`, label: labels.billing, icon: CreditCard },
       ],
     },
     { href: `${base}/discover`, label: labels.discover, icon: Compass },

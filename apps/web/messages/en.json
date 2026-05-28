@@ -215,7 +215,8 @@
       "wsHelp": "Help",
       "wsLogOut": "Log out",
       "wsAddWorkspace": "Add workspace",
-      "notifications": "Notifications"
+      "notifications": "Notifications",
+      "billing": "Billing"
     },
     "welcome": "Welcome, {name}",
     "actionItems": "Your action items",
@@ -955,7 +956,11 @@
       "title": "You're signed in as a client.",
       "body": "Only creator accounts have a portfolio. To edit one, sign in as a creator — or create a new account and choose \"Showcase my work\".",
       "discover": "Browse creatives instead"
-    }
+    },
+    "freeTierLimit": "Free plan caps your portfolio at 10 items. Upgrade to Pro to add more.",
+    "accentColor": "Profile accent color",
+    "accentColorHint": "Used for buttons, links, and highlights on your public profile.",
+    "accentColorClear": "Use default"
   },
   "studio": {
     "title": "Studio dashboard",
@@ -1585,7 +1590,17 @@
     "conversionRateHint": "{approved} approved of {total} total",
     "quotesOverview": "Quotes overview",
     "quotesTotal": "Total quotes",
-    "quotesApproved": "Approved"
+    "quotesApproved": "Approved",
+    "funnel": {
+      "title": "Hiring funnel",
+      "inquiries": "Inquiries",
+      "quotes": "Quotes",
+      "bookings": "Bookings",
+      "completed": "Completed"
+    },
+    "revenueByMonth": {
+      "title": "Revenue by month"
+    }
   },
   "legal": {
     "draftNotice": "DRAFT -- subject to legal review. This document is provided for informational purposes and does not constitute legal advice.",
@@ -2035,5 +2050,18 @@
     "reason_HARASSMENT": "Harassment",
     "reason_INAPPROPRIATE": "Inappropriate",
     "reason_OTHER": "Other"
+  },
+  "billing": {
+    "title": "Billing history",
+    "subtitle": "Invoices for bookings, products, and subscriptions you've been billed on.",
+    "emptyTitle": "No invoices yet",
+    "emptyBody": "Invoices appear here once a payment lands or a booking is confirmed.",
+    "colNumber": "Number",
+    "colIssued": "Issued",
+    "colSubtotal": "Subtotal",
+    "colVat": "VAT",
+    "colTotal": "Total",
+    "colStatus": "Status",
+    "downloadPdf": "Download PDF"
   }
 }

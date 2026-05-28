@@ -215,7 +215,8 @@
       "wsHelp": "المساعدة",
       "wsLogOut": "تسجيل الخروج",
       "wsAddWorkspace": "إضافة مساحة عمل",
-      "notifications": "الإشعارات"
+      "notifications": "الإشعارات",
+      "billing": "الفواتير"
     },
     "welcome": "مرحبا، {name}",
     "actionItems": "مهامك",
@@ -955,7 +956,11 @@
       "title": "أنت مسجّل دخول كعميل.",
       "body": "حسابات المبدعين فقط لها معرض أعمال. لتحرير معرض، سجّل الدخول كمبدع — أو أنشئ حساباً جديداً واختر \"عرض أعمالي\".",
       "discover": "تصفّح المبدعين"
-    }
+    },
+    "freeTierLimit": "الخطة المجانية تحد معرضك بـ 10 عناصر. ارقِ إلى Pro لإضافة المزيد.",
+    "accentColor": "لون مميّز للملف",
+    "accentColorHint": "يُستخدم للأزرار والروابط والإبرازات في ملفك العام.",
+    "accentColorClear": "استخدم الافتراضي"
   },
   "studio": {
     "title": "لوحة الاستوديو",
@@ -1585,7 +1590,17 @@
     "conversionRateHint": "{approved} موافقة من أصل {total}",
     "quotesOverview": "نظرة على العروض",
     "quotesTotal": "إجمالي العروض",
-    "quotesApproved": "الموافَق عليها"
+    "quotesApproved": "الموافَق عليها",
+    "funnel": {
+      "title": "مسار التوظيف",
+      "inquiries": "استفسارات",
+      "quotes": "عروض أسعار",
+      "bookings": "حجوزات",
+      "completed": "مكتملة"
+    },
+    "revenueByMonth": {
+      "title": "الإيرادات الشهرية"
+    }
   },
   "legal": {
     "draftNotice": "مسوّدة — قيد المراجعة القانونيّة. لا يشكّل هذا المستند استشارة قانونيّة.",
@@ -2035,5 +2050,18 @@
     "reason_HARASSMENT": "تحرّش",
     "reason_INAPPROPRIATE": "محتوى غير لائق",
     "reason_OTHER": "أخرى"
+  },
+  "billing": {
+    "title": "سجلّ الفواتير",
+    "subtitle": "فواتير الحجوزات والمنتجات والاشتراكات التي تم تحصيلها.",
+    "emptyTitle": "لا توجد فواتير بعد",
+    "emptyBody": "ستظهر الفواتير هنا بمجرّد تحصيل الدفع أو تأكيد الحجز.",
+    "colNumber": "الرقم",
+    "colIssued": "تاريخ الإصدار",
+    "colSubtotal": "المجموع الفرعي",
+    "colVat": "ضريبة القيمة المضافة",
+    "colTotal": "الإجمالي",
+    "colStatus": "الحالة",
+    "downloadPdf": "تنزيل PDF"
   }
 }

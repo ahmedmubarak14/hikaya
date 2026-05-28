@@ -51,6 +51,7 @@ export default async function MeLayout({ children, params }: Props) {
     contracts: tLinks('contracts'),
     purchases: tLinks('purchases'),
     discounts: tLinks('discounts'),
+    billing: t('sidebar.billing'),
     people: t('sidebar.people'),
     studios: t('sidebar.studios'),
     services: tLinks('services'),

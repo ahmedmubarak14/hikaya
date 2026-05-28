@@ -15,7 +15,11 @@ export type EditorErrorKey =
   | 'INVALID_INPUT'
   | 'NOT_AUTHENTICATED'
   | 'NO_CREATOR_PROFILE'
+  | 'FREE_TIER_LIMIT'
   | 'UNKNOWN';
+
+/** Free-plan cap on visible portfolio items. PRO+ removes the cap. */
+const FREE_TIER_PORTFOLIO_LIMIT = 10;
 
 export interface EditorFailure {
   ok: false;
@@ -67,6 +71,7 @@ export async function updateProfileAction(
     startingPriceSar: formData.get('startingPriceSar') || undefined,
     availability: formData.get('availability'),
     preferredLayout: formData.get('preferredLayout'),
+    accentColor: formData.get('accentColor') || undefined,
   });
   if (!parsed.success) {
     return {
@@ -90,6 +95,7 @@ export async function updateProfileAction(
       startingPriceSar: parsed.data.startingPriceSar ?? null,
       availability: parsed.data.availability,
       preferredLayout: parsed.data.preferredLayout,
+      accentColor: parsed.data.accentColor ? parsed.data.accentColor : null,
       updatedAt: new Date().toISOString(),
     })
     .eq('id', auth.creator.id);
@@ -144,6 +150,20 @@ export async function addPortfolioItemAction(
     .select('id, orderIndex')
     .eq('creatorId', auth.creator.id)
     .order('orderIndex', { ascending: true });
+
+  // Free-tier portfolio cap. Look up the user's subscription plan; if it's
+  // unset OR FREE, enforce the FREE_TIER_PORTFOLIO_LIMIT.
+  const { data: subscription } = await supabase
+    .from('Subscription')
+    .select('plan, status')
+    .eq('userId', auth.session.user.id)
+    .maybeSingle();
+
+  const plan = (subscription?.plan as string | undefined) ?? 'FREE';
+  const planIsFree = plan === 'FREE';
+  if (planIsFree && (existingItems?.length ?? 0) >= FREE_TIER_PORTFOLIO_LIMIT) {
+    return { ok: false, error: 'FREE_TIER_LIMIT' };
+  }
 
   if (existingItems && existingItems.length > 0) {
     // Bulk shift — increment all orderIndex by 1

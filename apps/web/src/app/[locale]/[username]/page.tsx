@@ -131,10 +131,21 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
   // Force tab back to "work" if user asks for store but there's no store.
   const effectiveTab: ProfileTab = tab === 'store' && !hasStore ? 'work' : tab;
 
+  // Per-creator accent override. The platform-wide --accent is defined in
+  // globals.css; here we shadow it just for this subtree with the creator's
+  // chosen hex (if any) so every `bg-accent`, `text-accent`, ring color,
+  // etc. picks it up automatically.
+  const accentStyle = creator.accentColor
+    ? ({ ['--accent' as string]: creator.accentColor } as React.CSSProperties)
+    : undefined;
+
   return (
     <>
       <SiteHeader />
-      <main className="max-w-8xl pb-22 mx-auto w-full px-6 pt-10 md:px-10 md:pt-12">
+      <main
+        className="max-w-8xl pb-22 mx-auto w-full px-6 pt-10 md:px-10 md:pt-12"
+        style={accentStyle}
+      >
         {/* Identity row — Instagram-style horizontal: avatar + stacked name/stats/bio,
             CTAs pinned to the trailing edge on md+. */}
         <section className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
