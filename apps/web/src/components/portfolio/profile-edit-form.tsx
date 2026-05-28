@@ -78,19 +78,19 @@ export function ProfileEditForm({ locale, creator }: Props) {
   } = useForm<ProfileEditValues>({
     resolver: zodResolver(profileEditSchema),
     defaultValues: {
-      displayNameEn: creator.displayNameEn,
-      displayNameAr: creator.displayNameAr,
-      bioEn: creator.bioEn,
-      bioAr: creator.bioAr,
+      displayNameEn: creator.displayNameEn ?? '',
+      displayNameAr: creator.displayNameAr ?? '',
+      bioEn: creator.bioEn ?? '',
+      bioAr: creator.bioAr ?? '',
       city: creator.city,
-      disciplines: creator.disciplines,
+      disciplines: creator.disciplines ?? [],
       startingPriceSar: creator.startingPriceSar ?? undefined,
       availability: creator.availability,
       preferredLayout: creator.preferredLayout,
     },
   });
 
-  const selectedDisciplines = watch('disciplines');
+  const selectedDisciplines = watch('disciplines') ?? [];
 
   const toggleDiscipline = (d: Discipline) => {
     const set = new Set(selectedDisciplines);
