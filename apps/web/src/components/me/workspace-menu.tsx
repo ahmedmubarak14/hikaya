@@ -12,6 +12,7 @@ import {
   Image as ImageIcon,
   LayoutDashboard,
   LogOut,
+  Plus,
   Settings,
   Sparkles,
   Users,
@@ -47,6 +48,7 @@ interface Props {
     roleCreator: string;
     roleStudioOwner: string;
     roleClient: string;
+    addWorkspace: string;
   };
 }
 
@@ -135,10 +137,9 @@ export function WorkspaceMenu({
       />
       <PopoverItem icon={<Settings size={16} />} label={labels.settings} href={`${me}/settings`} />
 
-      {availableRoles.length > 1 ? (
-        <>
-          <PopoverSeparator label={labels.switchWorkspace} />
-          {availableRoles.map((role) => {
+      <PopoverSeparator label={labels.switchWorkspace} />
+      {availableRoles.length > 1
+        ? availableRoles.map((role) => {
             const Icon = ROLE_ICONS[role];
             const isCurrent = role === currentRole;
             return (
@@ -158,10 +159,14 @@ export function WorkspaceMenu({
                 {isCurrent ? <Check size={14} className="text-accent shrink-0" /> : null}
               </button>
             );
-          })}
-          <PopoverSeparator />
-        </>
-      ) : null}
+          })
+        : null}
+      <PopoverItem
+        icon={<Plus size={16} />}
+        label={labels.addWorkspace}
+        href={`/${locale}/me/workspaces/new`}
+      />
+      <PopoverSeparator />
 
       <PopoverItem
         icon={<HelpCircle size={16} />}

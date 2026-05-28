@@ -731,7 +731,11 @@ model CollectionSelection {
 
 model Quote {
   id              String       @id @default(cuid())
-  bookingId       String
+  bookingId       String?
+  creatorId       String?
+  clientName      String?
+  clientEmail     String?
+  shareSlug       String?      @unique
   number          String       @unique
   status          QuoteStatus  @default(DRAFT)
   expiresAt       DateTime?

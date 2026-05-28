@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useMemo, useTransition } from 'react';
 import { useFormState } from 'react-dom';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 
 import { Button, Input, cn } from '@hikaya/ui';
 
@@ -40,7 +40,6 @@ export function QuoteBuilder({ locale }: Props) {
     register,
     control,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<CreateQuoteValues>({
     resolver: zodResolver(createQuoteSchema),
@@ -49,8 +48,11 @@ export function QuoteBuilder({ locale }: Props) {
 
   const { fields, append, remove } = useFieldArray({ control, name: 'lineItems' });
 
-  const watchedLineItems = watch('lineItems');
-  const watchedDiscount = watch('discountSar');
+  // `useWatch` subscribes to value changes and re-renders this component on
+  // every keystroke. Plain `watch()` would NOT re-render the parent when a
+  // child input changes, leaving the live totals frozen at zero.
+  const watchedLineItems = useWatch({ control, name: 'lineItems' });
+  const watchedDiscount = useWatch({ control, name: 'discountSar' });
 
   const totals = useMemo(() => {
     const subtotalSar = (watchedLineItems ?? []).reduce(

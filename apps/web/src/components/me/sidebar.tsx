@@ -97,6 +97,7 @@ interface Props {
     ws_roleCreator: string;
     ws_roleStudioOwner: string;
     ws_roleClient: string;
+    ws_addWorkspace: string;
   };
 }
 
@@ -127,15 +128,7 @@ export function MeSidebar({
         { href: `${base}/discounts`, label: labels.discounts, icon: CreditCard },
       ],
     },
-    {
-      label: labels.discover,
-      icon: Compass,
-      children: [
-        { href: `/${locale}/discover`, label: labels.people, icon: Compass },
-        { href: `/${locale}/studios`, label: labels.studios, icon: Compass },
-        { href: `${base}/services`, label: labels.services, icon: Compass },
-      ],
-    },
+    { href: `/${locale}/discover`, label: labels.discover, icon: Compass },
     { href: `${base}/jobs`, label: labels.jobs, icon: Briefcase },
   ];
 
@@ -181,6 +174,7 @@ export function MeSidebar({
             roleCreator: labels.ws_roleCreator,
             roleStudioOwner: labels.ws_roleStudioOwner,
             roleClient: labels.ws_roleClient,
+            addWorkspace: labels.ws_addWorkspace,
           }}
         />
 

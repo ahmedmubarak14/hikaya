@@ -143,6 +143,9 @@ export async function createQuoteAction(
     .from('Quote')
     .insert({
       id: quoteId,
+      // Standalone quotes have no parent Booking. The Quote.bookingId column
+      // is nullable post-2026-05-28 migration (manual/20260528_quote_standalone_columns.sql).
+      bookingId: null,
       number: nextQuoteNumber(),
       shareSlug: uniqueSlug(`${parsed.data.clientName}-${quoteId.slice(2, 6)}`),
       creatorId: auth.creator.id,
