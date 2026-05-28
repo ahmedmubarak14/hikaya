@@ -128,15 +128,7 @@ export function MeSidebar({
         { href: `${base}/discounts`, label: labels.discounts, icon: CreditCard },
       ],
     },
-    {
-      label: labels.discover,
-      icon: Compass,
-      children: [
-        { href: `/${locale}/discover`, label: labels.people, icon: Compass },
-        { href: `/${locale}/studios`, label: labels.studios, icon: Compass },
-        { href: `${base}/services`, label: labels.services, icon: Compass },
-      ],
-    },
+    { href: `/${locale}/discover`, label: labels.discover, icon: Compass },
     { href: `${base}/jobs`, label: labels.jobs, icon: Briefcase },
   ];
 
