@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  CreditCard,
-  FileText,
-  Image as ImageIcon,
-  Layers,
-  Package,
-  Plus,
-  Sparkles,
-} from 'lucide-react';
+import { FileText, Image as ImageIcon, Inbox, Layers, Package, Plus } from 'lucide-react';
 
 import { Popover, PopoverItem } from './popover';
 
@@ -43,14 +35,9 @@ export function CreateMenu({ locale, labels }: Props) {
       )}
     >
       <PopoverItem icon={<ImageIcon size={16} />} label={labels.post} href={`${me}/blog/new`} />
-      <PopoverItem icon={<Sparkles size={16} />} label={labels.project} href={`${me}/studio`} />
+      <PopoverItem icon={<Inbox size={16} />} label={labels.project} href={`${me}/inquiries`} />
       <PopoverItem icon={<Package size={16} />} label={labels.product} href={`${me}/store/new`} />
       <PopoverItem icon={<Layers size={16} />} label={labels.service} href={`${me}/services`} />
-      <PopoverItem
-        icon={<CreditCard size={16} />}
-        label={labels.paymentLink}
-        href={`${me}/quotes/new`}
-      />
       <PopoverItem icon={<FileText size={16} />} label={labels.invoice} href={`${me}/quotes/new`} />
     </Popover>
   );
