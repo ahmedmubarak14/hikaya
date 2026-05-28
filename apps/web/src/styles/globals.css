@@ -12,36 +12,41 @@
  */
 
 :root {
-  /* Light (default) */
-  --bg: #f4f1ea;
-  --surface: #151412;
-  --line: #e3ddd2;
-  --muted: #756f66;
+  /* Light (default) — Bone background, Black Rock surface */
+  --bg: #f1ede4;
+  --surface: #18012b;
+  --line: #e0dcd2;
+  --muted: #5d4f6a;
 
-  /* Fixed brand colors */
-  --ink: #151412;
-  --paper: #f4f1ea;
-  --accent: #8fb7a4;
-  --accent-secondary: #a786a5;
-  --sage: #789988;
-  --info: #7896a9;
-  --purple: #9285a8;
+  /* Fixed brand neutrals */
+  --ink: #18012b;
+  --paper: #f1ede4;
+
+  /* Primary accents */
+  --accent: #c8d32d;            /* Juicy Yellow Green */
+  --accent-secondary: #d1c7f9;  /* Simple Lavender */
+
+  /* Secondary palette */
+  --sage: #73d9ec;              /* Spray */
+  --info: #3e6bfd;              /* Laser Blue */
+  --purple: #ddcbb3;            /* Gold Blush */
+  --orange: #fe7452;            /* Outrageous Orange */
 }
 
 :root[data-theme='dark'] {
-  --bg: #151412;
-  --surface: #f4f1ea;
-  --line: #2d2923;
-  --muted: #aaa296;
+  --bg: #18012b;
+  --surface: #f1ede4;
+  --line: #2a1a3c;
+  --muted: #a89db4;
 }
 
 /* Honor OS preference when no explicit choice has been made. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    --bg: #151412;
-    --surface: #f4f1ea;
-    --line: #2d2923;
-    --muted: #aaa296;
+    --bg: #18012b;
+    --surface: #f1ede4;
+    --line: #2a1a3c;
+    --muted: #a89db4;
   }
 }
 

@@ -39,8 +39,7 @@ export default async function FavoritesPage({ params }: Props) {
   const favoriteCreators = allCreators.filter((c) => favoriteIds.includes(c.id));
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-6xl px-8 py-10">
         <header className="mb-12 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
@@ -74,7 +73,6 @@ export default async function FavoritesPage({ params }: Props) {
 
           <SavedSearchList searches={savedSearches} locale={locale} />
         </section>
-      </main>
-    </>
+      </div>
   );
 }

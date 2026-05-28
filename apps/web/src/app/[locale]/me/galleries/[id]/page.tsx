@@ -76,8 +76,7 @@ export default async function ManageGalleryPage({ params }: Props) {
     .slice(0, 6);
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-7xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-7xl px-8 py-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me/galleries`}
@@ -211,8 +210,7 @@ export default async function ManageGalleryPage({ params }: Props) {
             </div>
           </aside>
         </section>
-      </main>
-    </>
+      </div>
   );
 }
 

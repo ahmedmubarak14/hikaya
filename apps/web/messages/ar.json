@@ -1272,7 +1272,7 @@
     "profileDisplayName": "الاسم المعروض",
     "profileEmail": "البريد الإلكتروني (للقراءة فقط)",
     "profileAvatarUrl": "رابط الصورة الشخصيّة",
-    "profileAvatarHint": "ألصق رابط صورة. الإصدار النهائي يرفع مباشرة.",
+    "profileAvatarHint": "PNG أو JPG، بحد أقصى 5MB.",
     "profileLocale": "اللغة المفضّلة",
     "profileSave": "حفظ التعديلات",
     "profileSaved": "تمّ الحفظ",
@@ -1311,7 +1311,10 @@
     "deleteConfirm": "هل أنت متأكّد تماماً؟ لا يمكن التراجع.",
     "deleteConfirmCta": "نعم، احذف حسابي",
     "deleteCancel": "إلغاء",
-    "deleteError": "حدث خطأ ما. حاول مرّة أخرى."
+    "deleteError": "حدث خطأ ما. حاول مرّة أخرى.",
+    "profileAvatarLabel": "الصورة الشخصية",
+    "profileAvatarUpload": "رفع صورة",
+    "profileAvatarUploading": "جارٍ الرفع…"
   },
   "services": {
     "servicesLabel": "الخدمات والأسعار",

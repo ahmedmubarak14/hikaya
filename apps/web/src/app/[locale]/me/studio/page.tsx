@@ -69,8 +69,7 @@ export default async function StudioDashboardPage({ params }: Props) {
     new Intl.NumberFormat(locale === 'ar' ? 'ar-SA' : 'en-SA').format(n);
 
   return (
-    <>
-      <main className="max-w-8xl py-22 mx-auto w-full px-6 md:px-10">
+    <div className="mx-auto w-full max-w-8xl px-8 py-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
@@ -185,8 +184,7 @@ export default async function StudioDashboardPage({ params }: Props) {
         {/* Interactive Clients CRM */}
         <ClientTable clients={STUDIO_CLIENTS} />
 
-      </main>
-    </>
+      </div>
   );
 }
 

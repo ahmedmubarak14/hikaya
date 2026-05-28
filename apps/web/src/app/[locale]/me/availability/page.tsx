@@ -32,8 +32,7 @@ export default async function AvailabilityPage({ params }: Props) {
   const availability = await getAvailabilityAction();
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-3xl px-8 py-10">
         <Link
           href={`/${locale}/me`}
           className="text-2xs text-surface/40 hover:text-surface transition-colors"
@@ -56,7 +55,6 @@ export default async function AvailabilityPage({ params }: Props) {
           initialStatus={availability?.status ?? 'AVAILABLE'}
           initialBlockedDates={availability?.blockedDates ?? []}
         />
-      </main>
-    </>
+      </div>
   );
 }

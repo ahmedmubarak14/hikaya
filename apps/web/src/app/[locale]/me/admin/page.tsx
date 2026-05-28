@@ -48,12 +48,10 @@ export default async function AdminPage({ params, searchParams }: Props) {
 
   if (!isAdmin) {
     return (
-      <>
-        <main className="py-22 mx-auto w-full max-w-4xl px-6 md:px-10">
+      <div className="mx-auto w-full max-w-4xl px-8 py-10">
           <h1 className="text-3xl">{t('accessDenied')}</h1>
           <p className="text-surface/60 mt-2">{t('accessDeniedBody')}</p>
-        </main>
-      </>
+        </div>
     );
   }
 
@@ -63,8 +61,7 @@ export default async function AdminPage({ params, searchParams }: Props) {
   const formatSar = (halalas: number) => `SAR ${(halalas / 100).toLocaleString()}`;
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-5xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-5xl px-8 py-10">
         <header className="mb-10 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
@@ -166,7 +163,6 @@ export default async function AdminPage({ params, searchParams }: Props) {
             <p className="text-surface/40 mt-4 text-center text-sm">{t('noUsers')}</p>
           )}
         </section>
-      </main>
-    </>
+      </div>
   );
 }

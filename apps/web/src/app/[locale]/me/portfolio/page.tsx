@@ -37,8 +37,7 @@ export default async function MyPortfolioPage({ params }: Props) {
   const displayName = locale === 'ar' ? creator.displayNameAr : creator.displayNameEn;
 
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-6xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-6xl px-8 py-10">
         <header className="mb-12 flex flex-col gap-3">
           <Link
             href={`/${locale}/me`}
@@ -80,8 +79,7 @@ export default async function MyPortfolioPage({ params }: Props) {
           />
           <PortfolioEditor locale={locale} items={creator.portfolio ?? []} altPrefix={displayName} />
         </section>
-      </main>
-    </>
+      </div>
   );
 }
 
@@ -97,8 +95,7 @@ function SectionHeader({ title, subtitle }: { title: string; subtitle: string })
 async function NoCreatorProfile({ locale }: { locale: Locale }) {
   const t = await getTranslations('portfolioEditor');
   return (
-    <>
-      <main className="py-22 mx-auto w-full max-w-3xl px-6 md:px-10">
+    <div className="mx-auto w-full max-w-3xl px-8 py-10">
         <Link
           href={`/${locale}/me`}
           className="text-2xs text-surface/40 hover:text-surface transition-colors"
@@ -121,7 +118,6 @@ async function NoCreatorProfile({ locale }: { locale: Locale }) {
             </div>
           </CardBody>
         </Card>
-      </main>
-    </>
+      </div>
   );
 }

@@ -1272,7 +1272,7 @@
     "profileDisplayName": "Display name",
     "profileEmail": "Email (read-only)",
     "profileAvatarUrl": "Avatar URL",
-    "profileAvatarHint": "Paste an image URL. The eventual flow will upload directly.",
+    "profileAvatarHint": "PNG or JPG, max 5MB.",
     "profileLocale": "Preferred language",
     "profileSave": "Save changes",
     "profileSaved": "Saved",
@@ -1311,7 +1311,10 @@
     "deleteConfirm": "Are you absolutely sure? This cannot be undone.",
     "deleteConfirmCta": "Yes, delete my account",
     "deleteCancel": "Cancel",
-    "deleteError": "Something went wrong. Please try again."
+    "deleteError": "Something went wrong. Please try again.",
+    "profileAvatarLabel": "Avatar",
+    "profileAvatarUpload": "Upload photo",
+    "profileAvatarUploading": "Uploading…"
   },
   "services": {
     "servicesLabel": "Services & pricing",
