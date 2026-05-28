@@ -48,7 +48,7 @@ export function CreatorCard({ creator }: Props) {
         <p className="text-surface/60 line-clamp-2 text-sm">{bio}</p>
 
         <div className="mt-1 flex flex-wrap items-center gap-1.5">
-          {creator.disciplines.slice(0, 2).map((d) => (
+          {(creator.disciplines ?? []).slice(0, 2).map((d) => (
             <DisciplineTag key={d} discipline={d} tone="neutral" />
           ))}
         </div>
