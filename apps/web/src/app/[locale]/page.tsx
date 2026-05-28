@@ -417,11 +417,11 @@ export default async function HomePage({ params }: PageProps) {
 function getLandingCopy(locale: Locale) {
   if (locale === 'ar') {
     return {
-      eyebrow: 'سوق ومساحة شغل للمبدعين في الخليج',
+      eyebrow: 'سوق ومساحة شغل للمبدعين',
       heroTitle: 'حكاية تخلي الشغل الإبداعي',
       heroAccent: 'أهدأ، أرقى، وينحجز أسرع.',
       heroBody:
-        'شوف المبدعين، احجز استوديو، انشر فرصة، وسلّم مشروعك من مساحة واحدة مصممة للشغل البصري في الخليج.',
+        'شوف المبدعين، احجز استوديو، انشر فرصة، وسلّم مشروعك من مساحة واحدة مصممة للشغل البصري.',
       heroImageAlt: 'واجهة حكاية تعرض أعمال مبدعين ولوحة ترتيب المشاريع',
       metrics: [
         { value: '6', label: 'مدن نشطة' },
@@ -530,11 +530,11 @@ function getLandingCopy(locale: Locale) {
   }
 
   return {
-    eyebrow: 'A marketplace and work system for Gulf creatives',
+    eyebrow: 'A marketplace and work system for creatives',
     heroTitle: 'Hikaya makes creative work feel',
     heroAccent: 'calm, premium, and booked.',
     heroBody:
-      'Find creators, book studios, open briefs, and deliver projects from one beautifully focused workspace built for visual work in the Gulf.',
+      'Find creators, book studios, open briefs, and deliver projects from one beautifully focused workspace built for visual work.',
     heroImageAlt: 'Hikaya interface showing creative work and project operations',
     metrics: [
       { value: '6', label: 'active cities' },

@@ -621,7 +621,7 @@ async function seedSpaces() {
       id: 'sp_noor_rooftop_khobar',
       ownerId: USER_NOOR,
       name: 'Corniche Rooftop — Golden Hour',
-      description: 'Open-air rooftop on the Khobar Corniche with unobstructed Gulf views.',
+      description: 'Open-air rooftop on the Khobar Corniche with unobstructed sea views.',
       address: 'Corniche Road',
       city: 'KHOBAR',
       capacity: 20,
