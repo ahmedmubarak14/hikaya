@@ -16,6 +16,7 @@ import { StartThreadButton } from '@/components/messages/start-thread-button';
 import { ServicesList } from '@/components/services/services-list';
 import { ProductCard } from '@/components/store/product-card';
 import { SiteFooter } from '@/components/site-footer';
+import { SafetyMenu } from '@/components/safety/safety-menu';
 import { SiteHeader } from '@/components/site-header';
 import { type Locale } from '@/i18n/config';
 import { getPublishedPostsByCreator } from '@/lib/blog/mock-store';
@@ -229,6 +230,13 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
                 {t('viewStore')}
               </Link>
             ) : null}
+            <SafetyMenu
+              locale={locale}
+              targetUserId={null}
+              reportTargetKind="CREATOR_PROFILE"
+              reportTargetRef={creator.username}
+              canBlock={false}
+            />
           </div>
         </section>
 
