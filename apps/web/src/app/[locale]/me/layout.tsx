@@ -82,8 +82,8 @@ export default async function MeLayout({ children, params }: Props) {
           avatarUrl: session.user.avatarUrl ?? null,
         }}
         workspaceLabel={t('sidebar.workspace')}
-        currentRole={session.user.currentRole}
-        availableRoles={session.user.roles}
+        currentRole={session.user.currentRole ?? 'CLIENT'}
+        availableRoles={Array.isArray(session.user.roles) ? session.user.roles : []}
         completionPercent={completion}
         labels={labels}
       />
