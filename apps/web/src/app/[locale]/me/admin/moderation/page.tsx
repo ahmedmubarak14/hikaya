@@ -132,11 +132,11 @@ export default async function ModerationPage({ params }: Props) {
                   </div>
                   <div className="grid grid-cols-1 gap-2 text-sm md:grid-cols-2">
                     <p className="text-surface/70">
-                      <span className="text-surface/40">{t('reporterLabel')}:</span>{' '}
+                      <span className="text-surface/40">{t('moderation.reporterLabel')}:</span>{' '}
                       {nameById.get(r.reporterId) ?? r.reporterId}
                     </p>
                     <p className="text-surface/70">
-                      <span className="text-surface/40">{t('targetLabel')}:</span>{' '}
+                      <span className="text-surface/40">{t('moderation.targetLabel')}:</span>{' '}
                       {r.targetUserId
                         ? (nameById.get(r.targetUserId) ?? r.targetUserId)
                         : (r.targetRef ?? '—')}

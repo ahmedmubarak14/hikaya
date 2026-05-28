@@ -933,7 +933,10 @@
         "REELHint": "Horizontal scroll for showreels and video work."
       },
       "save": "Save changes",
-      "saved": "Saved"
+      "saved": "Saved",
+      "accentColor": "Profile accent color",
+      "accentColorHint": "Used for buttons, links, and highlights on your public profile.",
+      "accentColorClear": "Use default"
     },
     "items": {
       "empty": "Your portfolio is empty.",
@@ -949,18 +952,15 @@
       "urlHint": "Leave empty to insert a placeholder while you find the real image.",
       "titleEn": "Title (optional)",
       "add": "Add",
-      "added": "Added"
+      "added": "Added",
+      "freeTierLimit": "Free plan caps your portfolio at 10 items. Upgrade to Pro to add more."
     },
     "noProfile": {
       "label": "Client account",
       "title": "You're signed in as a client.",
       "body": "Only creator accounts have a portfolio. To edit one, sign in as a creator — or create a new account and choose \"Showcase my work\".",
       "discover": "Browse creatives instead"
-    },
-    "freeTierLimit": "Free plan caps your portfolio at 10 items. Upgrade to Pro to add more.",
-    "accentColor": "Profile accent color",
-    "accentColorHint": "Used for buttons, links, and highlights on your public profile.",
-    "accentColorClear": "Use default"
+    }
   },
   "studio": {
     "title": "Studio dashboard",
