@@ -50,6 +50,7 @@ interface DbCreatorRow {
   availability: Availability;
   preferredLayout: PortfolioLayout;
   accentColor: string | null;
+  sectionsOrder: string[] | null;
   reviewScore: number;
   reviewCount: number;
   isVerified: boolean;
@@ -101,6 +102,7 @@ function mapCreator(row: DbCreatorRow): CreatorProfile {
     availability: row.availability,
     preferredLayout: row.preferredLayout,
     accentColor: row.accentColor ?? null,
+    sectionsOrder: (row.sectionsOrder as ('work' | 'store' | 'about')[] | null) ?? null,
     reviewScore: row.reviewScore,
     reviewCount: row.reviewCount,
     isVerified: row.isVerified,
@@ -118,7 +120,7 @@ const CREATOR_SELECT = `
   disciplines, city,
   startingPriceSar, yearsExperience,
   languages, availability,
-  preferredLayout, accentColor,
+  preferredLayout, accentColor, sectionsOrder,
   reviewScore, reviewCount,
   isVerified, socialLinks,
   User ( email ),

@@ -936,7 +936,16 @@
       "saved": "تمّ الحفظ",
       "accentColor": "لون مميّز للملف",
       "accentColorHint": "يُستخدم للأزرار والروابط والإبرازات في ملفك العام.",
-      "accentColorClear": "استخدم الافتراضي"
+      "accentColorClear": "استخدم الافتراضي",
+      "sectionsTitle": "أقسام الملف الشخصي",
+      "sectionsHint": "أعد ترتيب الأقسام العامة أو أخفها (الأعمال، المتجر، نبذة). استخدم الأسهم لأعلى/لأسفل، وانقر إخفاء لإزالة قسم.",
+      "sectionsHide": "إخفاء",
+      "sectionsHidden": "مخفية",
+      "sections": {
+        "work": "الأعمال",
+        "store": "المتجر",
+        "about": "نبذة"
+      }
     },
     "items": {
       "empty": "معرض أعمالك فارغ.",
@@ -1341,7 +1350,9 @@
     "profileAvatarUploading": "جارٍ الرفع…",
     "profileAvatarUploadFailed": "فشل الرفع. قد لا تكون حاوية تخزين \"avatars\" في Supabase مُهيأة.",
     "profileAvatarTooLarge": "الصورة كبيرة جداً — يجب أن تكون أقل من 5MB.",
-    "profileAvatarInvalidType": "هذا الملف ليس صورة."
+    "profileAvatarInvalidType": "هذا الملف ليس صورة.",
+    "pushSection": "إشعارات الدفع",
+    "pushSectionSubtitle": "احصل على إشعار على سطح المكتب / الجوال عند حدوث أمر مهم."
   },
   "services": {
     "servicesLabel": "الخدمات والأسعار",
@@ -1572,7 +1583,9 @@
       "dismiss": "تجاهل",
       "reporterLabel": "المُبلِغ",
       "targetLabel": "الهدف"
-    }
+    },
+    "suspend": "تعليق",
+    "unsuspend": "إلغاء التعليق"
   },
   "analytics": {
     "title": "التحليلات",
@@ -2034,7 +2047,17 @@
     "emptyBody": "ستظهر الاستفسارات والرسائل والحجوزات الجديدة هنا.",
     "markAllRead": "تحديد الكل كمقروء",
     "markingAll": "جارٍ التحديد…",
-    "markRead": "تحديد كمقروء"
+    "markRead": "تحديد كمقروء",
+    "push": {
+      "unsupported": "إشعارات الدفع غير مدعومة في هذا المتصفح.",
+      "notConfigured": "لم يتم تهيئة Web Push بعد. اضبط VAPID_PUBLIC_KEY و VAPID_PRIVATE_KEY في البيئة.",
+      "denied": "لقد حظرت إشعارات الدفع. أعد تفعيلها من إعدادات الموقع في متصفحك.",
+      "subscribedHint": "هذا الجهاز يستقبل إشعارات الدفع.",
+      "idleHint": "احصل على إشعارات على هذا الجهاز عند ورود استفسارات أو رسائل جديدة.",
+      "enable": "فعّل على هذا الجهاز",
+      "disable": "عطّل على هذا الجهاز",
+      "working": "جارٍ…"
+    }
   },
   "safety": {
     "block": "حظر",

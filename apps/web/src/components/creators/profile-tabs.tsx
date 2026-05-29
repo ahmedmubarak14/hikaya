@@ -12,6 +12,8 @@ interface Props {
   labels: { work: string; store: string; about: string };
   /** When false, the Store tab is rendered as a disabled hint instead of a link. */
   storeEnabled: boolean;
+  /** Creator-defined order + visibility. NULL = default ['work','store','about']. */
+  visibleSections?: ProfileTab[];
   /**
    * When provided, switches via local state on click — used by
    * `<ProfileTabsSwitcher>` so the tab works in static-export builds where
@@ -26,7 +28,7 @@ interface Props {
  * `?tab=work|store|about` URL param so the active section is bookmarkable and
  * the page itself stays server-rendered.
  */
-export function ProfileTabs({ active, labels, storeEnabled, onChange }: Props) {
+export function ProfileTabs({ active, labels, storeEnabled, onChange, visibleSections }: Props) {
   const pathname = usePathname();
   const params = useSearchParams();
 
@@ -38,11 +40,17 @@ export function ProfileTabs({ active, labels, storeEnabled, onChange }: Props) {
     return qs ? `${pathname}?${qs}` : pathname;
   };
 
-  const tabs: { id: ProfileTab; label: string; disabled?: boolean }[] = [
+  const allTabs: { id: ProfileTab; label: string; disabled?: boolean }[] = [
     { id: 'work', label: labels.work },
     { id: 'store', label: labels.store, disabled: !storeEnabled },
     { id: 'about', label: labels.about },
   ];
+  const order = visibleSections && visibleSections.length > 0
+    ? visibleSections
+    : (['work', 'store', 'about'] as ProfileTab[]);
+  const tabs = order
+    .map((id) => allTabs.find((t) => t.id === id))
+    .filter((t): t is { id: ProfileTab; label: string; disabled?: boolean } => Boolean(t));
 
   // These are route-driven section links, not a managed tabs widget. Using
   // <nav> + aria-current="page" tells screen readers it's navigation, not a

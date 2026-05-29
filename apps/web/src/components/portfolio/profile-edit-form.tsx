@@ -10,6 +10,7 @@ import { Button, Input, cn } from '@hikaya/ui';
 
 import { type Locale } from '@/i18n/config';
 import { updateProfileAction, type EditorResult } from '@/lib/creators/actions';
+import { SectionsOrderInput } from './sections-order-input';
 import type {
   Availability,
   City,
@@ -88,6 +89,7 @@ export function ProfileEditForm({ locale, creator }: Props) {
       availability: creator.availability,
       preferredLayout: creator.preferredLayout,
       accentColor: creator.accentColor ?? '',
+      sectionsOrder: creator.sectionsOrder ? creator.sectionsOrder.join(',') : '',
     },
   });
 
@@ -114,6 +116,7 @@ export function ProfileEditForm({ locale, creator }: Props) {
         fd.set('availability', values.availability);
         fd.set('preferredLayout', values.preferredLayout);
         fd.set('accentColor', values.accentColor ?? '');
+        fd.set('sectionsOrder', values.sectionsOrder ?? '');
         startTransition(() => formAction(fd));
       })}
       className="flex w-full flex-col gap-6"
@@ -275,6 +278,17 @@ export function ProfileEditForm({ locale, creator }: Props) {
             {t('accentColorClear')}
           </button>
         </div>
+      </Field>
+
+      <Field
+        label={t('sectionsTitle')}
+        hint={t('sectionsHint')}
+        error={errors.sectionsOrder?.message}
+      >
+        <SectionsOrderInput
+          value={watch('sectionsOrder') ?? ''}
+          onChange={(next) => setValue('sectionsOrder', next, { shouldDirty: true })}
+        />
       </Field>
 
       <div className="flex items-center gap-3">

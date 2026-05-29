@@ -936,7 +936,16 @@
       "saved": "Saved",
       "accentColor": "Profile accent color",
       "accentColorHint": "Used for buttons, links, and highlights on your public profile.",
-      "accentColorClear": "Use default"
+      "accentColorClear": "Use default",
+      "sectionsTitle": "Profile sections",
+      "sectionsHint": "Reorder or hide the public sections (Work, Store, About). Drag-style with up/down arrows; click Hide to remove a section.",
+      "sectionsHide": "Hide",
+      "sectionsHidden": "Hidden",
+      "sections": {
+        "work": "Work",
+        "store": "Store",
+        "about": "About"
+      }
     },
     "items": {
       "empty": "Your portfolio is empty.",
@@ -1341,7 +1350,9 @@
     "profileAvatarUploading": "Uploading…",
     "profileAvatarUploadFailed": "Upload failed. The Supabase \"avatars\" storage bucket may not be configured.",
     "profileAvatarTooLarge": "Image too large — must be under 5MB.",
-    "profileAvatarInvalidType": "That file isn't an image."
+    "profileAvatarInvalidType": "That file isn't an image.",
+    "pushSection": "Push notifications",
+    "pushSectionSubtitle": "Get a desktop / mobile notification when something important happens."
   },
   "services": {
     "servicesLabel": "Services & pricing",
@@ -1572,7 +1583,9 @@
       "dismiss": "Dismiss",
       "reporterLabel": "Reporter",
       "targetLabel": "Target"
-    }
+    },
+    "suspend": "Suspend",
+    "unsuspend": "Unsuspend"
   },
   "analytics": {
     "title": "Analytics",
@@ -2034,7 +2047,17 @@
     "emptyBody": "New inquiries, messages, and bookings will show up here.",
     "markAllRead": "Mark all as read",
     "markingAll": "Marking…",
-    "markRead": "Mark read"
+    "markRead": "Mark read",
+    "push": {
+      "unsupported": "Push notifications aren't supported in this browser.",
+      "notConfigured": "Web Push isn't configured yet. Set VAPID_PUBLIC_KEY + VAPID_PRIVATE_KEY in the env.",
+      "denied": "You blocked push notifications. Re-enable them in your browser's site settings.",
+      "subscribedHint": "This device receives push notifications.",
+      "idleHint": "Get notified on this device when you have new inquiries or messages.",
+      "enable": "Enable on this device",
+      "disable": "Disable on this device",
+      "working": "Working…"
+    }
   },
   "safety": {
     "block": "Block",
