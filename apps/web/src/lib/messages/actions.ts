@@ -295,6 +295,15 @@ async function notifyOnNewMessage(input: {
     unsubscribeUrl,
   });
   void sendEmail({ to: recipient.email as string, subject, html });
+
+  // Best-effort Web Push to the same recipient. No-op when VAPID isn't set.
+  const { sendPushToUser } = await import('@/lib/push/client');
+  void sendPushToUser(input.recipientId, {
+    title: `${input.senderName} sent you a message`,
+    body: preview,
+    url: `/${input.locale}/me/messages/${input.threadId}`,
+    tag: `thread-${input.threadId}`,
+  });
 }
 
 export async function markThreadReadAction(locale: Locale, threadId: string): Promise<void> {

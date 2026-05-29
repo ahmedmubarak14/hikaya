@@ -72,6 +72,7 @@ export async function updateProfileAction(
     availability: formData.get('availability'),
     preferredLayout: formData.get('preferredLayout'),
     accentColor: formData.get('accentColor') || undefined,
+    sectionsOrder: formData.get('sectionsOrder') || undefined,
   });
   if (!parsed.success) {
     return {
@@ -96,6 +97,14 @@ export async function updateProfileAction(
       availability: parsed.data.availability,
       preferredLayout: parsed.data.preferredLayout,
       accentColor: parsed.data.accentColor ? parsed.data.accentColor : null,
+      sectionsOrder: parsed.data.sectionsOrder
+        ? parsed.data.sectionsOrder
+            .split(',')
+            .map((s) => s.trim().toLowerCase())
+            .filter((s): s is 'work' | 'store' | 'about' =>
+              s === 'work' || s === 'store' || s === 'about',
+            )
+        : null,
       updatedAt: new Date().toISOString(),
     })
     .eq('id', auth.creator.id);

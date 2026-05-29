@@ -11,6 +11,8 @@ interface Props {
   workNode: ReactNode;
   storeNode: ReactNode;
   aboutNode: ReactNode;
+  /** Creator-defined section order. NULL = default ['work','store','about']. */
+  sectionsOrder?: ProfileTab[] | null;
 }
 
 /**
@@ -27,7 +29,11 @@ export function ProfileTabsSwitcher({
   workNode,
   storeNode,
   aboutNode,
+  sectionsOrder,
 }: Props) {
+  const visible = sectionsOrder && sectionsOrder.length > 0
+    ? sectionsOrder
+    : (['work', 'store', 'about'] as ProfileTab[]);
   const [active, setActive] = useState<ProfileTab>(initial);
 
   useEffect(() => {
@@ -55,13 +61,14 @@ export function ProfileTabsSwitcher({
           labels={labels}
           storeEnabled={storeEnabled}
           onChange={setActive}
+          visibleSections={visible}
         />
       </div>
 
       <div className="mt-8">
-        <div hidden={active !== 'work'}>{workNode}</div>
-        <div hidden={active !== 'store'}>{storeNode}</div>
-        <div hidden={active !== 'about'}>{aboutNode}</div>
+        {visible.includes('work') ? <div hidden={active !== 'work'}>{workNode}</div> : null}
+        {visible.includes('store') ? <div hidden={active !== 'store'}>{storeNode}</div> : null}
+        {visible.includes('about') ? <div hidden={active !== 'about'}>{aboutNode}</div> : null}
       </div>
     </>
   );

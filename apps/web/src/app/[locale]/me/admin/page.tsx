@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { Badge } from '@hikaya/ui';
 
+import { SuspendUserButton } from '@/components/admin/suspend-user-button';
 import { StatTile } from '@/components/studio/stat-tile';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -127,6 +128,7 @@ export default async function AdminPage({ params, searchParams }: Props) {
                   <th className="px-3 py-2 font-medium">{t('colRoles')}</th>
                   <th className="px-3 py-2 font-medium">{t('colCreated')}</th>
                   <th className="px-3 py-2 font-medium">{t('colStatus')}</th>
+                  <th className="px-3 py-2 font-medium text-end" />
                 </tr>
               </thead>
               <tbody>
@@ -152,6 +154,9 @@ export default async function AdminPage({ params, searchParams }: Props) {
                       ) : (
                         <Badge tone="accent">{t('active')}</Badge>
                       )}
+                    </td>
+                    <td className="px-3 py-3 text-end">
+                      <SuspendUserButton userId={user.id} isSuspended={user.isSuspended} />
                     </td>
                   </tr>
                 ))}

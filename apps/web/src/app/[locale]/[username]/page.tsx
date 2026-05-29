@@ -252,6 +252,7 @@ export default async function CreatorProfilePage({ params, searchParams }: Props
               about: t('tabs.about'),
             }}
             storeEnabled={hasStore}
+            sectionsOrder={creator.sectionsOrder ?? null}
             workNode={
               <PortfolioGrid
                 items={creator.portfolio ?? []}

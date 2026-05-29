@@ -9,6 +9,7 @@ import { SettingsPasswordForm } from '@/components/settings/settings-password-fo
 import { SettingsDataExport } from '@/components/settings/settings-data-export';
 import { SettingsDeleteAccount } from '@/components/settings/settings-delete-account';
 import { NotificationPreferencesForm } from '@/components/settings/notification-preferences-form';
+import { RegisterPush } from '@/components/notifications/register-push';
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
 import { createClient } from '@/lib/supabase/server';
@@ -100,6 +101,13 @@ export default async function SettingsPage({ params }: Props) {
             subtitle={t('notificationsSectionSubtitle')}
           />
           <NotificationPreferencesForm initialPrefs={notificationPrefs} />
+          <div className="mt-6">
+            <h3 className="text-surface text-sm font-medium">{t('pushSection')}</h3>
+            <p className="text-muted mt-1 text-xs">{t('pushSectionSubtitle')}</p>
+            <div className="mt-3">
+              <RegisterPush vapidPublicKey={process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? null} />
+            </div>
+          </div>
         </section>
 
         {/* Danger zone */}

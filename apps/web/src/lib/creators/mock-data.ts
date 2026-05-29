@@ -76,6 +76,11 @@ export interface CreatorProfile {
   preferredLayout: PortfolioLayout;
   /** Optional CSS hex like "#c8d32d" applied to the public profile. */
   accentColor?: string | null;
+  /**
+   * Order of the public profile sections. NULL = platform default
+   * ["work", "store", "about"]. Hidden sections can be omitted.
+   */
+  sectionsOrder?: ("work" | "store" | "about")[] | null;
   reviewScore: number;
   reviewCount: number;
   isVerified: boolean;
