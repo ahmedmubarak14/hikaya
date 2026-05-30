@@ -96,28 +96,34 @@ async function NoCreatorProfile({ locale }: { locale: Locale }) {
   const t = await getTranslations('portfolioEditor');
   return (
     <div className="mx-auto w-full max-w-3xl px-8 py-10">
-        <Link
-          href={`/${locale}/me`}
-          className="text-2xs text-surface/40 hover:text-surface transition-colors"
-        >
-          ← {t('backToAccount')}
-        </Link>
-        <Card className="mt-8">
-          <CardBody className="flex flex-col gap-4 p-8">
-            <Badge tone="warning" className="self-start">
-              {t('noProfile.label')}
-            </Badge>
-            <h1 className="text-balance text-3xl">{t('noProfile.title')}</h1>
-            <p className="text-surface/60">{t('noProfile.body')}</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <Link href={`/${locale}/discover`}>
-                <Button size="md" variant="outline">
-                  {t('noProfile.discover')}
-                </Button>
-              </Link>
-            </div>
-          </CardBody>
-        </Card>
-      </div>
+      <Link
+        href={`/${locale}/me`}
+        className="text-2xs text-surface/40 hover:text-surface transition-colors"
+      >
+        ← {t('backToAccount')}
+      </Link>
+      <Card className="mt-8">
+        <CardBody className="flex flex-col gap-4 p-8">
+          <Badge tone="warning" className="self-start">
+            {t('noProfile.label')}
+          </Badge>
+          <h1 className="text-balance text-3xl">{t('noProfile.title')}</h1>
+          <p className="text-surface/60">{t('noProfile.body')}</p>
+          <p className="text-surface/60 text-sm">{t('noProfile.upgradeHint')}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Link href={`/${locale}/me/workspaces/new`}>
+              <Button size="md" variant="primary">
+                {t('noProfile.becomeCreator')}
+              </Button>
+            </Link>
+            <Link href={`/${locale}/discover`}>
+              <Button size="md" variant="outline">
+                {t('noProfile.discover')}
+              </Button>
+            </Link>
+          </div>
+        </CardBody>
+      </Card>
+    </div>
   );
 }

@@ -968,7 +968,9 @@
       "label": "Client account",
       "title": "You're signed in as a client.",
       "body": "Only creator accounts have a portfolio. To edit one, sign in as a creator — or create a new account and choose \"Showcase my work\".",
-      "discover": "Browse creatives instead"
+      "discover": "Browse creatives instead",
+      "upgradeHint": "You can keep your client account and add a Creator workspace at the same time — your account can have multiple roles.",
+      "becomeCreator": "Become a creator"
     }
   },
   "studio": {
