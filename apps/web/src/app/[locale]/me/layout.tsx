@@ -10,7 +10,7 @@ import {
   getProfileActionItems,
   getProfileCompletionPercent,
 } from '@/lib/me/profile-completion';
-import { countMyUnreadNotifications } from '@/lib/notifications/queries';
+import { countInboxUnread } from '@/lib/inbox/queries';
 
 interface Props {
   children: ReactNode;
@@ -27,17 +27,19 @@ export default async function MeLayout({ children, params }: Props) {
   const t = await getTranslations({ locale, namespace: 'me' });
   const tLinks = await getTranslations({ locale, namespace: 'me.links' });
   const tAuth = await getTranslations({ locale, namespace: 'auth' });
+  const tInbox = await getTranslations({ locale, namespace: 'inbox' });
 
   const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
   const actionItems = getProfileActionItems(creator, locale);
   const completion = getProfileCompletionPercent(actionItems);
-  const unreadNotifications = await countMyUnreadNotifications(session.user.id);
+  const unreadNotifications = await countInboxUnread(session.user.id);
 
   const labels = {
     completeProfile: t('sidebar.completeProfile'),
     create: t('sidebar.create'),
     home: t('sidebar.home'),
     profile: tLinks('portfolio'),
+    inbox: tInbox('title'),
     inquiries: tLinks('inquiries'),
     messages: t('sidebar.messages'),
     notifications: t('sidebar.notifications'),

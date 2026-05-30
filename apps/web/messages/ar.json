@@ -1197,6 +1197,34 @@
       "EXPIRED": "منتهي الصلاحيّة"
     }
   },
+  "inbox": {
+    "title": "الوارد",
+    "subtitle": "الرسائل وطلبات التوظيف والإشعارات — في مكان واحد.",
+    "tabs": {
+      "all": "الكل",
+      "messages": "الرسائل",
+      "inquiries": "الطلبات",
+      "notifications": "الإشعارات"
+    },
+    "received": "واردة",
+    "sent": "مُرسلة",
+    "inquiryReceivedTitle": "طلب توظيف جديد",
+    "inquirySentTitle": "طلب إلى {name}",
+    "status": {
+      "PENDING": "بانتظار الرد",
+      "ACCEPTED": "مقبول",
+      "DECLINED": "مرفوض",
+      "EXPIRED": "منتهي الصلاحيّة"
+    },
+    "emptyTitle": "صندوق الوارد فارغ",
+    "emptyBody": "ستظهر هنا الرسائل وطلبات التوظيف والإشعارات.",
+    "messagesEmptyTitle": "لا رسائل بعد",
+    "messagesEmptyBody": "تظهر هنا المحادثات مع المبدعين والعملاء.",
+    "inquiriesEmptyTitle": "لا طلبات بعد",
+    "inquiriesEmptyBody": "تظهر هنا طلبات التوظيف التي ترسلها أو تستقبلها.",
+    "notificationsEmptyTitle": "كل شيء محدّث",
+    "notificationsEmptyBody": "لا توجد إشعارات حالياً."
+  },
   "discover": {
     "title": "اكتشف المبدعين",
     "heroTitle": "وظِّف المبدعين",

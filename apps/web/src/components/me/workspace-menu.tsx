@@ -138,7 +138,7 @@ export function WorkspaceMenu({
         label={labels.analytics}
         href={`${me}/analytics`}
       />
-      <PopoverItem icon={<Users size={16} />} label={labels.network} href={`${me}/messages`} />
+      <PopoverItem icon={<Users size={16} />} label={labels.network} href={`${me}/inbox?tab=messages`} />
       <PopoverItem
         icon={<ImageIcon size={16} />}
         label={labels.portfolio}

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { Briefcase, Building2, Sparkles } from 'lucide-react';
+import { Building2, Sparkles } from 'lucide-react';
 
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
@@ -51,12 +51,6 @@ export default async function AddWorkspacePage({ params, searchParams }: Props) 
       title: tAuth('roleStudioOwner'),
       body: t('studioBody'),
       Icon: Building2,
-    },
-    {
-      role: 'CLIENT',
-      title: tAuth('roleClient'),
-      body: t('clientBody'),
-      Icon: Briefcase,
     },
   ];
 
