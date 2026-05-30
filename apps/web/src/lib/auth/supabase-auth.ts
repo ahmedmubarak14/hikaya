@@ -35,7 +35,11 @@ export async function ensureUserAndProfile(input: {
   locale: 'en' | 'ar';
   avatarUrl?: string | null;
 }): Promise<void> {
-  const supabase = await createServiceClient();
+  // Prefer the service client; fall back to the cookie client when the
+  // service-role key isn't configured so this still works in dev/preview.
+  const supabase = process.env.SUPABASE_SERVICE_ROLE_KEY
+    ? await createServiceClient()
+    : await createClient();
 
   const { data: existingUser } = await supabase
     .from('User')
