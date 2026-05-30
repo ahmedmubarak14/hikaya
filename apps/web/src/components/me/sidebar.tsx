@@ -3,14 +3,12 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Bell,
   Briefcase,
   ChevronDown,
   Compass,
   CreditCard,
   Home,
   Inbox,
-  MessageSquare,
   User,
   Wallet,
 } from 'lucide-react';
@@ -63,6 +61,7 @@ interface Props {
     create: string;
     home: string;
     profile: string;
+    inbox: string;
     inquiries: string;
     messages: string;
     notifications: string;
@@ -121,12 +120,10 @@ export function MeSidebar({
   const entries: NavEntry[] = [
     { href: base, label: labels.home, icon: Home },
     { href: `${base}/portfolio`, label: labels.profile, icon: User },
-    { href: `${base}/inquiries`, label: labels.inquiries, icon: Inbox },
-    { href: `${base}/messages`, label: labels.messages, icon: MessageSquare },
     {
-      href: `${base}/notifications`,
-      label: labels.notifications,
-      icon: Bell,
+      href: `${base}/inbox`,
+      label: labels.inbox,
+      icon: Inbox,
       trailing: unreadNotifications > 0 ? String(unreadNotifications) : undefined,
     },
     { href: `${base}/purchases`, label: labels.wallet, icon: Wallet },

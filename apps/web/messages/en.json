@@ -1197,6 +1197,34 @@
       "EXPIRED": "Expired"
     }
   },
+  "inbox": {
+    "title": "Inbox",
+    "subtitle": "Messages, hire requests, and notifications — all in one place.",
+    "tabs": {
+      "all": "All",
+      "messages": "Messages",
+      "inquiries": "Inquiries",
+      "notifications": "Notifications"
+    },
+    "received": "Received",
+    "sent": "Sent",
+    "inquiryReceivedTitle": "New hire request",
+    "inquirySentTitle": "Inquiry to {name}",
+    "status": {
+      "PENDING": "Awaiting reply",
+      "ACCEPTED": "Accepted",
+      "DECLINED": "Declined",
+      "EXPIRED": "Expired"
+    },
+    "emptyTitle": "Your inbox is empty",
+    "emptyBody": "Messages, hire requests, and notifications will show up here.",
+    "messagesEmptyTitle": "No messages yet",
+    "messagesEmptyBody": "Conversations with creators and clients appear here.",
+    "inquiriesEmptyTitle": "No inquiries yet",
+    "inquiriesEmptyBody": "Hire requests you send or receive show up here.",
+    "notificationsEmptyTitle": "All caught up",
+    "notificationsEmptyBody": "You have no notifications right now."
+  },
   "discover": {
     "title": "Discover creatives",
     "heroTitle": "Hire creatives",
