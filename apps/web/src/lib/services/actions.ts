@@ -22,7 +22,7 @@ export async function saveServicesAction(
   const session = await getSession();
   if (!session) return { ok: false, error: 'NOT_AUTHENTICATED' };
 
-  const creator = await getMyCreatorProfile(session.user.email);
+  const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
   if (!creator) return { ok: false, error: 'NO_CREATOR_PROFILE' };
 
   // Basic validation

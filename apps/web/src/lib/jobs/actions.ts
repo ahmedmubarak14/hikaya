@@ -228,7 +228,7 @@ export async function applyToJobAction(
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/jobs/${jobId}`);
 
-  const creator = await getMyCreatorProfile(session.user.email);
+  const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
   if (!creator) return { ok: false, error: 'NOT_CREATOR' };
 
   const supabase = await createClient();

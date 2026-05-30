@@ -42,7 +42,7 @@ export default async function MyStorePage({ params }: Props) {
   const t = await getTranslations('store.list');
   const tStatus = await getTranslations('store.status');
 
-  const creator = await getMyCreatorProfile(session.user.email);
+  const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
   if (!creator) {
     return (
       <div className="mx-auto w-full max-w-3xl px-8 py-10">

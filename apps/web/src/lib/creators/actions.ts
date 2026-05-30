@@ -48,7 +48,7 @@ function fieldErrorsFromZod(
 async function requireOwnedCreator() {
   const session = await getSession();
   if (!session) return { ok: false as const, error: 'NOT_AUTHENTICATED' as const };
-  const creator = await getMyCreatorProfile(session.user.email);
+  const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
   if (!creator) return { ok: false as const, error: 'NO_CREATOR_PROFILE' as const };
   return { ok: true as const, creator, session };
 }

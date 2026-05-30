@@ -33,7 +33,7 @@ export default async function MyGalleriesPage({ params }: Props) {
   const t = await getTranslations('gallery.list');
   const tNoProfile = await getTranslations('portfolioEditor.noProfile');
 
-  const creator = await getMyCreatorProfile(session.user.email);
+  const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
   if (!creator)
     return <NoCreatorState locale={locale} t={tNoProfile} backLabel={t('backToAccount')} />;
 

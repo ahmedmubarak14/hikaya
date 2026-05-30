@@ -250,19 +250,40 @@ export async function getCreatorByOwnerEmailFromDB(
 ): Promise<CreatorProfile | null> {
   const supabase = await getClient();
 
-  // Join through User to filter by email
+  // Step 1: resolve the User by email — we own the User table and the row
+  // is small. (The previous one-shot join used `.eq('User.email', …)` which
+  // PostgREST does NOT filter through a relation, so it silently returned
+  // the wrong row + .maybeSingle() threw "more than one row" → null.)
+  const { data: userRow } = await supabase
+    .from('User')
+    .select('id')
+    .eq('email', email.toLowerCase())
+    .maybeSingle();
+
+  if (!userRow) return null;
+
+  return getCreatorByUserIdFromDB(userRow.id as string);
+}
+
+/**
+ * Direct lookup by User.id — preferred over the email-roundtrip variant.
+ * Called from the /me pages where the signed-in user id is known.
+ */
+export async function getCreatorByUserIdFromDB(
+  userId: string,
+): Promise<CreatorProfile | null> {
+  const supabase = await getClient();
+
   const { data, error } = await supabase
     .from('CreatorProfile')
     .select(CREATOR_SELECT)
-    .eq('User.email', email.toLowerCase())
+    .eq('userId', userId)
     .maybeSingle();
 
   if (error) {
-    console.error('[supabase-queries] getCreatorByOwnerEmailFromDB error:', error.message);
+    console.error('[supabase-queries] getCreatorByUserIdFromDB error:', error.message);
     return null;
   }
-
   if (!data) return null;
-
   return mapCreator(data as unknown as DbCreatorRow);
 }

@@ -30,7 +30,7 @@ export default async function DiscountsPage({ params }: Props) {
 
   const t = await getTranslations('discounts');
   const tLinks = await getTranslations('me.links');
-  const creator = await getMyCreatorProfile(session.user.email);
+  const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
 
   const tabs = [
     { href: `/${locale}/me/discounts`, label: t('tabs.coupons') },

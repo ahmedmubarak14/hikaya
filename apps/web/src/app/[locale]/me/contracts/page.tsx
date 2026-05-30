@@ -31,7 +31,7 @@ export default async function MyContractsPage({ params }: Props) {
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/contracts`);
 
-  const creator = await getMyCreatorProfile(session.user.email);
+  const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
   const t = await getTranslations('contracts.list');
 
   if (!creator) {

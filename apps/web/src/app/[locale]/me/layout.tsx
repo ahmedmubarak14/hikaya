@@ -28,7 +28,7 @@ export default async function MeLayout({ children, params }: Props) {
   const tLinks = await getTranslations({ locale, namespace: 'me.links' });
   const tAuth = await getTranslations({ locale, namespace: 'auth' });
 
-  const creator = await getMyCreatorProfile(session.user.email);
+  const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
   const actionItems = getProfileActionItems(creator, locale);
   const completion = getProfileCompletionPercent(actionItems);
   const unreadNotifications = await countMyUnreadNotifications(session.user.id);
