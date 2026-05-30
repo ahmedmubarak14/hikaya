@@ -107,8 +107,11 @@
     "continueWithApple": "Continue with Apple",
     "errors": {
       "invalidCredentials": "Email or password is incorrect.",
-      "emailTaken": "An account with this email already exists."
-    }
+      "emailTaken": "An account with this email already exists.",
+      "signupFailed": "Sign-up failed. Check your details and try again — if this keeps happening, the email may already be in use, the password is too short, or the server isn't reachable."
+    },
+    "chooseRoleTitle": "How will you use Hikaya?",
+    "chooseRoleBody": "Pick the option that fits — you can add more later from settings."
   },
   "me": {
     "title": "Dashboard",

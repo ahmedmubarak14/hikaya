@@ -124,6 +124,20 @@ export function SignUpForm({ locale }: Props) {
         </p>
       ) : null}
 
+      {serverState && !serverState.ok && serverState.error !== 'EMAIL_TAKEN' ? (
+        <p
+          className="border-accent-secondary/40 bg-accent-secondary/10 text-surface rounded-md border px-3 py-2 text-sm"
+          role="alert"
+        >
+          {tErrors('signupFailed')}
+          {process.env.NODE_ENV !== 'production' ? (
+            <span className="text-muted mt-1 block font-mono text-xs">
+              ({serverState.error})
+            </span>
+          ) : null}
+        </p>
+      ) : null}
+
       <Button type="submit" size="lg" isLoading={isPending} className="mt-2">
         {t('signUpCta')}
       </Button>

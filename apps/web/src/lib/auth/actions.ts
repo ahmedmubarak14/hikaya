@@ -88,7 +88,12 @@ export async function signUpAction(
     if (result.error === 'EMAIL_TAKEN') {
       return { ok: false, error: 'EMAIL_TAKEN', fieldErrors: { email: 'EMAIL_TAKEN' } };
     }
-    return { ok: false, error: 'UNKNOWN' };
+    console.error('[auth/signUpAction] supabaseSignUp failed:', result.error);
+    // In non-prod surface the real error string so we can diagnose quickly.
+    return {
+      ok: false,
+      error: process.env.NODE_ENV === 'production' ? 'UNKNOWN' : (result.error as 'UNKNOWN'),
+    };
   }
 
   const next = parsed.data.role === 'STUDIO_OWNER' ? '/me/studio/setup' : '/me';
