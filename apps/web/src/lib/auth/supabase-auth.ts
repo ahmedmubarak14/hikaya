@@ -1,15 +1,107 @@
 import 'server-only';
 
-import { createClient } from '@/lib/supabase/server';
+import { randomUUID } from 'node:crypto';
+
+import { createClient, createServiceClient } from '@/lib/supabase/server';
 
 import type { SessionUser } from './session';
 
 type UserRole = 'CREATOR' | 'STUDIO_OWNER' | 'CLIENT';
 
+function appUrl(): string {
+  return process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
+}
+
+function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 24);
+}
+
 /**
- * Sign up with email + password via Supabase Auth, then create the
- * corresponding row in public."User". Returns the new user's session
- * or an error string.
+ * Idempotently ensure the public.User row + role-specific profile row exist
+ * for a confirmed auth user. Uses the SERVICE client so it works regardless
+ * of RLS / whether a session cookie is present yet (called from both the
+ * email/password flow and the /auth/confirm handler).
+ */
+export async function ensureUserAndProfile(input: {
+  userId: string;
+  email: string;
+  displayName: string;
+  role: UserRole;
+  locale: 'en' | 'ar';
+  avatarUrl?: string | null;
+}): Promise<void> {
+  const supabase = await createServiceClient();
+
+  const { data: existingUser } = await supabase
+    .from('User')
+    .select('id')
+    .eq('id', input.userId)
+    .maybeSingle();
+
+  if (!existingUser) {
+    await supabase.from('User').insert({
+      id: input.userId,
+      email: input.email.toLowerCase(),
+      displayName: input.displayName,
+      locale: input.locale === 'ar' ? 'AR' : 'EN',
+      roles: [input.role],
+      activeRole: input.role,
+      avatarUrl: input.avatarUrl ?? null,
+      updatedAt: new Date().toISOString(),
+    });
+  }
+
+  if (input.role === 'CREATOR') {
+    const { data: cp } = await supabase
+      .from('CreatorProfile')
+      .select('id')
+      .eq('userId', input.userId)
+      .maybeSingle();
+    if (!cp) {
+      await supabase.from('CreatorProfile').insert({
+        id: `cr_${randomUUID().replace(/-/g, '').slice(0, 16)}`,
+        userId: input.userId,
+        username: `${slugify(input.displayName) || 'creator'}-${randomUUID().slice(0, 4)}`,
+        displayNameEn: input.displayName,
+        displayNameAr: input.displayName,
+        city: 'RIYADH',
+        disciplines: [],
+      });
+    }
+  } else if (input.role === 'STUDIO_OWNER') {
+    const { data: sp } = await supabase
+      .from('StudioProfile')
+      .select('id')
+      .eq('userId', input.userId)
+      .maybeSingle();
+    if (!sp) {
+      await supabase.from('StudioProfile').insert({
+        id: `st_${randomUUID().replace(/-/g, '').slice(0, 16)}`,
+        userId: input.userId,
+        slug: `${slugify(input.displayName) || 'studio'}-${randomUUID().slice(0, 4)}`,
+        nameEn: input.displayName,
+        nameAr: input.displayName,
+        city: 'RIYADH',
+      });
+    }
+  }
+}
+
+/**
+ * Sign up with email + password via Supabase Auth.
+ *
+ * Behavior depends on the project's email-confirmation setting:
+ *  - Confirmation OFF → a session is returned immediately; we provision the
+ *    User + profile rows now and return needsConfirmation:false.
+ *  - Confirmation ON  → no session yet; the confirmation email links to
+ *    /auth/confirm which provisions the rows AFTER the user clicks through.
+ *    We return needsConfirmation:true so the UI shows a "check your email"
+ *    screen instead of bouncing to a session-less /me.
  */
 export async function supabaseSignUp(input: {
   email: string;
@@ -17,10 +109,12 @@ export async function supabaseSignUp(input: {
   displayName: string;
   role: UserRole;
   locale: 'en' | 'ar';
-}): Promise<{ ok: true; user: SessionUser } | { ok: false; error: string }> {
+}): Promise<
+  | { ok: true; user: SessionUser; needsConfirmation: boolean }
+  | { ok: false; error: string }
+> {
   const supabase = await createClient();
 
-  // 1. Create the auth user
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email: input.email,
     password: input.password,
@@ -28,12 +122,14 @@ export async function supabaseSignUp(input: {
       data: {
         display_name: input.displayName,
         role: input.role,
+        locale: input.locale,
       },
+      emailRedirectTo: `${appUrl()}/auth/confirm?locale=${input.locale}`,
     },
   });
 
   if (authError) {
-    if (authError.message.includes('already registered')) {
+    if (/already registered|already been registered/i.test(authError.message)) {
       return { ok: false, error: 'EMAIL_TAKEN' };
     }
     return { ok: false, error: authError.message };
@@ -43,32 +139,28 @@ export async function supabaseSignUp(input: {
     return { ok: false, error: 'SIGNUP_FAILED' };
   }
 
-  // 2. Create the public.User row
-  const roles: UserRole[] = [input.role];
-  const now = new Date().toISOString();
+  const needsConfirmation = !authData.session;
 
-  const { error: insertError } = await supabase.from('User').insert({
-    id: authData.user.id,
-    email: input.email.toLowerCase(),
-    displayName: input.displayName,
-    locale: input.locale === 'ar' ? 'AR' : 'EN',
-    roles: roles,
-    activeRole: input.role,
-    updatedAt: now,
-  });
-
-  if (insertError) {
-    console.error('Failed to create User row:', insertError);
-    return { ok: false, error: 'DB_ERROR' };
+  // When a session exists (confirmation disabled), provision rows now. When
+  // it doesn't, /auth/confirm will provision after the user confirms.
+  if (!needsConfirmation) {
+    await ensureUserAndProfile({
+      userId: authData.user.id,
+      email: input.email,
+      displayName: input.displayName,
+      role: input.role,
+      locale: input.locale,
+    });
   }
 
   return {
     ok: true,
+    needsConfirmation,
     user: {
       id: authData.user.id,
       email: input.email.toLowerCase(),
       displayName: input.displayName,
-      roles,
+      roles: [input.role],
       primaryRole: input.role,
       currentRole: input.role,
       locale: input.locale,
@@ -91,6 +183,12 @@ export async function supabaseSignIn(input: {
   });
 
   if (error) {
+    if (
+      error.code === 'email_not_confirmed' ||
+      /email not confirmed|not confirmed/i.test(error.message)
+    ) {
+      return { ok: false, error: 'EMAIL_NOT_CONFIRMED' };
+    }
     return { ok: false, error: 'INVALID_CREDENTIALS' };
   }
 

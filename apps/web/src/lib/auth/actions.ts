@@ -7,7 +7,12 @@ import { defaultLocale, type Locale } from '@/i18n/config';
 import { signInFormSchema, signUpFormSchema } from './schemas';
 import { supabaseSignIn, supabaseSignOut, supabaseSignUp } from './supabase-auth';
 
-export type AuthErrorKey = 'INVALID_INPUT' | 'INVALID_CREDENTIALS' | 'EMAIL_TAKEN' | 'UNKNOWN';
+export type AuthErrorKey =
+  | 'INVALID_INPUT'
+  | 'INVALID_CREDENTIALS'
+  | 'EMAIL_NOT_CONFIRMED'
+  | 'EMAIL_TAKEN'
+  | 'UNKNOWN';
 
 export interface AuthFailure {
   ok: false;
@@ -49,6 +54,9 @@ export async function signInAction(
   });
 
   if (!result.ok) {
+    if (result.error === 'EMAIL_NOT_CONFIRMED') {
+      return { ok: false, error: 'EMAIL_NOT_CONFIRMED' };
+    }
     return { ok: false, error: 'INVALID_CREDENTIALS' };
   }
 
@@ -94,6 +102,15 @@ export async function signUpAction(
       ok: false,
       error: process.env.NODE_ENV === 'production' ? 'UNKNOWN' : (result.error as 'UNKNOWN'),
     };
+  }
+
+  // Email confirmation is on → no session yet. Send the user to a
+  // "check your email" screen instead of bouncing through a session-less
+  // /me (which silently redirected back to sign-in — the reported bug).
+  if (result.needsConfirmation) {
+    redirect(
+      `/${locale ?? defaultLocale}/sign-up/check-email?email=${encodeURIComponent(parsed.data.email)}`,
+    );
   }
 
   const next = parsed.data.role === 'STUDIO_OWNER' ? '/me/studio/setup' : '/me';
