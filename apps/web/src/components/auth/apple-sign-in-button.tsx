@@ -19,15 +19,19 @@ import { createClient } from '@/lib/supabase/client';
 interface Props {
   locale: string;
   label: string;
+  /** Role to assign when this OAuth flow creates a brand-new account. */
+  role?: 'CREATOR' | 'STUDIO_OWNER' | 'CLIENT';
 }
 
-export function AppleSignInButton({ locale, label }: Props) {
+export function AppleSignInButton({ locale, label, role }: Props) {
   async function handleClick() {
     const supabase = createClient();
+    const params = new URLSearchParams({ locale });
+    if (role) params.set('role', role);
     await supabase.auth.signInWithOAuth({
       provider: 'apple',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?locale=${locale}`,
+        redirectTo: `${window.location.origin}/auth/callback?${params.toString()}`,
       },
     });
   }

@@ -4,7 +4,8 @@ import { redirect } from 'next/navigation';
 
 import { type Locale } from '@/i18n/config';
 import { getSession } from '@/lib/auth/session';
-import { createClient } from '@/lib/supabase/server';
+import { ensureUserAndProfile } from '@/lib/auth/supabase-auth';
+import { createClient, createServiceClient } from '@/lib/supabase/server';
 
 import { setActiveRole } from './active-role-actions';
 
@@ -17,13 +18,31 @@ const VALID_ROLES: ReadonlySet<MockUserRole> = new Set([
 ]);
 
 /**
+ * Prefer the service client (bypasses RLS for the privileged roles update).
+ * Fall back to the cookie-auth client when SUPABASE_SERVICE_ROLE_KEY isn't
+ * configured — that still works if the project has a self-update RLS policy.
+ */
+async function getWriteClient() {
+  if (process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return createServiceClient();
+  }
+  return createClient();
+}
+
+/**
  * Add a role (workspace) to the signed-in user and switch into it.
  *
- * - Validates that the requested role is one of the three known values.
- * - Reads the user's current `roles` from the DB, appends the new one if
- *   it isn't already present, and writes the merged array back.
- * - Sets the active-role cookie so the next render shows the new workspace.
- * - Redirects to the role-appropriate setup or landing page.
+ * All writes go through the SERVICE client — adding a role mutates the
+ * privileged `User.roles` column and inserts CreatorProfile / StudioProfile
+ * rows, none of which the anon (cookie-auth) client can do under RLS. The
+ * user is already authenticated via getSession(), and every write is scoped
+ * to their own id, so this is safe.
+ *
+ * - Merges the new role into User.roles (no-op if already present).
+ * - Provisions the role-specific profile row via the shared, idempotent
+ *   ensureUserAndProfile() so /me/portfolio (creator) or /me/studio/setup
+ *   (studio) render the editor instead of the empty-profile gate.
+ * - Sets the active-role cookie and redirects into the role's setup page.
  */
 export async function addWorkspaceAction(locale: Locale, role: MockUserRole): Promise<void> {
   if (!VALID_ROLES.has(role)) {
@@ -35,18 +54,23 @@ export async function addWorkspaceAction(locale: Locale, role: MockUserRole): Pr
     redirect(`/${locale}/sign-in?next=/${locale}/me/workspaces/new`);
   }
 
-  const supabase = await createClient();
+  const supabase = await getWriteClient();
+
   const { data: row, error: fetchErr } = await supabase
     .from('User')
-    .select('roles')
+    .select('roles, displayName')
     .eq('id', session.user.id)
     .maybeSingle();
 
   if (fetchErr || !row) {
+    console.error(
+      '[workspace-actions] addWorkspaceAction fetch error:',
+      fetchErr?.message ?? 'user row not found',
+    );
     redirect(`/${locale}/me/workspaces/new?error=NOT_FOUND`);
   }
 
-  const current = Array.isArray(row.roles) ? (row.roles as MockUserRole[]) : [];
+  const current = Array.isArray(row!.roles) ? (row!.roles as MockUserRole[]) : [];
   if (!current.includes(role)) {
     const merged = [...current, role];
     const { error: updateErr } = await supabase
@@ -57,6 +81,23 @@ export async function addWorkspaceAction(locale: Locale, role: MockUserRole): Pr
       console.error('[workspace-actions] addWorkspaceAction update error:', updateErr.message);
       redirect(`/${locale}/me/workspaces/new?error=UPDATE_FAILED`);
     }
+  }
+
+  // Provision the role-specific profile row (idempotent; service client).
+  const displayName =
+    (row!.displayName as string | null) ?? session.user.displayName ?? 'User';
+  try {
+    await ensureUserAndProfile({
+      userId: session.user.id,
+      email: session.user.email,
+      displayName,
+      role,
+      locale: locale === 'ar' ? 'ar' : 'en',
+    });
+  } catch (e) {
+    console.error('[workspace-actions] ensureUserAndProfile failed:', e);
+    // Non-fatal — the role is granted; profile can still be set up via the
+    // editor's empty-state gate.
   }
 
   await setActiveRole(role);

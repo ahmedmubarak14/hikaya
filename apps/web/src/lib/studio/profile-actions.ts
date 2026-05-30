@@ -78,10 +78,15 @@ const baseSchema = z.object({
     .or(z.literal('').transform(() => undefined)),
   city: cityEnum,
   address: z.string().max(200).optional(),
-  specializations: z.array(disciplineEnum).min(1, 'Pick at least one specialization').max(8),
+  specializations: z
+    .array(disciplineEnum)
+    .min(1, 'Pick at least one specialization')
+    .max(8, 'Pick up to 8 specializations'),
   capacity: z.coerce.number().int().min(1).max(50),
-  descriptionEn: z.string().min(20).max(2000),
-  descriptionAr: z.string().max(2000).optional(),
+  // Description is optional — a studio can fill it in later. When provided
+  // it's capped at 2000 chars; empty strings are allowed.
+  descriptionEn: z.string().max(2000).optional().or(z.literal('')),
+  descriptionAr: z.string().max(2000).optional().or(z.literal('')),
   contactEmail: z
     .string()
     .email()

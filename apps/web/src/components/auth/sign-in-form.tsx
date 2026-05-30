@@ -78,6 +78,15 @@ export function SignInForm({ locale }: Props) {
         </p>
       ) : null}
 
+      {serverState?.error === 'EMAIL_NOT_CONFIRMED' ? (
+        <p
+          className="border-accent/30 bg-accent/10 text-surface rounded-md border px-3 py-2 text-sm"
+          role="alert"
+        >
+          {tErrors('emailNotConfirmed')}
+        </p>
+      ) : null}
+
       <Button type="submit" size="lg" isLoading={isPending} className="mt-2">
         {t('signInCta')}
       </Button>

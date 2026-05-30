@@ -107,7 +107,18 @@
     "continueWithApple": "Continue with Apple",
     "errors": {
       "invalidCredentials": "Email or password is incorrect.",
-      "emailTaken": "An account with this email already exists."
+      "emailTaken": "An account with this email already exists.",
+      "signupFailed": "Sign-up failed. Check your details and try again — if this keeps happening, the email may already be in use, the password is too short, or the server isn't reachable.",
+      "emailNotConfirmed": "Please confirm your email first — check your inbox for the confirmation link, then sign in."
+    },
+    "chooseRoleTitle": "How will you use Hikaya?",
+    "chooseRoleBody": "Pick the option that fits — you can add more later from settings.",
+    "checkEmail": {
+      "title": "Check your email",
+      "body": "We sent you a confirmation link. Click it to activate your account, then sign in.",
+      "bodyWithEmail": "We sent a confirmation link to {email}. Click it to activate your account, then sign in.",
+      "spamHint": "Can’t find it? Check your spam or promotions folder.",
+      "backToSignIn": "Back to sign in"
     }
   },
   "me": {
@@ -968,7 +979,9 @@
       "label": "Client account",
       "title": "You're signed in as a client.",
       "body": "Only creator accounts have a portfolio. To edit one, sign in as a creator — or create a new account and choose \"Showcase my work\".",
-      "discover": "Browse creatives instead"
+      "discover": "Browse creatives instead",
+      "upgradeHint": "You can keep your client account and add a Creator workspace at the same time — your account can have multiple roles.",
+      "becomeCreator": "Become a creator"
     }
   },
   "studio": {

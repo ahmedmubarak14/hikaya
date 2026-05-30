@@ -5,15 +5,23 @@ import { createClient } from '@/lib/supabase/client';
 interface Props {
   locale: string;
   label: string;
+  /**
+   * Optional role to assign when this OAuth flow creates a brand-new User
+   * row. Passed through the redirect URL → auth/callback. When the user
+   * already has an account this is ignored.
+   */
+  role?: 'CREATOR' | 'STUDIO_OWNER' | 'CLIENT';
 }
 
-export function GoogleSignInButton({ locale, label }: Props) {
+export function GoogleSignInButton({ locale, label, role }: Props) {
   async function handleClick() {
     const supabase = createClient();
+    const params = new URLSearchParams({ locale });
+    if (role) params.set('role', role);
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?locale=${locale}`,
+        redirectTo: `${window.location.origin}/auth/callback?${params.toString()}`,
       },
     });
   }
