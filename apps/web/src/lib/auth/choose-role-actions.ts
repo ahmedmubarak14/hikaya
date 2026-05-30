@@ -65,10 +65,19 @@ export async function chooseRoleAction(locale: Locale, role: Role): Promise<void
       updatedAt: new Date().toISOString(),
     });
   } else {
-    // Already exists — promote the role to active.
+    // Already exists — MERGE the new role into the existing set (never
+    // overwrite, or a Client+Creator user would silently lose a role) and
+    // make it the active role.
+    const { data: roleRow } = await supabase
+      .from('User')
+      .select('roles')
+      .eq('id', userId)
+      .maybeSingle();
+    const current = Array.isArray(roleRow?.roles) ? (roleRow!.roles as Role[]) : [];
+    const merged = current.includes(role) ? current : [...current, role];
     await supabase
       .from('User')
-      .update({ roles: [role], activeRole: role })
+      .update({ roles: merged, activeRole: role })
       .eq('id', userId);
   }
 

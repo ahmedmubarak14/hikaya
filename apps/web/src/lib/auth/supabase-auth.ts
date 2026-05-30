@@ -4,6 +4,8 @@ import { randomUUID } from 'node:crypto';
 
 import { createClient, createServiceClient } from '@/lib/supabase/server';
 
+import { getActiveRole } from './active-role';
+
 import type { SessionUser } from './session';
 
 type UserRole = 'CREATOR' | 'STUDIO_OWNER' | 'CLIENT';
@@ -260,19 +262,50 @@ export async function getSupabaseSession(): Promise<{ user: SessionUser } | null
   if (!userRow) return null;
 
   const locale = userRow.locale === 'AR' ? 'ar' : 'en';
-  const roles = (userRow.roles ?? ['CLIENT']) as UserRole[];
-  const currentRole = (userRow.activeRole ?? roles[0] ?? 'CLIENT') as UserRole;
 
-  // Resolve creator username for public profile link
-  let username: string | undefined;
-  if (roles.includes('CREATOR')) {
-    const { data: creatorProfile } = await supabase
-      .from('CreatorProfile')
-      .select('username')
-      .eq('userId', authUser.id)
-      .maybeSingle();
-    username = (creatorProfile?.username as string) ?? undefined;
+  // --- Single source of truth: reconcile roles[] with real profile rows ---
+  // The roles[] column and the existence of a CreatorProfile / StudioProfile
+  // row are two signals that the rest of the app reads independently. If they
+  // ever drift (a profile row exists but the role was dropped, or vice versa)
+  // the user sees "mixed roles" — creator views gated as a client, etc. We
+  // reconcile here so the session can never under-report a capability the user
+  // actually has, and CLIENT is always available as the baseline.
+  const [{ data: creatorProfile }, { data: studioProfile }] = await Promise.all([
+    supabase.from('CreatorProfile').select('username').eq('userId', authUser.id).maybeSingle(),
+    supabase.from('StudioProfile').select('id').eq('userId', authUser.id).maybeSingle(),
+  ]);
+
+  const dbRoles = Array.isArray(userRow.roles) ? (userRow.roles as UserRole[]) : [];
+  const roleSet = new Set<UserRole>(dbRoles.length ? dbRoles : ['CLIENT']);
+  roleSet.add('CLIENT'); // every account can hire/buy — baseline capability
+  if (creatorProfile) roleSet.add('CREATOR');
+  if (studioProfile) roleSet.add('STUDIO_OWNER');
+  const roles = [...roleSet] as UserRole[];
+
+  // Heal the DB once when divergent so sign-in / other read paths agree too.
+  if (roles.length !== dbRoles.length || roles.some((r) => !dbRoles.includes(r))) {
+    try {
+      const writer = process.env.SUPABASE_SERVICE_ROLE_KEY
+        ? await createServiceClient()
+        : supabase;
+      await writer.from('User').update({ roles }).eq('id', authUser.id);
+    } catch {
+      // Non-critical — the reconciled roles are still used for this request.
+    }
   }
+
+  // Active role: cookie wins (iff still held), then the DB column, then a
+  // sensible default. The cookie is what the workspace switcher writes.
+  const cookieRole = await getActiveRole();
+  const dbActive = (userRow.activeRole as UserRole | null) ?? null;
+  const currentRole: UserRole =
+    cookieRole && roles.includes(cookieRole)
+      ? cookieRole
+      : dbActive && roles.includes(dbActive)
+        ? dbActive
+        : (roles[0] ?? 'CLIENT');
+
+  const username = (creatorProfile?.username as string) ?? undefined;
 
   return {
     user: {
@@ -280,7 +313,7 @@ export async function getSupabaseSession(): Promise<{ user: SessionUser } | null
       email: userRow.email,
       displayName: userRow.displayName,
       roles,
-      primaryRole: roles[0] ?? 'CLIENT',
+      primaryRole: dbActive && roles.includes(dbActive) ? dbActive : (roles[0] ?? 'CLIENT'),
       currentRole,
       locale,
       avatarUrl: (userRow.avatarUrl as string) ?? undefined,
