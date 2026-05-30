@@ -85,10 +85,15 @@ export function StudioProfileForm({ locale }: Props) {
   const [isPending, startTransition] = useTransition();
   const [selectedDisciplines, setSelectedDisciplines] = useState<Discipline[]>([]);
 
+  const MAX_SPECIALIZATIONS = 8;
+
   function toggleDiscipline(d: Discipline) {
-    setSelectedDisciplines((prev) =>
-      prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d],
-    );
+    setSelectedDisciplines((prev) => {
+      if (prev.includes(d)) return prev.filter((x) => x !== d);
+      // Cap at MAX — ignore clicks that would exceed it (server enforces too).
+      if (prev.length >= MAX_SPECIALIZATIONS) return prev;
+      return [...prev, d];
+    });
   }
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -167,21 +172,30 @@ export function StudioProfileForm({ locale }: Props) {
       />
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-surface/80 text-sm font-medium">{t('specializations')}</legend>
+        <legend className="text-surface/80 text-sm font-medium">
+          {t('specializations')}{' '}
+          <span className="text-surface/40 font-normal">
+            ({selectedDisciplines.length}/{MAX_SPECIALIZATIONS})
+          </span>
+        </legend>
         <p className="text-surface/50 text-xs">{t('specializationsHint')}</p>
         <div className="flex flex-wrap gap-1.5">
           {DISCIPLINES.map((d) => {
             const isActive = selectedDisciplines.includes(d);
+            const atCap = !isActive && selectedDisciplines.length >= MAX_SPECIALIZATIONS;
             return (
               <button
                 key={d}
                 type="button"
                 onClick={() => toggleDiscipline(d)}
+                disabled={atCap}
                 className={cn(
                   'rounded-full border px-3 py-1 text-xs transition-colors',
                   isActive
                     ? 'border-accent bg-accent text-ink'
-                    : 'border-surface/15 bg-surface/[0.03] text-surface/70 hover:border-surface/30',
+                    : atCap
+                      ? 'border-surface/10 bg-surface/[0.02] text-surface/30 cursor-not-allowed'
+                      : 'border-surface/15 bg-surface/[0.03] text-surface/70 hover:border-surface/30',
                 )}
                 aria-pressed={isActive}
               >
