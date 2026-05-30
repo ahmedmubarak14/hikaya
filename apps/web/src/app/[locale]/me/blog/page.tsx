@@ -36,7 +36,7 @@ export default async function MyBlogPage({ params }: Props) {
 
   const t = await getTranslations('blog.owner');
 
-  const creator = await getMyCreatorProfile(session.user.email);
+  const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
   if (!creator) {
     return (
       <div className="mx-auto w-full max-w-3xl px-8 py-10">

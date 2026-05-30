@@ -31,7 +31,7 @@ export default async function MyServicesPage({ params }: Props) {
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/services`);
 
   const t = await getTranslations('services');
-  const creator = await getMyCreatorProfile(session.user.email);
+  const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
 
   if (!creator) return <NoCreatorProfile locale={locale} />;
 

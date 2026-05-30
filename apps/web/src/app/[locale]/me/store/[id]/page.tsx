@@ -49,7 +49,7 @@ export default async function EditProductPage({ params }: Props) {
   const session = await getSession();
   if (!session) redirect(`/${locale}/sign-in?next=/${locale}/me/store/${id}`);
 
-  const creator = await getMyCreatorProfile(session.user.email);
+  const creator = await getMyCreatorProfile({ userId: session.user.id, email: session.user.email });
   if (!creator) redirect(`/${locale}/me/portfolio`);
 
   const product = getProductById(id);

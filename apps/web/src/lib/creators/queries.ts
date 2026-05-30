@@ -73,16 +73,32 @@ export async function listFeaturedCreators(limit = 4): Promise<CreatorProfile[]>
 }
 
 /** Resolve the creator profile owned by the currently signed-in user, if any. */
-export async function getMyCreatorProfile(userEmail: string): Promise<CreatorProfile | null> {
+export async function getMyCreatorProfile(
+  userEmailOrIdentity: string | { userId?: string; email: string },
+): Promise<CreatorProfile | null> {
+  // Caller may pass the bare email (legacy) or {userId, email} (preferred —
+  // skips the email→User lookup roundtrip and avoids the previous broken
+  // PostgREST `.eq('User.email', …)` join filter).
+  const identity =
+    typeof userEmailOrIdentity === 'string'
+      ? { email: userEmailOrIdentity }
+      : userEmailOrIdentity;
+
   if (!isStaticExport) {
     try {
+      if (identity.userId) {
+        const { getCreatorByUserIdFromDB } = await import('./supabase-queries');
+        const direct = await getCreatorByUserIdFromDB(identity.userId);
+        if (direct) return direct;
+      }
       const { getCreatorByOwnerEmailFromDB } = await import('./supabase-queries');
-      const result = await getCreatorByOwnerEmailFromDB(userEmail);
+      const result = await getCreatorByOwnerEmailFromDB(identity.email);
       if (result) return result;
-    } catch {
+    } catch (e) {
+      console.error('[creators/queries] getMyCreatorProfile DB lookup failed:', e);
       // Supabase unavailable — fall through to mock
     }
   }
 
-  return getCreatorByOwnerEmail(userEmail);
+  return getCreatorByOwnerEmail(identity.email);
 }

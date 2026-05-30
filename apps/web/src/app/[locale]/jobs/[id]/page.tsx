@@ -51,7 +51,7 @@ export default async function JobDetailPage({ params }: Props) {
   const isOwner = session?.user.id === job.postedByUserId;
 
   // Resolve creator profile lazily so we can render the right CTA.
-  const myCreator = session ? await getMyCreatorProfile(session.user.email) : null;
+  const myCreator = session ? await getMyCreatorProfile({ userId: session.user.id, email: session.user.email }) : null;
   const myApplication = session ? findApplication(job.id, session.user.id) : null;
 
   const applications = isOwner ? listApplicationsByJob(job.id) : [];
